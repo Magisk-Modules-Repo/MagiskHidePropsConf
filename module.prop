@@ -1,0 +1,7 @@
+id=template
+name=Template Module
+version=v1
+versionCode=1
+author=topjohnwu
+description=A short description
+minMagisk=1500
