@@ -3,8 +3,8 @@
 
 
 ## Installation
-Download the zip from the [module support thread](https://forum.xda-developers.com/apps/magisk/ ), and install through the Magisk Manager -> Modules, or from recovery.
-Any previous versions are kept in the first post of the [module support thread](https://forum.xda-developers.com/apps/magisk/ ).
+Download the zip from the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199), and install through the Magisk Manager -> Modules, or from recovery.
+Any previous versions are kept in the first post of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199).
 
 
 ## Use
@@ -25,7 +25,7 @@ To fix this, you can use a known working fingerprint (one that has been certifie
 
 Keep in mind that changing the fingerprint of your device might have some side-effects, since you are changing how your device is percieved. Most of the times it works fine though. IMO it is preferable to use a fingerprint from a stock ROM for your specific device.
 
-There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/ ) toghether with device details.
+There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) toghether with device details.
 
 ### Finding a certified fingerprint
 The easies way to find a certified fingerprint for your device is to run the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
@@ -64,7 +64,7 @@ If you're having issues passing SafetyNet or otherwise getting MagiskHide to wor
 
 
 ## Support, etc
-If you're having issues, questions or suggestions, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/ ) @XDA.
+If you're having issues, questions or suggestions, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @XDA.
 
 
 ## Source
