@@ -1,0 +1,140 @@
+#!/system/bin/sh
+
+# MagiskHide Props Config
+# By Didgeridoohan @ XDA-Developers
+
+# This is a script file for the Magisk module "MagiskHide Props Config" By Didgeridoohan @ XDA Developers.
+# DO NOT DELETE!
+# Unless: If you don't have the module installed something has gone horribly wrong and this file is an orphan.
+# In that case, feel free to delete it.
+
+# Script version
+SCRIPTV=1
+SETTRANSF=1
+
+# Variables
+IMGPATH=IMG_PLACEHOLDER
+MODPATH=$IMGPATH/MagiskHidePropsConf
+FINGERPRINTENB=1
+PRINTEDIT=0
+BUILDPROPENB=1
+FILESAFE=1
+BUILDEDIT=0
+DEFAULTEDIT=0
+PROPCOUNT=0
+PROPEDIT=0
+REBOOTCHK=0
+
+# Checks if the module is installed. Deletes itself if it isn't.
+if [ -d "$MODPATH" ]; then	
+	# Checks if the module is set for removal
+	if [ -f "$MODPATH/remove" ]; then
+		# Suicide.
+		rm $0
+	else
+		# Load functions
+		. $MODPATH/util_functions.sh
+
+		log_handler "Running boot script."
+
+		if ! [ -f "$MODPATH/disable" ]; then
+			# ---Original values---
+			# default.prop
+			FILEDEBUGGABLE=
+			FILESECURE=
+			# build.prop
+			FILETYPE=
+			FILETAGS=
+			FILESELINUX=
+			# Prop values
+			ORIGDEBUGGABLE=
+			ORIGSECURE=
+			ORIGTYPE=
+			ORIGTAGS=
+			ORIGSELINUX=
+			ORIGFINGERPRINT=
+
+			# ---Module values---
+			MODULEDEBUGGABLE=
+			MODULESECURE=
+			MODULETYPE=
+			MODULETAGS=
+			MODULESELINUX=
+			MODULEFINGERPRINT=
+
+			# ---Setting/Changing props---
+			# Set/change MagiskHide sensitive props
+			if [ "$PROPEDIT" == 1 ]; then
+				log_handler "Changing sensitive props."
+				REDEBUGGABLE=false
+				RESECURE=false
+				RETYPE=false
+				RETAGS=false
+				RESELINUX=false
+				if [ "$REDEBUGGABLE" == "true" ]; then
+					resetprop -v ro.debuggable $MODULEDEBUGGABLE 2>> $LOGFILE
+				fi
+				if [ "$RESECURE" == "true" ]; then
+					resetprop -v ro.secure $MODULESECURE 2>> $LOGFILE
+				fi
+				if [ "$RETYPE" == "true" ]; then
+					resetprop -v ro.build.type $MODULETYPE 2>> $LOGFILE
+				fi
+				if [ "$RETAGS" == "true" ]; then
+					resetprop -v ro.build.tags $MODULETAGS 2>> $LOGFILE
+				fi
+				if [ "$RESELINUX" == "true" ]; then
+					resetprop -v ro.build.selinux $MODULESELINUX 2>> $LOGFILE
+				fi
+			fi
+
+			# Set new fingerprint
+			if [ "$FINGERPRINTENB" == 1 ] && [ "$PRINTEDIT" == 1 ]; then
+				REFINGERPRINT=false
+				if [ "$REFINGERPRINT" == "true" ]; then
+					log_handler "Changing fingerprint."
+					resetprop -v ro.build.fingerprint $MODULEFINGERPRINT 2>> $LOGFILE
+					resetprop -v ro.bootimage.build.fingerprint $MODULEFINGERPRINT 2>> $LOGFILE
+				fi
+			fi
+
+			# Settings for default.prop editing
+			SETDEBUGGABLE=false
+			SETSECURE=false			
+			# Edits default.prop
+			if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then
+				log_handler "Default.prop editing enabled."
+				log_handler "Editing default.prop."
+				mount -wo remount rootfs /
+				if [ "$MODULEDEBUGGABLE" ]; then
+					SEDDEBUGGABLE=$MODULEDEBUGGABLE
+				else
+					SEDDEBUGGABLE=0
+				fi
+				if [ "$SETDEBUGGABLE" == "true" ]; then
+					sed -i "s/ro.debuggable=$FILEDEBUGGABLE/ro.debuggable=$SEDDEBUGGABLE/" /default.prop && log_handler "ro.debuggable"
+				fi
+				if [ "$MODULESECURE" ]; then
+					SEDSECURE=$MODULESECURE
+				else
+					SEDSECURE=1
+				fi
+				if [ "$SETSECURE" == "true" ]; then
+					sed -i "s/ro.secure=$FILESECURE/ro.secure=$SEDSECURE/" /default.prop && log_handler "ro.secure"
+				fi
+				mount -ro remount rootfs /
+			else
+				log_handler "Default.prop editing disabled."
+			fi
+
+			# Settings for build.prop editing
+			SETTYPE=false
+			SETTAGS=false
+			SETSELINUX=false
+		fi		
+		log_handler "Boot script finished.\n\n=================="
+	fi
+else
+	# Suicide.
+	rm $0
+fi

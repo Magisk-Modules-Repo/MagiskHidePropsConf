@@ -1,0 +1,1152 @@
+#!/system/bin/sh
+
+# MagiskHide Props Config
+# By Didgeridoohan @ XDA-Developers
+
+# =====================================================
+# ================ Paths and variables ================
+# =====================================================
+
+IMGPATH=IMG_PLACEHOLDER
+MODVERSION=VER_PLACEHOLDER
+MODPATH=$IMGPATH/MagiskHidePropsConf
+
+# Colours
+if [ "$1" == "-nc" ]; then
+	G=''
+	R=''
+	Y=''
+	B=''
+	V=''
+	Bl=''
+	C=''
+	W=''
+	N=''
+else
+	G='\e[01;32m'    # GREEN
+	R='\e[01;31m'    # RED
+	Y='\e[01;33m'    # YELLOW
+	B='\e[01;34m'    # BLUE
+	V='\e[01;35m'    # VIOLET
+	Bl='\e[01;30m'   # BLACK
+	C='\e[01;36m'    # CYAN
+	W='\e[01;37m'    # WHITE
+	N='\e[00;37;40m' # NEUTRAL
+fi
+
+# ===================================================
+# ==================== Functions ====================
+# ===================================================
+
+# Load functions
+. $MODPATH/util_functions.sh
+
+# Currently set values
+curr_values() {
+	CURRDEBUGGABLE=$(resetprop ro.debuggable)
+	CURRSECURE=$(resetprop ro.secure)
+	CURRTYPE=$(resetprop ro.build.type)
+	CURRTAGS=$(resetprop ro.build.tags)
+	CURRSELINUX=$(resetprop ro.build.selinux)
+	CURRFINGERPRINT=$(resetprop ro.build.fingerprint)
+}
+
+# File values
+file_values() {
+	FILEDEBUGGABLE=$(get_file_value /default.prop ro.debuggable)
+	FILESECURE=$(get_file_value /default.prop ro.secure)
+	FILETYPE=$(get_file_value /system/build.prop ro.build.type)
+	FILETAGS=$(get_file_value /system/build.prop ro.build.tags)
+	FILESELINUX=$(get_file_value /system/build.prop ro.build.selinux)
+}
+
+# Original prop values
+orig_values() {
+	ORIGDEBUGGABLE=$(get_file_value $LATEFILE "ORIGDEBUGGABLE=")
+	ORIGSECURE=$(get_file_value $LATEFILE "ORIGSECURE=")
+	ORIGTYPE=$(get_file_value $LATEFILE "ORIGTYPE=")
+	ORIGTAGS=$(get_file_value $LATEFILE "ORIGTAGS=")
+	ORIGSELINUX=$(get_file_value $LATEFILE "ORIGSELINUX=")
+	ORIGFINGERPRINT=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
+}
+
+# Module values
+module_values() {
+	MODULEDEBUGGABLE=$(get_file_value $LATEFILE "MODULEDEBUGGABLE=")
+	MODULESECURE=$(get_file_value $LATEFILE "MODULESECURE=")
+	MODULETYPE=$(get_file_value $LATEFILE "MODULETYPE=")
+	MODULETAGS=$(get_file_value $LATEFILE "MODULETAGS=")
+	MODULESELINUX=$(get_file_value $LATEFILE "MODULESELINUX=")
+	MODULEFINGERPRINT=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
+}
+
+# Run all value functions
+all_values() {
+	# Currently set values
+	curr_values
+	# File values
+	file_values
+	# Original prop values
+	orig_values
+	# Module values
+	module_values
+}
+
+#Divider
+DIVIDER="${Y}=====================================${N}"
+
+# Header
+menu_header() {
+	if [ "$MODVERSION" == "VER_PLACEHOLDER" ]; then
+		VERSIONTXT=""
+	else
+		VERSIONTXT=$MODVERSION
+	fi
+	echo ""
+	echo "${W}MagiskHide Props Config $VERSIONTXT${N}"
+	echo "${W}by Didgeridoohan @ XDA Developers${N}"
+	echo ""
+	echo $DIVIDER
+	echo -e " $1"
+	echo $DIVIDER
+}
+
+invalid_input() {
+	INPMSG=""
+
+	# Set the message text
+	case $1 in
+		1)	INPMSG="Only pick from the list above, one at a time."
+		;;
+		2)	INPMSG="Only enter '${G}y${N}' or '${G}n${N}'."
+		;;
+		3)	INPMSG="Only enter '${G}y${N}', '${G}n${N}' or '${G}e${N}'."
+		;;
+		4)	INPMSG="Only enter '${G}y${N}', '${G}n${N}', '${G}r${N}' or '${G}e${N}'."
+		;;
+	esac
+
+	# Find menu level
+	case $2 in
+		1)	INPUT=""
+		;;
+		2)	INPUT2=""
+		;;
+		3)	INPUT3=""
+		;;
+		4)	INPUT4=""
+		;;
+		5)	INPUT5=""
+		;;
+	esac
+
+	echo ""
+	echo "${R}Invalid input${N}. $INPMSG"
+	sleep 2
+}
+
+reboot_chk() {
+	sed -i 's/REBOOTCHK=0/REBOOTCHK=1/' $LATEFILE
+}
+
+reset_fn() {
+	BUILDPROPENB=$(get_file_value $LATEFILE "BUILDPROPENB=")
+	FINGERPRINTENB=$(get_file_value $LATEFILE "FINGERPRINTENB=")
+	cp -af $MODPATH/propsconf_late $LATEFILE
+	if [ "$BUILDPROPENB" ] && [ ! "$BUILDPROPENB" == 1 ]; then
+		sed -i "s@BUILDPROPENB=1@BUILDPROPENB=$BUILDPROPENB@g" $LATEFILE
+	fi
+	if [ "$FINGERPRINTENB" ] && [ ! "$FINGERPRINTENB" == 1 ]; then
+		sed -i "s@FINGERPRINTENB=1@FINGERPRINTENB=$FINGERPRINTENB@g" $LATEFILE
+	fi
+	chmod 755 $LATEFILE	
+	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
+
+	# Update the reboot variable
+	reboot_chk
+
+	# Update all prop value variables
+	all_values
+}
+
+reboot_fn() {
+	INPUT5=""
+	while true
+	do
+		if [ ! "$INPUT5" ]; then
+			if [ "$2" == "reboot" ] || [ "$2" == "reset-script" ]; then
+				REBOOTTXT=""
+			else
+				REBOOTTXT="Reboot - "
+			fi
+			clear
+			menu_header "$REBOOTTXT${C}$1${N}"
+			echo ""
+			if  [ "$2" != "reset-script" ] && [ "$2" != "reboot" ]; then
+				echo "Reboot for changes to take effect."
+			fi
+			echo "Do you want to reboot now (y/n)?"
+			echo ""
+			if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
+				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+				INV1=2
+			else
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "	
+				INV1=3
+			fi
+			read -r INPUT5			
+		fi
+		case "$INPUT5" in
+			y)
+				log_handler "Rebooting..."
+				reboot 2 >> $LOGFILE
+				sleep 15
+				log_handler "Rebooting failed."
+				echo ""
+				echo "That doesn't seem like it worked..."
+				echo "Reboot manually."
+				exit 0
+			;;
+			n)
+				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
+					exit_fn
+				else
+					INPUT=""
+					INPUT2=""
+					INPUT3=""
+					INPUT4=""
+					break
+				fi
+			;;
+			e)
+				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
+					invalid_input $INV1 5
+				else
+					exit_fn
+				fi
+			;;
+			*)	invalid_input $INV1 5
+			;;
+		esac
+	done
+}
+
+exit_fn() {
+	clear
+	menu_header "${C}Bye bye.${N}"
+	echo ""
+	log_handler "Exiting... Bye bye."
+	exit 0
+}
+
+# ======================== Device's fingerprint ========================
+# Reset the module fingerprint change
+reset_print() {
+	log_handler "Resetting device fingerprint."
+
+	SUBA=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
+	PRINTA=$(echo $(cat $LATEFILE | grep "resetprop -v ro.build.fingerprint"))
+
+	# Saves new module value
+	sed -i "s@MODULEFINGERPRINT=$SUBA@MODULEFINGERPRINT=@" $LATEFILE
+	# Changes prop
+	sed -i "s/REFINGERPRINT=true/REFINGERPRINT=false/" $LATEFILE
+	# Updates prop change variables in propsconf_late
+	sed -i 's/PRINTEDIT=1/PRINTEDIT=0/g' $LATEFILE
+
+	# Update the reboot variable
+	reboot_chk
+
+	all_values
+	reboot_fn "$1"
+}
+
+# Use fingerprint
+change_print() {
+	log_handler "Changing device fingerprint to $2."
+
+	SUBA=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
+
+	# Saves new module value
+	sed -i "s@MODULEFINGERPRINT=$SUBA@MODULEFINGERPRINT=$2@" $LATEFILE
+	# Changes prop
+	sed -i "s/REFINGERPRINT=false/REFINGERPRINT=true/" $LATEFILE
+	# Updates prop change variables in propsconf_late
+	sed -i 's/PRINTEDIT=0/PRINTEDIT=1/' $LATEFILE
+
+	NEWFINGERPRINT=""
+
+	# Update the reboot variable
+	reboot_chk
+
+	all_values
+	reboot_fn "$1"
+}
+
+# Get device name from list of fingerprints
+get_device_prints() {
+	echo $1 | sed 's/=.*//'
+}
+
+# Get fingerprint from list of fingerprints
+get_print_prints() {
+	echo $1 | sed 's/.*=//'
+}
+
+# Second menu level - fingerprint
+menu_change_fingerprint() {
+	INPUT2=""
+	while true
+	do
+		if [ ! "$INPUT2" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 0 ]; then
+				echo "Fingerprint modification currently disabled"
+				echo "because of a conflicting module."
+				echo ""
+				echo "Nothing to do... Returning to main menu."
+				sleep 4
+				INPUT=""
+				break
+			else
+				if [ "$4" ] && [ "$(get_file_value $LATEFILE "REFINGERPRINT=")" == "true" ]; then
+					PRINTMODULETXT=" (by this module)"
+				else
+					PRINTMODULETXT=""
+				fi
+				echo "Currently set to$PRINTMODULETXT:"
+				echo ${C}$2${N}
+				if [ "$2" != "$3" ]; then
+					echo "The original value is:"
+					echo ${C}$3${N}
+				fi
+				echo ""
+				echo "Enter the new fingerprint or"
+				echo "pick from the options below."
+				echo ""
+				echo "${G}f${N} - Pick a certified fingerprint"
+				if [ "$PRINTMODULETXT" ]; then
+					echo "${G}r${N} - Reset fingerprint"
+				fi
+				echo "${G}b${N} - Go back."
+				echo ""
+				echo -n "Enter '${G}e${N}' to exit: "
+				read -r INPUT2
+			fi
+		fi
+		case "$INPUT2" in
+			f)	menu_pickprint "$1"
+			;;
+			r)	
+				if [ "$PRINTMODULETXT" ]; then
+					menu_reset_print "Reset fingerprint"
+				else
+					menu_newprint "$1" "$INPUT2" 2
+				fi
+			;;
+			b)
+				INPUT=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	menu_newprint "$1" "$INPUT2" 2
+			;;
+		esac
+	done
+}
+
+# Third menu level - pick fingerprint
+menu_pickprint() {
+	INPUT3=""
+	while true
+	do
+		# Loading fingerprints
+		. $MODPATH/prints.sh
+		if [ ! "$INPUT3" ]; then
+			ITEMCOUNT=1
+			clear
+			menu_header "${C}$1${N}\n Select an option below."
+			echo ""
+			echo "Keep in mind that it is always best to"
+			echo "use a fingerprint meant for your device."
+			echo ""
+			SAVEIFS=$IFS
+			IFS=$(echo -en "\n\b")
+			for ITEM in $PRINTSLIST; do
+				echo "${G}$ITEMCOUNT${N} - $(get_device_prints $ITEM)"
+				ITEMCOUNT=$(($ITEMCOUNT+1))
+			done
+			IFS=$SAVEIFS
+			echo "${G}b${N} - Go back"
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT3
+		fi
+		if [ "$INPUT3" -ge 1 ] && [ "$INPUT3" -le "$ITEMCOUNT" ]; then
+			ITEMCOUNT=1
+			SAVEIFS=$IFS
+			IFS=$(echo -en "\n\b")
+			for ITEM in $PRINTSLIST; do
+				if [ "$ITEMCOUNT" == "$INPUT3" ]; then
+					menu_newprint "$1" $(get_print_prints $ITEM)
+					break
+				fi
+				ITEMCOUNT=$(($ITEMCOUNT+1))
+			done
+			IFS=$SAVEIFS
+		elif [ "$INPUT3" == "b" ]; then
+			INPUT2=""
+			break
+		elif [ "$INPUT3" == "e" ]; then
+			exit_fn
+		else
+			invalid_input 1 3
+		fi
+	done
+}
+
+# Fourth menu level - fingerprint
+menu_newprint() {
+	NEWFINGERPRINT="$2"
+	INPUT4=""
+	while true
+	do
+		if [ ! "$INPUT4" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "You are about to use the following as your device's fingerprint."
+			echo ${V}$NEWFINGERPRINT${N}
+			echo ""
+			echo "Make sure that it is correct before continuing."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y)
+				change_print "$1" "$NEWFINGERPRINT"
+				break
+			;;
+			n)
+				INPUT2=""
+				INPUT3=""
+				NEWFINGERPRINT=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 3 4
+			;;
+		esac
+	done
+}
+
+# Third menu level - Reset fingerprint
+menu_reset_print() {
+	INPUT3=""
+	while true
+	do
+		if [ ! "$INPUT3" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will reset the device"
+			echo "fingerprint to the default value."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y)	
+				reset_print "$1"
+				break
+			;;
+			n)
+				INPUT2=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# ======================== Edit props files ========================
+# Reset prop files
+reset_prop_files() {
+	log_handler "Resetting prop files$2."
+
+	# Changes file	
+	for PROPTYPE in $PROPSLIST; do
+		log_handler "Disabling prop file editing for '$PROPTYPTE'."
+		PROP=$(get_prop_type $PROPTYPE)
+		FILEPROP=$(echo "FILE$PROP" | tr '[:lower:]' '[:upper:]')
+		SETPROP=$(echo "SET$PROP" | tr '[:lower:]' '[:upper:]')
+		
+		sed -i "s/$SETPROP=true/$SETPROP=false/" $LATEFILE
+		sed -i 's/BUILDEDIT=1/BUILDEDIT=0/' $LATEFILE
+		sed -i 's/DEFAULTEDIT=1/DEFAULTEDIT=0/' $LATEFILE
+	done
+
+	# Update the reboot variable
+	reboot_chk
+
+	INPUT=""
+	all_values
+	reboot_fn "$1"
+}
+
+# Editing prop files
+edit_prop_files() {	
+	log_handler "Modifying prop files$2."
+
+	# Checks if editing prop files is enabled
+	if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 0 ]; then
+		log_handler "Editing build.prop is disabled. Only editing default.prop."		
+		PROPSLIST="
+		ro.debuggable
+		ro.secure
+		"
+	fi
+
+	for PROPTYPE in $PROPSLIST; do
+		log_handler "Checking original file value for '$PROPTYPE'."
+		PROP=$(get_prop_type $PROPTYPE)
+		FILEPROP=$(echo "FILE$PROP" | tr '[:lower:]' '[:upper:]')
+		SETPROP=$(echo "SET$PROP" | tr '[:lower:]' '[:upper:]')
+
+		# Check the original file value
+		PROPVALUE=$(get_file_value $LATEFILE "$FILEPROP=")
+
+		# Checks for default/set values
+		safe_props $PROPTYPE $PROPVALUE
+
+		# Changes file only if necessary
+		if [ "$SAFE" == 0 ]; then
+			log_handler "Enabling prop file editing for '$PROPTYPE'."
+			sed -i "s/$SETPROP=false/$SETPROP=true/" $LATEFILE
+		fi
+		sed -i 's/DEFAULTEDIT=0/DEFAULTEDIT=1/' $LATEFILE
+		sed -i 's/BUILDEDIT=0/BUILDEDIT=1/' $LATEFILE
+	done
+
+	# Update the reboot variable
+	reboot_chk
+
+	INPUT=""
+	all_values
+	reboot_fn "$1"
+}
+
+# Second menu level - prop files
+menu_edit_prop_files() {
+	INPUT2=""
+	while true
+	do
+		if [ ! "$INPUT2" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			# Checks if file values are "safe"
+			if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 1 ]; then
+				echo "Prop file modification currently disabled,"
+				echo "since all relevant file values are \"safe\"."
+				echo ""
+				if [ "$2" == "p" ]; then
+					echo "Nothing to do... Exiting."
+					exit 0
+				else
+					echo "Nothing to do... Returning to main menu."
+					sleep 4
+					INPUT=""
+					break
+				fi
+			else
+				# Checks if editing prop files is enabled and/or active
+				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+					if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ]; then
+						echo "This will revert the values in build.prop"
+						echo "and default.prop to their original values."
+					else
+						echo "This will revert the values in"
+						echo "default.prop to the original values."
+					fi
+				else
+					if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ]; then
+						echo "This will change values in build.prop"
+						echo "and default.prop to match the values"
+					else
+						echo "This will change values in"
+						echo "default.prop to match the values"
+					fi
+					echo "set by MagiskHide or this module."
+				fi
+				echo ""
+				if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 0 ]; then
+					echo "Please note that build.prop editing is"
+					echo "disabled because of a conflicting module."
+					echo ""
+				fi
+				echo "Do you want to continue?"
+				echo ""
+				if [ "$2" == "p" ]; then
+					echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+					LOGTXT=" (option -p)"
+					INV1=2
+					INV2=1
+				else
+					echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+					LOGTXT=""
+					INV1=3
+					INV2=2
+				fi
+				read -r INPUT2
+			fi
+		fi
+		case "$INPUT2" in
+			y)
+				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+					reset_prop_files "$1" "$LOGTXT"
+				else
+					edit_prop_files "$1" "$LOGTXT"
+				fi
+				break
+			;;
+			n)
+				if [ "$2" == "p" ]; then
+					exit_fn
+				else
+					INPUT=""
+					break
+				fi
+			;;
+			e)
+				if [ "$2" == "p" ]; then
+					invalid_input $INV1 $INV2
+				else
+					exit_fn
+				fi
+			;;
+			*)	invalid_input $INV1 $INV2
+			;;
+		esac
+	done
+}
+
+# ======================== MagiskHide Props ========================
+# Find what prop value to change to
+change_to() {
+	CHANGE=""
+	case "$1" in
+		ro.debuggable) if [ "$2" == 0 ]; then CHANGE=1; else CHANGE=0; fi
+		;;
+		ro.secure) if [ "$2" == 0 ]; then CHANGE=1; else CHANGE=0; fi
+		;;
+		ro.build.type) if [ "$2" == "userdebug" ]; then CHANGE="user"; else CHANGE="userdebug"; fi
+		;;
+		ro.build.tags) if [ "$2" == "test-keys" ]; then CHANGE="release-keys"; else CHANGE="test-keys"; fi
+		;;
+		ro.build.selinux) if [ "$2" == 0 ]; then CHANGE=1; else CHANGE=0; fi
+		;;
+	esac
+}
+
+# Reset the module prop change
+reset_prop() {
+	# Sets variables
+	PROP=$(get_prop_type $1)
+	MODULEPROP=$(echo "MODULE$PROP" | tr '[:lower:]' '[:upper:]')
+	REPROP=$(echo "RE$PROP" | tr '[:lower:]' '[:upper:]')
+	SUBA=$(get_file_value $LATEFILE "$MODULEPROP=")
+
+	log_handler "Resetting $1 to default value."
+
+	# Saves new module value
+	sed -i "s/$MODULEPROP=$SUBA/$MODULEPROP=/" $LATEFILE
+	# Changes prop
+	sed -i "s/$REPROP=true/$REPROP=false/" $LATEFILE
+
+	# Updates prop change variable in propsconf_late
+	PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
+	if [ "$PROPCOUNT" -gt 0 ]; then
+		PROPCOUNTP=$(($PROPCOUNT-1))
+		sed -i "s/PROPCOUNT=$PROPCOUNT/PROPCOUNT=$PROPCOUNTP/" $LATEFILE
+	fi
+	if [ "$PROPCOUNT" == 0 ]; then
+		sed -i 's/PROPEDIT=1/PROPEDIT=0/' $LATEFILE
+	fi
+
+	# Update the reboot variable
+	reboot_chk
+
+	all_values
+	reboot_fn "$1"
+}
+
+# Use prop value
+change_prop() {
+	# Sets variables
+	PROP=$(get_prop_type $1)
+	MODULEPROP=$(echo "MODULE$PROP" | tr '[:lower:]' '[:upper:]')
+	REPROP=$(echo "RE$PROP" | tr '[:lower:]' '[:upper:]')
+	SUBA=$(get_file_value $LATEFILE "$MODULEPROP=")
+
+	log_handler "Changing $1 to $2."
+
+	# Saves new module value
+	sed -i "s/$MODULEPROP=$SUBA/$MODULEPROP=$2/" $LATEFILE
+	# Changes prop
+	sed -i "s/$REPROP=false/$REPROP=true/" $LATEFILE
+
+	# Updates prop change variables in propsconf_late
+	PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
+	PROPCOUNTP=$(($PROPCOUNT+1))
+	sed -i "s/PROPCOUNT=$PROPCOUNT/PROPCOUNT=$PROPCOUNTP/" $LATEFILE
+	sed -i 's/PROPEDIT=0/PROPEDIT=1/' $LATEFILE
+
+	# Update the reboot variable
+	reboot_chk
+
+	all_values
+	reboot_fn "$1"
+}
+
+# Reset all module prop changes
+reset_prop_all() {
+	log_handler "Resetting all props to default values."
+
+	for PROPTYPE in $PROPSLIST; do
+		PROP=$(get_prop_type $PROPTYPE)
+		MODULEPROP=$(echo "MODULE$PROP" | tr '[:lower:]' '[:upper:]')
+		REPROP=$(echo "RE$PROP" | tr '[:lower:]' '[:upper:]')
+		SUBA=$(get_file_value $LATEFILE "$MODULEPROP=")
+
+		# Saves new module value
+		sed -i "s/$MODULEPROP=$SUBA/$MODULEPROP=/" $LATEFILE
+		# Changes prop
+		sed -i "s/$REPROP=true/$REPROP=false/" $LATEFILE
+
+		# Updates prop change variables in propsconf_late
+		PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
+		sed -i "s/PROPCOUNT=$PROPCOUNT/PROPCOUNT=0/" $LATEFILE
+		sed -i 's/PROPEDIT=1/PROPEDIT=0/' $LATEFILE
+	done
+
+	# Update the reboot variable
+	reboot_chk
+
+	all_values
+	reboot_fn "$1"
+}
+
+# Second menu level - MagiskHide props
+menu_magiskhide_props() {
+	INPUT2=""
+	while true
+	do
+		ACTIVE="${G} (active)${N}"
+		DEBUGGABLETXT=""
+		SECURETXT=""
+		TYPETXT=""
+		TAGSTXT=""
+		SELINUXTXT=""
+		if [ ! "$INPUT2" ]; then
+			if [ "$(get_file_value $LATEFILE "REDEBUGGABLE=")" == "true" ]; then
+				DEBUGGABLETXT=$ACTIVE
+			fi
+			if [ "$(get_file_value $LATEFILE "RESECURE=")" == "true" ]; then
+				SECURETXT=$ACTIVE
+			fi
+			if [ "$(get_file_value $LATEFILE "RETYPE=")" == "true" ]; then
+				TYPETXT=$ACTIVE
+			fi
+			if [ "$(get_file_value $LATEFILE "RETAGS=")" == "true" ]; then
+				TAGSTXT=$ACTIVE
+			fi
+			if [ "$(get_file_value $LATEFILE "RESELINUX=")" == "true" ]; then
+				SELINUXTXT=$ACTIVE
+			fi
+			clear
+			menu_header "${C}$1${N}\n Select an option below:"
+			echo ""
+			echo "${G}1${N} - ro.debuggable$DEBUGGABLETXT"
+			echo "${G}2${N} - ro.secure$SECURETXT"
+			echo "${G}3${N} - ro.build.type$TYPETXT"
+			echo "${G}4${N} - ro.build.tags$TAGSTXT"
+			echo "${G}5${N} - ro.build.selinux$SELINUXTXT"
+			if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" -gt 1 ]; then
+				echo "${G}r${N} - Reset all props"
+			fi
+			echo "${G}b${N} - Go back to main menu"
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT2
+		fi
+		case "$INPUT2" in
+			1)	menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE		
+			;;
+			2)	menu_change_prop "ro.secure" $CURRSECURE $ORIGSECURE $MODULESECURE
+			;;
+			3)	menu_change_prop "ro.build.type" $CURRTYPE $ORIGTYPE $MODULETYPE
+			;;
+			4)	menu_change_prop "ro.build.tags" $CURRTAGS $ORIGTAGS $MODULETAGS
+			;;
+			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
+			;;
+			r)	
+				if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" -gt 1 ]; then
+					menu_reset_prop_all "Reset all props"
+				else
+					invalid_input 1 2
+				fi
+			;;
+			b)
+				INPUT=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 1 2
+			;;
+		esac
+	done
+}
+
+# Third menu level - MagiskHide props
+menu_change_prop() {
+	INPUT3=""
+	while true
+	do
+		if [ ! "$INPUT3" ]; then
+			PROP=$(get_prop_type "$1")
+			REPROP=$(echo "RE$PROP" | tr '[:lower:]' '[:upper:]')
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			# Checks if the prop exists
+			if [ "$2" ]; then
+				if [ "$4" ] && [ "$(get_file_value $LATEFILE "$REPROP\=")" == "true" ]; then
+					PROPMODULETXT=", by this module"
+					BACKTXT=" back"
+				else
+					PROPMODULETXT=""
+					BACKTXT=""
+				fi
+				echo "Currently set to ${C}$2${N}$PROPMODULETXT."				
+				if [ "$2" != "$3" ]; then
+					echo "The original value is ${C}$3${N}."
+				fi
+				echo ""
+				safe_props "$1" $2
+				change_to "$1" $2
+				if [ "$SAFE" == 1 ]; then
+					echo "You currently have the safe value set."
+					echo "Are you sure you want to change it$BACKTXT to ${C}$CHANGE${N}?"
+				else
+					echo "Do you want to change it$BACKTXT to ${C}$CHANGE${N}?"
+				fi
+				echo ""
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+				read -r INPUT3
+			else
+				INPUT3="n"
+				echo "This prop doesn't currently exist on your system."
+				echo ""
+				echo "Nothing to do... Returning to main menu."
+				sleep 4
+			fi
+		fi
+		case "$INPUT3" in
+			y)
+				if [ "$PROPMODULETXT" ]; then
+					menu_reset_prop "Reset $1" "$1"
+				else
+					change_prop "$1" $CHANGE
+				fi
+				break
+			;;
+			n)
+				INPUT2=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Third menu level - Reset all MagiskHide props
+menu_reset_prop_all() {
+	INPUT3=""
+	while true
+	do
+		if [ ! "$INPUT3" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will reset all prop"
+			echo "values to default values."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y)	
+				reset_prop_all "$1"
+				break
+			;;
+			n)
+				INPUT2=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 3 2
+			;;
+		esac
+	done
+}
+
+# Third menu level - Reset specific MagiskHide prop
+menu_reset_prop() {
+	INPUT3=""
+	while true
+	do
+		if [ ! "$INPUT3" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will reset $2"
+			echo "to it's default value."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y)	
+				reset_prop "$2"
+				break
+			;;
+			n)
+				INPUT2=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 3 2
+			;;
+		esac
+	done
+}
+
+# ======================== Reset all settings ========================
+# Second menu level - Reset all settings
+reset_everything() {
+	INPUT2=""
+	while true
+	do
+		if [ ! "$INPUT2" ]; then
+			clear
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "All module settings will be"
+			echo "reset to initial values."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			if [ "$2" == "r" ]; then
+				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+				LOGTXT=" (option -r)"
+				INV1=2
+				INV2=1
+			else
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+				LOGTXT=""
+				INV1=3
+				INV2=2
+			fi
+			read -r INPUT2
+		fi
+		case "$INPUT2" in
+			y)	
+				log_handler "Resetting all module settings$LOGTXT."
+				reset_fn
+				reboot_fn "$1" $2
+				break
+			;;
+			n)	
+				if [ "$2" == "r" ]; then
+					exit_fn
+				else
+					INPUT=""
+					break
+				fi
+			;;
+			e)	
+				if [ "$2" == "r" ]; then
+					invalid_input $INV1 $INV2
+				else
+					exit_fn
+				fi
+			;;
+			*)	invalid_input $INV1 $INV2
+			;;
+		esac
+	done
+}
+
+# ====================================================
+# ==================== Root check ====================
+# ====================================================
+
+if [ $(id -u) != 0 ] ; then
+	clear
+	menu_header "${C}This script must be run with\n superuser access. Try again.${N}"
+	echo ""
+	exit 0
+fi
+
+# ====================================================
+# =================== Script check ===================
+# ====================================================
+
+if [ ! -f "$LATEFILE" ]; then
+	log_handler "Boot script can't be found. Please reboot."
+	reboot_fn "The module boot script can't be found.\n Please reboot your device to reset." "reset-script"
+fi
+
+ORIGCHECK=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
+if [ ! "$ORIGCHECK" ]; then
+	log_handler "Original values are not loaded in propsconf_late."
+	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset.\n\n Please reboot your device to reset." "reset-script"
+fi
+
+# ====================================================
+# ====================== Options =====================
+# ====================================================
+
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+	clear
+	menu_header "${C}Help${N}"
+	echo ""
+	echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's/, /,\\n/g' | sed 's/\. /\.\\n/g')
+	echo ""
+	echo "Usage: props [options]..."
+	echo ""
+	echo "Options:"
+	echo "  -h/--help	Show this message."
+	echo "  -nc		Turn off colours."
+	echo "  -p		Edit prop files."
+	echo "  -r		Reset all settings."
+	echo ""
+	echo "See the module readme or the"
+	echo "support thread @XDA for details."
+	echo ""
+	exit 0
+elif [ "$1" == "-p" ]; then
+	menu_edit_prop_files "Edit prop files" "p"
+elif [ "$1" == "-r" ]; then
+	reset_everything "Reset all settings" "r"
+elif [ "$1" ]; then
+	clear
+	menu_header "${C}Help${N}"
+	echo ""
+	echo "${R}Invalid option.${N}"
+	echo ""
+	echo "Try again without options,"
+	echo "or use -h/--help."
+	echo ""
+	exit 0
+fi
+
+# ==================================================
+# ================ Find used values ================
+# ==================================================
+
+all_values
+
+# ===================================================
+# ==================== Main menu ====================
+# ===================================================
+
+log_handler "Running props script."
+
+while true
+do
+	ORIGCHECK=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
+	if [ ! "$ORIGCHECK" ]; then
+		log_handler "Original values are not loaded in propsconf_late."
+		reboot_fn "The original prop values are not loaded,\n possibly due to a full reset.\n\n Please reboot your device to reset." "reset-script"
+	else
+		INPUT=""
+		ACTIVE="${G} (active)${N}"
+		DISABLED="${R} (disabled)${N}"
+		PRINTTXT=""
+		FILETXT=""
+		PROPTXT=""
+		if [ ! "$INPUT" ]; then
+			if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 0 ]; then
+				PRINTTXT=$DISABLED
+			elif [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
+				PRINTTXT=$ACTIVE
+			fi
+			if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 1 ]; then
+				FILETXT=$DISABLED
+			elif [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+				FILETXT=$ACTIVE
+			fi
+			if [ "$(get_file_value $LATEFILE "PROPEDIT=")" == 1 ]; then
+				PROPTXT=$ACTIVE
+			fi
+			clear
+			menu_header "Select an option below."
+			echo ""
+			echo "${G}1${N} - Device fingerprint$PRINTTXT"
+			echo "${G}2${N} - Edit prop files$FILETXT"
+			echo "${G}3${N} - MagiskHide props$PROPTXT"
+			echo "${G}r${N} - Reset all settings"
+			echo "${G}b${N} - Reboot device"
+			echo ""
+			if [ "$(get_file_value $LATEFILE "REBOOTCHK=")" == 1 ]; then
+				echo "${R}Some settings have been changed.${N}"
+				echo "${R}Please reboot for them to take affect.${N}"
+				echo ""
+			fi
+			echo "See the module readme or the"
+			echo "support thread @XDA for details."
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT
+		fi
+		case "$INPUT" in
+			1)	menu_change_fingerprint "ro.build.fingerprint$PRINTTXT" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
+			;;
+			2)	menu_edit_prop_files "Edit prop files$FILETXT"
+			;;
+			3)	menu_magiskhide_props "MagiskHide props$PROPTXT"
+			;;
+			r)	reset_everything "Reset all settings"
+			;;
+			b)	reboot_fn "Reboot device" "reboot"
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 1 1
+			;;
+		esac
+	fi
+done
