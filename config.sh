@@ -197,8 +197,7 @@ script_placement() {
 placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
 	case $FILEVALUE in
-		*PLACEHOLDER*)	ui_print "- Updating placeholders"
-						sed -i "s@$2\=$3@$2\=\"$4\"@g" $1
+		*PLACEHOLDER*)	sed -i "s@$2\=$3@$2\=\"$4\"@g" $1
 		;;
 	esac
 }
@@ -254,6 +253,7 @@ script_install() {
 	usnf_check
 	bin_check
 	script_placement
+	ui_print "- Updating placeholders"
 	placeholder_update $MODPATH/post-fs-data.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/post-fs-data.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
 }
