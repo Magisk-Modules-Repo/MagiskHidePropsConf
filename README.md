@@ -7,7 +7,7 @@ Download the zip from the [module support thread](https://forum.xda-developers.c
 Any previous versions are kept in the first post of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199).
 
 
-## Use
+## Usage
 Run the command `props` (as su) in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)).
 ```
 su
@@ -59,12 +59,15 @@ If, for some reason, you need one or more of these to be kept as their original 
 You can also use this module to set these props to your preferred value with MagiskHide disabled.
 
 
-## Miscellaneous
+## Miscellaneous MagiskHide issues
 If you're having issues passing SafetyNet or otherwise getting MagiskHide to work, take a look in the [Magisk and MagiskHide Installation and Troubleshooting Guide](https://www.didgeridoohan.com/magisk). Lots of good info there (if I may say so myself)...
 
 
 ## Support, etc
 If you're having issues, questions or suggestions, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @XDA.
+
+### Logs, etc
+Please provide the logs saved in /cache, "propsconf.log" and "propsconf_last.log", together with a detailed description of your issue. Providing the output from terminal might also be useful.
 
 
 ## Source
