@@ -368,10 +368,7 @@ menu_pickprint() {
 		if [ ! "$INPUT3" ]; then
 			ITEMCOUNT=1
 			clear
-			menu_header "${C}$1${N}\n Select an option below."
-			echo ""
-			echo "Keep in mind that it is always best to"
-			echo "use a fingerprint meant for your device."
+			menu_header "List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n ${C}$1${N}\n Select an option below."
 			echo ""
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
@@ -1034,6 +1031,12 @@ if [ ! "$ORIGCHECK" ]; then
 	log_handler "Original values are not loaded in propsconf_late."
 	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset.\n\n Please reboot your device to reset." "reset-script"
 fi
+
+# ====================================================
+# ================ Check for updates =================
+# ====================================================
+
+download_prints
 
 # ====================================================
 # ====================== Options =====================

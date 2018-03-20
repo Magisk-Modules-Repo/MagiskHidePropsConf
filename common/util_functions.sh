@@ -8,12 +8,16 @@ LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 LOGFILE=/cache/propsconf.log
 MAGISKLOC=/data/adb/magisk
 BBPATH=$MAGISKLOC/busybox
+PRINTSLOC=$MODPATH/prints.sh
+PRINTSTMP=/cache/prints.sh
+PRINTSWWW="https://raw.githubusercontent.com/Didgeridoohan/MagiskHide-Props-Config/master/common/prints.sh"
 alias cat="$BBPATH cat"
 alias grep="$BBPATH grep"
-alias sed="$BBPATH sed"
-alias tr="$BBPATH tr"
 alias reboot="/system/bin/reboot"
 alias resetprop="$MAGISKLOC/magisk resetprop"
+alias sed="$BBPATH sed"
+alias tr="$BBPATH tr"
+alias wget="$BBPATH wget"
 
 # MagiskHide props
 PROPSLIST="
@@ -83,4 +87,16 @@ placeholder_update() {
 						log_handler "Placeholder '$3' updated to '$4' in '$1'."
 		;;
 	esac
+}
+
+download_prints() {
+	wget -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE
+	if [ "$(get_file_value $PRINTSTMP "PRINTSV=")" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+		if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -ge "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
+			mv -f $PRINTSTMP $PRINTSLOC
+			log_handler "Updated prints.sh to v$(get_file_value $PRINTSLOC "PRINTSV=")."
+		fi
+	else
+		rm -f $PRINTSTMP
+	fi
 }
