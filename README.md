@@ -42,6 +42,14 @@ Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
 
 
+## Current fingerprints list version
+The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) for info.
+
+Just run the `props` command and it'll be updated automatically.
+
+**_Current fingerprints list version - v1_**
+
+
 ## Editing build.prop and default.prop
 Some apps and services look at the actual files, rather than the set prop values. With this module feature you can make sure that the actual prop in build.prop and default.prop is changed to match whatever value the prop has been set to by either MagiskHide or the module. If there's a prop value set by the module (see below), that value takes precedence.
 
@@ -80,5 +88,9 @@ Please provide the logs saved in /cache, "propsconf.log" and "propsconf_last.log
 
 
 ## Changelog
+### v1.1.0  
+- New fingerprint added (Sony Xperia Z3).
+- Added the ability to update the fingerprints list automatically
+
 ### v1.0.0  
 - Initial release. Compatible with Magisk v15+.
