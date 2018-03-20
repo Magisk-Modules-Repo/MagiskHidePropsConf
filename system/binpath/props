@@ -368,7 +368,7 @@ menu_pickprint() {
 		if [ ! "$INPUT3" ]; then
 			ITEMCOUNT=1
 			clear
-			menu_header "List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n ${C}$1${N}\n Select an option below."
+			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
 			echo ""
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
