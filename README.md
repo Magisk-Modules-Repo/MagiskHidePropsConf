@@ -35,7 +35,7 @@ getprop ro.build.fingerprint
 If you're already on a custom ROM that can't pass the CTS profile check, this might not be an option... Head over to your device's forum and ask for help. If someone can run the getprop command on their device for you, you're good to go.
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file in the root of your internal storage with the fingerprint. It needs to be formated as follows:`<device name>=<fingerprint>`.
+You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`<device name>=<fingerprint>`.
 Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
