@@ -47,7 +47,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and it'll be updated automatically.
 
-**_Current fingerprints list version - v1_**
+**_Current fingerprints list version - v2_**
 
 
 ## Editing build.prop and default.prop
