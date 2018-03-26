@@ -90,7 +90,6 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 ### v1.2.0  
 - Now in the Magisk repo. Updated to match.
 - New fingerprint, list v3.
-- Check connection when checking for fingerprint updates.
 - Show info when checking for fingerprint updates.
 - Minor changes and improvements.
 
