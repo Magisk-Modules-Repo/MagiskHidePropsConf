@@ -10,10 +10,9 @@ MAGISKLOC=/data/adb/magisk
 BBPATH=$MAGISKLOC/busybox
 PRINTSLOC=$MODPATH/prints.sh
 PRINTSTMP=/cache/prints.sh
-PRINTSWWW="https://raw.githubusercontent.com/Didgeridoohan/MagiskHide-Props-Config/master/common/prints.sh"
+PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
 alias cat="$BBPATH cat"
 alias grep="$BBPATH grep"
-alias reboot="/system/bin/reboot"
 alias resetprop="$MAGISKLOC/magisk resetprop"
 alias sed="$BBPATH sed"
 alias tr="$BBPATH tr"
@@ -41,6 +40,30 @@ ro.build.selinux=0
 log_handler() {
 	echo "" >> $LOGFILE
 	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE
+}
+log_print() {
+	echo "$1"
+	log_handler "$1"
+}
+
+
+#Divider
+DIVIDER="${Y}=====================================${N}"
+
+# Header
+menu_header() {
+	if [ "$MODVERSION" == "VER_PLACEHOLDER" ]; then
+		VERSIONTXT=""
+	else
+		VERSIONTXT=$MODVERSION
+	fi
+	echo ""
+	echo "${W}MagiskHide Props Config $VERSIONTXT${N}"
+	echo "${W}by Didgeridoohan @ XDA Developers${N}"
+	echo ""
+	echo $DIVIDER
+	echo -e " $1"
+	echo $DIVIDER
 }
 
 # Finding file values
@@ -90,13 +113,29 @@ placeholder_update() {
 }
 
 download_prints() {
-	wget -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE
-	if [ "$(get_file_value $PRINTSTMP "PRINTSV=")" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
-		if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -ge "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
-			mv -f $PRINTSTMP $PRINTSLOC
-			log_handler "Updated prints.sh to v$(get_file_value $PRINTSLOC "PRINTSV=")."
+	clear
+	menu_header "Updating fingerprints list"
+	echo ""
+	log_print "Checking list version."
+	wget -T 10 -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE	
+	if [ -f "$PRINTSTMP" ]; then
+		LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
+		if [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+			if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
+				mv -f $PRINTSTMP $PRINTSLOC
+				# Updates list version in module.prop
+				VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
+				sed -i "s/version=$VERSIONTMP/version=$MODVERSION-v$LISTVERSION/g" $MODPATH/module.prop
+				log_print "Updated list to v$LISTVERSION."
+			else
+				rm -f $PRINTSTMP
+				log_print "New fingerprints list requires module update."
+			fi
+		else
+			rm -f $PRINTSTMP
+			log_print "Fingerprints list up-to-date."
 		fi
 	else
-		rm -f $PRINTSTMP
+		log_print "No connection."
 	fi
 }

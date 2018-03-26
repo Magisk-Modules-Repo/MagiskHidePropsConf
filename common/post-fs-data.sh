@@ -18,7 +18,7 @@ USNFLIST=USNF_PLACEHOLDER
 # Load functions
 . $MODDIR/util_functions.sh
 
-MODVERSION=$(get_file_value $MODDIR/module.prop "version=")
+MODVERSION=$(echo $(get_file_value $MODDIR/module.prop "version=") | sed 's/-.*//')
 
 # Saves the previous log (if available) and creates a new one
 if [ -f "$LOGFILE" ]; then

@@ -3,12 +3,13 @@
 
 
 ## Installation
-Download the zip from the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199), and install through the Magisk Manager -> Modules, or from recovery.
-Any previous versions are kept in the first post of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199).
+Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199), and install through the Magisk Manager -> Modules, or from recovery.
+
+The current release is always attached to the OP of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199). Any previous releases can also be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases). If downloading a release from GitHub, make sure to repackage the zip with all the module files and folders in the root of the zip. Otherwise it won't install (error: "not a Magisk zip").
 
 
 ## Usage
-Run the command `props` (as su) in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)).
+After installing the module and rebooting, run the command `props` (as su) in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options.
 ```
 su
 props
@@ -21,9 +22,7 @@ If your device can't pass SafetyNet fully, the CTS profile check fails while bas
 
 This might be because your device simply hasn't been certified or that the ROM you are using on your device isn't recognised by Google (because it's a custom ROM). 
 
-To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this.
-
-Keep in mind that changing the fingerprint of your device might have some side-effects, since you are changing how your device is percieved. Most of the times it works fine though. IMO it is preferable to use a fingerprint from a stock ROM for your specific device.
+To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
 There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) toghether with device details.
 
@@ -35,7 +34,7 @@ getprop ro.build.fingerprint
 If you're already on a custom ROM that can't pass the CTS profile check, this might not be an option... Head over to your device's forum and ask for help. If someone can run the getprop command on their device for you, you're good to go.
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`<device name>=<fingerprint>`.
+You can add your own fingerprint to the list by placing a file, named `printslis`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name=fingerprint`.
 Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
@@ -45,9 +44,9 @@ Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) for info.
 
-Just run the `props` command and it'll be updated automatically.
+Just run the `props` command and the list will be updated automatically.
 
-**_Current fingerprints list version - v2_**
+**_Current fingerprints list version - v3_**
 
 
 ## Editing build.prop and default.prop
@@ -72,14 +71,14 @@ If you're having issues passing SafetyNet or otherwise getting MagiskHide to wor
 
 
 ## Support, etc
-If you're having issues, questions or suggestions, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @XDA.
+If you have questions, suggestions or are experiensing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @XDA.
 
 ### Logs, etc
-Please provide the logs saved in /cache, "propsconf.log" and "propsconf_last.log", together with a detailed description of your issue. Providing the output from terminal might also be useful.
+In case of issues, please provide the logs, saved in /cache, "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful.
 
 
 ## Source
-[GitHub](https://github.com/Didgeridoohan/MagiskHide-Props-Config)
+[GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config)
 
 
 ## Credits
@@ -88,9 +87,29 @@ Please provide the logs saved in /cache, "propsconf.log" and "propsconf_last.log
 
 
 ## Changelog
+### v1.2.0  
+- Now in the Magisk repo. Updated to match.
+- New fingerprint, list v3.
+- Check connection when checking for fingerprint updates.
+- Show info when checking for fingerprint updates.
+- Minor changes and improvements.
+
 ### v1.1.0  
 - New fingerprint added (Sony Xperia Z3).
 - Added the ability to update the fingerprints list automatically
 
 ### v1.0.0  
 - Initial release. Compatible with Magisk v15+.
+
+
+## Current fingerprints list
+### List v3  
+- Google Nexus 6 (7.1.1)
+- Google Pixel 2 (P DP1)
+- Google Pixel 2 XL (8.1.0)
+- OnePlus 3T (8.0.0)
+- OnePlus 5T (7.1.1)
+- Samsung Galaxy Grand Prime (5.0.2)
+- Samsung Galaxy S8 Plus (7.0)
+- Sony Xperia Z3 (6.0.1)
+- Xiaomi Mi6 (7.1.1)

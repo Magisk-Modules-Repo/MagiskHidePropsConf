@@ -92,25 +92,6 @@ all_values() {
 	module_values
 }
 
-#Divider
-DIVIDER="${Y}=====================================${N}"
-
-# Header
-menu_header() {
-	if [ "$MODVERSION" == "VER_PLACEHOLDER" ]; then
-		VERSIONTXT=""
-	else
-		VERSIONTXT=$MODVERSION
-	fi
-	echo ""
-	echo "${W}MagiskHide Props Config $VERSIONTXT${N}"
-	echo "${W}by Didgeridoohan @ XDA Developers${N}"
-	echo ""
-	echo $DIVIDER
-	echo -e " $1"
-	echo $DIVIDER
-}
-
 invalid_input() {
 	INPMSG=""
 
@@ -199,12 +180,13 @@ reboot_fn() {
 		case "$INPUT5" in
 			y)
 				log_handler "Rebooting..."
-				reboot 2 >> $LOGFILE
+				setprop sys.powerctl reboot
 				sleep 15
 				log_handler "Rebooting failed."
 				echo ""
 				echo "That doesn't seem like it worked..."
-				echo "Reboot manually."
+				echo "Please reboot manually."
+				echo ""
 				exit 0
 			;;
 			n)
