@@ -12,7 +12,7 @@ The current release is always attached to the OP of the [module support thread](
 
 
 ## Usage
-After installing the module and rebooting, run the command `props` (as su) in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options.
+After installing the module and rebooting, run the command `props` (as su) in a terminal emulator (you can find one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options.
 ```
 su
 props
