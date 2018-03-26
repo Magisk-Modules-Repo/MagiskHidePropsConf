@@ -2,6 +2,9 @@
 ## By Didgeridoohan @ XDA Developers
 
 
+[Support Thread @ XDA](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199)
+
+
 ## Installation
 Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199), and install through the Magisk Manager -> Modules, or from recovery.
 
