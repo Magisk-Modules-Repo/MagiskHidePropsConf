@@ -300,7 +300,7 @@ menu_change_fingerprint() {
 				else
 					PRINTMODULETXT=""
 				fi
-				if [ "$2" ]
+				if [ "$2" ]; then
 					echo "Currently set to$PRINTMODULETXT:"
 					echo ${C}$2${N}
 					if [ "$2" != "$3" ]; then
