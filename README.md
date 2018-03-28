@@ -12,7 +12,7 @@ The current release is always attached to the OP of the [module support thread](
 
 
 ## Usage
-After installing the module and rebooting, run the command `props` (as su) in a terminal emulator (you can find one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options.
+After installing the module and rebooting, run the command `props` (as su) in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options.
 ```
 su
 props
@@ -37,7 +37,7 @@ getprop ro.build.fingerprint
 If you're already on a custom ROM that can't pass the CTS profile check, this might not be an option... Head over to your device's forum and ask for help. If someone can run the getprop command on their device for you, you're good to go.
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file, named `printslis`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name=fingerprint`.
+You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name=fingerprint`.
 Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
@@ -49,7 +49,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically.
 
-**_Current fingerprints list version - v3_**
+**_Current fingerprints list version - v4_**
 
 
 ## Editing build.prop and default.prop
@@ -90,9 +90,14 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 
 
 ## Changelog
+### v1.2.1  
+- Fixed logic for checking the original prop values.
+- New fingerprints (Xiaomi Mi 5, ZTE Axon 7), list v4.
+- Minor fixes.
+
 ### v1.2.0  
 - Now in the Magisk repo. Updated to match.
-- New fingerprint, list v3.
+- New fingerprint (Pixel 2), list v3.
 - Show info when checking for fingerprint updates.
 - Minor changes and improvements.
 
@@ -105,7 +110,7 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 
 
 ## Current fingerprints list
-### List v3  
+### List v4  
 - Google Nexus 6 (7.1.1)
 - Google Pixel 2 (P DP1)
 - Google Pixel 2 XL (8.1.0)
@@ -114,4 +119,6 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy S8 Plus (7.0)
 - Sony Xperia Z3 (6.0.1)
+- Xiaomi Mi 5 (7.0)
 - Xiaomi Mi6 (7.1.1)
+- ZTE Axon 7 (7.1.1)

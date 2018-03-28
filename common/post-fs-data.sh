@@ -85,6 +85,9 @@ ORIGTYPE=$(resetprop ro.build.type)
 ORIGTAGS=$(resetprop ro.build.tags)
 ORIGSELINUX=$(resetprop ro.build.selinux)
 ORIGFINGERPRINT=$(resetprop ro.build.fingerprint)
+if [ ! "$ORIGFINGERPRINT" ]; then
+	ORIGFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
+fi
 
 # Save defatul prop values in propsconf_late
 sed -i "s/ORIGDEBUGGABLE=$LATEDEBUGGABLE/ORIGDEBUGGABLE=$ORIGDEBUGGABLE/" $LATEFILE

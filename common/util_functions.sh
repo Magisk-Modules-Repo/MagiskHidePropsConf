@@ -139,3 +139,18 @@ download_prints() {
 		log_print "No connection."
 	fi
 }
+
+orig_check() {
+	PROPSTMPLIST=$PROPSLIST"
+	ro.build.fingerprint
+	"
+	ORIGLOAD=0
+	for PROPTYPE in $PROPSTMPLIST; do
+		PROP=$(get_prop_type $PROPTYPE)
+		ORIGPROP=$(echo "ORIG$PROP" | tr '[:lower:]' '[:upper:]')
+		ORIGVALUE=$(get_file_value $LATEFILE "$ORIGPROP=")
+		if [ "$ORIGVALUE" ]; then
+			ORIGLOAD=1
+		fi
+	done
+}

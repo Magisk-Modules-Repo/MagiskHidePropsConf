@@ -49,6 +49,9 @@ curr_values() {
 	CURRTAGS=$(resetprop ro.build.tags)
 	CURRSELINUX=$(resetprop ro.build.selinux)
 	CURRFINGERPRINT=$(resetprop ro.build.fingerprint)
+	if [ ! "$CURRFINGERPRINT" ]; then
+		CURRFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
+	fi
 }
 
 # File values
@@ -227,7 +230,6 @@ reset_print() {
 	log_handler "Resetting device fingerprint."
 
 	SUBA=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
-	PRINTA=$(echo $(cat $LATEFILE | grep "resetprop -v ro.build.fingerprint"))
 
 	# Saves new module value
 	sed -i "s@MODULEFINGERPRINT=$SUBA@MODULEFINGERPRINT=@" $LATEFILE
@@ -298,11 +300,16 @@ menu_change_fingerprint() {
 				else
 					PRINTMODULETXT=""
 				fi
-				echo "Currently set to$PRINTMODULETXT:"
-				echo ${C}$2${N}
-				if [ "$2" != "$3" ]; then
-					echo "The original value is:"
-					echo ${C}$3${N}
+				if [ "$2" ]
+					echo "Currently set to$PRINTMODULETXT:"
+					echo ${C}$2${N}
+					if [ "$2" != "$3" ]; then
+						echo "The original value is:"
+						echo ${C}$3${N}
+					fi
+				else
+					echo "ro.build.fingerprint doesn't seem to"
+					echo "currently exist on your system."
 				fi
 				echo ""
 				echo "Enter the new fingerprint or"
@@ -1008,10 +1015,10 @@ if [ ! -f "$LATEFILE" ]; then
 	reboot_fn "The module boot script can't be found.\n Please reboot your device to reset." "reset-script"
 fi
 
-ORIGCHECK=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
-if [ ! "$ORIGCHECK" ]; then
+orig_check
+if [ "$ORIGLOAD" == 0 ]; then
 	log_handler "Original values are not loaded in propsconf_late."
-	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset.\n\n Please reboot your device to reset." "reset-script"
+	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
 fi
 
 # ====================================================
@@ -1072,10 +1079,10 @@ log_handler "Running props script."
 
 while true
 do
-	ORIGCHECK=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
-	if [ ! "$ORIGCHECK" ]; then
+	orig_check
+	if [ "$ORIGLOAD" == 0 ]; then
 		log_handler "Original values are not loaded in propsconf_late."
-		reboot_fn "The original prop values are not loaded,\n possibly due to a full reset.\n\n Please reboot your device to reset." "reset-script"
+		reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
 	else
 		INPUT=""
 		ACTIVE="${G} (active)${N}"
