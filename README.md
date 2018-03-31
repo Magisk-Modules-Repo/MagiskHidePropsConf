@@ -49,7 +49,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically.
 
-**_Current fingerprints list version - v4_**
+**_Current fingerprints list version - v5_**
 
 
 ## Editing build.prop and default.prop
@@ -110,15 +110,20 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 
 
 ## Current fingerprints list
-### List v4  
+### List v5  
 - Google Nexus 6 (7.1.1)
 - Google Pixel 2 (P DP1)
 - Google Pixel 2 XL (8.1.0)
 - OnePlus 3T (8.0.0)
 - OnePlus 5T (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
-- Samsung Galaxy S8 Plus (7.0)
+- Samsung Galaxy Note 4 (6.0.1)
+- Samsung Galaxy S7 (7.0)
+- Samsung Galaxy S8 Plus (8.0.0)
+- Sony Xperia XZ1 Compact (8.0.0)
 - Sony Xperia Z3 (6.0.1)
 - Xiaomi Mi 5 (7.0)
+- Xiaomi Mi 5S (7.0)
+- Xiaomi Mi 5S Plus (6.0.1)
 - Xiaomi Mi6 (7.1.1)
 - ZTE Axon 7 (7.1.1)
