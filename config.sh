@@ -102,7 +102,7 @@ set_permissions() {
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed 's/.*=//'
+	cat $1 | grep $2 | sed 's/.*=//' | sed 's/\"//g'
 }
 
 # Variables
@@ -130,7 +130,12 @@ BUILDEDIT
 DEFAULTEDIT
 PROPCOUNT
 PROPEDIT
+CUSTOMCHK
 REBOOTCHK
+OPTIONCOLOUR
+OPTIONWEB
+"
+PROPSETTINGSLIST="
 FILEDEBUGGABLE
 FILESECURE
 FILETYPE
@@ -148,6 +153,7 @@ MODULETYPE
 MODULETAGS
 MODULESELINUX
 MODULEFINGERPRINT
+CUSTOMPROPS
 "
 PROPSLIST="
 debuggable
@@ -159,8 +165,7 @@ fingerprint
 "
 USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix"
 
-# Places the boot script in service.d and puts a backup in the module folder
-# Places util_functions.sh in the module folder
+# Places various module scripts in their proper places
 script_placement() {
 	ui_print "- Installing scripts"
 	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh
@@ -172,18 +177,35 @@ script_placement() {
 		elif [ "$SETTRANSF" -gt "$FILEV" ]; then
 			ui_print "- Settings cleared (script updated)"
 		else
-			ui_print "- Transfering settings from old script"
+			ui_print "- Script updated"
+			ui_print "- Transferring settings from old script"
+			# Prop settings
+			for ITEM in $SETTINGSLIST; do
+				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+				SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
+				if [ "$SOLD" ]; then
+					sed -i "s@${ITEM}=${SNEW}@${ITEM}=${SOLD}@" $UPDATELATEFILE
+				fi
+			done
 			# Prop values
-			for S in $SETTINGSLIST; do				
-				SOLD=$(get_file_value $LATEFILE "$S=")
-				SNEW=$(get_file_value $UPDATELATEFILE "$S=")
-				sed -i "s@$S\=$SNEW@$S\=$SOLD@g" $UPDATELATEFILE
+			for ITEM in $PROPSETTINGSLIST; do
+				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+				if [ "$SOLD" ]; then
+					sed -i "s@${ITEM}=\"\"@${ITEM}=\"${SOLD}\"@" $UPDATELATEFILE
+				fi
 			done
 			# Prop and file edits
-			for P in $PROPSLIST; do
-				REPROP=$(echo "RE$P" | tr '[:lower:]' '[:upper:]')
-				POLD=$(get_file_value $LATEFILE "$REPROP\=")
-				sed -i "s/$REPROP\=false/$REPROP\=$POLD/" $UPDATELATEFILE
+			for ITEM in $PROPSLIST; do
+				REPROP=$(echo "RE${ITEM}" | tr '[:lower:]' '[:upper:]')
+				SETPROP=$(echo "SET${ITEM}" | tr '[:lower:]' '[:upper:]')
+				REOLD=$(get_file_value $LATEFILE "${REPROP}=")
+				SETOLD=$(get_file_value $LATEFILE "${SETPROP}=")
+				if [ "$REOLD" ]; then
+					sed -i "s/${REPROP}=false/${REPROP}=${REOLD}/" $UPDATELATEFILE
+				fi
+				if [ "$SETOLD" ]; then
+					sed -i "s/${SETPROP}=false/${SETPROP}=${SETOLD}/" $UPDATELATEFILE
+				fi
 			done
 		fi
 		cp -af $UPDATELATEFILE $LATEFILE
@@ -197,7 +219,7 @@ script_placement() {
 placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
 	case $FILEVALUE in
-		*PLACEHOLDER*)	sed -i "s@$2\=$3@$2\=\"$4\"@g" $1
+		*PLACEHOLDER*)	sed -i "s@${2}=${3}@${2}=\"${4}\"@g" $1
 		;;
 	esac
 }
@@ -248,12 +270,34 @@ bin_check() {
 	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN
 }
 
+# Check for A/B devices
+ab_check() {
+	if [ -z $SLOT ]; then
+		CACHELOC=/cache
+	else
+		CACHELOC/data/cache
+	fi
+}
+
+# Installs everything
 script_install() {
 	build_prop_check
 	usnf_check
 	bin_check
+	ab_check
 	script_placement
 	ui_print "- Updating placeholders"
-	placeholder_update $MODPATH/post-fs-data.sh BIN BIN_PLACEHOLDER "$BIN"
-	placeholder_update $MODPATH/post-fs-data.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
+	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
+	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
+	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+	MODVERSION=$(echo $(get_file_value $MODPATH/module.prop "version=") | sed 's/-.*//')
+	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER $MODVERSION
+	# Load module functions
+	. $MODPATH/util_functions.sh
+	# Checks original file values
+	file_values
+	orig_safe
+	# Checks for configuration file	
+	config_file
 }

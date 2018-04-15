@@ -1,24 +1,19 @@
 #!/system/bin/sh
-# Please don't hardcode /magisk/modname/... ; instead, please use $MODDIR/...
+# Please don't hardcode /magisk/modname/... ; instead, please use $MODPATH/...
 # This will make your scripts compatible even if Magisk change its mount point in the future
-MODDIR=${0%/*}
+MODPATH=${0%/*}
 
 # This script will be executed in post-fs-data mode
 # More info in the main Magisk thread
 
 # MagiskHide Props Config
-# By Didgeridoohan @ XDA-Developers
+# By Didgeridoohan @ XDA Developers
 
 # Variables
-IMGPATH=$(dirname "$MODDIR")
-LASTLOGFILE=/cache/propsconf_last.log
-BIN=BIN_PLACEHOLDER
-USNFLIST=USNF_PLACEHOLDER
+IMGPATH=$(dirname "$MODPATH")
 
 # Load functions
-. $MODDIR/util_functions.sh
-
-MODVERSION=$(echo $(get_file_value $MODDIR/module.prop "version=") | sed 's/-.*//')
+. $MODPATH/util_functions.sh
 
 # Saves the previous log (if available) and creates a new one
 if [ -f "$LOGFILE" ]; then
@@ -31,19 +26,17 @@ echo "**************** By Didgeridoohan ***************" >> $LOGFILE
 echo "***************************************************" >> $LOGFILE
 log_handler "Log start."
 
-# Check for boot scripts, restore backup if deleted
-if [ ! -f "$LATEFILE" ]; then
-	cp -af $MODDIR/propsconf_late $LATEFILE
+# Check for boot scripts and restore backup if deleted, or if the resetfile is present
+if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
+	cp -af $MODPATH/propsconf_late $LATEFILE
 	chmod 755 $LATEFILE
-	log_handler "Boot script restored."
+	log_handler "Boot script restored/reset (${LATEFILE})."
 fi
 
-# Update placeholders in util_functions.sh
+# Update placeholders
 # Image path
 placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
-placeholder_update $MODDIR/system/$BIN/props IMGPATH IMG_PLACEHOLDER $IMGPATH
-# Module version
-placeholder_update $MODDIR/system/$BIN/props MODVERSION VER_PLACEHOLDER $MODVERSION
+placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER $IMGPATH
 
 # Check the reboot variable
 if [ "$(get_file_value $LATEFILE "REBOOTCHK=")" == 1 ]; then
@@ -51,51 +44,30 @@ if [ "$(get_file_value $LATEFILE "REBOOTCHK=")" == 1 ]; then
 fi
 
 # Get the current values saved in propsconf_late
-LATEDEBUGGABLE=$(get_file_value $LATEFILE "ORIGDEBUGGABLE=")
-LATEFILEDEBUGGABLE=$(get_file_value $LATEFILE "FILEDEBUGGABLE=")
-LATESECURE=$(get_file_value $LATEFILE "ORIGSECURE=")
-LATEFILESECURE=$(get_file_value $LATEFILE "FILESECURE=")
-LATETYPE=$(get_file_value $LATEFILE "ORIGTYPE=")
-LATEFILETYPE=$(get_file_value $LATEFILE "FILETYPE=")
-LATETAGS=$(get_file_value $LATEFILE "ORIGTAGS=")
-LATEFILETAGS=$(get_file_value $LATEFILE "FILETAGS=")
-LATESELINUX=$(get_file_value $LATEFILE "ORIGSELINUX=")
-LATEFILESELINUX=$(get_file_value $LATEFILE "FILESELINUX=")
-LATEFINGERPRINT=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
+orig_values
+latefile_values
 
 # Get default file values
-FILEDEBUGGABLE=$(get_file_value /default.prop ro.debuggable)
-FILESECURE=$(get_file_value /default.prop ro.secure)
-FILETYPE=$(get_file_value /system/build.prop ro.build.type)
-FILETAGS=$(get_file_value /system/build.prop ro.build.tags)
-FILESELINUX=$(get_file_value /system/build.prop ro.build.selinux)
+file_values
 
 # Save default file values in propsconf_late
-sed -i "s/FILEDEBUGGABLE=$LATEFILEDEBUGGABLE/FILEDEBUGGABLE=$FILEDEBUGGABLE/" $LATEFILE
-sed -i "s/FILESECURE=$LATEFILESECURE/FILESECURE=$FILESECURE/" $LATEFILE
-sed -i "s/FILETYPE=$LATEFILETYPE/FILETYPE=$FILETYPE/" $LATEFILE
-sed -i "s/FILETAGS=$LATEFILETAGS/FILETAGS=$FILETAGS/" $LATEFILE
-sed -i "s/FILESELINUX=$LATEFILESELINUX/FILESELINUX=$FILESELINUX/" $LATEFILE
+sed -i "s/FILEDEBUGGABLE=\"$LATEFILEDEBUGGABLE\"/FILEDEBUGGABLE=\"$FILEDEBUGGABLE\"/" $LATEFILE
+sed -i "s/FILESECURE=\"$LATEFILESECURE\"/FILESECURE=\"$FILESECURE\"/" $LATEFILE
+sed -i "s/FILETYPE=\"$LATEFILETYPE\"/FILETYPE=\"$FILETYPE\"/" $LATEFILE
+sed -i "s/FILETAGS=\"$LATEFILETAGS\"/FILETAGS=\"$FILETAGS\"/" $LATEFILE
+sed -i "s/FILESELINUX=\"$LATEFILESELINUX\"/FILESELINUX=\"$FILESELINUX\"/" $LATEFILE
 log_handler "Default file values saved to $LATEFILE."
 
 # Get the default prop values
-ORIGDEBUGGABLE=$(resetprop ro.debuggable)
-ORIGSECURE=$(resetprop ro.secure)
-ORIGTYPE=$(resetprop ro.build.type)
-ORIGTAGS=$(resetprop ro.build.tags)
-ORIGSELINUX=$(resetprop ro.build.selinux)
-ORIGFINGERPRINT=$(resetprop ro.build.fingerprint)
-if [ ! "$ORIGFINGERPRINT" ]; then
-	ORIGFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
-fi
+curr_values
 
-# Save defatul prop values in propsconf_late
-sed -i "s/ORIGDEBUGGABLE=$LATEDEBUGGABLE/ORIGDEBUGGABLE=$ORIGDEBUGGABLE/" $LATEFILE
-sed -i "s/ORIGSECURE=$LATESECURE/ORIGSECURE=$ORIGSECURE/" $LATEFILE
-sed -i "s/ORIGTYPE=$LATETYPE/ORIGTYPE=$ORIGTYPE/" $LATEFILE
-sed -i "s/ORIGTAGS=$LATETAGS/ORIGTAGS=$ORIGTAGS/" $LATEFILE
-sed -i "s/ORIGSELINUX=$LATESELINUX/ORIGSELINUX=$ORIGSELINUX/" $LATEFILE
-sed -i "s@ORIGFINGERPRINT=$LATEFINGERPRINT@ORIGFINGERPRINT=$ORIGFINGERPRINT@" $LATEFILE
+# Save default prop values in propsconf_late
+sed -i "s/ORIGDEBUGGABLE=\"$ORIGDEBUGGABLE\"/ORIGDEBUGGABLE=\"$CURRDEBUGGABLE\"/" $LATEFILE
+sed -i "s/ORIGSECURE=\"$ORIGSECURE\"/ORIGSECURE=\"$CURRSECURE\"/" $LATEFILE
+sed -i "s/ORIGTYPE=\"$ORIGTYPE\"/ORIGTYPE=\"$CURRTYPE\"/" $LATEFILE
+sed -i "s/ORIGTAGS=\"$ORIGTAGS\"/ORIGTAGS=\"$CURRTAGS\"/" $LATEFILE
+sed -i "s/ORIGSELINUX=\"$ORIGSELINUX\"/ORIGSELINUX=\"$CURRSELINUX\"/" $LATEFILE
+sed -i "s@ORIGFINGERPRINT=\"$ORIGFINGERPRINT\"@ORIGFINGERPRINT=\"$CURRFINGERPRINT\"@" $LATEFILE
 log_handler "Current prop values saved to $LATEFILE."
 
 # Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
@@ -112,7 +84,7 @@ if [ "$PRINTMODULE" == "true" ]; then
 	log_handler "Fingerprint modification disabled."	
 else
 	sed -i 's/FINGERPRINTENB=0/FINGERPRINTENB=1/' $LATEFILE
-	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ]; then		
+	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ]; then
 		log_handler "Fingerprint modification enabled."
 	else
 		log_handler "Fingerprint modification disabled."
@@ -120,25 +92,16 @@ else
 fi
 
 # Check if original file values are safe
-sed -i 's/FILESAFE=0/FILESAFE=1/' $LATEFILE
-for V in $PROPSLIST; do
-	PROP=$(get_prop_type $V)
-	FILEPROP=$(echo "FILE$PROP" | tr '[:lower:]' '[:upper:]')
-	FILEVALUE=$(eval "echo \$$FILEPROP")
-	log_handler "Checking $FILEPROP=$FILEVALUE"
-	safe_props $V $FILEVALUE
-	if [ "$SAFE" == 0 ]; then
-		log_handler "Prop $V set to triggering value in prop file."
-		sed -i 's/FILESAFE=1/FILESAFE=0/' $LATEFILE
-	else
-		log_handler "Prop $V set to \"safe\" value in prop file."
-	fi
-done
+orig_safe
 
+# Checks for configuration file
+config_file
+
+# Edits build.prop
 if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 	# Checks if any other modules are using a local copy of build.prop
 	BUILDMODULE=false
-	MODID=$(get_file_value $MODDIR/module.prop "id=")
+	MODID=$(get_file_value $MODPATH/module.prop "id=")
 	for D in $(ls $IMGPATH); do
 		if [ $D != "$MODID" ]; then
 			if [ -f "$IMGPATH/$D/system/build.prop" ]; then
@@ -157,7 +120,7 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 	# Copies the stock build.prop to the module. Only if set in propsconf_late.
 	if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ]; then
 		log_handler "Build.prop editing enabled."
-		cp /system/build.prop $MODDIR/system/build.prop
+		cp /system/build.prop $MODPATH/system/build.prop
 		log_handler "Stock build.prop copied from /system."
 
 		# Edits the module copy of build.prop
@@ -171,7 +134,7 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 			SEDTYPE=user
 		fi
 		if [ "$(get_file_value $LATEFILE "SETTYPE=")" == "true" ]; then
-			sed -i "s/ro.build.type=$FILETYPE/ro.build.type=$SEDTYPE/" $MODDIR/system/build.prop && log_handler "ro.build.type"
+			sed -i "s/ro.build.type=$FILETYPE/ro.build.type=$SEDTYPE/" $MODPATH/system/build.prop && log_handler "ro.build.type"
 		fi
 		if [ "$MODULETAGS" ]; then
 			SEDTAGS=$MODULETAGS
@@ -179,7 +142,7 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 			SEDTAGS=release-keys
 		fi
 		if [ "$(get_file_value $LATEFILE "SETTAGS=")" == "true" ]; then
-			sed -i "s/ro.build.tags=$FILETAGS/ro.build.tags=$SEDTAGS/" $MODDIR/system/build.prop && log_handler "ro.build.tags"
+			sed -i "s/ro.build.tags=$FILETAGS/ro.build.tags=$SEDTAGS/" $MODPATH/system/build.prop && log_handler "ro.build.tags"
 		fi
 		if [ "$MODULESELINUX" ]; then
 			SEDSELINUX=$MODULESELINUX
@@ -187,14 +150,14 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 			SEDSELINUX=0
 		fi
 		if [ "$(get_file_value $LATEFILE "SETSELINUX=")" == "true" ]; then
-			sed -i "s/ro.build.selinux=$FILESELINUX/ro.build.selinux=$SEDSELINUX/" $MODDIR/system/build.prop && log_handler "ro.build.selinux"
+			sed -i "s/ro.build.selinux=$FILESELINUX/ro.build.selinux=$SEDSELINUX/" $MODPATH/system/build.prop && log_handler "ro.build.selinux"
 		fi
 	else
-		rm -f $MODDIR/system/build.prop
+		rm -f $MODPATH/system/build.prop
 		log_handler "Build.prop editing disabled."
 	fi
 else
-	rm -f $MODDIR/system/build.prop
+	rm -f $MODPATH/system/build.prop
 	log_handler "Prop file editing disabled. All values ok."
 fi
 

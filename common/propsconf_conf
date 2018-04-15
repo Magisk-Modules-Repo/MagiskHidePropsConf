@@ -1,0 +1,70 @@
+#!/system/bin/sh
+
+# MagiskHide Props Config
+# By Didgeridoohan @ XDA Developers
+
+CONFFINGERPRINT=""
+
+CONFPROPFILES=false
+
+CONFDEBUGGABLE=""
+CONFSECURE=""
+CONFTYPE=""
+CONFTAGS=""
+CONFSELINUX=""
+
+CONFPROPS=""
+PROPOPTION=replace
+
+CONFCOLOUR=enabled
+CONFWEB=enabled
+
+# =================================================================
+# ========================== Instructions =========================
+# =================================================================
+# Set the above variables to the desired prop/configuration values.
+#
+# CONFFINGERPRINT should be set to the fingerprint of a ROM that passes
+# the ctsProfile check. See the prints.sh file for usable prints,
+# or the documentation for information on how to find one.
+#
+# CONFPROPFILES should be set to "true" if you want to mask the file
+# values in build.prop and default.prop. For better root hiding.
+#
+# The MagiskHide prop variables can be set as follows:
+# CONFDEBUGGABLE - 0 or 1 (set to "0" by MagiskHide - sensitive value is "1")
+# CONFSECURE - 0 or 1 (set to "1" by MagiskHide - sensitive value is "0")
+# CONFTYPE - user or userdebug (set to "user" by MagiskHide - sensitive value is "userdebug")
+# CONFTAGS - release-keys or test-keys (set to "release-keys" by MagiskHide - sensitive value is "test-keys")
+# CONFSELINUX - 0 or 1 (set to "0" by MagiskHide - sensitive value is "1")
+#
+# CONFPROPS should contain any custom props and the value you want the module to set.
+# Any props you've previously edited in build.prop, and more, can be set like this.
+# Add them to the PROPS variable according to the following example:
+# CONFPROPS="
+# ro.sf.lcd_density=320
+# ro.config.media_vol_steps=30
+# net.tethering.noprovisioning=true
+# "
+# With PROPOPTION you can decide if the current custom prop list should
+# be replaced, added to or preserved. Add the corresponding words "replace",
+# "add", or "preserve". The default option is to replace the list.
+# This option supersedes the preserve option described below, but only
+# for the CONFPROPS variable.
+#
+# CONFCOLOUR and CONFWEB are the options for colour and automatic fingerprints
+# list update. See the module documentation for more details.
+#
+# If any variables are left unset, that particular prop/configuration
+# will be cleared and the device/MagiskHide default values will be used.
+# If you want to keep any current module settings, add "preserve" to the variable.
+# Example:
+# CONFFINGERPRINT=preserve
+#
+# When placed in /cache, the module will load these values during boot and the
+# configuration file will be deleted. Keep a backup of the file if you want to reuse it.
+#
+# For more information, see the documentation:
+# https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md
+# and the support thread @ XDA Developers:
+# https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199
