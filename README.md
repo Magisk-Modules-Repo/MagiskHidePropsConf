@@ -52,7 +52,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 **_Current fingerprints list version - v6_**
 
 
-## Editing build.prop and default.prop
+## Improved root hiding - Editing build.prop and default.prop
 Some apps and services look at the actual files, rather than the set prop values. With this module feature you can make sure that the actual prop in build.prop and default.prop is changed to match whatever value the prop has been set to by either MagiskHide or the module. If there's a prop value set by the module (see below), that value takes precedence.
 
 
