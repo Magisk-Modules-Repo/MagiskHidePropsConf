@@ -47,9 +47,9 @@ Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) for info.
 
-Just run the `props` command and the list will be updated automatically. Use the -nw option to disable.
+Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below).
 
-**_Current fingerprints list version - v6_**
+**_Current fingerprints list version - v7_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -71,7 +71,7 @@ If, for some reason, you need one or more of these to be kept as their original 
 It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop you can now do with this module instead.
 
 
-## Prop script options
+## Prop script settings
 There are a couple of persistent options that you can set for the `props` script. These are currently "Colour" and "Fingerprints list check". The colour option disables or enables colours for the script, and the fingerprints list check option disables or enables automatic updating of the fingerprints list when the script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the "Device fingerprint" menu.
 
 
@@ -150,7 +150,7 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 
 
 ## Current fingerprints list
-### List v6  
+### List v7  
 - Google Nexus 6 (7.1.1)
 - Google Pixel (8.1.0)
 - Google Pixel 2 (P DP1)
@@ -177,6 +177,9 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 - Sony Xperia XZ (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
 - Sony Xperia Z3 (6.0.1)
+- Sony Xperia Z5 (7.1.1)
+- Sony Xperia Z5 Compact (7.1.1)
+- Sony Xperia Z5 Dual (7.1.1)
 - Vodafone Smart Ultra 6 (5.1.1)
 - Xiaomi Mi 5 (7.0)
 - Xiaomi Mi 5S (7.0)
