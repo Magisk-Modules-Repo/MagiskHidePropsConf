@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=6
+PRINTSV=7
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
