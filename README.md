@@ -121,7 +121,7 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 ## Changelog
 ### v2.1.0  
-- "Improved hiding" will now also mask the device fingerprint in build.prop. Please disable and reapply to set.
+- "Improved hiding" will now also mask the device fingerprint in build.prop. Please reapply the option to set.
 - Fixed colour code issues if running the script with ADB Shell. Huge shout-out to @veez21 over at XDA Developers.
 - Fixed typo in A/B device detection. Thank you to @JayminSuthar over at XDA Developers.
 - New fingerprints (Samsung Galaxy S4 and Sony Xperia Z3 Tablet Compact), list v8.
