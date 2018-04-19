@@ -20,7 +20,7 @@ props
 You can also run the command with options. Use -h for details.
 
 
-## Spoofing device's fingerprint
+## Spoofing device's fingerprint to pass the ctsProfile check
 If your device can't pass SafetyNet fully, the CTS profile check fails while basic integrity passes, that means MagiskHide is working on your device but Google doesn't recognise your device as being certified.
 
 This might be because your device simply hasn't been certified or that the ROM you are using on your device isn't recognised by Google (because it's a custom ROM). 
@@ -47,9 +47,9 @@ Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) for info.
 
-Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below).
+Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v7_**
+**_Current fingerprints list version - v8_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -72,7 +72,7 @@ It's quite easy to change prop values with Magisk. With this module it's even ea
 
 
 ## Prop script settings
-There are a couple of persistent options that you can set for the `props` script. These are currently "Colour" and "Fingerprints list check". The colour option disables or enables colours for the script, and the fingerprints list check option disables or enables automatic updating of the fingerprints list when the script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the "Device fingerprint" menu.
+There are a couple of persistent options that you can set for the `props` script. These are currently "Colour" and "Fingerprints list check". The colour option disables or enables colours for the script, and the fingerprints list check option disables or enables automatic updating of the fingerprints list when the script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu.
 
 
 ## Configuration file
@@ -87,7 +87,7 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 
-## Certifying your device
+## Keeping your device "certified"
 If you're using a custom ROM, the chances of it being [perceived as uncertified by Google](https://www.xda-developers.com/google-blocks-gapps-uncertified-devices-custom-rom-whitelist/) are pretty high. If your ROM has a build date later than March 16 2018, this might mean that you can't even log into your Google account or use Gapps without [whitelisting your device with Google](https://www.google.com/android/uncertified/) first.
 
 Magisk, and this module, can help with that.
@@ -107,7 +107,7 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @ XDA.
 
 ### Logs, etc
-In case of issues, please provide the logs, saved in /cache, "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful.
+In case of issues, please provide the logs, saved in /cache, "magisk.log", "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful.
 
 
 ## Source
@@ -116,10 +116,17 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 
 ## Credits
 @topjohnwu @ XDA Developers, for Magisk  
-@Zackptg5, @veez21 and @jenslody @ XDA Developers, for inspiration
+@Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration
 
 
 ## Changelog
+### v2.1.0  
+- "Improved hiding" will now also mask the device fingerprint in build.prop. Please disable and reapply to set.
+- Fixed colour code issues if running the script with ADB Shell. Huge shout-out to @veez21 over at XDA Developers.
+- Fixed typo in A/B device detection. Thank you to @JayminSuthar over at XDA Developers.
+- New fingerprints (Samsung Galaxy S4 and Sony Xperia Z3 Tablet Compact), list v8.
+- Minor fixes and improvements.
+
 ### v2.0.0  
 - Added a function for setting your own custom prop values.
 - Added a function for setting values by configuration file. Useful if you want to make a ROM pass the ctsProfile check out of the box.
@@ -150,7 +157,7 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 
 
 ## Current fingerprints list
-### List v7  
+### List v8  
 - Google Nexus 6 (7.1.1)
 - Google Pixel (8.1.0)
 - Google Pixel 2 (P DP1)
@@ -168,6 +175,7 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 - Samsung Galaxy Note 3 (7.1.1)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
+- Samsung Galaxy S4 (5.0.1)
 - Samsung Galaxy S6 (5.0.2)
 - Samsung Galaxy S7 (7.0)
 - Samsung Galaxy S7 Edge (7.0)
@@ -177,6 +185,7 @@ In case of issues, please provide the logs, saved in /cache, "propsconf.log" and
 - Sony Xperia XZ (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
 - Sony Xperia Z3 (6.0.1)
+- Sony Xperia Z3 Tablet Compact (6.0.1)
 - Sony Xperia Z5 (7.1.1)
 - Sony Xperia Z5 Compact (7.1.1)
 - Sony Xperia Z5 Dual (7.1.1)

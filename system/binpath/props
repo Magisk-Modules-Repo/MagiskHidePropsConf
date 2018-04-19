@@ -11,7 +11,7 @@ IMGPATH=IMG_PLACEHOLDER
 MODPATH=$IMGPATH/MagiskHidePropsConf
 
 # Colours
-if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's/.*=//' | sed 's/\"//g')" == 0 ]; then
+if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's/.*=//' | sed 's/\"//g')" == 0 ] || [ "$LOGNAME" ]; then
 	COLOURCHK="nc"
 else
 	COLOURCHK="$1"
@@ -92,7 +92,6 @@ reboot_fn() {
 			else
 				REBOOTTXT="Reboot - "
 			fi
-			clear
 			menu_header "$REBOOTTXT${C}$1${N}"
 			echo ""
 			if  [ "$2" != "reset-script" ] && [ "$2" != "reboot" ]; then
@@ -147,7 +146,6 @@ reboot_fn() {
 }
 
 exit_fn() {
-	clear
 	menu_header "${C}Bye bye.${N}"
 	echo ""
 	log_handler "Exiting... Bye bye."
@@ -161,7 +159,6 @@ menu_change_fingerprint() {
 	while true
 	do
 		if [ -z "$INPUT2" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 0 ]; then
@@ -201,6 +198,9 @@ menu_change_fingerprint() {
 					echo "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
 				fi
 				echo "${G}b${N} - Go back."
+				echo ""
+				echo "See the module readme or the"
+				echo "support thread @ XDA for details."
 				echo ""
 				echo -n "Enter '${G}e${N}' to exit: "
 				read -r INPUT2
@@ -249,7 +249,6 @@ menu_pick_print() {
 			TMPOEMLIST=$(echo $(printf '%s\n' $OEMLIST | sort -u))
 			OEMLIST="$TMPOEMLIST"
 			ITEMCOUNT=1
-			clear
 			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
 			echo ""
 			for ITEM in $OEMLIST; do
@@ -288,7 +287,6 @@ menu_pick_print_sub() {
 	do
 		if [ -z "$INPUT4" ]; then
 			ITEMCOUNT=1
-			clear
 			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
 			echo ""
 			SAVEIFS=$IFS
@@ -337,7 +335,6 @@ menu_new_print() {
 	while true
 	do
 		if [ -z "$INPUT5" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "You are about to use the following as your device's fingerprint."
@@ -374,7 +371,6 @@ menu_reset_print() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will reset the device"
@@ -408,7 +404,6 @@ menu_update_print() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")"
 			echo ""
 			echo "Do you want to check online if there"
@@ -442,7 +437,6 @@ menu_edit_prop_files() {
 	while true
 	do
 		if [ -z "$INPUT2" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			# Checks if file values are "safe"
@@ -486,6 +480,15 @@ menu_edit_prop_files() {
 					echo ""
 				fi
 				echo "Do you want to continue?"
+				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+					echo ""
+					echo "Enter ${G}r${N} to re-apply the settings."
+					echo "This option is only useful if there's been"
+					echo "an update to the \"Improved hiding\" feature."
+				fi
+				echo ""
+				echo "See the module readme or the"
+				echo "support thread @ XDA for details."
 				echo ""
 				if [ "$2" == "p" ]; then
 					echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
@@ -517,6 +520,13 @@ menu_edit_prop_files() {
 					INPUT=""
 					break
 				fi
+			;;
+			r)
+				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+					edit_prop_files "$1" "$2" "$LOGTXT"
+				else
+					invalid_input $INV1 $INV2
+				fi	
 			;;
 			e)
 				if [ "$2" == "p" ]; then
@@ -559,8 +569,9 @@ menu_magiskhide_props() {
 			if [ "$(get_file_value $LATEFILE "RESELINUX=")" == "true" ]; then
 				SELINUXTXT=$ACTIVE
 			fi
-			clear
 			menu_header "${C}$1${N}\n Select an option below:"
+			echo ""
+			echo "Change the sensitive props set by MagiskHide."
 			echo ""
 			echo "${G}1${N} - ro.debuggable${DEBUGGABLETXT}"
 			echo "${G}2${N} - ro.secure${SECURETXT}"
@@ -571,6 +582,9 @@ menu_magiskhide_props() {
 				echo "${G}r${N} - Reset all props"
 			fi
 			echo "${G}b${N} - Go back to main menu"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
 			echo ""
 			echo -n "Enter '${G}e${N}' to exit: "
 			read -r INPUT2
@@ -613,7 +627,6 @@ menu_change_prop() {
 		if [ -z "$INPUT3" ]; then
 			PROP=$(get_prop_type "$1")
 			REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			# Checks if the prop exists
@@ -676,7 +689,6 @@ menu_reset_prop_all() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will reset all prop"
@@ -710,7 +722,6 @@ menu_reset_prop() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will reset $2"
@@ -746,8 +757,9 @@ menu_custom_props() {
 	do
 		if [ -z "$INPUT2" ]; then
 			ITEMCOUNT=1
-			clear
 			menu_header "${C}$1${N}\n Select an option below:"
+			echo ""
+			echo "Set or edit custom prop values for your device."
 			echo ""
 			if [ "$CUSTOMPROPS" ]; then
 				for ITEM in $CUSTOMPROPS; do
@@ -765,6 +777,9 @@ menu_custom_props() {
 				echo "${G}r${N} - Reset all custom props"
 			fi
 			echo "${G}b${N} - Go back to main menu"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
 			echo ""
 			echo -n "Enter '${G}e${N}' to exit: "
 			read -r INPUT2
@@ -810,7 +825,6 @@ menu_edit_custprop() {
 					break
 				fi
 			done
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "The current value for ${C}'$1'${N} is:"
@@ -865,7 +879,6 @@ menu_new_custprop() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Enter the prop to set,"
@@ -899,7 +912,6 @@ menu_reset_all_custprop() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will reset all"
@@ -934,7 +946,6 @@ menu_magiskhide_custprop() {
 	while true
 	do
 		if [ -z "$INPUT4" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "That prop, ${C}$1${N}, is one of"
@@ -966,7 +977,6 @@ menu_set_new_custprop() {
 	while true
 	do
 		if [ -z "$INPUT4" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Enter the value to set ${C}$1${N} to,"
@@ -1007,7 +1017,6 @@ menu_reset_custprop() {
 	while true
 	do
 		if [ -z "$INPUT4" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will reset ${C}$1${N}"
@@ -1043,7 +1052,6 @@ menu_set_custprop() {
 	while true
 	do
 		if [ -z "$INPUT5" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will set ${C}$1${N} to:"
@@ -1097,23 +1105,25 @@ menu_options() {
 				PRINTSCHKTXT="disabled"
 				CP=${R}
 			fi
-			clear
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
-			echo "${G}1${N} - Colour ${CC}(${COLOURTXT})${N}"
+			echo "${G}1${N} - Script colours ${CC}(${COLOURTXT})${N}"
 			echo "${G}2${N} - Fingerprints list check ${CP}(${PRINTSCHKTXT})${N}"
-			echo "${G}r${N} - Reset all options"
+			echo "${G}r${N} - Reset all settings"
 			echo "${G}b${N} - Go back to main menu"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
 			echo ""
 			echo -n "Enter '${G}e${N}' to exit: "
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			1)	menu_options_colour "Colour" "$COLOURTXT"
+			1)	menu_options_colour "Script colours" "$COLOURTXT"
 			;;
 			2)	menu_options_printschk "Fingerprints list check" "$PRINTSCHKTXT"
 			;;
-			r)	menu_options_reset "Reset all options"
+			r)	menu_options_reset "Reset all settings"
 			;;
 			b)
 				INPUT=""
@@ -1142,12 +1152,11 @@ menu_options_colour() {
 				OPTCURR=0
 				OPTNEW=1
 			fi
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Colour is currently ${G}$2${N}."
+			echo "Script colours are currently ${G}$2${N}d."
 			echo ""
-			echo "Do you want to ${C}$TMPTXT${N} it?"
+			echo "Do you want to ${C}$TMPTXT${N} them?"
 			echo ""
 			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
@@ -1186,7 +1195,6 @@ menu_options_printschk() {
 				OPTCURR=0
 				OPTNEW=1
 			fi
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Automatic updating of the fingerprints"
@@ -1222,10 +1230,9 @@ menu_options_reset() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "This will reset all script options"
+			echo "This will reset all script settings"
 			echo "to their default values."
 			echo ""
 			echo "Do you want to continue?"
@@ -1235,7 +1242,7 @@ menu_options_reset() {
 		fi
 		case "$INPUT3" in
 			y)
-				log_handler "Resetting all script options."
+				log_handler "Resetting all script settings."
 				OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
 				OPTWCURR=$(get_file_value $LATEFILE "OPTIONWEB=")
 				sed -i "s@OPTIONCOLOUR=$OPTCCURR@OPTIONCOLOUR=1@" $LATEFILE
@@ -1255,18 +1262,17 @@ menu_options_reset() {
 	done
 }
 
-# ======================== Reset all settings ========================
-# Second menu level - Reset all settings
+# ======================== Reset all options and settings ========================
+# Second menu level - Reset all options and settings
 reset_everything() {
 	INPUT2=""
 	while true
 	do
 		if [ -z "$INPUT2" ]; then
-			clear
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "All module settings will be"
-			echo "reset to initial values."
+			echo "All module options and settings"
+			echo "will be reset to the default values."
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
@@ -1316,7 +1322,6 @@ reset_everything() {
 # ====================================================
 
 if [ $(id -u) != 0 ] ; then
-	clear
 	menu_header "${C}This script must be run with\n superuser access. Try again.${N}"
 	echo ""
 	exit 0
@@ -1337,6 +1342,16 @@ if [ "$ORIGLOAD" == 0 ]; then
 	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
 fi
 
+script_ran_check
+if [ "$POSTCHECK" == 0 ]; then
+	log_handler "The post-fs-data script did not run during boot."
+	reboot_fn "The post-fs-data boot script does not appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs${N}." "reset-script"
+fi
+if [ "$LATECHECK" == 0 ]; then
+	log_handler "The settings boot script did not run during boot."
+	reboot_fn "The settings boot script does not\n appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs${N}." "reset-script"
+fi
+
 # ==================================================
 # ================ Find used values ================
 # ==================================================
@@ -1349,7 +1364,6 @@ all_values
 
 case "$1" in
 	-h)
-		clear
 		menu_header "${C}Help${N}"
 		echo ""
 		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's/, /,\\n/g' | sed 's/\. /\.\\n/g')
@@ -1358,10 +1372,10 @@ case "$1" in
 		echo ""
 		echo "Options:"
 		echo "  -h		Show this message."
-		echo "  -nw		Turn off fingerprint startup check."
 		echo "  -nc		Turn off colours."
-		echo "  -p		Edit prop files."
-		echo "  -r		Reset all settings."
+		echo "  -nw		Turn off fingerprint startup check."
+		echo "  -p		Improved hiding (edit prop files)."
+		echo "  -r		Reset all options/settings."
 		echo ""
 		echo "See the module readme or the"
 		echo "support thread @ XDA for details."
@@ -1396,7 +1410,6 @@ if [ "$1" ]; then
 		*h*|*nw*|*nc*|*p*|*r*) # Do nothing
 		;;
 		*)
-			clear
 			menu_header "${C}Help${N}"
 			echo ""
 			echo "${R}Invalid option.${N}"
@@ -1446,19 +1459,18 @@ do
 			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
 				CUSTTXT=$ACTIVE
 			fi
-			clear
 			menu_header "Select an option below."
 			echo ""
-			echo "${G}1${N} - Device fingerprint${PRINTTXT}"
-			echo "${G}2${N} - Edit prop files${FILETXT}"
-			echo "${G}3${N} - MagiskHide props${PROPTXT}"
-			echo "${G}4${N} - Custom props${CUSTTXT}"
-			echo "${G}5${N} - Options"
-			echo "${G}r${N} - Reset all settings"
+			echo "${G}1${N} - Edit device fingerprint${PRINTTXT}"
+			echo "${G}2${N} - Improved hiding${FILETXT}"
+			echo "${G}3${N} - Edit MagiskHide props${PROPTXT}"
+			echo "${G}4${N} - Add/edit custom props${CUSTTXT}"
+			echo "${G}5${N} - Script settings"
+			echo "${G}r${N} - Reset all options/settings"
 			echo "${G}b${N} - Reboot device"
 			echo ""
 			if [ "$(get_file_value $LATEFILE "REBOOTCHK=")" == 1 ]; then
-				echo "${R}Some settings have been changed.${N}"
+				echo "${R}Some options/settings have been changed.${N}"
 				echo "${R}Please reboot for them to take affect.${N}"
 				echo ""
 			fi
@@ -1471,15 +1483,15 @@ do
 		case "$INPUT" in
 			1)	menu_change_fingerprint "ro.build.fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
 			;;
-			2)	menu_edit_prop_files "Edit prop files${FILETXT}"
+			2)	menu_edit_prop_files "Improved hiding${FILETXT}"
 			;;
 			3)	menu_magiskhide_props "MagiskHide props${PROPTXT}"
 			;;
 			4)	menu_custom_props "Custom props${CUSTTXT}"
 			;;
-			5)	menu_options "Options"
+			5)	menu_options "Script settings"
 			;;
-			r)	reset_everything "Reset all settings"
+			r)	reset_everything "Reset all options/settings"
 			;;
 			b)	reboot_fn "Reboot device" "reboot"
 			;;

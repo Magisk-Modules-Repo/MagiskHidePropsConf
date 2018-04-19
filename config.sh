@@ -275,7 +275,7 @@ ab_check() {
 	if [ -z $SLOT ]; then
 		CACHELOC=/cache
 	else
-		CACHELOC/data/cache
+		CACHELOC=/data/cache
 	fi
 }
 

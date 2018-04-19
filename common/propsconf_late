@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=2
+SCRIPTV=3
 SETTRANSF=1
 
 # Variables
@@ -50,7 +50,7 @@ if [ -d "$MODPATH" ]; then
 		# Load functions
 		. $MODPATH/util_functions.sh
 
-		log_handler "Running boot script."
+		log_script_chk "Running boot script."
 
 		if [ -f "$MODPATH/disable" ]; then
 			log_handler "Module disabled."
@@ -97,6 +97,7 @@ if [ -d "$MODPATH" ]; then
 			SETTYPE=false
 			SETTAGS=false
 			SETSELINUX=false
+			SETFINGERPRINT=false
 
 			# ---Setting/Changing props---
 			# Set/change MagiskHide sensitive props
@@ -145,7 +146,7 @@ if [ -d "$MODPATH" ]; then
 					SEDDEBUGGABLE="0"
 				fi
 				if [ "$SETDEBUGGABLE" == "true" ]; then
-					sed -i "s/ro.debuggable=$FILEDEBUGGABLE/ro.debuggable=$SEDDEBUGGABLE/" /default.prop && log_handler "ro.debuggable"
+					sed -i "s/ro.debuggable=$FILEDEBUGGABLE/ro.debuggable=$SEDDEBUGGABLE/" /default.prop && log_handler "ro.debuggable=$SEDDEBUGGABLE"
 				fi
 				if [ "$MODULESECURE" ]; then
 					SEDSECURE="$MODULESECURE"
@@ -153,14 +154,14 @@ if [ -d "$MODPATH" ]; then
 					SEDSECURE="1"
 				fi
 				if [ "$SETSECURE" == "true" ]; then
-					sed -i "s/ro.secure=$FILESECURE/ro.secure=$SEDSECURE/" /default.prop && log_handler "ro.secure"
+					sed -i "s/ro.secure=$FILESECURE/ro.secure=$SEDSECURE/" /default.prop && log_handler "ro.secure=$SEDSECURE"
 				fi
 				mount -ro remount rootfs /
 			else
 				log_handler "Default.prop editing disabled."
 			fi
 		fi		
-		log_handler "Boot script finished.\n\n=================="
+		log_script_chk "Boot script finished.\n\n=================="
 	fi
 else
 	# Cleanup

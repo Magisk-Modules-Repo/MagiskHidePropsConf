@@ -15,6 +15,10 @@ IMGPATH=$(dirname "$MODPATH")
 # Load functions
 . $MODPATH/util_functions.sh
 
+# Clears out the script check file
+rm -f $RUNFILE
+touch $RUNFILE
+
 # Saves the previous log (if available) and creates a new one
 if [ -f "$LOGFILE" ]; then
 	mv -f $LOGFILE $LASTLOGFILE
@@ -24,7 +28,7 @@ echo "***************************************************" >> $LOGFILE
 echo "******** MagiskHide Props Config $MODVERSION ********" >> $LOGFILE
 echo "**************** By Didgeridoohan ***************" >> $LOGFILE
 echo "***************************************************" >> $LOGFILE
-log_handler "Log start."
+log_script_chk "Log start."
 
 # Check for boot scripts and restore backup if deleted, or if the resetfile is present
 if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
@@ -124,33 +128,37 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 		log_handler "Stock build.prop copied from /system."
 
 		# Edits the module copy of build.prop
-		MODULETYPE=$(get_file_value $LATEFILE "MODULETYPE=")
-		MODULETAGS=$(get_file_value $LATEFILE "MODULETAGS=")
-		MODULESELINUX=$(get_file_value $LATEFILE "MODULESELINUX=")
+		module_values
 		log_handler "Editing build.prop."
 		if [ "$MODULETYPE" ]; then
-			SEDTYPE=$MODULETYPE
+			SEDTYPE="$MODULETYPE"
 		else
-			SEDTYPE=user
+			SEDTYPE="user"
 		fi
 		if [ "$(get_file_value $LATEFILE "SETTYPE=")" == "true" ]; then
-			sed -i "s/ro.build.type=$FILETYPE/ro.build.type=$SEDTYPE/" $MODPATH/system/build.prop && log_handler "ro.build.type"
+			sed -i "s/ro.build.type=$FILETYPE/ro.build.type=$SEDTYPE/" $MODPATH/system/build.prop && log_handler "ro.build.type=$SEDTYPE"
 		fi
 		if [ "$MODULETAGS" ]; then
-			SEDTAGS=$MODULETAGS
+			SEDTAGS="$MODULETAGS"
 		else
-			SEDTAGS=release-keys
+			SEDTAGS="release-keys"
 		fi
 		if [ "$(get_file_value $LATEFILE "SETTAGS=")" == "true" ]; then
-			sed -i "s/ro.build.tags=$FILETAGS/ro.build.tags=$SEDTAGS/" $MODPATH/system/build.prop && log_handler "ro.build.tags"
+			sed -i "s/ro.build.tags=$FILETAGS/ro.build.tags=$SEDTAGS/" $MODPATH/system/build.prop && log_handler "ro.build.tags=$SEDTAGS"
 		fi
 		if [ "$MODULESELINUX" ]; then
-			SEDSELINUX=$MODULESELINUX
+			SEDSELINUX="$MODULESELINUX"
 		else
-			SEDSELINUX=0
+			SEDSELINUX="0"
 		fi
 		if [ "$(get_file_value $LATEFILE "SETSELINUX=")" == "true" ]; then
-			sed -i "s/ro.build.selinux=$FILESELINUX/ro.build.selinux=$SEDSELINUX/" $MODPATH/system/build.prop && log_handler "ro.build.selinux"
+			sed -i "s/ro.build.selinux=$FILESELINUX/ro.build.selinux=$SEDSELINUX/" $MODPATH/system/build.prop && log_handler "ro.build.selinux=$SEDSELINUX"
+		fi
+		if [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ] && [ "$MODULEFINGERPRINT" ]; then
+			PRINTSTMP="$(cat /system/build.prop | grep "$CURRFINGERPRINT")"
+			for ITEM in $PRINTSTMP; do
+				sed -i "s@${ITEM}@$(get_eq_left $ITEM)=${MODULEFINGERPRINT}@" $MODPATH/system/build.prop && log_handler "$(get_eq_left $ITEM)=$MODULEFINGERPRINT"
+			done
 		fi
 	else
 		rm -f $MODPATH/system/build.prop
@@ -161,4 +169,4 @@ else
 	log_handler "Prop file editing disabled. All values ok."
 fi
 
-log_handler "post-fs-data.sh finished.\n\n===================="
+log_script_chk "post-fs-data.sh finished.\n\n===================="

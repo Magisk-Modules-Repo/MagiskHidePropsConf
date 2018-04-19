@@ -8,6 +8,7 @@ MODVERSION=VER_PLACEHOLDER
 POSTFILE=$IMGPATH/.core/post-fs-data.d/propsconf_post
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 CACHELOC=CACHE_PLACEHOLDER
+RUNFILE=$MODPATH/script_check
 LOGFILE=$CACHELOC/propsconf.log
 LASTLOGFILE=$CACHELOC/propsconf_last.log
 CONFFILE=$CACHELOC/propsconf_conf
@@ -55,12 +56,19 @@ log_print() {
 	echo "$1"
 	log_handler "$1"
 }
+log_script_chk() {
+	log_handler "$1"
+	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $RUNFILE
+}
 
 #Divider
 DIVIDER="${Y}=====================================${N}"
 
 # Header
 menu_header() {
+	if [ -z "$LOGNAME" ]; then
+		clear
+	fi
 	if [ "$MODVERSION" == "VER_PLACEHOLDER" ]; then
 		VERSIONTXT=""
 	else
@@ -124,6 +132,17 @@ orig_check() {
 			ORIGLOAD=1
 		fi
 	done
+}
+
+script_ran_check() {
+	POSTCHECK=0
+	if [ "$(cat $RUNFILE | grep "post-fs-data.sh finished")" ]; then
+		POSTCHECK=1
+	fi
+	LATECHECK=0
+	if [ "$(cat $RUNFILE | grep "Boot script finished")" ]; then
+		LATECHECK=1
+	fi
 }
 
 # Currently set values
@@ -339,7 +358,9 @@ config_file() {
 # ======================== Fingerprint functions ========================
 # Checks and updates the prints list
 download_prints() {
-	clear
+	if [ -z "$LOGNAME" ]; then
+		clear
+	fi
 	menu_header "Updating fingerprints list"
 	echo ""
 	log_print "Checking list version."
@@ -366,6 +387,8 @@ download_prints() {
 	fi
 	if [ "$1" == "manual" ]; then
 		sleep 2
+	else
+		sleep 0.5
 	fi
 }
 
@@ -408,17 +431,19 @@ change_print() {
 reset_prop_files() {
 	log_handler "Resetting prop files$3."
 
-	# Changes file	
+	# Changes files
 	for PROPTYPE in $PROPSLIST; do
 		log_handler "Disabling prop file editing for '$PROPTYPTE'."
 		PROP=$(get_prop_type $PROPTYPE)
 		FILEPROP=$(echo "FILE$PROP" | tr '[:lower:]' '[:upper:]')
 		SETPROP=$(echo "SET$PROP" | tr '[:lower:]' '[:upper:]')
-		
 		sed -i "s/$SETPROP=true/$SETPROP=false/" $LATEFILE
-		sed -i 's/BUILDEDIT=1/BUILDEDIT=0/' $LATEFILE
-		sed -i 's/DEFAULTEDIT=1/DEFAULTEDIT=0/' $LATEFILE
 	done
+	# Change fingerprint
+	sed -i "s/SETFINGERPRINT=true/SETFINGERPRINT=false/" $LATEFILE
+	# Edit settings variables
+	sed -i 's/BUILDEDIT=1/BUILDEDIT=0/' $LATEFILE
+	sed -i 's/DEFAULTEDIT=1/DEFAULTEDIT=0/' $LATEFILE
 
 	if [ "$1" != "file" ]; then
 		after_change_file "$1" "$2"
@@ -436,6 +461,13 @@ edit_prop_files() {
 		ro.debuggable
 		ro.secure
 		"
+	else
+		# Checking if the device fingerprint is set by the module
+		if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
+			if [ "$(cat /system/build.prop | grep "$ORIGFINGERPRINT")" ]; then
+				sed -i "s/SETFINGERPRINT=false/SETFINGERPRINT=true/" $LATEFILE
+			fi
+		fi
 	fi
 
 	for PROPTYPE in $PROPSLIST; do
@@ -467,9 +499,9 @@ edit_prop_files() {
 		else
 			log_handler "Couldn't check safe value for '$PROPTYPE'."
 		fi
-		sed -i 's/DEFAULTEDIT=0/DEFAULTEDIT=1/' $LATEFILE
-		sed -i 's/BUILDEDIT=0/BUILDEDIT=1/' $LATEFILE
 	done
+	sed -i 's/DEFAULTEDIT=0/DEFAULTEDIT=1/' $LATEFILE
+	sed -i 's/BUILDEDIT=0/BUILDEDIT=1/' $LATEFILE
 
 	if [ "$1" != "file" ]; then
 		after_change_file "$1" "$2"
