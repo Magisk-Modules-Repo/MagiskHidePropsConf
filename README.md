@@ -49,7 +49,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v8_**
+**_Current fingerprints list version - v9_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -157,11 +157,19 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 
 ## Current fingerprints list
-### List v8  
+### List v9  
+- Google Nexus 4 (5.1.1)
+- Google Nexus 5 (6.0.1)
 - Google Nexus 6 (7.1.1)
+- Google Nexus 5X (8.1.0)
+- Google Nexus 6P (8.1.0)
 - Google Pixel (8.1.0)
+- Google Pixel (P DP1)
+- Google Pixel XL (8.1.0)
+- Google Pixel XL (P DP1)
 - Google Pixel 2 (P DP1)
 - Google Pixel 2 XL (8.1.0)
+- Google Pixel 2 XL (P DP1)
 - HTC 10 (6.0.1)
 - Huawei Mate 10 Pro (8.0.0)
 - Motorola Moto G4 (7.0)
@@ -181,6 +189,7 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 - Samsung Galaxy S7 Edge (7.0)
 - Samsung Galaxy S8 Plus (7.0)
 - Samsung Galaxy S8 Plus (8.0.0)
+- Sony Xperia X (8.0.0)
 - Sony Xperia X Performance (8.0.0)
 - Sony Xperia XZ (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
