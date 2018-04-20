@@ -102,7 +102,7 @@ set_permissions() {
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed 's/.*=//' | sed 's/\"//g'
+	cat $1 | grep $2 | sed "s/.*$2//" | sed 's/\"//g'
 }
 
 # Variables

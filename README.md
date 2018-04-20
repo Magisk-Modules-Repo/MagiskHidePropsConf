@@ -120,6 +120,9 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 
 ## Changelog
+### v2.1.1  
+- Fixed transferring custom props between module updates.
+
 ### v2.1.0  
 - "Improved hiding" will now also mask the device fingerprint in build.prop. Please reapply the option to set.
 - Fixed colour code issues if running the script with ADB Shell. Huge shout-out to @veez21 over at XDA Developers.
