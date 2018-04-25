@@ -47,6 +47,11 @@ ro.build.tags=release-keys
 ro.build.selinux=0
 "
 
+# Finding file values
+get_file_value() {
+	cat $1 | grep $2 | sed "s/.*${2}//" | sed 's/\"//g'
+}
+
 # Logs
 log_handler() {
 	echo "" >> $LOGFILE
@@ -83,11 +88,6 @@ menu_header() {
 	echo $DIVIDER
 }
 
-# Finding file values
-get_file_value() {
-	cat $1 | grep $2 | sed "s/.*$2//" | sed 's/\"//g'
-}
-
 # Find prop type
 get_prop_type() {
 	echo $1 | sed 's/.*\.//'
@@ -105,7 +105,17 @@ get_eq_right() {
 
 # Get first word in string
 get_first() {
-	echo $1 | sed 's/\ .*//'
+	case $1 in
+		*\ *) echo $1 | sed 's/\ .*//'
+		;;
+		*=*) get_eq_left $1
+		;;
+	esac
+}
+
+# Replace file values
+replace_fn() {
+	sed -i "s@${1}=${2}@${1}=${3}@" $4
 }
 
 # Updates placeholders
@@ -113,7 +123,7 @@ placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
 	log_handler "Checking for '$3' in '$1'. Current value is '$FILEVALUE'."
 	case $FILEVALUE in
-		*PLACEHOLDER*)	sed -i "s@${2}=${3}@${2}=${4}@g" $1
+		*PLACEHOLDER*)	replace_fn $2 $3 $4 $1
 						log_handler "Placeholder '$3' updated to '$4' in '$1'."
 		;;
 	esac
@@ -126,7 +136,7 @@ orig_check() {
 	ORIGLOAD=0
 	for PROPTYPE in $PROPSTMPLIST; do
 		PROP=$(get_prop_type $PROPTYPE)
-		ORIGPROP=$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')
+		ORIGPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
 		ORIGVALUE=$(get_file_value $LATEFILE "${ORIGPROP}=")
 		if [ "$ORIGVALUE" ]; then
 			ORIGLOAD=1
@@ -165,6 +175,16 @@ file_values() {
 	FILETYPE=$(get_file_value /system/build.prop "ro.build.type=")
 	FILETAGS=$(get_file_value /system/build.prop "ro.build.tags=")
 	FILESELINUX=$(get_file_value /system/build.prop "ro.build.selinux=")
+	FILEFINGERPRINT=$(get_file_value /system/build.prop "ro.build.fingerprint=")
+	if [ -z "$FILEFINGERPRINT" ]; then
+		FILEFINGERPRINT=$(get_file_value /system/build.prop "ro.bootimage.build.fingerprint=")
+		if [ -z "$FILEFINGERPRINT" ]; then
+			FILEFINGERPRINT=$(resetprop ro.build.fingerprint)
+			if [ -z "$FILEFINGERPRINT" ]; then
+				FILEFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
+			fi
+		fi
+	fi	
 }
 
 # Latefile values
@@ -174,16 +194,7 @@ latefile_values() {
 	LATEFILETYPE=$(get_file_value $LATEFILE "FILETYPE=")
 	LATEFILETAGS=$(get_file_value $LATEFILE "FILETAGS=")
 	LATEFILESELINUX=$(get_file_value $LATEFILE "FILESELINUX=")
-}
-
-# Original prop values
-orig_values() {
-	ORIGDEBUGGABLE=$(get_file_value $LATEFILE "ORIGDEBUGGABLE=")
-	ORIGSECURE=$(get_file_value $LATEFILE "ORIGSECURE=")
-	ORIGTYPE=$(get_file_value $LATEFILE "ORIGTYPE=")
-	ORIGTAGS=$(get_file_value $LATEFILE "ORIGTAGS=")
-	ORIGSELINUX=$(get_file_value $LATEFILE "ORIGSELINUX=")
-	ORIGFINGERPRINT=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
+	LATEFILEFINGERPRINT=$(get_file_value $LATEFILE "FILEFINGERPRINT=")
 }
 
 # Module values
@@ -205,8 +216,6 @@ all_values() {
 	file_values
 	# Latefile values
 	latefile_values
-	# Original prop values
-	orig_values
 	# Module values
 	module_values
 }
@@ -231,7 +240,7 @@ after_change_file() {
 }
 
 reboot_chk() {
-	sed -i 's/REBOOTCHK=0/REBOOTCHK=1/' $LATEFILE
+	replace_fn REBOOTCHK 0 1 $LATEFILE
 }
 
 reset_fn() {
@@ -239,10 +248,10 @@ reset_fn() {
 	FINGERPRINTENB=$(get_file_value $LATEFILE "FINGERPRINTENB=")
 	cp -af $MODPATH/propsconf_late $LATEFILE
 	if [ "$BUILDPROPENB" ] && [ -z "$BUILDPROPENB" == 1 ]; then
-		sed -i "s@BUILDPROPENB=1@BUILDPROPENB=$BUILDPROPENB@g" $LATEFILE
+		replace_fn BUILDPROPENB 1 $BUILDPROPENB $LATEFILE
 	fi
 	if [ "$FINGERPRINTENB" ] && [ -z "$FINGERPRINTENB" == 1 ]; then
-		sed -i "s@FINGERPRINTENB=1@FINGERPRINTENB=$FINGERPRINTENB@g" $LATEFILE
+		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
 	chmod 755 $LATEFILE	
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
@@ -256,7 +265,7 @@ reset_fn() {
 
 # Check if original file values are safe
 orig_safe() {
-	sed -i 's/FILESAFE=0/FILESAFE=1/' $LATEFILE
+	replace_fn FILESAFE 0 1 $LATEFILE
 	for V in $PROPSLIST; do
 		PROP=$(get_prop_type $V)
 		FILEPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
@@ -265,7 +274,7 @@ orig_safe() {
 		safe_props $V $FILEVALUE
 		if [ "$SAFE" == 0 ]; then
 			log_handler "Prop $V set to triggering value in prop file."
-			sed -i 's/FILESAFE=1/FILESAFE=0/' $LATEFILE
+			replace_fn FILESAFE 1 0 $LATEFILE
 		else
 			log_handler "Prop $V set to \"safe\" value in prop file."
 		fi
@@ -274,6 +283,7 @@ orig_safe() {
 
 # Checks for configuration file
 config_file() {
+	log_handler "Checking for configuration file."
 	if [ -f "$CONFFILE" ]; then
 		log_handler "Configuration file detected."
 		# Loads custom variables
@@ -336,22 +346,25 @@ config_file() {
 		OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
 		OPTWCURR=$(get_file_value $LATEFILE "OPTIONWEB=")
 		if [ "$CONFCOLOUR" == "enabled" ]; then
-			
-			sed -i "s@OPTIONCOLOUR=$OPTCCURR@OPTIONCOLOUR=1@" $LATEFILE
+			OPTCCHNG=1
 		else
-			sed -i "s@OPTIONCOLOUR=$OPTCCURR@OPTIONCOLOUR=0" $LATEFILE
+			OPTCCHNG=0
 		fi
+		replace_fn OPTIONCOLOUR $OPTCCURR $OPTCCHNG $LATEFILE
 		log_handler "Colour $CONFCOLOUR."
 		if [ "$CONFWEB" == "enabled" ]; then
-			sed -i "s@OPTIONWEB=$OPTWCURR@OPTIONWEB=1@" $LATEFILE
+			OPTWCHNG=1
 		else
-			sed -i "s@OPTIONWEB=$OPTWCURR@OPTIONWEB=0@" $LATEFILE
+			OPTWCHNG=0
 		fi
+		replace_fn OPTIONWEB $OPTWCURR $OPTWCHNG $LATEFILE
 		log_handler "Automatic fingerprints list update $CONFWEB."
 
 		# Deletes the configuration file
 		log_handler "Deleting configuration file."
 		rm -f $CONFFILE
+	else
+		log_handler "No configuration file."
 	fi
 }
 
@@ -372,7 +385,7 @@ download_prints() {
 				mv -f $PRINTSTMP $PRINTSLOC
 				# Updates list version in module.prop
 				VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
-				sed -i "s/version=$VERSIONTMP/version=$MODVERSION-v$LISTVERSION/g" $MODPATH/module.prop
+				replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
 				log_print "Updated list to v${LISTVERSION}."
 			else
 				rm -f $PRINTSTMP
@@ -399,9 +412,13 @@ reset_print() {
 	SUBA=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 
 	# Saves new module value
-	sed -i "s@MODULEFINGERPRINT=\"$SUBA\"@MODULEFINGERPRINT=\"\"@" $LATEFILE
+	replace_fn MODULEFINGERPRINT "\"$SUBA\"" "\"\"" $LATEFILE
 	# Updates prop change variables in propsconf_late
-	sed -i 's/PRINTEDIT=1/PRINTEDIT=0/g' $LATEFILE
+	replace_fn PRINTEDIT 1 0 $LATEFILE
+	# Updates improved hiding setting
+	if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" ]; then
+		replace_fn SETFINGERPRINT "true" "false" $LATEFILE
+	fi
 
 	if [ "$2" != "file" ]; then
 		after_change "$1"
@@ -415,9 +432,13 @@ change_print() {
 	SUBA=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 
 	# Saves new module value
-	sed -i "s@MODULEFINGERPRINT=\"$SUBA\"@MODULEFINGERPRINT=\"$2\"@" $LATEFILE
+	replace_fn MODULEFINGERPRINT "\"$SUBA\"" "\"$2\"" $LATEFILE
 	# Updates prop change variables in propsconf_late
-	sed -i 's/PRINTEDIT=0/PRINTEDIT=1/' $LATEFILE
+	replace_fn PRINTEDIT 0 1 $LATEFILE
+	# Updates improved hiding setting
+	if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" ]; then
+		replace_fn SETFINGERPRINT "false" "true" $LATEFILE
+	fi
 
 	NEWFINGERPRINT=""
 
@@ -435,15 +456,14 @@ reset_prop_files() {
 	for PROPTYPE in $PROPSLIST; do
 		log_handler "Disabling prop file editing for '$PROPTYPTE'."
 		PROP=$(get_prop_type $PROPTYPE)
-		FILEPROP=$(echo "FILE$PROP" | tr '[:lower:]' '[:upper:]')
 		SETPROP=$(echo "SET$PROP" | tr '[:lower:]' '[:upper:]')
-		sed -i "s/$SETPROP=true/$SETPROP=false/" $LATEFILE
+		replace_fn $SETPROP "true" "false" $LATEFILE
 	done
 	# Change fingerprint
-	sed -i "s/SETFINGERPRINT=true/SETFINGERPRINT=false/" $LATEFILE
+	replace_fn SETFINGERPRINT "true" "false" $LATEFILE
 	# Edit settings variables
-	sed -i 's/BUILDEDIT=1/BUILDEDIT=0/' $LATEFILE
-	sed -i 's/DEFAULTEDIT=1/DEFAULTEDIT=0/' $LATEFILE
+	replace_fn BUILDEDIT 1 0 $LATEFILE
+	replace_fn DEFAULTEDIT 1 0 $LATEFILE
 
 	if [ "$1" != "file" ]; then
 		after_change_file "$1" "$2"
@@ -464,8 +484,8 @@ edit_prop_files() {
 	else
 		# Checking if the device fingerprint is set by the module
 		if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
-			if [ "$(cat /system/build.prop | grep "$ORIGFINGERPRINT")" ]; then
-				sed -i "s/SETFINGERPRINT=false/SETFINGERPRINT=true/" $LATEFILE
+			if [ "$(cat /system/build.prop | grep "$FILEFINGERPRINT")" ]; then
+				replace_fn SETFINGERPRINT "false" "true" $LATEFILE
 			fi
 		fi
 	fi
@@ -492,16 +512,16 @@ edit_prop_files() {
 		# Changes file only if necessary
 		if [ "$SAFE" == 0 ]; then
 			log_handler "Enabling prop file editing for '$PROPTYPE'."
-			sed -i "s/$SETPROP=false/$SETPROP=true/" $LATEFILE
+			replace_fn $SETPROP "false" "true" $LATEFILE
 		elif [ "$SAFE" == 1 ]; then
 			log_handler "Prop file editing unnecessary for '$PROPTYPE'."
-			sed -i "s/$SETPROP=true/$SETPROP=false/" $LATEFILE
+			replace_fn $SETPROP "true" "false" $LATEFILE
 		else
 			log_handler "Couldn't check safe value for '$PROPTYPE'."
 		fi
 	done
-	sed -i 's/DEFAULTEDIT=0/DEFAULTEDIT=1/' $LATEFILE
-	sed -i 's/BUILDEDIT=0/BUILDEDIT=1/' $LATEFILE
+	replace_fn BUILDEDIT 0 1 $LATEFILE
+	replace_fn DEFAULTEDIT 0 1 $LATEFILE
 
 	if [ "$1" != "file" ]; then
 		after_change_file "$1" "$2"
@@ -554,19 +574,19 @@ reset_prop() {
 	log_handler "Resetting $1 to default value."
 
 	# Saves new module value
-	sed -i "s/$MODULEPROP=\"$SUBA\"/$MODULEPROP=\"\"/" $LATEFILE
+	replace_fn $MODULEPROP "\"$SUBA\"" "\"\"" $LATEFILE
 	# Changes prop
-	sed -i "s/$REPROP=true/$REPROP=false/" $LATEFILE
+	replace_fn $REPROP "true" "false" $LATEFILE
 
 	# Updates prop change variable in propsconf_late
 	PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
 	if [ "$SUBA" ]; then
 		if [ "$PROPCOUNT" -gt 0 ]; then
 			PROPCOUNTP=$(($PROPCOUNT-1))
-			sed -i "s/PROPCOUNT=$PROPCOUNT/PROPCOUNT=$PROPCOUNTP/" $LATEFILE
+			replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
 		fi
 		if [ "$PROPCOUNT" == 0 ]; then
-			sed -i 's/PROPEDIT=1/PROPEDIT=0/' $LATEFILE
+			replace_fn PROPEDIT 1 0 $LATEFILE
 		fi
 	fi
 
@@ -586,17 +606,17 @@ change_prop() {
 	log_handler "Changing $1 to $2."
 
 	# Saves new module value
-	sed -i "s/$MODULEPROP=\"$SUBA\"/$MODULEPROP=\"$2\"/" $LATEFILE
+	replace_fn $MODULEPROP "\"$SUBA\"" "\"$2\"" $LATEFILE
 	# Changes prop
-	sed -i "s/$REPROP=false/$REPROP=true/" $LATEFILE
+	replace_fn $REPROP "false" "true" $LATEFILE
 
 	# Updates prop change variables in propsconf_late
 	if [ -z "$SUBA" ]; then
 		PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
 		PROPCOUNTP=$(($PROPCOUNT+1))
-		sed -i "s/PROPCOUNT=$PROPCOUNT/PROPCOUNT=$PROPCOUNTP/" $LATEFILE
+		replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
 	fi
-	sed -i 's/PROPEDIT=0/PROPEDIT=1/' $LATEFILE
+	replace_fn PROPEDIT 0 1 $LATEFILE
 
 	if [ "$3" != "file" ]; then
 		after_change "$1"
@@ -614,15 +634,15 @@ reset_prop_all() {
 		SUBA=$(get_file_value $LATEFILE "${MODULEPROP}=")
 
 		# Saves new module value
-		sed -i "s/$MODULEPROP=\"$SUBA\"/$MODULEPROP=\"\"/" $LATEFILE
+		replace_fn $MODULEPROP "\"$SUBA\"" "\"\"" $LATEFILE
 		# Changes prop
-		sed -i "s/$REPROP=true/$REPROP=false/" $LATEFILE
-
-		# Updates prop change variables in propsconf_late
-		PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
-		sed -i "s/PROPCOUNT=$PROPCOUNT/PROPCOUNT=0/" $LATEFILE
-		sed -i 's/PROPEDIT=1/PROPEDIT=0/' $LATEFILE
+		replace_fn $REPROP "true" "false" $LATEFILE
 	done
+	
+	# Updates prop change variables in propsconf_late
+	PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
+	replace_fn PROPCOUNT $PROPCOUNT 0 $LATEFILE
+	replace_fn PROPEDIT 1 0 $LATEFILE
 	
 	after_change "$1"
 }
@@ -636,8 +656,8 @@ set_custprop() {
 		SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
 
 		log_handler "Setting custom prop $1."
-		sed -i "s/CUSTOMPROPS=\"$CURRCUSTPROPS\"/CUSTOMPROPS=\"$SORTCUSTPROPS\"/" $LATEFILE
-		sed -i 's/CUSTOMEDIT=0/CUSTOMEDIT=1/' $LATEFILE
+		replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$SORTCUSTPROPS\"" $LATEFILE
+		replace_fn CUSTOMEDIT 0 1 $LATEFILE
 
 		if [ "$3" != "file" ]; then
 			after_change "$1"
@@ -651,8 +671,8 @@ reset_all_custprop() {
 
 	log_handler "Resetting all custom props."
 	# Removing all custom props
-	sed -i "s/CUSTOMPROPS=\"$CURRCUSTPROPS\"/CUSTOMPROPS=\"\"/" $LATEFILE
-	sed -i 's/CUSTOMEDIT=1/CUSTOMEDIT=0/' $LATEFILE
+	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"\"" $LATEFILE
+	replace_fn CUSTOMEDIT 1 0 $LATEFILE
 
 	if [ "$1" != "file" ]; then
 		after_change "$1"
@@ -664,13 +684,13 @@ reset_custprop() {
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
 
 	log_handler "Resetting custom props $1."
-	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s/$1=$2//" | tr -s " " | sed 's/^[ \t]*//')
+	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s/${1}=${2}//" | tr -s " " | sed 's/^[ \t]*//')
 
 	# Removing all custom props
-	sed -i "s/CUSTOMPROPS=\"$CURRCUSTPROPS\"/CUSTOMPROPS=\"$TMPCUSTPROPS\"/" $LATEFILE
+	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
 	if [ -z "$CURRCUSTPROPS" ]; then
-		sed -i 's/CUSTOMEDIT=1/CUSTOMEDIT=0/' $LATEFILE
+		replace_fn CUSTOMEDIT 1 0 $LATEFILE
 	fi
 
 	after_change "$1"

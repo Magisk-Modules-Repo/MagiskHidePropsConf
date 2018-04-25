@@ -40,7 +40,7 @@ CONFWEB=enabled
 #
 # CONFPROPS should contain any custom props and the value you want the module to set.
 # Any props you've previously edited in build.prop, and more, can be set like this.
-# Add them to the PROPS variable according to the following example:
+# Add them to the CONFPROPS variable according to the following example:
 # CONFPROPS="
 # ro.sf.lcd_density=320
 # ro.config.media_vol_steps=30

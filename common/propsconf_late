@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=3
+SCRIPTV=4
 SETTRANSF=1
 
 # Variables
@@ -55,6 +55,28 @@ if [ -d "$MODPATH" ]; then
 		if [ -f "$MODPATH/disable" ]; then
 			log_handler "Module disabled."
 		else
+			# Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
+			PRINTMODULE=false
+			for USNF in $USNFLIST; do
+				if [ -d "$IMGPATH/$USNF" ]; then
+					NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
+					log_handler "'$NAME' installed (modifies the device fingerprint)."
+					PRINTMODULE=true
+				fi
+			done
+			if [ "$PRINTMODULE" == "true" ]; then
+				replace_fn FINGERPRINTENB 1 0 $LATEFILE
+				log_handler "Fingerprint modification disabled."
+			else
+				replace_fn FINGERPRINTENB 0 1 $LATEFILE
+				log_handler "Fingerprint modification enabled."
+			fi
+			
+			# Check the reboot variable
+			if [ "$(get_file_value $LATEFILE "REBOOTCHK\=")" == 1 ]; then
+				replace_fn REBOOTCHK 1 0 $LATEFILE
+			fi
+
 			# ---Original values---
 			# default.prop
 			FILEDEBUGGABLE=""
@@ -63,13 +85,7 @@ if [ -d "$MODPATH" ]; then
 			FILETYPE=""
 			FILETAGS=""
 			FILESELINUX=""
-			# Prop values
-			ORIGDEBUGGABLE=""
-			ORIGSECURE=""
-			ORIGTYPE=""
-			ORIGTAGS=""
-			ORIGSELINUX=""
-			ORIGFINGERPRINT=""
+			FILEFINGERPRINT=""
 
 			# ---Module values---
 			MODULEDEBUGGABLE=""
@@ -120,10 +136,13 @@ if [ -d "$MODPATH" ]; then
 				fi
 			fi
 			# Set new fingerprint
-			if [ "$FINGERPRINTENB" == 1 ] && [ "$PRINTEDIT" == 1 ]; then
+			if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == "false" ] && [ "$PRINTEDIT" == 1 ]; then
 				log_handler "Changing fingerprint."
-				resetprop -v ro.build.fingerprint $MODULEFINGERPRINT 2>> $LOGFILE
-				resetprop -v ro.bootimage.build.fingerprint $MODULEFINGERPRINT 2>> $LOGFILE
+				PRINTSTMP="$(resetprop | grep "build.fingerprint" | sed 's/\]\:\ /\]/')"
+				for ITEM in $PRINTSTMP; do
+					TMPPROP=$(echo $ITEM | sed 's/\]\[.*//' | sed 's/\[//')
+					resetprop -v $TMPPROP $MODULEFINGERPRINT 2>> $LOGFILE
+				done
 			fi
 
 			# ---Setting custom props---
@@ -146,7 +165,7 @@ if [ -d "$MODPATH" ]; then
 					SEDDEBUGGABLE="0"
 				fi
 				if [ "$SETDEBUGGABLE" == "true" ]; then
-					sed -i "s/ro.debuggable=$FILEDEBUGGABLE/ro.debuggable=$SEDDEBUGGABLE/" /default.prop && log_handler "ro.debuggable=$SEDDEBUGGABLE"
+					replace_fn "ro.debuggable" $FILEDEBUGGABLE $SEDDEBUGGABLE /default.prop && log_handler "ro.debuggable=$SEDDEBUGGABLE"
 				fi
 				if [ "$MODULESECURE" ]; then
 					SEDSECURE="$MODULESECURE"
@@ -154,13 +173,13 @@ if [ -d "$MODPATH" ]; then
 					SEDSECURE="1"
 				fi
 				if [ "$SETSECURE" == "true" ]; then
-					sed -i "s/ro.secure=$FILESECURE/ro.secure=$SEDSECURE/" /default.prop && log_handler "ro.secure=$SEDSECURE"
+					replace_fn "ro.secure" $FILESECURE $SEDSECURE /default.prop && log_handler "ro.secure=$SEDSECURE"
 				fi
 				mount -ro remount rootfs /
 			else
 				log_handler "Default.prop editing disabled."
-			fi
-		fi		
+			fi			
+		fi
 		log_script_chk "Boot script finished.\n\n=================="
 	fi
 else

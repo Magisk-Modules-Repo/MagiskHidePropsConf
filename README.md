@@ -30,7 +30,7 @@ To fix this, you can use a known working fingerprint (one that has been certifie
 There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) toghether with device details.
 
 ### Finding a certified fingerprint
-The easies way to find a certified fingerprint for your device is to run the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
+If you don't want to use one of the provided fingerprints, the easies way to find a certified fingerprint for your device is to run the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
 ```
 getprop ro.build.fingerprint
 ```
@@ -43,13 +43,20 @@ Here's an example:
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
 
+### I still can't pass the ctsProfile check
+If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, do the following.
+- First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under "Miscellaneous MagiskHide issues" below.
+- Try a different fingerprint from the provided list.
+- Make sure you don't have any remnants from previous root methods that may interfere with the SafetyNet check. A clean install of your system may be required.
+- If you can't get things working, make sure to provide logs. See "Logs, etc" below.
+
 
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) for info.
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v9_**
+**_Current fingerprints list version - v10_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -103,11 +110,11 @@ If you're having issues passing SafetyNet, getting your device certified, or oth
 But first: have you tried turning it off and on again? Toggling MagiskHide off and on usually works if MagiskHide has stopped working after an update of Magisk or your ROM.
 
 
-## Support, etc
+## Issues, support, etc
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @ XDA.
 
 ### Logs, etc
-In case of issues, please provide the logs, saved in /cache, "magisk.log", "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful.
+In case of issues, please provide the logs, saved in /cache, "magisk.log", "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful. If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release, so that you can collect the debug log.
 
 
 ## Source
@@ -120,6 +127,12 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 
 ## Changelog
+### v2.1.2  
+- Detects and edits only existing device fingerprint props.
+- Slightly optimised the boot scripts.
+- New fingerprint (Motorola Moto E4), list v10.
+- Minor updates and improvements.
+
 ### v2.1.1  
 - Fixed transferring custom props between module updates.
 
@@ -160,7 +173,7 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 
 ## Current fingerprints list
-### List v9  
+### List v10  
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
 - Google Nexus 6 (7.1.1)
@@ -175,6 +188,7 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 - Google Pixel 2 XL (P DP1)
 - HTC 10 (6.0.1)
 - Huawei Mate 10 Pro (8.0.0)
+- Motorola Moto E4 (7.1.1)
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)

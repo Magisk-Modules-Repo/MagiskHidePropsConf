@@ -106,7 +106,8 @@ get_file_value() {
 }
 
 # Variables
-$BOOTMODE && IMGPATH=/sbin/.core/img || IMGPATH=$MOUNTPATH
+BIMGPATH=/sbin/.core/img
+$BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
 UPDATELATEFILE=$INSTALLER/common/propsconf_late
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
@@ -130,23 +131,13 @@ BUILDEDIT
 DEFAULTEDIT
 PROPCOUNT
 PROPEDIT
+CUSTOMEDIT
 CUSTOMCHK
 REBOOTCHK
 OPTIONCOLOUR
 OPTIONWEB
 "
 PROPSETTINGSLIST="
-FILEDEBUGGABLE
-FILESECURE
-FILETYPE
-FILETAGS
-FILESELINUX
-ORIGDEBUGGABLE
-ORIGSECURE
-ORIGTYPE
-ORIGTAGS
-ORIGSELINUX
-ORIGFINGERPRINT
 MODULEDEBUGGABLE
 MODULESECURE
 MODULETYPE
@@ -200,14 +191,18 @@ script_placement() {
 				SETPROP=$(echo "SET${ITEM}" | tr '[:lower:]' '[:upper:]')
 				REOLD=$(get_file_value $LATEFILE "${REPROP}=")
 				SETOLD=$(get_file_value $LATEFILE "${SETPROP}=")
-				if [ "$REOLD" ]; then
+				if [ "$REOLD" != "false" ]; then
 					sed -i "s/${REPROP}=false/${REPROP}=${REOLD}/" $UPDATELATEFILE
 				fi
-				if [ "$SETOLD" ]; then
+				if [ "$SETOLD" != "false" ]; then
 					sed -i "s/${SETPROP}=false/${SETPROP}=${SETOLD}/" $UPDATELATEFILE
 				fi
 			done
 		fi
+		cp -af $UPDATELATEFILE $LATEFILE
+		chmod 755 $LATEFILE
+	elif [ "$UPDATEV" -lt "$FILEV" ]; then
+		ui_print "- Settings cleared (script downgraded)"
 		cp -af $UPDATELATEFILE $LATEFILE
 		chmod 755 $LATEFILE
 	else
@@ -293,6 +288,8 @@ script_install() {
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	MODVERSION=$(echo $(get_file_value $MODPATH/module.prop "version=") | sed 's/-.*//')
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER $MODVERSION
+	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $BIMGPATH
+	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER $BIMGPATH
 	# Load module functions
 	. $MODPATH/util_functions.sh
 	# Checks original file values

@@ -590,15 +590,15 @@ menu_magiskhide_props() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			1)	menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE		
+			1)	menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $FILEDEBUGGABLE $MODULEDEBUGGABLE		
 			;;
-			2)	menu_change_prop "ro.secure" $CURRSECURE $ORIGSECURE $MODULESECURE
+			2)	menu_change_prop "ro.secure" $CURRSECURE $FILESECURE $MODULESECURE
 			;;
-			3)	menu_change_prop "ro.build.type" $CURRTYPE $ORIGTYPE $MODULETYPE
+			3)	menu_change_prop "ro.build.type" $CURRTYPE $FILETYPE $MODULETYPE
 			;;
-			4)	menu_change_prop "ro.build.tags" $CURRTAGS $ORIGTAGS $MODULETAGS
+			4)	menu_change_prop "ro.build.tags" $CURRTAGS $FILETAGS $MODULETAGS
 			;;
-			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
+			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $FILESELINUX $MODULESELINUX
 			;;
 			r)	
 				if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" -gt 1 ]; then
@@ -1164,7 +1164,7 @@ menu_options_colour() {
 		case "$INPUT3" in
 			y)
 				log_handler "The script colour option was ${TMPTXT}d."
-				sed -i "s@OPTIONCOLOUR=$OPTCURR@OPTIONCOLOUR=$OPTNEW@" $LATEFILE
+				replace_fn OPTIONCOLOUR $OPTCURR $OPTNEW $LATEFILE
 				INPUT2=""
 				break
 			;;
@@ -1208,7 +1208,7 @@ menu_options_printschk() {
 		case "$INPUT3" in
 			y)
 				log_handler "The script prints list check option was ${TMPTXT}d."
-				sed -i "s@OPTIONWEB=$OPTCURR@OPTIONWEB=$OPTNEW@" $LATEFILE
+				replace_fn OPTIONWEB $OPTCURR $OPTNEW $LATEFILE
 				INPUT2=""
 				break
 			;;
@@ -1245,8 +1245,8 @@ menu_options_reset() {
 				log_handler "Resetting all script settings."
 				OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
 				OPTWCURR=$(get_file_value $LATEFILE "OPTIONWEB=")
-				sed -i "s@OPTIONCOLOUR=$OPTCCURR@OPTIONCOLOUR=1@" $LATEFILE
-				sed -i "s@OPTIONWEB=$OPTWCURR@OPTIONWEB=1@" $LATEFILE
+				replace_fn OPTIONCOLOUR $OPTCCURR 1 $LATEFILE
+				replace_fn OPTIONWEB $OPTWCURR 1 $LATEFILE
 				INPUT2=""
 				break
 			;;
@@ -1345,11 +1345,11 @@ fi
 script_ran_check
 if [ "$POSTCHECK" == 0 ]; then
 	log_handler "The post-fs-data script did not run during boot."
-	reboot_fn "The post-fs-data boot script does not appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs${N}." "reset-script"
+	reboot_fn "The post-fs-data boot script does not appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs!${N}" "reset-script"
 fi
 if [ "$LATECHECK" == 0 ]; then
 	log_handler "The settings boot script did not run during boot."
-	reboot_fn "The settings boot script does not\n appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs${N}." "reset-script"
+	reboot_fn "The settings boot script does not\n appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs!${N}" "reset-script"
 fi
 
 # ==================================================
@@ -1481,7 +1481,7 @@ do
 			read -r INPUT
 		fi
 		case "$INPUT" in
-			1)	menu_change_fingerprint "ro.build.fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
+			1)	menu_change_fingerprint "ro.build.fingerprint${PRINTTXT}" $CURRFINGERPRINT $FILEFINGERPRINT $MODULEFINGERPRINT
 			;;
 			2)	menu_edit_prop_files "Improved hiding${FILETXT}"
 			;;

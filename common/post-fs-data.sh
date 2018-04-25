@@ -34,75 +34,37 @@ log_script_chk "Log start."
 if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	cp -af $MODPATH/propsconf_late $LATEFILE
 	chmod 755 $LATEFILE
-	log_handler "Boot script restored/reset (${LATEFILE})."
-fi
-
-# Update placeholders
-# Image path
-placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
-placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER $IMGPATH
-
-# Check the reboot variable
-if [ "$(get_file_value $LATEFILE "REBOOTCHK=")" == 1 ]; then
-	sed -i 's/REBOOTCHK=1/REBOOTCHK=0/' $LATEFILE
+	if [ -f "$RESETFILE" ]; then
+		RSTTXT="reset"
+	else
+		RSTTXT="restored"
+	fi
+	log_handler "Boot script $RSTTXT (${LATEFILE})."
 fi
 
 # Get the current values saved in propsconf_late
-orig_values
 latefile_values
-
-# Get default file values
+# Get default values
 file_values
 
 # Save default file values in propsconf_late
-sed -i "s/FILEDEBUGGABLE=\"$LATEFILEDEBUGGABLE\"/FILEDEBUGGABLE=\"$FILEDEBUGGABLE\"/" $LATEFILE
-sed -i "s/FILESECURE=\"$LATEFILESECURE\"/FILESECURE=\"$FILESECURE\"/" $LATEFILE
-sed -i "s/FILETYPE=\"$LATEFILETYPE\"/FILETYPE=\"$FILETYPE\"/" $LATEFILE
-sed -i "s/FILETAGS=\"$LATEFILETAGS\"/FILETAGS=\"$FILETAGS\"/" $LATEFILE
-sed -i "s/FILESELINUX=\"$LATEFILESELINUX\"/FILESELINUX=\"$FILESELINUX\"/" $LATEFILE
-log_handler "Default file values saved to $LATEFILE."
-
-# Get the default prop values
-curr_values
-
-# Save default prop values in propsconf_late
-sed -i "s/ORIGDEBUGGABLE=\"$ORIGDEBUGGABLE\"/ORIGDEBUGGABLE=\"$CURRDEBUGGABLE\"/" $LATEFILE
-sed -i "s/ORIGSECURE=\"$ORIGSECURE\"/ORIGSECURE=\"$CURRSECURE\"/" $LATEFILE
-sed -i "s/ORIGTYPE=\"$ORIGTYPE\"/ORIGTYPE=\"$CURRTYPE\"/" $LATEFILE
-sed -i "s/ORIGTAGS=\"$ORIGTAGS\"/ORIGTAGS=\"$CURRTAGS\"/" $LATEFILE
-sed -i "s/ORIGSELINUX=\"$ORIGSELINUX\"/ORIGSELINUX=\"$CURRSELINUX\"/" $LATEFILE
-sed -i "s@ORIGFINGERPRINT=\"$ORIGFINGERPRINT\"@ORIGFINGERPRINT=\"$CURRFINGERPRINT\"@" $LATEFILE
-log_handler "Current prop values saved to $LATEFILE."
-
-# Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
-PRINTMODULE=false
-for USNF in $USNFLIST; do
-	if [ -d "$IMGPATH/$USNF" ]; then
-		NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")			
-		log_handler "'$NAME' installed (modifies the device fingerprint)."
-		PRINTMODULE=true
-	fi
-done
-if [ "$PRINTMODULE" == "true" ]; then
-	sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $LATEFILE
-	log_handler "Fingerprint modification disabled."	
-else
-	sed -i 's/FINGERPRINTENB=0/FINGERPRINTENB=1/' $LATEFILE
-	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ]; then
-		log_handler "Fingerprint modification enabled."
-	else
-		log_handler "Fingerprint modification disabled."
-	fi
-fi
-
-# Check if original file values are safe
-orig_safe
+replace_fn FILEDEBUGGABLE "\"$LATEFILEDEBUGGABLE\"" "\"$FILEDEBUGGABLE\"" $LATEFILE
+replace_fn FILESECURE "\"$LATEFILESECURE\"" "\"$FILESECURE\"" $LATEFILE
+replace_fn FILETYPE "\"$LATEFILETYPE\"" "\"$FILETYPE\"" $LATEFILE
+replace_fn FILETAGS "\"$LATEFILETAGS\"" "\"$FILETAGS\"" $LATEFILE
+replace_fn FILESELINUX "\"$LATEFILESELINUX\"" "\"$FILESELINUX\"" $LATEFILE
+replace_fn FILEFINGERPRINT "\"$LATEFILEFINGERPRINT\"" "\"$FILEFINGERPRINT\"" $LATEFILE
+log_handler "Default values saved to $LATEFILE."
 
 # Checks for configuration file
 config_file
 
+# Check if original file values are safe
+orig_safe
+
 # Edits build.prop
 if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
+	log_handler "Checking for conflicting build.prop modules."
 	# Checks if any other modules are using a local copy of build.prop
 	BUILDMODULE=false
 	MODID=$(get_file_value $MODPATH/module.prop "id=")
@@ -116,9 +78,9 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 		fi
 	done
 	if [ "$BUILDMODULE" == "true" ]; then
-		sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $LATEFILE
+		replace_fn BUILDPROPENB 1 0 $LATEFILE
 	else
-		sed -i 's/BUILDPROPENB=0/BUILDPROPENB=1/' $LATEFILE
+		replace_fn BUILDPROPENB 0 1 $LATEFILE
 	fi
 
 	# Copies the stock build.prop to the module. Only if set in propsconf_late.
@@ -136,7 +98,7 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 			SEDTYPE="user"
 		fi
 		if [ "$(get_file_value $LATEFILE "SETTYPE=")" == "true" ]; then
-			sed -i "s/ro.build.type=$FILETYPE/ro.build.type=$SEDTYPE/" $MODPATH/system/build.prop && log_handler "ro.build.type=$SEDTYPE"
+			replace_fn "ro.build.type" $FILETYPE $SEDTYPE $MODPATH/system/build.prop && log_handler "ro.build.type=$SEDTYPE"
 		fi
 		if [ "$MODULETAGS" ]; then
 			SEDTAGS="$MODULETAGS"
@@ -144,7 +106,7 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 			SEDTAGS="release-keys"
 		fi
 		if [ "$(get_file_value $LATEFILE "SETTAGS=")" == "true" ]; then
-			sed -i "s/ro.build.tags=$FILETAGS/ro.build.tags=$SEDTAGS/" $MODPATH/system/build.prop && log_handler "ro.build.tags=$SEDTAGS"
+			replace_fn "ro.build.tags" $FILETAGS $SEDTAGS $MODPATH/system/build.prop && log_handler "ro.build.tags=$SEDTAGS"
 		fi
 		if [ "$MODULESELINUX" ]; then
 			SEDSELINUX="$MODULESELINUX"
@@ -152,12 +114,12 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 			SEDSELINUX="0"
 		fi
 		if [ "$(get_file_value $LATEFILE "SETSELINUX=")" == "true" ]; then
-			sed -i "s/ro.build.selinux=$FILESELINUX/ro.build.selinux=$SEDSELINUX/" $MODPATH/system/build.prop && log_handler "ro.build.selinux=$SEDSELINUX"
+			replace_fn "ro.build.selinux" $FILESELINUX $SEDSELINUX $MODPATH/system/build.prop && log_handler "ro.build.selinux=$SEDSELINUX"
 		fi
-		if [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ] && [ "$MODULEFINGERPRINT" ]; then
-			PRINTSTMP="$(cat /system/build.prop | grep "$CURRFINGERPRINT")"
+		if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ]; then
+			PRINTSTMP="$(cat /system/build.prop | grep "$FILEFINGERPRINT")"
 			for ITEM in $PRINTSTMP; do
-				sed -i "s@${ITEM}@$(get_eq_left $ITEM)=${MODULEFINGERPRINT}@" $MODPATH/system/build.prop && log_handler "$(get_eq_left $ITEM)=$MODULEFINGERPRINT"
+				replace_fn $(get_eq_left $ITEM) $(get_eq_right $ITEM) $MODULEFINGERPRINT $MODPATH/system/build.prop && log_handler "$(get_eq_left $ITEM)=$MODULEFINGERPRINT"
 			done
 		fi
 	else
