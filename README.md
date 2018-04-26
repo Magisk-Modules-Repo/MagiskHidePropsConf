@@ -86,14 +86,6 @@ There are a couple of persistent options that you can set for the `props` script
 You can use a configuration file to set your desired options, rather than running the `props` command. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip (in the common folder), fill in the desired options (follow the instructions in the file), place it in /cache (or /data/cache if you're using an A/B device) and reboot. This can also be done directly at the first install (through Manager or recovery), before even rebooting your device. Instant settings.
 
 
-## Device issues because of the module
-In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
-
-Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and reboot.
-
-It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
-
-
 ## Keeping your device "certified"
 If you're using a custom ROM, the chances of it being [perceived as uncertified by Google](https://www.xda-developers.com/google-blocks-gapps-uncertified-devices-custom-rom-whitelist/) are pretty high. If your ROM has a build date later than March 16 2018, this might mean that you can't even log into your Google account or use Gapps without [whitelisting your device with Google](https://www.google.com/android/uncertified/) first.
 
@@ -101,7 +93,7 @@ Magisk, and this module, can help with that.
 
 Before setting up your device, install Magisk, this module and use the configuration file described above to pass the ctsProfile check. This should make your device be perceived as certified by Google and you can log into your Google account and use your device without having to whitelist it. Check [here](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/common/prints.sh) for usable fingerprints (only use the part to the right of the equal sign).
 
-If you're having issues getting your device certified, take a look in the troubleshooting guide linked below.
+If you're having issues getting your device certified, take a look in the Magisk troubleshooting guide linked below.
 
 
 ## Miscellaneous MagiskHide issues
@@ -112,6 +104,13 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 
 ## Issues, support, etc
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @ XDA.
+
+### Device issues because of the module
+In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
+
+Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and reboot.
+
+It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 ### Logs, etc
 In case of issues, please provide the logs, saved in /cache, "magisk.log", "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful. If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release, so that you can collect the debug log.
@@ -127,6 +126,11 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 
 ## Changelog
+### v2.1.3  
+- Reverted the function to only editing existing fingerprint props.
+- Optimised setting the different props.
+- Minor updates and improvements.
+
 ### v2.1.2  
 - Detects and edits only existing device fingerprint props.
 - Slightly optimised the boot scripts.

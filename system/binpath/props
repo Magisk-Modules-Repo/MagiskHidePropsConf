@@ -11,7 +11,7 @@ IMGPATH=IMG_PLACEHOLDER
 MODPATH=$IMGPATH/MagiskHidePropsConf
 
 # Colours
-if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's/.*=//' | sed 's/\"//g')" == 0 ] || [ "$LOGNAME" ]; then
+if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's@.*=@@' | sed 's@\"@@g')" == 0 ] || [ "$LOGNAME" ]; then
 	COLOURCHK="nc"
 else
 	COLOURCHK="$1"
@@ -242,7 +242,7 @@ menu_pick_print() {
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
-				TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's/^[ \t]*//')
+				TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's@^[ \t]*@@')
 				OEMLIST="$TMPOEMLIST"
 			done
 			IFS=$SAVEIFS
@@ -758,52 +758,87 @@ menu_custom_props() {
 		if [ -z "$INPUT2" ]; then
 			ITEMCOUNT=1
 			menu_header "${C}$1${N}\n Select an option below:"
-			echo ""
-			echo "Set or edit custom prop values for your device."
-			echo ""
-			if [ "$CUSTOMPROPS" ]; then
-				for ITEM in $CUSTOMPROPS; do
-					echo "${G}$ITEMCOUNT${N} - $(get_eq_left $ITEM)"
-					ITEMCOUNT=$(($ITEMCOUNT+1))
-				done
-			else
-				echo "Currently no custom props set."
-				echo "Please add one by selecting"
-				echo "\"New custom prop\" below."
+			echo ""			
+			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 0 ] && [ "$CUSTOMPROPS" ]; then
+				CTRLSET=0
+				echo "You have ${C}custom props set${N},"
+				echo "but the option is ${R}not activated${N}."
+				echo ""
+				echo "Do you want to activate it (enter ${G}r${N} to reset)?"
+				echo ""
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
+				read -r INPUT2				
+			else				
+				CTRLSET=1
+				echo "Set or edit custom prop values for your device."
+				echo ""
+				if [ "$CUSTOMPROPS" ]; then
+					for ITEM in $CUSTOMPROPS; do
+						echo "${G}$ITEMCOUNT${N} - $(get_eq_left $ITEM)"
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				else
+					echo "Currently no custom props set."
+					echo "Please add one by selecting"
+					echo "\"New custom prop\" below."
+				fi
+				echo ""
+				echo "${G}n${N} - New custom prop"
+				if [ "$CUSTOMPROPS" ]; then
+					echo "${G}r${N} - Reset all custom props"
+				fi
+				echo "${G}b${N} - Go back to main menu"
+				echo ""
+				echo "See the module readme or the"
+				echo "support thread @ XDA for details."
+				echo ""
+				echo -n "Enter '${G}e${N}' to exit: "
+				read -r INPUT2
 			fi
-			echo ""
-			echo "${G}n${N} - New custom prop"
-			if [ "$CUSTOMPROPS" ]; then
-				echo "${G}r${N} - Reset all custom props"
-			fi
-			echo "${G}b${N} - Go back to main menu"
-			echo ""
-			echo "See the module readme or the"
-			echo "support thread @ XDA for details."
-			echo ""
-			echo -n "Enter '${G}e${N}' to exit: "
-			read -r INPUT2
-		fi
-		if [ "$INPUT2" -ge 1 ] && [ "$INPUT2" -le "$ITEMCOUNT" ]; then
-			ITEMCOUNT=1
-			for ITEM in $CUSTOMPROPS; do
-				if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-					menu_edit_custprop "$(get_eq_left $ITEM)"
+			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					ITEMCOUNT=1
+					for ITEM in $CUSTOMPROPS; do
+						if [ "$ITEMCOUNT" == "$INPUT2" ]; then
+							menu_edit_custprop "$(get_eq_left $ITEM)"
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				elif [ "$CTRLSET" == 0 ]; then
+					replace_fn CUSTOMEDIT 0 1 $LATEFILE
+					INPUT=""
 					break
 				fi
-				ITEMCOUNT=$(($ITEMCOUNT+1))
-			done
-		elif [ "$INPUT2" == "n" ]; then
-			menu_new_custprop "New custom prop"
-		elif [ "$INPUT2" == "r" ]; then
-			menu_reset_all_custprop "Reset all custom props"
-		elif [ "$INPUT2" == "b" ]; then
-			INPUT2=""
-			break
-		elif [ "$INPUT2" == "e" ]; then
-			exit_fn
-		else
-			invalid_input 1 2
+			elif [ "$INPUT2" == "n" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					menu_new_custprop "New custom prop"
+				elif [ "$CTRLSET" == 0 ]; then
+					INPUT=""
+					break
+				fi
+			elif [ "$INPUT2" == "r" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					menu_reset_all_custprop "Reset all custom props"
+				elif [ "$CTRLSET" == 0 ]; then
+					menu_reset_all_custprop "Reset all custom props"
+				fi
+			elif [ "$INPUT2" == "b" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					INPUT=""
+					break
+				elif [ "$CTRLSET" == 0 ]; then
+					invalid_input 4 2
+				fi
+			elif [ "$INPUT2" == "e" ]; then
+				exit_fn
+			else
+				if [ "$CTRLSET" == 1 ]; then
+					invalid_input 1 2
+				elif [ "$CTRLSET" == 0 ]; then
+					invalid_input 4 2
+				fi
+			fi
 		fi
 	done
 }
@@ -1366,7 +1401,7 @@ case "$1" in
 	-h)
 		menu_header "${C}Help${N}"
 		echo ""
-		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's/, /,\\n/g' | sed 's/\. /\.\\n/g')
+		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's@, @,\\n@g' | sed 's@\. @\.\\n@g')
 		echo ""
 		echo "Usage: props [options]..."
 		echo ""

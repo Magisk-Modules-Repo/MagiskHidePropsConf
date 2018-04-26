@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=4
+SCRIPTV=5
 SETTRANSF=1
 
 # Variables
@@ -69,7 +69,6 @@ if [ -d "$MODPATH" ]; then
 				log_handler "Fingerprint modification disabled."
 			else
 				replace_fn FINGERPRINTENB 0 1 $LATEFILE
-				log_handler "Fingerprint modification enabled."
 			fi
 			
 			# Check the reboot variable
@@ -119,44 +118,39 @@ if [ -d "$MODPATH" ]; then
 			# Set/change MagiskHide sensitive props
 			if [ "$PROPEDIT" == 1 ]; then
 				log_handler "Changing sensitive props."
-				if [ "$REDEBUGGABLE" == "true" ]; then
-					resetprop -v ro.debuggable $MODULEDEBUGGABLE 2>> $LOGFILE
-				fi
-				if [ "$RESECURE" == "true" ]; then
-					resetprop -v ro.secure $MODULESECURE 2>> $LOGFILE
-				fi
-				if [ "$RETYPE" == "true" ]; then
-					resetprop -v ro.build.type $MODULETYPE 2>> $LOGFILE
-				fi
-				if [ "$RETAGS" == "true" ]; then
-					resetprop -v ro.build.tags $MODULETAGS 2>> $LOGFILE
-				fi
-				if [ "$RESELINUX" == "true" ]; then
-					resetprop -v ro.build.selinux $MODULESELINUX 2>> $LOGFILE
-				fi
+				for ITEM in $PROPSLIST; do
+					PROP=$(get_prop_type $ITEM)
+					REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
+					MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
+					if [ "$(eval "echo \$$REPROP")" == "true" ]; then
+						log_handler "Changing/writing $ITEM."
+						resetprop -v $ITEM 2>> $LOGFILE
+						resetprop -v $ITEM $(eval "echo \$$MODULEPROP") 2>> $LOGFILE
+					fi
+				done
 			fi
 			# Set new fingerprint
 			if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == "false" ] && [ "$PRINTEDIT" == 1 ]; then
 				log_handler "Changing fingerprint."
-				PRINTSTMP="$(resetprop | grep "build.fingerprint" | sed 's/\]\:\ /\]/')"
-				for ITEM in $PRINTSTMP; do
-					TMPPROP=$(echo $ITEM | sed 's/\]\[.*//' | sed 's/\[//')
-					resetprop -v $TMPPROP $MODULEFINGERPRINT 2>> $LOGFILE
-				done
+				for ITEM in $PRINTPROPS; do
+					log_handler "Changing/writing $ITEM."
+					resetprop -v $ITEM 2>> $LOGFILE
+					resetprop -v $ITEM $MODULEFINGERPRINT 2>> $LOGFILE
+				done				
 			fi
 
 			# ---Setting custom props---
 			if [ "$CUSTOMEDIT" == 1 ]; then
 				log_handler "Writing custom props."
 				for ITEM in $CUSTOMPROPS; do
-					log_handler "Writing $(get_eq_left $ITEM)."
+					log_handler "Changing/writing $(get_eq_left $ITEM)."
+					resetprop -v $(get_eq_left $ITEM) 2>> $LOGFILE
 					resetprop -v $(get_eq_left $ITEM) $(get_eq_right $ITEM) 2>> $LOGFILE
 				done
 			fi
 
 			# ---Edits default.prop---
 			if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then
-				log_handler "Default.prop editing enabled."
 				log_handler "Editing default.prop."
 				mount -wo remount rootfs /
 				if [ "$MODULEDEBUGGABLE" ]; then

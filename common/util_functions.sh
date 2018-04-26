@@ -47,9 +47,16 @@ ro.build.tags=release-keys
 ro.build.selinux=0
 "
 
+# Print props
+PRINTPROPS="
+ro.build.fingerprint
+ro.bootimage.build.fingerprint
+ro.vendor.build.fingerprint
+"
+
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed "s/.*${2}//" | sed 's/\"//g'
+	cat $1 | grep $2 | sed "s@.*${2}@@" | sed 's@\"@@g'
 }
 
 # Logs
@@ -90,23 +97,23 @@ menu_header() {
 
 # Find prop type
 get_prop_type() {
-	echo $1 | sed 's/.*\.//'
+	echo $1 | sed 's@.*\.@@'
 }
 
 # Get left side of =
 get_eq_left() {
-	echo $1 | sed 's/=.*//'
+	echo $1 | sed 's@=.*@@'
 }
 
 # Get right side of =
 get_eq_right() {
-	echo $1 | sed 's/.*=//'
+	echo $1 | sed 's@.*=@@'
 }
 
 # Get first word in string
 get_first() {
 	case $1 in
-		*\ *) echo $1 | sed 's/\ .*//'
+		*\ *) echo $1 | sed 's@\ .*@@'
 		;;
 		*=*) get_eq_left $1
 		;;
@@ -165,26 +172,26 @@ curr_values() {
 	CURRFINGERPRINT=$(resetprop ro.build.fingerprint)
 	if [ -z "$CURRFINGERPRINT" ]; then
 		CURRFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
+		if [ -z "$CURRFINGERPRINT" ]; then
+			CURRFINGERPRINT=$(resetprop ro.vendor.build.fingerprint)
+		fi
 	fi
 }
 
 # Prop file values
 file_values() {
-	FILEDEBUGGABLE=$(get_file_value /default.prop "ro.debuggable=")
-	FILESECURE=$(get_file_value /default.prop "ro.secure=")
-	FILETYPE=$(get_file_value /system/build.prop "ro.build.type=")
-	FILETAGS=$(get_file_value /system/build.prop "ro.build.tags=")
-	FILESELINUX=$(get_file_value /system/build.prop "ro.build.selinux=")
-	FILEFINGERPRINT=$(get_file_value /system/build.prop "ro.build.fingerprint=")
+	FILEDEBUGGABLE=$(resetprop ro.debuggable)
+	FILESECURE=$(resetprop ro.secure)
+	FILETYPE=$(resetprop ro.build.type)
+	FILETAGS=$(resetprop ro.build.tags)
+	FILESELINUX=$(resetprop ro.build.selinux)
+	FILEFINGERPRINT=$(resetprop ro.build.fingerprint)
 	if [ -z "$FILEFINGERPRINT" ]; then
-		FILEFINGERPRINT=$(get_file_value /system/build.prop "ro.bootimage.build.fingerprint=")
+		FILEFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
 		if [ -z "$FILEFINGERPRINT" ]; then
-			FILEFINGERPRINT=$(resetprop ro.build.fingerprint)
-			if [ -z "$FILEFINGERPRINT" ]; then
-				FILEFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
-			fi
+			FILEFINGERPRINT=$(resetprop ro.vendor.build.fingerprint)
 		fi
-	fi	
+	fi
 }
 
 # Latefile values
@@ -652,7 +659,7 @@ reset_prop_all() {
 set_custprop() {
 	if [ "$2" ]; then
 		CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
-		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${2}" | sed 's/^[ \t]*//')
+		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${2}" | sed 's@^[ \t]*@@')
 		SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
 
 		log_handler "Setting custom prop $1."
@@ -684,7 +691,7 @@ reset_custprop() {
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
 
 	log_handler "Resetting custom props $1."
-	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s/${1}=${2}//" | tr -s " " | sed 's/^[ \t]*//')
+	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s@${1}=${2}@@" | tr -s " " | sed 's@^[ \t]*@@')
 
 	# Removing all custom props
 	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE

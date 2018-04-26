@@ -102,7 +102,7 @@ set_permissions() {
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed "s/.*$2//" | sed 's/\"//g'
+	cat $1 | grep $2 | sed "s@.*$2@@" | sed 's@\"@@g'
 }
 
 # Variables
@@ -286,7 +286,7 @@ script_install() {
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
-	MODVERSION=$(echo $(get_file_value $MODPATH/module.prop "version=") | sed 's/-.*//')
+	MODVERSION=$(echo $(get_file_value $MODPATH/module.prop "version=") | sed 's@-.*@@')
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER $MODVERSION
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $BIMGPATH
 	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER $BIMGPATH

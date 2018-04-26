@@ -85,37 +85,31 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 
 	# Copies the stock build.prop to the module. Only if set in propsconf_late.
 	if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ]; then
-		log_handler "Build.prop editing enabled."
-		cp /system/build.prop $MODPATH/system/build.prop
+		cp -f /system/build.prop $MODPATH/system/build.prop
 		log_handler "Stock build.prop copied from /system."
 
 		# Edits the module copy of build.prop
 		module_values
-		log_handler "Editing build.prop."
-		if [ "$MODULETYPE" ]; then
-			SEDTYPE="$MODULETYPE"
-		else
-			SEDTYPE="user"
-		fi
-		if [ "$(get_file_value $LATEFILE "SETTYPE=")" == "true" ]; then
-			replace_fn "ro.build.type" $FILETYPE $SEDTYPE $MODPATH/system/build.prop && log_handler "ro.build.type=$SEDTYPE"
-		fi
-		if [ "$MODULETAGS" ]; then
-			SEDTAGS="$MODULETAGS"
-		else
-			SEDTAGS="release-keys"
-		fi
-		if [ "$(get_file_value $LATEFILE "SETTAGS=")" == "true" ]; then
-			replace_fn "ro.build.tags" $FILETAGS $SEDTAGS $MODPATH/system/build.prop && log_handler "ro.build.tags=$SEDTAGS"
-		fi
-		if [ "$MODULESELINUX" ]; then
-			SEDSELINUX="$MODULESELINUX"
-		else
-			SEDSELINUX="0"
-		fi
-		if [ "$(get_file_value $LATEFILE "SETSELINUX=")" == "true" ]; then
-			replace_fn "ro.build.selinux" $FILESELINUX $SEDSELINUX $MODPATH/system/build.prop && log_handler "ro.build.selinux=$SEDSELINUX"
-		fi
+		log_handler "Editing build.prop."		
+		for ITEM in $PROPSLIST; do
+			PROP=$(get_prop_type $ITEM)
+			MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
+			FILEPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
+			SETPROP=$(echo "SET${PROP}" | tr '[:lower:]' '[:upper:]')
+			if [ "$(eval "echo \$$MODULEPROP")" ]; then
+				SEDVAR="$(eval "echo \$$MODULEPROP")"
+			else
+				for P in $SAFELIST; do
+					if [ "$(get_eq_left $P)" == "$ITEM" ]; then
+						SEDVAR=$(get_eq_right $P)
+					fi
+				done
+			fi
+			if [ "$(get_file_value $LATEFILE "${SETPROP}=")" == "true" ]; then
+				replace_fn $ITEM $(eval "echo \$$FILEPROP") $SEDVAR $MODPATH/system/build.prop && log_handler "${ITEM}=${SEDVAR}"
+			fi
+		done
+		# Fingerprint
 		if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ]; then
 			PRINTSTMP="$(cat /system/build.prop | grep "$FILEFINGERPRINT")"
 			for ITEM in $PRINTSTMP; do
