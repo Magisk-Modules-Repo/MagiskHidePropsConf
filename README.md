@@ -75,7 +75,7 @@ If, for some reason, you need one or more of these to be kept as their original 
 
 
 ## Change/set custom prop values
-It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop you can now do with this module instead.
+It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop, default.prop, etc, you can now do with this module instead.
 
 
 ## Prop script settings
