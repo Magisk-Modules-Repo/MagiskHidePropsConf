@@ -48,7 +48,18 @@ If you've picked a certified fingerprint from the provided list, or you're using
 - First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under "Miscellaneous MagiskHide issues" below.
 - Try a different fingerprint from the provided list.
 - Make sure you don't have any remnants from previous root methods that may interfere with the SafetyNet check. A clean install of your system may be required.
-- If you can't get things working, make sure to provide logs. See "Logs, etc" below.
+- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide.
+- If you can't get things working, and want help, make sure to provide logs. See "Logs, etc" below.
+
+
+## Keeping your device "certified"
+If you're using a custom ROM, the chances of it being [perceived as uncertified by Google](https://www.xda-developers.com/google-blocks-gapps-uncertified-devices-custom-rom-whitelist/) are pretty high. If your ROM has a build date later than March 16 2018, this might mean that you can't even log into your Google account or use Gapps without [whitelisting your device with Google](https://www.google.com/android/uncertified/) first.
+
+Magisk, and this module, can help with that.
+
+Before setting up your device, install Magisk, this module and use the configuration file described below to pass the ctsProfile check. This should make your device be perceived as certified by Google and you can log into your Google account and use your device without having to whitelist it. Check [here](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/common/prints.sh) for usable fingerprints (only use the part to the right of the equal sign).
+
+If you're having issues getting your device certified, take a look in the Magisk troubleshooting guide linked below.
 
 
 ## Current fingerprints list version
@@ -86,16 +97,6 @@ There are a couple of persistent options that you can set for the `props` script
 You can use a configuration file to set your desired options, rather than running the `props` command. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip (in the common folder), fill in the desired options (follow the instructions in the file), place it in /cache (or /data/cache if you're using an A/B device) and reboot. This can also be done directly at the first install (through Manager or recovery), before even rebooting your device. Instant settings.
 
 
-## Keeping your device "certified"
-If you're using a custom ROM, the chances of it being [perceived as uncertified by Google](https://www.xda-developers.com/google-blocks-gapps-uncertified-devices-custom-rom-whitelist/) are pretty high. If your ROM has a build date later than March 16 2018, this might mean that you can't even log into your Google account or use Gapps without [whitelisting your device with Google](https://www.google.com/android/uncertified/) first.
-
-Magisk, and this module, can help with that.
-
-Before setting up your device, install Magisk, this module and use the configuration file described above to pass the ctsProfile check. This should make your device be perceived as certified by Google and you can log into your Google account and use your device without having to whitelist it. Check [here](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/common/prints.sh) for usable fingerprints (only use the part to the right of the equal sign).
-
-If you're having issues getting your device certified, take a look in the Magisk troubleshooting guide linked below.
-
-
 ## Miscellaneous MagiskHide issues
 If you're having issues passing SafetyNet, getting your device certified, or otherwise getting MagiskHide to work, take a look in the [Magisk and MagiskHide Installation and Troubleshooting Guide](https://www.didgeridoohan.com/magisk). Lots of good info there (if I may say so myself)...
 
@@ -113,7 +114,9 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 ### Logs, etc
-In case of issues, please provide the logs, saved in /cache, "magisk.log", "propsconf.log" and "propsconf_last.log", together with a detailed description of your problem. Providing the output from terminal might also be useful. If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release, so that you can collect the debug log.
+In case of issues, please provide the different log files, found in /cache (or /data/cache for A/B devices), together with a detailed description of your problem. The logs available could include "magisk.log", "propsconf.log", "propsconf_last.log", "propsconf_install.log" and "propsconf_latefile.log" Providing the output from terminal might also be useful.
+
+If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release (the only difference is the more verbose logging), so that you can collect the debug log.
 
 
 ## Source
@@ -126,6 +129,13 @@ In case of issues, please provide the logs, saved in /cache, "magisk.log", "prop
 
 
 ## Changelog
+### v2.1.4  
+- Fixed improved hiding.
+- Fixed using the configuration file on a clean install.
+- Fixed a fault in the AE-35 Unit.
+- Improved logging.
+- A bunch of optimisations that will probably break stuff.
+
 ### v2.1.3  
 - Reverted the function to only editing existing fingerprint props.
 - Optimised setting the different props.

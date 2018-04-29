@@ -60,6 +60,18 @@ get_file_value() {
 }
 
 # Logs
+# Saves the previous log (if available) and creates a new one
+log_start() {
+	if [ -f "$LOGFILE" ]; then
+		mv -f $LOGFILE $LASTLOGFILE
+	fi
+	touch $LOGFILE
+	echo "***************************************************" >> $LOGFILE
+	echo "******** MagiskHide Props Config $MODVERSION ********" >> $LOGFILE
+	echo "**************** By Didgeridoohan ***************" >> $LOGFILE
+	echo "***************************************************" >> $LOGFILE
+	log_script_chk "Log start."
+}
 log_handler() {
 	echo "" >> $LOGFILE
 	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE
@@ -128,10 +140,10 @@ replace_fn() {
 # Updates placeholders
 placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
-	log_handler "Checking for '$3' in '$1'. Current value is '$FILEVALUE'."
+	log_handler "Checking for ${3} in ${1}. Current value is ${FILEVALUE}."
 	case $FILEVALUE in
 		*PLACEHOLDER*)	replace_fn $2 $3 $4 $1
-						log_handler "Placeholder '$3' updated to '$4' in '$1'."
+						log_handler "Placeholder ${3} updated to ${4} in ${1}."
 		;;
 	esac
 }
@@ -414,7 +426,7 @@ download_prints() {
 
 # Reset the module fingerprint change
 reset_print() {
-	log_handler "Resetting device fingerprint."
+	log_handler "Resetting device fingerprint to default system value."
 
 	SUBA=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 
@@ -492,6 +504,7 @@ edit_prop_files() {
 		# Checking if the device fingerprint is set by the module
 		if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
 			if [ "$(cat /system/build.prop | grep "$FILEFINGERPRINT")" ]; then
+				log_handler "Enabling prop file editing for device fingerprint."
 				replace_fn SETFINGERPRINT "false" "true" $LATEFILE
 			fi
 		fi
@@ -533,6 +546,44 @@ edit_prop_files() {
 	if [ "$1" != "file" ]; then
 		after_change_file "$1" "$2"
 	fi
+}
+
+change_prop_file() {
+	case $1 in
+		build)
+			FNLIST="
+			ro.build.type
+			ro.build.tags
+			ro.build.selinux
+			"
+			PROPFILELOC=$MODPATH/system/build.prop
+		;;
+		default)
+			FNLIST="
+			ro.debuggable
+			ro.secure
+			"
+			PROPFILELOC=/default.prop
+		;;
+	esac
+	for ITEM in $FNLIST; do
+		PROP=$(get_prop_type $ITEM)
+		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
+		FILEPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
+		SETPROP=$(echo "SET${PROP}" | tr '[:lower:]' '[:upper:]')
+		if [ "$(eval "echo \$$MODULEPROP")" ]; then
+			SEDVAR="$(eval "echo \$$MODULEPROP")"
+		else
+			for P in $SAFELIST; do
+				if [ "$(get_eq_left $P)" == "$ITEM" ]; then
+					SEDVAR=$(get_eq_right $P)
+				fi
+			done
+		fi
+		if [ "$(get_file_value $LATEFILE "${SETPROP}=")" == "true" ]; then
+			replace_fn $ITEM $(eval "echo \$$FILEPROP") $SEDVAR $PROPFILELOC && log_handler "${ITEM}=${SEDVAR}"
+		fi
+	done	
 }
 
 # ======================== MagiskHide Props functions ========================
@@ -578,7 +629,7 @@ reset_prop() {
 	REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
 	SUBA=$(get_file_value $LATEFILE "${MODULEPROP}=")
 
-	log_handler "Resetting $1 to default value."
+	log_handler "Resetting $1 to default system value."
 
 	# Saves new module value
 	replace_fn $MODULEPROP "\"$SUBA\"" "\"\"" $LATEFILE

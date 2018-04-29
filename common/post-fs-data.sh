@@ -19,16 +19,8 @@ IMGPATH=$(dirname "$MODPATH")
 rm -f $RUNFILE
 touch $RUNFILE
 
-# Saves the previous log (if available) and creates a new one
-if [ -f "$LOGFILE" ]; then
-	mv -f $LOGFILE $LASTLOGFILE
-fi
-touch $LOGFILE
-echo "***************************************************" >> $LOGFILE
-echo "******** MagiskHide Props Config $MODVERSION ********" >> $LOGFILE
-echo "**************** By Didgeridoohan ***************" >> $LOGFILE
-echo "***************************************************" >> $LOGFILE
-log_script_chk "Log start."
+# Start logging
+log_start
 
 # Check for boot scripts and restore backup if deleted, or if the resetfile is present
 if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
@@ -56,11 +48,11 @@ replace_fn FILESELINUX "\"$LATEFILESELINUX\"" "\"$FILESELINUX\"" $LATEFILE
 replace_fn FILEFINGERPRINT "\"$LATEFILEFINGERPRINT\"" "\"$FILEFINGERPRINT\"" $LATEFILE
 log_handler "Default values saved to $LATEFILE."
 
-# Checks for configuration file
-config_file
-
 # Check if original file values are safe
 orig_safe
+
+# Checks for configuration file
+config_file
 
 # Edits build.prop
 if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
@@ -90,25 +82,9 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 
 		# Edits the module copy of build.prop
 		module_values
-		log_handler "Editing build.prop."		
-		for ITEM in $PROPSLIST; do
-			PROP=$(get_prop_type $ITEM)
-			MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-			FILEPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
-			SETPROP=$(echo "SET${PROP}" | tr '[:lower:]' '[:upper:]')
-			if [ "$(eval "echo \$$MODULEPROP")" ]; then
-				SEDVAR="$(eval "echo \$$MODULEPROP")"
-			else
-				for P in $SAFELIST; do
-					if [ "$(get_eq_left $P)" == "$ITEM" ]; then
-						SEDVAR=$(get_eq_right $P)
-					fi
-				done
-			fi
-			if [ "$(get_file_value $LATEFILE "${SETPROP}=")" == "true" ]; then
-				replace_fn $ITEM $(eval "echo \$$FILEPROP") $SEDVAR $MODPATH/system/build.prop && log_handler "${ITEM}=${SEDVAR}"
-			fi
-		done
+		log_handler "Editing build.prop."
+		# ro.build props
+		change_prop_file "build"		
 		# Fingerprint
 		if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ]; then
 			PRINTSTMP="$(cat /system/build.prop | grep "$FILEFINGERPRINT")"

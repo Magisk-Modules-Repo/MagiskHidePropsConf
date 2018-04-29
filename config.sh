@@ -40,8 +40,9 @@ LATESTARTSERVICE=false
 # Set what you want to show when installing your mod
 
 print_modname() {
+  MODVERSION=$(echo $(get_file_value $INSTALLER/module.prop "version=") | sed 's@-.*@@')
   ui_print "*******************************"
-  ui_print "    MagiskHide Props Config"
+  ui_print " MagiskHide Props Config $MODVERSION"
   ui_print "*******************************"
 }
 
@@ -110,6 +111,12 @@ BIMGPATH=/sbin/.core/img
 $BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
 UPDATELATEFILE=$INSTALLER/common/propsconf_late
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
+if [ -z $SLOT ]; then
+	CACHELOC=/cache
+else
+	CACHELOC=/data/cache
+fi
+INSTLOG=$CACHELOC/propsconf_install.log
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 SETTRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
 if [ -f "$LATEFILE" ]; then
@@ -156,25 +163,46 @@ fingerprint
 "
 USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix"
 
+log_handler() {
+	echo "" >> $INSTLOG
+	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $INSTLOG
+}
+log_start() {
+	if [ -f "$INSTLOG" ]; then
+		rm -f $INSTLOG
+	fi
+	touch $INSTLOG
+	echo "***************************************************" >> $INSTLOG
+	echo "******** MagiskHide Props Config $MODVERSION ********" >> $INSTLOG
+	echo "**************** By Didgeridoohan ***************" >> $INSTLOG
+	echo "***************************************************" >> $INSTLOG
+	log_handler "Starting module installation script"
+}
+log_print() {
+	ui_print "$1"
+	log_handler "$1"
+}
+
 # Places various module scripts in their proper places
 script_placement() {
-	ui_print "- Installing scripts"
+	log_print "- Installing scripts"
 	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh
 	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh
 	cp -af $UPDATELATEFILE $MODPATH/propsconf_late
 	if [ "$UPDATEV" -gt "$FILEV" ]; then
 		if [ "$FILEV" == 0 ]; then
-			ui_print "- Placing settings script"
+			log_print "- Placing settings script"
 		elif [ "$SETTRANSF" -gt "$FILEV" ]; then
-			ui_print "- Settings cleared (script updated)"
+			log_print "- Settings cleared (script updated)"
 		else
-			ui_print "- Script updated"
-			ui_print "- Transferring settings from old script"
+			log_print "- Script updated"
+			log_print "- Transferring settings from old script"
 			# Prop settings
 			for ITEM in $SETTINGSLIST; do
 				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
 				SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
-				if [ "$SOLD" ]; then
+				if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
+					log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
 					sed -i "s@${ITEM}=${SNEW}@${ITEM}=${SOLD}@" $UPDATELATEFILE
 				fi
 			done
@@ -182,6 +210,7 @@ script_placement() {
 			for ITEM in $PROPSETTINGSLIST; do
 				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
 				if [ "$SOLD" ]; then
+					log_handler "Setting ${ITEM} to ${SOLD}."
 					sed -i "s@${ITEM}=\"\"@${ITEM}=\"${SOLD}\"@" $UPDATELATEFILE
 				fi
 			done
@@ -191,10 +220,12 @@ script_placement() {
 				SETPROP=$(echo "SET${ITEM}" | tr '[:lower:]' '[:upper:]')
 				REOLD=$(get_file_value $LATEFILE "${REPROP}=")
 				SETOLD=$(get_file_value $LATEFILE "${SETPROP}=")
-				if [ "$REOLD" != "false" ]; then
+				if [ "$REOLD" ] && [ "$REOLD" != "false" ]; then
+					log_handler "Setting sensitive prop ${ITEM} to ${REOLD}."
 					sed -i "s/${REPROP}=false/${REPROP}=${REOLD}/" $UPDATELATEFILE
 				fi
-				if [ "$SETOLD" != "false" ]; then
+				if [ "$SETOLD" ] && [ "$SETOLD" != "false" ]; then
+					log_handler "Setting file edit ${ITEM} to ${SETOLD}."
 					sed -i "s/${SETPROP}=false/${SETPROP}=${SETOLD}/" $UPDATELATEFILE
 				fi
 			done
@@ -202,35 +233,37 @@ script_placement() {
 		cp -af $UPDATELATEFILE $LATEFILE
 		chmod 755 $LATEFILE
 	elif [ "$UPDATEV" -lt "$FILEV" ]; then
-		ui_print "- Settings cleared (script downgraded)"
+		log_print "- Settings cleared (script downgraded)"
 		cp -af $UPDATELATEFILE $LATEFILE
 		chmod 755 $LATEFILE
 	else
-		ui_print "- Module settings preserved"
+		log_print "- Module settings preserved"
 	fi
 }
 
-# Updates placeholder
+# Updates placeholders
 placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
+	log_handler "Checking for ${3} in ${1}. Current value is ${FILEVALUE}."
 	case $FILEVALUE in
 		*PLACEHOLDER*)	sed -i "s@${2}=${3}@${2}=\"${4}\"@g" $1
+						log_handler "Placeholder ${3} updated to ${4} in ${1}."
 		;;
 	esac
 }
 
 # Checks if any other module is using a local copy of build.prop
 build_prop_check() {
-	ui_print "- Checking for build.prop conflicts"
+	log_print "- Checking for build.prop conflicts"
 	for D in $(ls $IMGPATH); do
 		if [ "$D" != "$MODID" ]; then
 			if [ -f "$IMGPATH/$D/system/build.prop" ]; then
 				NAME=$(get_file_value $IMGPATH/$D/module.prop "name=")
-				ui_print ""
-				ui_print "! Another module editing build.prop detected!"
-				ui_print "! Module - '$NAME'!"
-				ui_print "! Modification of build.prop disabled!"
-				ui_print ""
+				log_print ""
+				log_print "! Another module editing build.prop detected!"
+				log_print "! Module - '$NAME'!"
+				log_print "! Modification of build.prop disabled!"
+				log_print ""
 				sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE			
 				break
 			fi
@@ -240,15 +273,15 @@ build_prop_check() {
 
 # Checks for the Universal SafetyNet Fix module and similar modules editing device fingerprint
 usnf_check() {
-	ui_print "- Checking for fingerprint conflicts"
+	log_print "- Checking for fingerprint conflicts"
 	for USNF in $USNFLIST; do
 		if [ -d "$IMGPATH/$USNF" ]; then
 			NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
-			ui_print ""
-			ui_print "! Module editing fingerprint detected!"
-			ui_print "! Module - '$NAME'!"
-			ui_print "! Fingerprint modification disabled!"
-			ui_print ""
+			log_print ""
+			log_print "! Module editing fingerprint detected!"
+			log_print "! Module - '$NAME'!"
+			log_print "! Fingerprint modification disabled!"
+			log_print ""
 			sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
 			break
 		fi
@@ -262,39 +295,23 @@ bin_check() {
 	else
 		BIN=bin
 	fi
+	log_handler "Using /system/$BIN."
 	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN
-}
-
-# Check for A/B devices
-ab_check() {
-	if [ -z $SLOT ]; then
-		CACHELOC=/cache
-	else
-		CACHELOC=/data/cache
-	fi
 }
 
 # Installs everything
 script_install() {
+	log_start
 	build_prop_check
 	usnf_check
 	bin_check
-	ab_check
 	script_placement
-	ui_print "- Updating placeholders"
+	log_print "- Updating placeholders"
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
-	MODVERSION=$(echo $(get_file_value $MODPATH/module.prop "version=") | sed 's@-.*@@')
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER $MODVERSION
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $BIMGPATH
 	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER $BIMGPATH
-	# Load module functions
-	. $MODPATH/util_functions.sh
-	# Checks original file values
-	file_values
-	orig_safe
-	# Checks for configuration file	
-	config_file
 }
