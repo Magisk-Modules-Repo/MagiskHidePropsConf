@@ -67,7 +67,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v10_**
+**_Current fingerprints list version - v11_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -187,7 +187,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v10  
+### List v11 
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
 - Google Nexus 6 (7.1.1)
@@ -238,4 +238,5 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 4/4X (7.0)
 - ZTE Axon 7 (7.1.1)
+- ZTE Nubia Z17 (7.1.1)
 - Zuk Z2 Pro (7.0)
