@@ -87,7 +87,7 @@ print_modname
 
 # Please leave this message in your flashable zip for credits :)
 ui_print "******************************"
-ui_print "Powered by Magisk (|topjohnwu)"
+ui_print "Powered by Magisk (@topjohnwu)"
 ui_print "******************************"
 
 ##########################################################################################
