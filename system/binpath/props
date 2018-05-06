@@ -11,7 +11,7 @@ IMGPATH=IMG_PLACEHOLDER
 MODPATH=$IMGPATH/MagiskHidePropsConf
 
 # Colours
-if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's@.*=@@' | sed 's@\"@@g')" == 0 ] || [ "$LOGNAME" ]; then
+if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's|.*=||' | sed 's|\"||g')" == 0 ] || [ "$LOGNAME" ]; then
 	COLOURCHK="nc"
 else
 	COLOURCHK="$1"
@@ -177,8 +177,13 @@ menu_change_fingerprint() {
 				fi
 				if [ "$2" ]; then
 					echo "Currently set to${PRINTMODULETXT}:"
-					echo ${C}$2${N}
+					echo ""
+					if [ "$PRINTMODULETXT" ]; then
+						get_device_used $2
+					fi
+					echo ${C}$2${N}					
 					if [ "$2" != "$3" ]; then
+						echo ""
 						echo "The original value is:"
 						echo ${C}$3${N}
 					fi
@@ -242,7 +247,7 @@ menu_pick_print() {
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
-				TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's@^[ \t]*@@')
+				TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's|^[ \t]*||')
 				OEMLIST="$TMPOEMLIST"
 			done
 			IFS=$SAVEIFS
@@ -293,7 +298,7 @@ menu_pick_print_sub() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$(get_first $ITEM)" == "$2" ]; then
-					echo "${G}$ITEMCOUNT${N} - $(get_eq_left $ITEM)"
+					echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
 			done
@@ -309,10 +314,10 @@ menu_pick_print_sub() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$(get_first $ITEM)" == "$2" ] && [ "$ITEMCOUNT" == "$INPUT4" ]; then
-					menu_new_print "$1" $(get_eq_right $ITEM)					
+					menu_new_print "$1" $(get_eq_right "$ITEM")					
 					break
 				fi
-				if [ "$(get_first $ITEM)" == "$2" ]; then
+				if [ "$(get_first "$ITEM")" == "$2" ]; then
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
 			done
@@ -330,7 +335,6 @@ menu_pick_print_sub() {
 
 # Fifth menu level - fingerprint
 menu_new_print() {
-	NEWFINGERPRINT="$2"
 	INPUT5=""
 	while true
 	do
@@ -338,7 +342,9 @@ menu_new_print() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "You are about to use the following as your device's fingerprint."
-			echo ${V}$NEWFINGERPRINT${N}
+			echo ""
+			get_device_used $2
+			echo ${V}$2${N}
 			echo ""
 			echo "Make sure that it is correct before continuing."
 			echo ""
@@ -347,14 +353,13 @@ menu_new_print() {
 		fi
 		case "$INPUT5" in
 			y)
-				change_print "$1" "$NEWFINGERPRINT"
+				change_print "$1" "$2"
 				break
 			;;
 			n)
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
-				NEWFINGERPRINT=""
 				break
 			;;
 			e)	exit_fn
@@ -774,7 +779,7 @@ menu_custom_props() {
 				echo ""
 				if [ "$CUSTOMPROPS" ]; then
 					for ITEM in $CUSTOMPROPS; do
-						echo "${G}$ITEMCOUNT${N} - $(get_eq_left $ITEM)"
+						echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
 						ITEMCOUNT=$(($ITEMCOUNT+1))
 					done
 				else
@@ -800,7 +805,7 @@ menu_custom_props() {
 					ITEMCOUNT=1
 					for ITEM in $CUSTOMPROPS; do
 						if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-							menu_edit_custprop "$(get_eq_left $ITEM)"
+							menu_edit_custprop "$(get_eq_left "$ITEM")"
 							break
 						fi
 						ITEMCOUNT=$(($ITEMCOUNT+1))
@@ -850,10 +855,10 @@ menu_edit_custprop() {
 	do
 		if [ -z "$INPUT3" ]; then
 			for ITEM in $CUSTOMPROPS; do
-				if [ "$(get_eq_left $ITEM)" == "$1" ]; then
-					if [ "$(get_eq_right $ITEM)" == "$(resetprop $1)" ]; then
+				if [ "$(get_eq_left "$ITEM")" == "$1" ]; then
+					if [ "$(get_eq_right "$ITEM")" == "$(resetprop $1)" ]; then
 						PROPNOTSET=0
-						SETPROPVALUE="$(get_eq_right $ITEM)"
+						SETPROPVALUE="$(get_eq_right "$ITEM")"
 					else
 						PROPNOTSET=1
 					fi
@@ -1401,7 +1406,7 @@ case "$1" in
 	-h)
 		menu_header "${C}Help${N}"
 		echo ""
-		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's@, @,\\n@g' | sed 's@\. @\.\\n@g')
+		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
 		echo ""
 		echo "Usage: props [options]..."
 		echo ""
@@ -1425,7 +1430,10 @@ case "$1" in
 	;;
 	*r*) # Reset all settings
 		reset_everything "Reset all settings" "r"
-	;;	
+	;;
+	*d*) # Download developers prints list, for testing prints
+		download_prints "dev"
+	;;
 esac
 
 if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
@@ -1442,7 +1450,7 @@ esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*h*|*nw*|*nc*|*p*|*r*) # Do nothing
+		*d*|*h*|*nc*|*nw*|*p*|*r*) # Do nothing
 		;;
 		*)
 			menu_header "${C}Help${N}"

@@ -158,9 +158,9 @@ if [ -d "$MODPATH" ]; then
 			if [ "$CUSTOMEDIT" == 1 ]; then
 				log_handler "Writing custom props."
 				for ITEM in $CUSTOMPROPS; do
-					log_handler "Changing/writing $(get_eq_left $ITEM)."
-					resetprop -v $(get_eq_left $ITEM) 2>> $LOGFILE
-					resetprop -v $(get_eq_left $ITEM) $(get_eq_right $ITEM) 2>> $LOGFILE
+					log_handler "Changing/writing $(get_eq_left "$ITEM")."
+					resetprop -v $(get_eq_left "$ITEM") 2>> $LOGFILE
+					resetprop -v $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") 2>> $LOGFILE
 				done
 			fi
 

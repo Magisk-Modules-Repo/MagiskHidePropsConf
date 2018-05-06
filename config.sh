@@ -40,7 +40,7 @@ LATESTARTSERVICE=false
 # Set what you want to show when installing your mod
 
 print_modname() {
-  MODVERSION=$(echo $(get_file_value $INSTALLER/module.prop "version=") | sed 's@-.*@@')
+  MODVERSION=$(echo $(get_file_value $INSTALLER/module.prop "version=") | sed 's|-.*||')
   ui_print "*******************************"
   ui_print " MagiskHide Props Config $MODVERSION"
   ui_print "*******************************"
@@ -103,7 +103,7 @@ set_permissions() {
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed "s@.*$2@@" | sed 's@\"@@g'
+	cat $1 | grep $2 | sed "s|.*$2||" | sed 's|\"||g'
 }
 
 # Variables
@@ -203,7 +203,7 @@ script_placement() {
 				SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
 				if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
 					log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
-					sed -i "s@${ITEM}=${SNEW}@${ITEM}=${SOLD}@" $UPDATELATEFILE
+					sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
 				fi
 			done
 			# Prop values
@@ -211,7 +211,7 @@ script_placement() {
 				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
 				if [ "$SOLD" ]; then
 					log_handler "Setting ${ITEM} to ${SOLD}."
-					sed -i "s@${ITEM}=\"\"@${ITEM}=\"${SOLD}\"@" $UPDATELATEFILE
+					sed -i "s|${ITEM}=\"\"|${ITEM}=\"${SOLD}\"|" $UPDATELATEFILE
 				fi
 			done
 			# Prop and file edits
@@ -246,7 +246,7 @@ placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
 	log_handler "Checking for ${3} in ${1}. Current value is ${FILEVALUE}."
 	case $FILEVALUE in
-		*PLACEHOLDER*)	sed -i "s@${2}=${3}@${2}=\"${4}\"@g" $1
+		*PLACEHOLDER*)	sed -i "s|${2}=${3}|${2}=\"${4}\"|g" $1
 						log_handler "Placeholder ${3} updated to ${4} in ${1}."
 		;;
 	esac

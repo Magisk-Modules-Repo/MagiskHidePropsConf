@@ -67,7 +67,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v11_**
+**_Current fingerprints list version - v12_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -129,6 +129,11 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.1.5  
+- Show what device the currently set fingerprint is from.
+- Fixed,updated and added a bunch of fingerprints, list v12.
+- Minor updates and improvements.
+
 ### v2.1.4  
 - Fixed improved hiding.
 - Fixed using the configuration file on a clean install.
@@ -187,7 +192,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v11 
+### List v12  
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
 - Google Nexus 6 (7.1.1)
@@ -206,11 +211,13 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
+- Motorola Moto X4 (8.0.0)
 - Nvidia Shield K1 (7.0)
 - OnePlus 3T (8.0.0)
 - OnePlus 5T (7.1.1)
 - OnePlus 5T (8.0.0)
 - Samsung Galaxy Grand Prime (5.0.2)
+- Samsung Galaxy J5 Prime (7.0)
 - Samsung Galaxy Note 3 (7.1.1)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
@@ -218,6 +225,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Samsung Galaxy S6 (5.0.2)
 - Samsung Galaxy S7 (7.0)
 - Samsung Galaxy S7 Edge (7.0)
+- Samsung Galaxy S7 Edge (8.0.0)
 - Samsung Galaxy S8 Plus (7.0)
 - Samsung Galaxy S8 Plus (8.0.0)
 - Sony Xperia X (8.0.0)

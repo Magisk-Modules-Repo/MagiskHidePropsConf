@@ -89,7 +89,7 @@ if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then
 		if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ]; then
 			PRINTSTMP="$(cat /system/build.prop | grep "$FILEFINGERPRINT")"
 			for ITEM in $PRINTSTMP; do
-				replace_fn $(get_eq_left $ITEM) $(get_eq_right $ITEM) $MODULEFINGERPRINT $MODPATH/system/build.prop && log_handler "$(get_eq_left $ITEM)=$MODULEFINGERPRINT"
+				replace_fn $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") $MODULEFINGERPRINT $MODPATH/system/build.prop && log_handler "$(get_eq_left "$ITEM")=$MODULEFINGERPRINT"
 			done
 		fi
 	else

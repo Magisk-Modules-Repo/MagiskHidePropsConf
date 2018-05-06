@@ -56,7 +56,7 @@ ro.vendor.build.fingerprint
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed "s@.*${2}@@" | sed 's@\"@@g'
+	cat $1 | grep $2 | sed "s|.*${2}||" | sed 's|\"||g'
 }
 
 # Logs
@@ -109,32 +109,41 @@ menu_header() {
 
 # Find prop type
 get_prop_type() {
-	echo $1 | sed 's@.*\.@@'
+	echo $1 | sed 's|.*\.||'
 }
 
 # Get left side of =
 get_eq_left() {
-	echo $1 | sed 's@=.*@@'
+	echo $1 | sed 's|=.*||'
 }
 
 # Get right side of =
 get_eq_right() {
-	echo $1 | sed 's@.*=@@'
+	echo $1 | sed 's|.*=||'
 }
 
 # Get first word in string
 get_first() {
 	case $1 in
-		*\ *) echo $1 | sed 's@\ .*@@'
+		*\ *) echo $1 | sed 's|\ .*||'
 		;;
-		*=*) get_eq_left $1
+		*=*) get_eq_left "$1"
 		;;
 	esac
 }
 
+# Get the device for current fingerprint
+get_device_used() {
+	PRINTTMP=$(cat $MODPATH/prints.sh | grep "$1")
+	if [ "$PRINTTMP" ]; then
+		echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N}"
+		echo ""
+	fi
+}
+
 # Replace file values
 replace_fn() {
-	sed -i "s@${1}=${2}@${1}=${3}@" $4
+	sed -i "s|${1}=${2}|${1}=${3}|" $4
 }
 
 # Updates placeholders
@@ -353,7 +362,7 @@ config_file() {
 						reset_all_custprop "file"
 					fi
 					for ITEM in $CONFPROPS; do
-						set_custprop "$(get_eq_left $ITEM)" "$(get_eq_right $ITEM)" "file"
+						set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "file"
 					done
 				fi
 			else
@@ -393,13 +402,16 @@ download_prints() {
 	if [ -z "$LOGNAME" ]; then
 		clear
 	fi
+	if [ "$1" == "dev" ]; then
+		PRINTSWWW="https://www.didgeridoohan.com/MagiskHidePropsConfig/prints.sh"
+	fi
 	menu_header "Updating fingerprints list"
 	echo ""
 	log_print "Checking list version."
 	wget -T 10 -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE	
 	if [ -f "$PRINTSTMP" ]; then
 		LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
-		if [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+		if [ "$LISTVERSION" == "DEV" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
 			if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
 				mv -f $PRINTSTMP $PRINTSLOC
 				# Updates list version in module.prop
@@ -419,6 +431,9 @@ download_prints() {
 	fi
 	if [ "$1" == "manual" ]; then
 		sleep 2
+	elif [ "$1" == "dev" ]; then
+		sleep 2
+		exit_fn
 	else
 		sleep 0.5
 	fi
@@ -575,8 +590,8 @@ change_prop_file() {
 			SEDVAR="$(eval "echo \$$MODULEPROP")"
 		else
 			for P in $SAFELIST; do
-				if [ "$(get_eq_left $P)" == "$ITEM" ]; then
-					SEDVAR=$(get_eq_right $P)
+				if [ "$(get_eq_left "$P")" == "$ITEM" ]; then
+					SEDVAR=$(get_eq_right "$P")
 				fi
 			done
 		fi
@@ -592,8 +607,8 @@ safe_props() {
 	SAFE=""
 	if [ "$2" ]; then
 		for P in $SAFELIST; do
-			if [ "$(get_eq_left $P)" == "$1" ]; then
-				if [ "$2" == "$(get_eq_right $P)" ]; then
+			if [ "$(get_eq_left "$P")" == "$1" ]; then
+				if [ "$2" == "$(get_eq_right "$P")" ]; then
 					SAFE=1
 				else
 					SAFE=0
@@ -710,7 +725,7 @@ reset_prop_all() {
 set_custprop() {
 	if [ "$2" ]; then
 		CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
-		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${2}" | sed 's@^[ \t]*@@')
+		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${2}" | sed 's|^[ \t]*||')
 		SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
 
 		log_handler "Setting custom prop $1."
@@ -742,7 +757,7 @@ reset_custprop() {
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
 
 	log_handler "Resetting custom props $1."
-	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s@${1}=${2}@@" | tr -s " " | sed 's@^[ \t]*@@')
+	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${2}||" | tr -s " " | sed 's|^[ \t]*||')
 
 	# Removing all custom props
 	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE
