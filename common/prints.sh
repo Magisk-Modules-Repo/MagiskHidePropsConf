@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=13
+PRINTSV=14
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -20,8 +20,9 @@ Google Pixel (8.1.0)=google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user
 Google Pixel (P DP1)=google/sailfish/sailfish:P/PPP1.180208.014/4633861:user/release-keys
 Google Pixel XL (8.1.0)=google/marlin/marlin:8.1.0/OPM2.171019.029/4657601:user/release-keys
 Google Pixel XL (P DP1)=google/marlin/marlin:P/PPP1.180208.014/4633861:user/release-keys
+Google Pixel 2 (8.1.0)=google/walleye/walleye:8.1.0/OPM2.171019.029/4657601:user/release-keys
 Google Pixel 2 (P DP1)=google/walleye/walleye:P/PPP1.180208.014/4633861:user/release-keys
-Google Pixel 2 XL (8.1.0)=google/taimen/taimen:8.1.0/OPM1.171019.013/4474084:user/release-keys
+Google Pixel 2 XL (8.1.0)=google/taimen/taimen:8.1.0/OPM2.171019.029/4657601:user/release-keys
 Google Pixel 2 XL (P DP1)=google/taimen/taimen:P/PPP1.180208.014/4633861:user/release-keys
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
@@ -35,13 +36,16 @@ OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR6.170623.013/12041042:use
 OnePlus 5T (7.1.1)=OnePlus/OnePlus5T/OnePlus5T:7.1.1/NMF26X/12152312:user/release-keys
 OnePlus 5T (8.0.0)=OnePlus/OnePlus5T/OnePlus5T:8.0.0/OPR1.170623.032/02040656:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
+Samsung Galaxy J7 (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy J5 Prime (7.0)=samsung/on5xeltejv/on5xelte:7.0/NRD90M/G570FXXU1BQI6:user/release-keys
 Samsung Galaxy Note 3 (7.1.1)=samsung/greatltexx/greatlte:7.1.1/NMF26X/N950FXXU1AQHA:user/release-keys
 Samsung Galaxy Note 4 (6.0.1)=samsung/trltexx/trlte:6.0.1/MMB29M/N910FXXS1DQH9:user/release-keys
 Samsung Galaxy Note 5 (7.0)=samsung/nobleltejv/noblelte:7.0/NRD90M/N920CXXU3CQH6:user/release-keys
+Samsung Galaxy S3 Neo (4.4.4)=samsung/s3ve3gdd/s3ve3gdd:4.4.4/KTU84P/I9300IDDUBQE2:user/release-keys
 Samsung Galaxy S4 (5.0.1)=samsung/jfltexx/jflte:5.0.1/LRX22C/I9505XXUHPF4:user/release-keys
 Samsung Galaxy S6 (5.0.2)=samsung/zerofltexx/zeroflte:5.0.2/LRX22G/G920FXXU1AOD4:user/release-keys
 Samsung Galaxy S7 (7.0)=samsung/heroltexx/herolte:7.0/NRD90M/G930FXXU2DRB6:user/release-keys
+Samsung Galaxy S7 (8.0.0)=samsung/heroltexx/herolte:8.0.0/R16NW/G930FXXU2ERD5:user/release-keys
 Samsung Galaxy S7 Edge (7.0)=samsung/hero2ltexx/hero2lte:7.0/NRD90M/G935FXXU2DRB6:user/release-keys
 Samsung Galaxy S7 Edge (8.0.0)=samsung/hero2ltexx/hero2lte:8.0.0/R16NW/G935FXXU2ERD5:user/release-keys
 Samsung Galaxy S8 Plus (7.0)=samsung/dream2ltexx/dream2lte:7.0/NRD90M/G955FXXU1AQGB:user/release-keys
