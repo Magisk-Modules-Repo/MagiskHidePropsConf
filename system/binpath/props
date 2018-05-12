@@ -1411,6 +1411,7 @@ case "$1" in
 		echo "Usage: props [options]..."
 		echo ""
 		echo "Options:"
+		echo "  -f		Update fingerprints list."
 		echo "  -h		Show this message."
 		echo "  -nc		Turn off colours."
 		echo "  -nw		Turn off fingerprint startup check."
@@ -1425,14 +1426,17 @@ case "$1" in
 esac
 
 case "$1" in
+	*d*) # Download developers prints list, for testing prints
+		download_prints "Dev"
+	;;
+	*f*) # Update fingerprints list
+		download_prints
+	;;
 	*p*) # Edit prop files
 		menu_edit_prop_files "Edit prop files" "p"
 	;;
 	*r*) # Reset all settings
 		reset_everything "Reset all settings" "r"
-	;;
-	*d*) # Download developers prints list, for testing prints
-		download_prints "dev"
 	;;
 esac
 
@@ -1450,7 +1454,7 @@ esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*d*|*h*|*nc*|*nw*|*p*|*r*) # Do nothing
+		*d*|*f*|*h*|*nc*|*nw*|*p*|*r*) # Do nothing
 		;;
 		*)
 			menu_header "${C}Help${N}"

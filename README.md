@@ -2,13 +2,13 @@
 ## By Didgeridoohan @ XDA Developers
 
 
-[Support Thread @ XDA](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199)
+[Support Thread @ XDA](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228)
 
 
 ## Installation
-Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199), and install through the Magisk Manager -> Modules, or from recovery.
+Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), and install through the Magisk Manager -> Modules, or from recovery.
 
-The current release is always attached to the OP of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199). Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases).
+The current release is always attached to the OP of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228). Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases).
 
 
 ## Usage
@@ -27,7 +27,7 @@ This might be because your device simply hasn't been certified or that the ROM y
 
 To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
-There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) toghether with device details.
+There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details.
 
 ### Finding a certified fingerprint
 If you don't want to use one of the provided fingerprints, the easies way to find a certified fingerprint for your device is to run the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
@@ -63,11 +63,11 @@ If you're having issues getting your device certified, take a look in the Magisk
 
 
 ## Current fingerprints list version
-The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) for info.
+The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) for info.
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v14_**
+**_Current fingerprints list version - v15_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -104,7 +104,7 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 
 
 ## Issues, support, etc
-If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-simple-t3765199) @ XDA.
+If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
 ### Device issues because of the module
 In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
@@ -129,6 +129,10 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.1.6  
+- Added some new fingerprints (Sony Xperia Z, Sony Xperia Z1, Xiaomi Redmi 4 Prime, Xiaomi Redmi Note 5/5 Plus), list v15.
+- Very minor improvements that doesn't even deserve their own release, or changelog.
+
 ### v2.1.5  
 - Show what device the currently set fingerprint is from.
 - Fixed,updated and added a bunch of fingerprints, list v12.
@@ -192,7 +196,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v14  
+### List v15  
 - Asus Zenfone 2 Laser (6.0.1)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
@@ -237,6 +241,8 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Sony Xperia X Performance (8.0.0)
 - Sony Xperia XZ (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
+- Sony Xperia Z (5.1.1)
+- Sony Xperia Z1 (5.1.1)
 - Sony Xperia Z2 (6.0.1)
 - Sony Xperia Z3 (6.0.1)
 - Sony Xperia Z3 Compact (6.0.1)
@@ -250,9 +256,11 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Xiaomi Mi 5S Plus (6.0.1)
 - Xiaomi Mi 6 (7.1.1)
 - Xiaomi Mi 6 (8.0.0)
+- Xiaomi Redmi 4 Prime (6.0.1)
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 4/4X (7.0)
+- Xiaomi Redmi Note 5/5 Plus (7.1.2)
 - ZTE Axon 7 (7.1.1)
 - ZTE Nubia Z17 (7.1.1)
 - Zuk Z2 Pro (7.0)

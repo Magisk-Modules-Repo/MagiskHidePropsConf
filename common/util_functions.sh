@@ -402,8 +402,8 @@ download_prints() {
 	if [ -z "$LOGNAME" ]; then
 		clear
 	fi
-	if [ "$1" == "dev" ]; then
-		PRINTSWWW="https://www.didgeridoohan.com/MagiskHidePropsConfig/prints.sh"
+	if [ "$1" == "Dev" ]; then
+		PRINTSWWW="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/prints.sh"
 	fi
 	menu_header "Updating fingerprints list"
 	echo ""
@@ -411,7 +411,7 @@ download_prints() {
 	wget -T 10 -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE	
 	if [ -f "$PRINTSTMP" ]; then
 		LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
-		if [ "$LISTVERSION" == "DEV" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+		if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
 			if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
 				mv -f $PRINTSTMP $PRINTSLOC
 				# Updates list version in module.prop
@@ -431,7 +431,7 @@ download_prints() {
 	fi
 	if [ "$1" == "manual" ]; then
 		sleep 2
-	elif [ "$1" == "dev" ]; then
+	elif [ "$1" == "Dev" ]; then
 		sleep 2
 		exit_fn
 	else
