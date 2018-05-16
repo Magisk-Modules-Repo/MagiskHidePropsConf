@@ -29,12 +29,26 @@ To fix this, you can use a known working fingerprint (one that has been certifie
 
 There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details.
 
+### Can I use any fingerprint?
+It's possible to use any fingerprint that's certified for your device. It doesn't have to match, either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter.
+
 ### Finding a certified fingerprint
-If you don't want to use one of the provided fingerprints, the easies way to find a certified fingerprint for your device is to run the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
+#### The getprop method
+If you don't want to use one of the provided fingerprints, you can get one for your device by running the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
 ```
 getprop ro.build.fingerprint
 ```
-If you're already on a custom ROM that can't pass the CTS profile check, this might not be an option... Head over to your device's forum and ask for help. If someone can run the getprop command on their device for you, you're good to go.
+If you're already on a custom ROM that can't pass the CTS profile check, this might not be an option... Head over to your device's forum and ask for help. If someone can run the getprop command on their device for you, you're good to go. Or, you can try the other method described below.
+
+#### The stock ROM/firmware/factory image method
+Another way to find a certified fingerprint is to download a stock ROM/firmware/factory image for your device and extract the fingerprint from there.
+
+You can find the file to download in your device's forum on XDA Developers (either as a firmware file, a proper stock ROM, or in the development section as a debloated stock ROM), from the manufacturer's website, or elsewhere on the great interweb (just remember to be careful when downloading unknown files, it's dangerous to go alone!). Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
+
+- Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
+- Other times you'll find the fingerprint in META-INF\com\google\android\updater-script.
+- For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
+- Etc... Experiment, the fingerprint will be in there somewhere.
 
 ### Custom fingerprints list
 You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name=fingerprint`.
@@ -67,7 +81,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v15_**
+**_Current fingerprints list version - v16_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -196,7 +210,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v15  
+### List v16  
 - Asus Zenfone 2 Laser (6.0.1)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
@@ -222,21 +236,24 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - OnePlus 3T (8.0.0)
 - OnePlus 5T (7.1.1)
 - OnePlus 5T (8.0.0)
+- Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
-- Samsung Galaxy J7 (7.1.1)
 - Samsung Galaxy J5 Prime (7.0)
 - Samsung Galaxy Note 3 (7.1.1)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
 - Samsung Galaxy S3 Neo (4.4.4)
 - Samsung Galaxy S4 (5.0.1)
-- Samsung Galaxy S6 (5.0.2)
+- Samsung Galaxy S6 (7.0)
+- Samsung Galaxy S6 Edge (7.0)
 - Samsung Galaxy S7 (7.0)
 - Samsung Galaxy S7 (8.0.0)
 - Samsung Galaxy S7 Edge (7.0)
 - Samsung Galaxy S7 Edge (8.0.0)
 - Samsung Galaxy S8 Plus (7.0)
 - Samsung Galaxy S8 Plus (8.0.0)
+- Samsung Galaxy S9 (8.0.0)
+- Samsung Galaxy S9 Plus (8.0.0)
 - Sony Xperia X (8.0.0)
 - Sony Xperia X Performance (8.0.0)
 - Sony Xperia XZ (8.0.0)
@@ -251,6 +268,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Sony Xperia Z5 Compact (7.1.1)
 - Sony Xperia Z5 Dual (7.1.1)
 - Vodafone Smart Ultra 6 (5.1.1)
+- Xiaomi Mi 3/4 (6.0.1)
 - Xiaomi Mi 5/5 Pro (7.0)
 - Xiaomi Mi 5S (7.0)
 - Xiaomi Mi 5S Plus (6.0.1)
