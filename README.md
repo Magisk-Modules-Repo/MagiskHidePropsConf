@@ -48,9 +48,11 @@ You can find the file to download in your device's forum on XDA Developers (eith
 Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
 
 - Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
-- Other times you'll find the fingerprint in META-INF\com\google\android\updater-script.
 - For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
+- Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere.
+
+Take a look below for an example of what a device fingerprint looks like.
 
 ### Custom fingerprints list
 You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name=fingerprint`.
