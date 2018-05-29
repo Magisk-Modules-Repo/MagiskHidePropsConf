@@ -48,6 +48,27 @@ esac
 # Load functions
 . $MODPATH/util_functions.sh
 
+blank_input() {
+	# Find menu level
+	case $1 in
+		1)	INPUT=""
+		;;
+		2)	INPUT2=""
+		;;
+		3)	INPUT3=""
+		;;
+		4)	INPUT4=""
+		;;
+		5)	INPUT5=""
+		;;
+	esac
+
+	echo ""
+	echo "${R}Don't enter an empty value${N}."
+	echo "Try again."
+	sleep 2
+}
+
 invalid_input() {
 	INPMSG=""
 
@@ -228,6 +249,10 @@ menu_change_fingerprint() {
 				break
 			;;
 			e)	exit_fn
+			;;
+			"")	blank_input 2
+			;;
+			*[[:blank:]]*)	blank_input 2
 			;;
 			*)	menu_new_print "$1" "$INPUT2" 2
 			;;
@@ -934,6 +959,10 @@ menu_new_custprop() {
 			;;
 			e)	exit_fn
 			;;
+			"")	blank_input 3
+			;;
+			*[[:blank:]]*)	blank_input 3
+			;;
 			*)
 				if [ "$(echo $PROPSLIST | grep -o $INPUT3)" ]; then
 					menu_magiskhide_custprop "$INPUT3"
@@ -1040,6 +1069,10 @@ menu_set_new_custprop() {
 				break
 			;;
 			e)	exit_fn
+			;;
+			"")	blank_input 4
+			;;
+			*[[:blank:]]*)	blank_input 4
 			;;
 			*)
 				menu_set_custprop "$1" "$INPUT4"
@@ -1156,7 +1189,9 @@ menu_options() {
 			echo "${G}2${N} - Script colours ${CC}(${COLOURTXT})${N}"
 			echo "${G}3${N} - Fingerprints list check ${CP}(${PRINTSCHKTXT})${N}"
 			echo "${G}r${N} - Reset all settings"
-			echo "${G}b${N} - Go back to main menu"
+			if [ "$2" != "s" ]; then
+				echo "${G}b${N} - Go back to main menu"
+			fi
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -1174,8 +1209,12 @@ menu_options() {
 			r)	menu_options_reset "Reset all settings"
 			;;
 			b)
-				INPUT=""
-				break
+				if [ "$2" == "s" ]; then
+					invalid_input 1 2
+				else
+					INPUT=""
+					break
+				fi
 			;;
 			e)	exit_fn
 			;;
@@ -1471,6 +1510,7 @@ case "$1" in
 		echo "  -nw		Turn off fingerprint startup check."
 		echo "  -p		Improved hiding (edit prop files)."
 		echo "  -r		Reset all options/settings."
+		echo "  -s		Open script settings menu."
 		echo ""
 		echo "See the module readme or the"
 		echo "support thread @ XDA for details."
@@ -1492,6 +1532,9 @@ case "$1" in
 	*r*) # Reset all settings
 		reset_everything "Reset all settings" "r"
 	;;
+	*s*) # Open settings menu
+		menu_options "Script settings" "s"
+	;;
 esac
 
 if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
@@ -1508,7 +1551,7 @@ esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*d*|*f*|*h*|*nc*|*nw*|*p*|*r*) # Do nothing
+		*d*|*f*|*h*|*nc*|*nw*|*p*|*r*|*s*) # Do nothing
 		;;
 		*)
 			menu_header "${C}Help${N}"
@@ -1516,7 +1559,7 @@ if [ "$1" ]; then
 			echo "${R}Invalid option.${N}"
 			echo ""
 			echo "Try again without options,"
-			echo "or use -h for details."
+			echo "or use -h for help and details."
 			echo ""
 			exit 0
 		;;

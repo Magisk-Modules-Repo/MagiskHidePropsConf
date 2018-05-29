@@ -160,6 +160,10 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.2.1  
+- Added a check for entering empty values for fingerprint and custom props.
+- Added a command option to go directly to the settings menu. Run `props` with the -h option for details.
+
 ### v2.2.0  
 - Added an option to set prop values earlier in the boot process.
 - Moved module setup from post-fs-data.sh to post-fs-data.d.
