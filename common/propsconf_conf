@@ -16,6 +16,7 @@ CONFSELINUX=""
 CONFPROPS=""
 PROPOPTION=replace
 
+CONFLATE=true
 CONFCOLOUR=enabled
 CONFWEB=enabled
 
@@ -51,6 +52,12 @@ CONFWEB=enabled
 # "add", or "preserve". The default option is to replace the list.
 # This option supersedes the preserve option described below, but only
 # for the CONFPROPS variable.
+#
+# CONFLATE is by default set to "true". This loads the boot script during the
+# late_start service mode. If the setting is changed to "false", the boot script
+# will instead be loaded earlier during boot, in the post-fs-data mode. This is
+# useful if the module can't set the props correctly. Known to happen on some
+# LineageOS 15.1 ROMs, and possibly others.
 #
 # CONFCOLOUR and CONFWEB are the options for colour and automatic fingerprints
 # list update. See the module documentation for more details.

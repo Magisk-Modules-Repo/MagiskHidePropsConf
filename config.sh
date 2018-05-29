@@ -109,8 +109,13 @@ get_file_value() {
 # Variables
 BIMGPATH=/sbin/.core/img
 $BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
+POSTPATH=$IMGPATH/.core/post-fs-data.d
+SERVICEPATH=$IMGPATH/.core/service.d
+POSTFILE=$POSTPATH/propsconf_post
+UPDATEPOSTFILE=$INSTALLER/common/propsconf_post
+LATEFILE=$SERVICEPATH/propsconf_late
+POSTLATEFILE=$POSTPATH/propsconf_late
 UPDATELATEFILE=$INSTALLER/common/propsconf_late
-LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 if [ -z $SLOT ]; then
 	CACHELOC=/cache
 else
@@ -141,6 +146,7 @@ PROPEDIT
 CUSTOMEDIT
 CUSTOMCHK
 REBOOTCHK
+OPTIONLATE
 OPTIONCOLOUR
 OPTIONWEB
 "
@@ -186,9 +192,12 @@ log_print() {
 # Places various module scripts in their proper places
 script_placement() {
 	log_print "- Installing scripts"
-	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh
-	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh
-	cp -af $UPDATELATEFILE $MODPATH/propsconf_late
+	cp -afv $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG
+	cp -afv $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG
+	cp -afv $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG
+	cp -afv $UPDATEPOSTFILE $POSTFILE >> $INSTLOG
+	chmod 755 $POSTFILE
+	cp -afv $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG
 	if [ "$UPDATEV" -gt "$FILEV" ]; then
 		if [ "$FILEV" == 0 ]; then
 			log_print "- Placing settings script"
@@ -230,11 +239,11 @@ script_placement() {
 				fi
 			done
 		fi
-		cp -af $UPDATELATEFILE $LATEFILE
+		cp -afv $UPDATELATEFILE $LATEFILE >> $INSTLOG
 		chmod 755 $LATEFILE
 	elif [ "$UPDATEV" -lt "$FILEV" ]; then
 		log_print "- Settings cleared (script downgraded)"
-		cp -af $UPDATELATEFILE $LATEFILE
+		cp -afv $UPDATELATEFILE $LATEFILE >> $INSTLOG
 		chmod 755 $LATEFILE
 	else
 		log_print "- Module settings preserved"
@@ -299,19 +308,37 @@ bin_check() {
 	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN
 }
 
+# Magisk installation check
+install_check() {
+	if [ ! -d "$SERVICEPATH"]; then
+		log_handler "Fresh Magisk installation detected."
+		log_handler "Creating path for boot script."
+		mkdir -pv $SERVICEPATH >> $INSTLOG
+	fi
+}
+
+# Check for boot script in post-fs-data.d
+post_check() {
+	if [ -f "$POSTLATEFILE" ]; then
+		log_handler "Removing boot script from post-fs-data.d."
+		rm -f $POSTLATEFILE
+	fi
+}
+
 # Installs everything
 script_install() {
-	log_start
 	build_prop_check
 	usnf_check
 	bin_check
+	post_check
 	script_placement
 	log_print "- Updating placeholders"
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
-	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER $MODVERSION
-	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $BIMGPATH
-	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER $BIMGPATH
+	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $POSTFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
+	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
+	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
 }

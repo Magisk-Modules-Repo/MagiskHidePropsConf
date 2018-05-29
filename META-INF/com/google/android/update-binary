@@ -100,6 +100,11 @@ request_zip_size_check "$ZIP"
 # This function will mount $IMG to $MOUNTPATH, and resize the image based on $reqSizeM
 mount_magisk_img
 
+# Start module installation log
+log_start
+# Check for fresh Magisk installation
+install_check
+
 # Create mod paths
 rm -rf $MODPATH 2>/dev/null
 mkdir -p $MODPATH

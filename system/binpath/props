@@ -1131,6 +1131,11 @@ menu_options() {
 		COLOURTXT=""
 		PRINTSCHKTXT=""
 		if [ -z "$INPUT2" ]; then
+			if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 1 ]; then
+				BOOTTXT="late_start service"
+			else
+				BOOTTXT="post-fs-data"
+			fi
 			if [ "$(get_file_value $LATEFILE "OPTIONCOLOUR=")" == 1 ]; then
 				COLOURTXT="enabled"
 				CC=${G}
@@ -1147,8 +1152,9 @@ menu_options() {
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
-			echo "${G}1${N} - Script colours ${CC}(${COLOURTXT})${N}"
-			echo "${G}2${N} - Fingerprints list check ${CP}(${PRINTSCHKTXT})${N}"
+			echo "${G}1${N} - Boot stage ${C}(${BOOTTXT})${N}"
+			echo "${G}2${N} - Script colours ${CC}(${COLOURTXT})${N}"
+			echo "${G}3${N} - Fingerprints list check ${CP}(${PRINTSCHKTXT})${N}"
 			echo "${G}r${N} - Reset all settings"
 			echo "${G}b${N} - Go back to main menu"
 			echo ""
@@ -1159,9 +1165,11 @@ menu_options() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			1)	menu_options_colour "Script colours" "$COLOURTXT"
+			1)	menu_options_bootstage "Boot stage" "$BOOTTXT"
 			;;
-			2)	menu_options_printschk "Fingerprints list check" "$PRINTSCHKTXT"
+			2)	menu_options_colour "Script colours" "$COLOURTXT"
+			;;
+			3)	menu_options_printschk "Fingerprints list check" "$PRINTSCHKTXT"
 			;;
 			r)	menu_options_reset "Reset all settings"
 			;;
@@ -1172,6 +1180,50 @@ menu_options() {
 			e)	exit_fn
 			;;
 			*)	invalid_input 1 2
+			;;
+		esac
+	done
+}
+
+# Third menu level - Options, boot stage
+menu_options_bootstage() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			if [ "$2" == "late_start service" ]; then
+				TMPTXT="post-fs-data"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				TMPTXT="late_start service"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Current boot stage is ${G}$2${N}."
+			echo ""
+			echo "Do you want to change it to ${C}$TMPTXT${N}?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y)
+				log_handler "Boot stage changed to ${TMPTXT}."
+				replace_fn OPTIONLATE $OPTCURR $OPTNEW $LATEFILE
+				INPUT2=""
+				reboot_fn "$1"
+				break
+			;;
+			n)
+				INPUT2=""
+				break
+			;;
+			e)	exit_fn
+			;;
+			*)	invalid_input 3 3
 			;;
 		esac
 	done
@@ -1283,8 +1335,10 @@ menu_options_reset() {
 		case "$INPUT3" in
 			y)
 				log_handler "Resetting all script settings."
+				OPTLCURR=$(get_file_value $LATEFILE "OPTIONLATE=")
 				OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
 				OPTWCURR=$(get_file_value $LATEFILE "OPTIONWEB=")
+				replace_fn OPTIONLATE $OPTLCURR 1 $LATEFILE
 				replace_fn OPTIONCOLOUR $OPTCCURR 1 $LATEFILE
 				replace_fn OPTIONWEB $OPTWCURR 1 $LATEFILE
 				INPUT2=""

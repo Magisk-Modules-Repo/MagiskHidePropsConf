@@ -62,12 +62,13 @@ Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
 
 ### I still can't pass the ctsProfile check
-If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, do the following.
+If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
 - First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under "Miscellaneous MagiskHide issues" below.
-- Try a different fingerprint from the provided list.
-- Make sure you don't have any remnants from previous root methods that may interfere with the SafetyNet check. A clean install of your system may be required.
-- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide.
-- If you can't get things working, and want help, make sure to provide logs. See "Logs, etc" below.
+- Go into the script options and move the execution of the boot script to post-fs-data. See "Boot stage" below.
+- Try a different fingerprint (pick one from the provided list).
+- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide. Check in your ROM thread or with the creator/developer.
+- You might have remnants of previous tampering on your device. A clean install of your system may be required.
+- If you can't get things working, and want help, make sure to provide logs and details. See "Logs, etc" below.
 
 
 ## Keeping your device "certified"
@@ -85,7 +86,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v16_**
+**_Current fingerprints list version - v17_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -108,7 +109,16 @@ It's quite easy to change prop values with Magisk. With this module it's even ea
 
 
 ## Prop script settings
-There are a couple of persistent options that you can set for the `props` script. These are currently "Colour" and "Fingerprints list check". The colour option disables or enables colours for the script, and the fingerprints list check option disables or enables automatic updating of the fingerprints list when the script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu.
+There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check".
+
+### Boot stage
+It's possible to move the execution of the boot script from the default late_start service to post-fs-data.d. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations (known: LineageOS 15.1). The option is found under "Script settings" when running the `props` script. The reason late_start service is default is that it's best to try to keep the number of scripts running during post-fs-data mode as low as possible.
+
+### Script colours
+This option will disable or enable colours for the `props` script.
+
+### Fingerprints list check
+This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option (use -h for details).
 
 
 ## Configuration file
@@ -124,6 +134,9 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 ## Issues, support, etc
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
+### Props don't seem to set properly
+If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the execution of the boot script to post-fs-data. See "Boot stage" above.
+
 ### Device issues because of the module
 In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
 
@@ -132,7 +145,7 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 ### Logs, etc
-In case of issues, please provide the different log files, found in /cache (or /data/cache for A/B devices), together with a detailed description of your problem. The logs available could include "magisk.log", "propsconf.log", "propsconf_last.log", "propsconf_install.log" and "propsconf_latefile.log" Providing the output from terminal might also be useful.
+In case of issues, please provide the different log files, found in /cache (or /data/cache for A/B devices), together with a detailed description of your problem. The logs available could include "magisk.log" and any files starting with "propsconf". Providing the output from terminal might also be useful.
 
 If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release (the only difference is the more verbose logging), so that you can collect the debug log.
 
@@ -147,6 +160,14 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.2.0  
+- Added an option to set prop values earlier in the boot process.
+- Moved module setup from post-fs-data.sh to post-fs-data.d.
+- Fixed installing module on a fresh Magisk install.
+- Fixed restoring the boot scripts during post-fs-data boot stage.
+- Updated and added some new fingerprints (Google Pixel 2 XL, Huawei Honor 9, Samsung Galaxy J5 and Note 8, Xiaomi Mi A1, Mi Max 2 and Redmi Note 5 Pro), list v17.
+- As usual, a bunch of improvements. They'll likely not harm any kittens, but might break the module.
+
 ### v2.1.6  
 - Added some new fingerprints (Sony Xperia Z, Sony Xperia Z1, Xiaomi Redmi 4 Prime, Xiaomi Redmi Note 5/5 Plus), list v15.
 - Very minor improvements that doesn't even deserve their own release, or changelog.
@@ -214,7 +235,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v16  
+### List v17  
 - Asus Zenfone 2 Laser (6.0.1)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
@@ -230,6 +251,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Google Pixel 2 XL (8.1.0)
 - Google Pixel 2 XL (P DP1)
 - HTC 10 (6.0.1)
+- Huawei Honor 9 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto G4 (7.0)
@@ -242,10 +264,12 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - OnePlus 5T (8.0.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
+- Samsung Galaxy J5 (7.1.1)
 - Samsung Galaxy J5 Prime (7.0)
 - Samsung Galaxy Note 3 (7.1.1)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
+- Samsung Galaxy Note 8 (8.0.0)
 - Samsung Galaxy S3 Neo (4.4.4)
 - Samsung Galaxy S4 (5.0.1)
 - Samsung Galaxy S6 (7.0)
@@ -278,11 +302,14 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Xiaomi Mi 5S Plus (6.0.1)
 - Xiaomi Mi 6 (7.1.1)
 - Xiaomi Mi 6 (8.0.0)
+- Xiaomi Mi A1 (8.0.0)
+- Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Redmi 4 Prime (6.0.1)
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 4/4X (7.0)
 - Xiaomi Redmi Note 5/5 Plus (7.1.2)
+- Xiaomi Redmi Note 5 Pro (8.1.0)
 - ZTE Axon 7 (7.1.1)
 - ZTE Nubia Z17 (7.1.1)
 - Zuk Z2 Pro (7.0)

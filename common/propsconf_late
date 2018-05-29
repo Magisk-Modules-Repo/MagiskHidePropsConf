@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=6
+SCRIPTV=7
 SETTRANSF=1
 
 # Variables
@@ -17,14 +17,6 @@ IMGPATH=IMG_PLACEHOLDER
 MODPATH=$IMGPATH/MagiskHidePropsConf
 CACHELOC=CACHE_PLACEHOLDER
 LATELOGFILE=$CACHELOC/propsconf_latefile.log
-
-CACHEFILES="
-propsconf.log
-propsconf_last.log
-propsconf_install.log
-propsconf_conf
-reset_mhpc
-"
 
 FINGERPRINTENB=1
 PRINTEDIT=0
@@ -36,8 +28,19 @@ PROPCOUNT=0
 PROPEDIT=0
 CUSTOMEDIT=0
 REBOOTCHK=0
+OPTIONLATE=1
 OPTIONCOLOUR=1
 OPTIONWEB=1
+
+CACHEFILES="
+propsconf.log
+propsconf_last.log
+propsconf_install.log
+propsconf_conf
+reset_mhpc
+"
+
+rm -f $LATELOGFILE
 
 # Function to clean up different files after the module has been uninstalled
 cleanup() {
@@ -45,12 +48,13 @@ cleanup() {
 	for ITEM in $CACHEFILES; do
 		if [ -f "$CACHELOC/$ITEM" ]; then
 			echo "Deleting ${ITEM}." >> $LATELOGFILE
-			rm -f $CACHELOC/$ITEM
+			rm -fv $CACHELOC/$ITEM >> $LATELOGFILE
 		fi
 	done
 	# Suicide.
-	echo "Removing script." >> $LATELOGFILE
-	rm $0
+	echo "Removing scripts." >> $LATELOGFILE
+	rm -fv $IMGPATH/.core/post-fs-data.d/propsconf_post >> $LATELOGFILE
+	rm -fv $0 >> $LATELOGFILE
 }
 
 # Checks if the module is installed. Deletes itself if it isn't.
@@ -63,6 +67,12 @@ if [ -d "$MODPATH" ]; then
 	else
 		# Load functions
 		. $MODPATH/util_functions.sh
+
+		if [ "$OPTIONLATE" == 0 ]; then
+			until [ ! -f "$POSTCHKFILE" ]; do
+				sleep 1
+			done
+		fi
 
 		log_script_chk "Running boot script."
 
@@ -85,7 +95,7 @@ if [ -d "$MODPATH" ]; then
 			else
 				replace_fn FINGERPRINTENB 0 1 $LATEFILE
 			fi
-			
+
 			# Check the reboot variable
 			if [ "$(get_file_value $LATEFILE "REBOOTCHK\=")" == 1 ]; then
 				replace_fn REBOOTCHK 1 0 $LATEFILE
@@ -129,8 +139,14 @@ if [ -d "$MODPATH" ]; then
 			SETSELINUX=false
 			SETFINGERPRINT=false
 
-			# ---Setting/Changing props---
-			# Set/change MagiskHide sensitive props
+			# Edits prop values if set for late_start service
+			if [ "$OPTIONLATE" == 1 ]; then
+				# ---Setting/Changing fingerprint---				
+				print_edit
+				# ---Setting custom props---
+				custom_edit
+			fi
+			# Edit MagiskHide sensitive values
 			if [ "$PROPEDIT" == 1 ]; then
 				log_handler "Changing sensitive props."
 				for ITEM in $PROPSLIST; do
@@ -140,27 +156,8 @@ if [ -d "$MODPATH" ]; then
 					if [ "$(eval "echo \$$REPROP")" == "true" ]; then
 						log_handler "Changing/writing $ITEM."
 						resetprop -v $ITEM 2>> $LOGFILE
-						resetprop -v $ITEM $(eval "echo \$$MODULEPROP") 2>> $LOGFILE
+						resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") 2>> $LOGFILE
 					fi
-				done
-			fi
-			# Set new fingerprint
-			if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == "false" ] && [ "$PRINTEDIT" == 1 ]; then
-				log_handler "Changing fingerprint."
-				for ITEM in $PRINTPROPS; do
-					log_handler "Changing/writing $ITEM."
-					resetprop -v $ITEM 2>> $LOGFILE
-					resetprop -v $ITEM $MODULEFINGERPRINT 2>> $LOGFILE
-				done				
-			fi
-
-			# ---Setting custom props---
-			if [ "$CUSTOMEDIT" == 1 ]; then
-				log_handler "Writing custom props."
-				for ITEM in $CUSTOMPROPS; do
-					log_handler "Changing/writing $(get_eq_left "$ITEM")."
-					resetprop -v $(get_eq_left "$ITEM") 2>> $LOGFILE
-					resetprop -v $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") 2>> $LOGFILE
 				done
 			fi
 
@@ -174,10 +171,11 @@ if [ -d "$MODPATH" ]; then
 				log_handler "Default.prop editing disabled."
 			fi
 		fi
+
 		# Check if the late_start service log file exists.
 		if [ -f "$LATELOGFILE" ]; then
 			log_handler "Removing late_start service log ($LATELOGFILE)."
-			rm -f $LATELOGFILE
+			rm -fv $LATELOGFILE >> $LOGFILE
 		fi
 		log_script_chk "Boot script finished.\n\n=================="
 	fi

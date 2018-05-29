@@ -8,6 +8,7 @@ MODVERSION=VER_PLACEHOLDER
 POSTFILE=$IMGPATH/.core/post-fs-data.d/propsconf_post
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 CACHELOC=CACHE_PLACEHOLDER
+POSTCHKFILE=$CACHELOC/propsconf_postchk
 RUNFILE=$MODPATH/script_check
 LOGFILE=$CACHELOC/propsconf.log
 LASTLOGFILE=$CACHELOC/propsconf_last.log
@@ -15,11 +16,6 @@ CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
 BBPATH=$MAGISKLOC/busybox
-PRINTSLOC=$MODPATH/prints.sh
-PRINTSTMP=$CACHELOC/prints.sh
-PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
-BIN=BIN_PLACEHOLDER
-USNFLIST=USNF_PLACEHOLDER
 alias cat="$BBPATH cat"
 alias grep="$BBPATH grep"
 alias printf="$BBPATH printf"
@@ -28,6 +24,11 @@ alias sed="$BBPATH sed"
 alias sort="$BBPATH sort"
 alias tr="$BBPATH tr"
 alias wget="$BBPATH wget"
+PRINTSLOC=$MODPATH/prints.sh
+PRINTSTMP=$CACHELOC/prints.sh
+PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
+BIN=BIN_PLACEHOLDER
+USNFLIST=USNF_PLACEHOLDER
 
 # MagiskHide props
 PROPSLIST="
@@ -67,8 +68,8 @@ log_start() {
 	fi
 	touch $LOGFILE
 	echo "***************************************************" >> $LOGFILE
-	echo "******** MagiskHide Props Config $MODVERSION ********" >> $LOGFILE
-	echo "**************** By Didgeridoohan ***************" >> $LOGFILE
+	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE
+	echo "***************** By Didgeridoohan ***************" >> $LOGFILE
 	echo "***************************************************" >> $LOGFILE
 	log_script_chk "Log start."
 }
@@ -174,7 +175,7 @@ orig_check() {
 
 script_ran_check() {
 	POSTCHECK=0
-	if [ "$(cat $RUNFILE | grep "post-fs-data.sh finished")" ]; then
+	if [ "$(cat $RUNFILE | grep "post-fs-data.d finished")" ]; then
 		POSTCHECK=1
 	fi
 	LATECHECK=0
@@ -274,21 +275,24 @@ reboot_chk() {
 reset_fn() {
 	BUILDPROPENB=$(get_file_value $LATEFILE "BUILDPROPENB=")
 	FINGERPRINTENB=$(get_file_value $LATEFILE "FINGERPRINTENB=")
-	cp -af $MODPATH/propsconf_late $LATEFILE
-	if [ "$BUILDPROPENB" ] && [ -z "$BUILDPROPENB" == 1 ]; then
+	cp -afv $MODPATH/propsconf_late $LATEFILE >> $LOGFILE
+	if [ "$BUILDPROPENB" ] && [ "$BUILDPROPENB" != 1 ]; then
 		replace_fn BUILDPROPENB 1 $BUILDPROPENB $LATEFILE
 	fi
-	if [ "$FINGERPRINTENB" ] && [ -z "$FINGERPRINTENB" == 1 ]; then
+	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
-	chmod 755 $LATEFILE	
+	chmod 755 $LATEFILE
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
+	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER $CACHELOC
 
-	# Update the reboot variable
-	reboot_chk
+	if [ "$1" != "post" ]; then
+		# Update the reboot variable
+		reboot_chk
 
-	# Update all prop value variables
-	all_values
+		# Update all prop value variables
+		all_values
+	fi
 }
 
 # Check if original file values are safe
@@ -371,8 +375,18 @@ config_file() {
 		fi
 
 		# Updates options
+		OPTLCURR=$(get_file_value $LATEFILE "OPTIONLATE=")
 		OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
 		OPTWCURR=$(get_file_value $LATEFILE "OPTIONWEB=")
+		if [ "$CONFLATE" == "true" ]; then
+			OPTLCHNG=1
+			TMPTXT="late_start service"
+		else
+			OPTLCHNG=0
+			TMPTXT="post-fs-data"
+		fi
+		replace_fn OPTIONLATE $OPTLCURR $OPTLCHNG $LATEFILE
+		log_handler "Boot stage is ${TMPTXT}."
 		if [ "$CONFCOLOUR" == "enabled" ]; then
 			OPTCCHNG=1
 		else
@@ -397,6 +411,18 @@ config_file() {
 }
 
 # ======================== Fingerprint functions ========================
+# Set new fingerprint
+print_edit() {
+	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 -o "$(get_file_value $LATEFILE "PRINTMODULE=")" == "false" ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
+		log_handler "Changing fingerprint."
+		for ITEM in $PRINTPROPS; do
+			log_handler "Changing/writing $ITEM."
+			resetprop -v $ITEM 2>> $LOGFILE
+			resetprop -nv $ITEM "$(get_file_value $LATEFILE "MODULEFINGERPRINT=")" 2>> $LOGFILE
+		done				
+	fi
+}
+
 # Checks and updates the prints list
 download_prints() {
 	if [ -z "$LOGNAME" ]; then
@@ -658,9 +684,9 @@ reset_prop() {
 			PROPCOUNTP=$(($PROPCOUNT-1))
 			replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
 		fi
-		if [ "$PROPCOUNT" == 0 ]; then
-			replace_fn PROPEDIT 1 0 $LATEFILE
-		fi
+	fi
+	if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" == 0 ]; then
+		replace_fn PROPEDIT 1 0 $LATEFILE
 	fi
 
 	if [ "$2" != "file" ]; then
@@ -716,11 +742,24 @@ reset_prop_all() {
 	PROPCOUNT=$(get_file_value $LATEFILE "PROPCOUNT=")
 	replace_fn PROPCOUNT $PROPCOUNT 0 $LATEFILE
 	replace_fn PROPEDIT 1 0 $LATEFILE
-	
+
 	after_change "$1"
 }
 
 # ======================== Custom Props functions ========================
+# Set custom props
+custom_edit() {
+	if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
+		log_handler "Writing custom props."
+		TMPLST="$(get_file_value $LATEFILE "CUSTOMPROPS=")"
+		for ITEM in $TMPLST; do
+			log_handler "Changing/writing $(get_eq_left "$ITEM")."
+			resetprop -v $(get_eq_left "$ITEM") 2>> $LOGFILE
+			resetprop -nv $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") 2>> $LOGFILE
+		done
+	fi
+}
+
 # Set custom prop value
 set_custprop() {
 	if [ "$2" ]; then
