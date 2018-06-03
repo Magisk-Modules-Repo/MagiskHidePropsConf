@@ -130,7 +130,7 @@ reboot_fn() {
 			read -r INPUT5
 		fi
 		case "$INPUT5" in
-			y)
+			y|Y)
 				log_handler "Rebooting..."
 				setprop sys.powerctl reboot
 				sleep 15
@@ -141,7 +141,7 @@ reboot_fn() {
 				echo ""
 				exit 0
 			;;
-			n)
+			n|N)
 				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
 					exit_fn
 				else
@@ -153,7 +153,7 @@ reboot_fn() {
 					break
 				fi
 			;;
-			e)
+			e|E)
 				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
 					invalid_input $INV1 5
 				else
@@ -233,26 +233,24 @@ menu_change_fingerprint() {
 			fi
 		fi
 		case "$INPUT2" in
-			f)	menu_pick_print "$1"
+			f|F)	menu_pick_print "$1"
 			;;
-			r)	
+			r|R)	
 				if [ "$PRINTMODULETXT" ]; then
 					menu_reset_print "Reset fingerprint"
 				else
 					menu_new_print "$1" "$INPUT2" 2
 				fi
 			;;
-			u)	menu_update_print "Update fingerprints list"
+			u|U)	menu_update_print "Update fingerprints list"
 			;;
-			b)
+			b|B)
 				INPUT=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
-			"")	blank_input 2
-			;;
-			*[[:blank:]]*)	blank_input 2
+			""|[[:blank:]]*)	blank_input 2
 			;;
 			*)	menu_new_print "$1" "$INPUT2" 2
 			;;
@@ -299,10 +297,10 @@ menu_pick_print() {
 				fi
 				ITEMCOUNT=$(($ITEMCOUNT+1))
 			done
-		elif [ "$INPUT3" == "b" ]; then
+		elif [ "$INPUT3" == "b" ] || [ "$INPUT3" == "B" ]; then
 			INPUT2=""
 			break
-		elif [ "$INPUT3" == "e" ]; then
+		elif [ "$INPUT3" == "e" ] || [ "$INPUT3" == "E" ]; then
 			exit_fn
 		else
 			invalid_input 1 3
@@ -347,10 +345,10 @@ menu_pick_print_sub() {
 				fi
 			done
 			IFS=$SAVEIFS
-		elif [ "$INPUT4" == "b" ]; then
+		elif [ "$INPUT4" == "b" ] || [ "$INPUT4" == "B" ]; then
 			INPUT3=""
 			break
-		elif [ "$INPUT4" == "e" ]; then
+		elif [ "$INPUT4" == "e" ] || [ "$INPUT4" == "E" ]; then
 			exit_fn
 		else
 			invalid_input 1 4
@@ -377,17 +375,17 @@ menu_new_print() {
 			read -r INPUT5
 		fi
 		case "$INPUT5" in
-			y)
+			y|Y)
 				change_print "$1" "$2"
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 5
 			;;
@@ -412,15 +410,15 @@ menu_reset_print() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)	
+			y|Y)	
 				reset_print "$1"
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -443,16 +441,16 @@ menu_update_print() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)	
+			y|Y)	
 				download_prints "manual"
 				INPUT2=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -535,7 +533,7 @@ menu_edit_prop_files() {
 			fi
 		fi
 		case "$INPUT2" in
-			y)
+			y|Y)
 				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
 					reset_prop_files "$1" "$2" "$LOGTXT"
 				else
@@ -543,7 +541,7 @@ menu_edit_prop_files() {
 				fi
 				break
 			;;
-			n)
+			n|N)
 				if [ "$2" == "p" ]; then
 					exit_fn
 				else
@@ -551,14 +549,14 @@ menu_edit_prop_files() {
 					break
 				fi
 			;;
-			r)
+			r|R)
 				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
 					edit_prop_files "$1" "$2" "$LOGTXT"
 				else
 					invalid_input $INV1 $INV2
 				fi	
 			;;
-			e)
+			e|E)
 				if [ "$2" == "p" ]; then
 					invalid_input $INV1 $INV2
 				else
@@ -620,28 +618,28 @@ menu_magiskhide_props() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			1)	menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $FILEDEBUGGABLE $MODULEDEBUGGABLE		
+			1)	menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE		
 			;;
-			2)	menu_change_prop "ro.secure" $CURRSECURE $FILESECURE $MODULESECURE
+			2)	menu_change_prop "ro.secure" $CURRSECURE $ORIGSECURE $MODULESECURE
 			;;
-			3)	menu_change_prop "ro.build.type" $CURRTYPE $FILETYPE $MODULETYPE
+			3)	menu_change_prop "ro.build.type" $CURRTYPE $ORIGTYPE $MODULETYPE
 			;;
-			4)	menu_change_prop "ro.build.tags" $CURRTAGS $FILETAGS $MODULETAGS
+			4)	menu_change_prop "ro.build.tags" $CURRTAGS $ORIGTAGS $MODULETAGS
 			;;
-			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $FILESELINUX $MODULESELINUX
+			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
 			;;
-			r)	
+			r|R)	
 				if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" -gt 1 ]; then
 					menu_reset_prop_all "Reset all props"
 				else
 					invalid_input 1 2
 				fi
 			;;
-			b)
+			b|B)
 				INPUT=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 1 2
 			;;
@@ -693,7 +691,7 @@ menu_change_prop() {
 			fi
 		fi
 		case "$INPUT3" in
-			y)
+			y|Y)
 				if [ "$PROPMODULETXT" ]; then
 					menu_reset_prop "Reset $1" "$1"
 				else
@@ -701,11 +699,11 @@ menu_change_prop() {
 				fi
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -730,15 +728,15 @@ menu_reset_prop_all() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)	
+			y|Y)	
 				reset_prop_all "$1"
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -763,15 +761,15 @@ menu_reset_prop() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)	
+			y|Y)	
 				reset_prop "$2"
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -797,8 +795,8 @@ menu_custom_props() {
 				echo "Do you want to activate it (enter ${G}r${N} to reset)?"
 				echo ""
 				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
-				read -r INPUT2				
-			else				
+				read -r INPUT2
+			else
 				CTRLSET=1
 				echo "Set or edit custom prop values for your device."
 				echo ""
@@ -825,7 +823,7 @@ menu_custom_props() {
 				echo -n "Enter '${G}e${N}' to exit: "
 				read -r INPUT2
 			fi
-			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" ]; then
+			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					ITEMCOUNT=1
 					for ITEM in $CUSTOMPROPS; do
@@ -840,27 +838,27 @@ menu_custom_props() {
 					INPUT=""
 					break
 				fi
-			elif [ "$INPUT2" == "n" ]; then
+			elif [ "$INPUT2" == "n" ] || [ "$INPUT2" == "N" ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					menu_new_custprop "New custom prop"
 				elif [ "$CTRLSET" == 0 ]; then
 					INPUT=""
 					break
 				fi
-			elif [ "$INPUT2" == "r" ]; then
+			elif [ "$INPUT2" == "r" ] || [ "$INPUT2" == "R" ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					menu_reset_all_custprop "Reset all custom props"
 				elif [ "$CTRLSET" == 0 ]; then
 					menu_reset_all_custprop "Reset all custom props"
 				fi
-			elif [ "$INPUT2" == "b" ]; then
+			elif [ "$INPUT2" == "b" ] || [ "$INPUT2" == "B" ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					INPUT=""
 					break
 				elif [ "$CTRLSET" == 0 ]; then
 					invalid_input 4 2
 				fi
-			elif [ "$INPUT2" == "e" ]; then
+			elif [ "$INPUT2" == "e" ] || [ "$INPUT2" == "E" ]; then
 				exit_fn
 			else
 				if [ "$CTRLSET" == 1 ]; then
@@ -880,10 +878,11 @@ menu_edit_custprop() {
 	do
 		if [ -z "$INPUT3" ]; then
 			for ITEM in $CUSTOMPROPS; do
+				TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
 				if [ "$(get_eq_left "$ITEM")" == "$1" ]; then
-					if [ "$(get_eq_right "$ITEM")" == "$(resetprop $1)" ]; then
+					if [ "$TMPITEM" == "$(resetprop $1)" ]; then
 						PROPNOTSET=0
-						SETPROPVALUE="$(get_eq_right "$ITEM")"
+						SETPROPVALUE="$TMPITEM"
 					else
 						PROPNOTSET=1
 					fi
@@ -912,7 +911,7 @@ menu_edit_custprop() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			r)
+			r|R)
 				if [ "$PROPNOTSET" == 0 ]; then
 					menu_reset_custprop "$1" "$SETPROPVALUE"
 					break
@@ -920,11 +919,11 @@ menu_edit_custprop() {
 					reboot_fn "Reboot device" "reboot"
 				fi
 			;;
-			b)
+			b|B)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)
 				if [ "$PROPNOTSET" == 0]; then
@@ -953,15 +952,13 @@ menu_new_custprop() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			b)
+			b|B)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
-			"")	blank_input 3
-			;;
-			*[[:blank:]]*)	blank_input 3
+			""|[[:blank:]]*)	blank_input 3
 			;;
 			*)
 				if [ "$(echo $PROPSLIST | grep -o $INPUT3)" ]; then
@@ -992,16 +989,16 @@ menu_reset_all_custprop() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)
+			y|Y)
 				reset_all_custprop
 				INPUT2=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1027,11 +1024,11 @@ menu_magiskhide_custprop() {
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
-			b)
+			b|B)
 				INPUT3=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 1 4
 			;;
@@ -1064,15 +1061,13 @@ menu_set_new_custprop() {
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
-			b)
+			b|B)
 				INPUT3=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
-			"")	blank_input 4
-			;;
-			*[[:blank:]]*)	blank_input 4
+			""|[[:blank:]]*)	blank_input 4
 			;;
 			*)
 				menu_set_custprop "$1" "$INPUT4"
@@ -1101,17 +1096,17 @@ menu_reset_custprop() {
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
-			y)
+			y|Y)
 				reset_custprop "$1" "$2"
 				INPUT2=""
 				INPUT3=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT3=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 4
 			;;
@@ -1136,18 +1131,18 @@ menu_set_custprop() {
 			read -r INPUT5
 		fi
 		case "$INPUT5" in
-			y)
+			y|Y)
 				set_custprop "$1" "$2"
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT4=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 5
 			;;
@@ -1206,9 +1201,9 @@ menu_options() {
 			;;
 			3)	menu_options_printschk "Fingerprints list check" "$PRINTSCHKTXT"
 			;;
-			r)	menu_options_reset "Reset all settings"
+			r|R)	menu_options_reset "Reset all settings"
 			;;
-			b)
+			b|B)
 				if [ "$2" == "s" ]; then
 					invalid_input 1 2
 				else
@@ -1216,7 +1211,7 @@ menu_options() {
 					break
 				fi
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 1 2
 			;;
@@ -1249,18 +1244,18 @@ menu_options_bootstage() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)
+			y|Y)
 				log_handler "Boot stage changed to ${TMPTXT}."
 				replace_fn OPTIONLATE $OPTCURR $OPTNEW $LATEFILE
 				INPUT2=""
 				reboot_fn "$1"
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1293,17 +1288,17 @@ menu_options_colour() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)
+			y|Y)
 				log_handler "The script colour option was ${TMPTXT}d."
 				replace_fn OPTIONCOLOUR $OPTCURR $OPTNEW $LATEFILE
 				INPUT2=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1337,17 +1332,17 @@ menu_options_printschk() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)
+			y|Y)
 				log_handler "The script prints list check option was ${TMPTXT}d."
 				replace_fn OPTIONWEB $OPTCURR $OPTNEW $LATEFILE
 				INPUT2=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1372,7 +1367,7 @@ menu_options_reset() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y)
+			y|Y)
 				log_handler "Resetting all script settings."
 				OPTLCURR=$(get_file_value $LATEFILE "OPTIONLATE=")
 				OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
@@ -1383,11 +1378,11 @@ menu_options_reset() {
 				INPUT2=""
 				break
 			;;
-			n)
+			n|N)
 				INPUT2=""
 				break
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1423,13 +1418,13 @@ reset_everything() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			y)	
+			y|Y)	
 				log_handler "Resetting all module settings$LOGTXT."
 				reset_fn
 				reboot_fn "$1" "$2"
 				break
 			;;
-			n)	
+			n|N)	
 				if [ "$2" == "r" ]; then
 					exit_fn
 				else
@@ -1437,7 +1432,7 @@ reset_everything() {
 					break
 				fi
 			;;
-			e)	
+			e|E)	
 				if [ "$2" == "r" ]; then
 					invalid_input $INV1 $INV2
 				else
@@ -1472,7 +1467,8 @@ fi
 orig_check
 if [ "$ORIGLOAD" == 0 ]; then
 	log_handler "Original values are not loaded in propsconf_late."
-	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
+	reboot_fn "
+	The original prop values are not loaded,\n possibly due to a full reset of the module,\n or something has gone wrong.\n\n Please reboot your device to reset.\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${N}.\n See the documentations for details." "reset-script"
 fi
 
 script_ran_check
@@ -1625,7 +1621,7 @@ do
 			read -r INPUT
 		fi
 		case "$INPUT" in
-			1)	menu_change_fingerprint "ro.build.fingerprint${PRINTTXT}" $CURRFINGERPRINT $FILEFINGERPRINT $MODULEFINGERPRINT
+			1)	menu_change_fingerprint "ro.build.fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
 			;;
 			2)	menu_edit_prop_files "Improved hiding${FILETXT}"
 			;;
@@ -1635,11 +1631,11 @@ do
 			;;
 			5)	menu_options "Script settings"
 			;;
-			r)	reset_everything "Reset all options/settings"
+			r|R)	reset_everything "Reset all options/settings"
 			;;
-			b)	reboot_fn "Reboot device" "reboot"
+			b|B)	reboot_fn "Reboot device" "reboot"
 			;;
-			e)	exit_fn
+			e|E)	exit_fn
 			;;
 			*)	invalid_input 1 1
 			;;

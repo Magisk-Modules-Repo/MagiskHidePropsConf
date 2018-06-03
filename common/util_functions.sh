@@ -15,11 +15,21 @@ LASTLOGFILE=$CACHELOC/propsconf_last.log
 CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
-BBPATH=$MAGISKLOC/busybox
+if [ -d "$IMGPATH/busybox-ndk" ]; then
+	BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+elif [ -f "/system/bin/busybox" ]; then
+	BBPATH=/system/bin/busybox
+elif [ -f "/system/xbin/busybox" ]; then
+	BBPATH=/system/xbin/busybox
+else
+	BBPATH=$MAGISKLOC/busybox
+fi
 alias cat="$BBPATH cat"
 alias grep="$BBPATH grep"
 alias printf="$BBPATH printf"
-alias resetprop="$MAGISKLOC/magisk resetprop"
+if [ -z "$(echo $PATH | grep /sbin:)" ]; then
+	alias resetprop="$MAGISKLOC/magisk resetprop"
+fi
 alias sed="$BBPATH sed"
 alias sort="$BBPATH sort"
 alias tr="$BBPATH tr"
@@ -165,7 +175,7 @@ orig_check() {
 	ORIGLOAD=0
 	for PROPTYPE in $PROPSTMPLIST; do
 		PROP=$(get_prop_type $PROPTYPE)
-		ORIGPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
+		ORIGPROP=$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')
 		ORIGVALUE=$(get_file_value $LATEFILE "${ORIGPROP}=")
 		if [ "$ORIGVALUE" ]; then
 			ORIGLOAD=1
@@ -186,44 +196,28 @@ script_ran_check() {
 
 # Currently set values
 curr_values() {
-	CURRDEBUGGABLE=$(resetprop ro.debuggable)
-	CURRSECURE=$(resetprop ro.secure)
-	CURRTYPE=$(resetprop ro.build.type)
-	CURRTAGS=$(resetprop ro.build.tags)
-	CURRSELINUX=$(resetprop ro.build.selinux)
-	CURRFINGERPRINT=$(resetprop ro.build.fingerprint)
+	CURRDEBUGGABLE=$(resetprop -v ro.debuggable) 2>> $LOGFILE
+	CURRSECURE=$(resetprop -v ro.secure) 2>> $LOGFILE
+	CURRTYPE=$(resetprop -v ro.build.type) 2>> $LOGFILE
+	CURRTAGS=$(resetprop -v ro.build.tags) 2>> $LOGFILE
+	CURRSELINUX=$(resetprop -v ro.build.selinux) 2>> $LOGFILE
+	CURRFINGERPRINT=$(resetprop -v ro.build.fingerprint) 2>> $LOGFILE
 	if [ -z "$CURRFINGERPRINT" ]; then
-		CURRFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
+		CURRFINGERPRINT=$(resetprop -v ro.bootimage.build.fingerprint) 2>> $LOGFILE
 		if [ -z "$CURRFINGERPRINT" ]; then
-			CURRFINGERPRINT=$(resetprop ro.vendor.build.fingerprint)
+			CURRFINGERPRINT=$(resetprop -v ro.vendor.build.fingerprint) 2>> $LOGFILE
 		fi
 	fi
 }
 
-# Prop file values
-file_values() {
-	FILEDEBUGGABLE=$(resetprop ro.debuggable)
-	FILESECURE=$(resetprop ro.secure)
-	FILETYPE=$(resetprop ro.build.type)
-	FILETAGS=$(resetprop ro.build.tags)
-	FILESELINUX=$(resetprop ro.build.selinux)
-	FILEFINGERPRINT=$(resetprop ro.build.fingerprint)
-	if [ -z "$FILEFINGERPRINT" ]; then
-		FILEFINGERPRINT=$(resetprop ro.bootimage.build.fingerprint)
-		if [ -z "$FILEFINGERPRINT" ]; then
-			FILEFINGERPRINT=$(resetprop ro.vendor.build.fingerprint)
-		fi
-	fi
-}
-
-# Latefile values
-latefile_values() {
-	LATEFILEDEBUGGABLE=$(get_file_value $LATEFILE "FILEDEBUGGABLE=")
-	LATEFILESECURE=$(get_file_value $LATEFILE "FILESECURE=")
-	LATEFILETYPE=$(get_file_value $LATEFILE "FILETYPE=")
-	LATEFILETAGS=$(get_file_value $LATEFILE "FILETAGS=")
-	LATEFILESELINUX=$(get_file_value $LATEFILE "FILESELINUX=")
-	LATEFILEFINGERPRINT=$(get_file_value $LATEFILE "FILEFINGERPRINT=")
+# Original values
+orig_values() {
+	ORIGDEBUGGABLE=$(get_file_value $LATEFILE "ORIGDEBUGGABLE=")
+	ORIGSECURE=$(get_file_value $LATEFILE "ORIGSECURE=")
+	ORIGTYPE=$(get_file_value $LATEFILE "ORIGTYPE=")
+	ORIGTAGS=$(get_file_value $LATEFILE "ORIGTAGS=")
+	ORIGSELINUX=$(get_file_value $LATEFILE "ORIGSELINUX=")
+	ORIGFINGERPRINT=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
 }
 
 # Module values
@@ -241,10 +235,8 @@ module_values() {
 all_values() {
 	# Currently set values
 	curr_values
-	# Prop file values
-	file_values
-	# Latefile values
-	latefile_values
+	# Original values
+	orig_values
 	# Module values
 	module_values
 }
@@ -300,7 +292,7 @@ orig_safe() {
 	replace_fn FILESAFE 0 1 $LATEFILE
 	for V in $PROPSLIST; do
 		PROP=$(get_prop_type $V)
-		FILEPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
+		FILEPROP=$(echo "CURR${PROP}" | tr '[:lower:]' '[:upper:]')
 		FILEVALUE=$(eval "echo \$$FILEPROP")
 		log_handler "Checking $FILEPROP=$FILEVALUE"
 		safe_props $V $FILEVALUE
@@ -544,7 +536,7 @@ edit_prop_files() {
 	else
 		# Checking if the device fingerprint is set by the module
 		if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
-			if [ "$(cat /system/build.prop | grep "$FILEFINGERPRINT")" ]; then
+			if [ "$(cat /system/build.prop | grep "$ORIGFINGERPRINT")" ]; then
 				log_handler "Enabling prop file editing for device fingerprint."
 				replace_fn SETFINGERPRINT "false" "true" $LATEFILE
 			fi
@@ -610,7 +602,7 @@ change_prop_file() {
 	for ITEM in $FNLIST; do
 		PROP=$(get_prop_type $ITEM)
 		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-		FILEPROP=$(echo "FILE${PROP}" | tr '[:lower:]' '[:upper:]')
+		FILEPROP=$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')
 		SETPROP=$(echo "SET${PROP}" | tr '[:lower:]' '[:upper:]')
 		if [ "$(eval "echo \$$MODULEPROP")" ]; then
 			SEDVAR="$(eval "echo \$$MODULEPROP")"
@@ -752,10 +744,11 @@ custom_edit() {
 	if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
 		log_handler "Writing custom props."
 		TMPLST="$(get_file_value $LATEFILE "CUSTOMPROPS=")"
-		for ITEM in $TMPLST; do
+		for ITEM in $TMPLST; do			
 			log_handler "Changing/writing $(get_eq_left "$ITEM")."
+			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
 			resetprop -v $(get_eq_left "$ITEM") 2>> $LOGFILE
-			resetprop -nv $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") 2>> $LOGFILE
+			resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" 2>> $LOGFILE
 		done
 	fi
 }
@@ -763,8 +756,9 @@ custom_edit() {
 # Set custom prop value
 set_custprop() {
 	if [ "$2" ]; then
+		TMPVALUE=$(echo "$2" | sed 's| |_sp_|g')
 		CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
-		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${2}" | sed 's|^[ \t]*||')
+		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${TMPVALUE}" | sed 's|^[ \t]*||')
 		SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
 
 		log_handler "Setting custom prop $1."
@@ -793,12 +787,13 @@ reset_all_custprop() {
 
 # Reset custom prop value
 reset_custprop() {
+	TMPVALUE=$(echo "$2" | sed 's| |_sp_|g')
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
 
-	log_handler "Resetting custom props $1."
-	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${2}||" | tr -s " " | sed 's|^[ \t]*||')
+	log_handler "Resetting custom prop $1."
+	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${TMPVALUE}||" | tr -s " " | sed 's|^[ \t]*||')
 
-	# Removing all custom props
+	# Updating custom props string
 	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
 	if [ -z "$CURRCUSTPROPS" ]; then

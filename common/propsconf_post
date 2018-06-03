@@ -33,19 +33,23 @@ if [ -d "$MODPATH" ]; then
 		# Start logging
 		log_start
 
-		# Get the current values saved in propsconf_late
-		latefile_values
 		# Get default values
-		file_values
+		log_handler "Checking device default values."
+		curr_values
+		# Get the current original values saved in propsconf_late
+		log_handler "Checking currently saved values."
+		orig_values
 
 		# Save default file values in propsconf_late
-		replace_fn FILEDEBUGGABLE "\"$LATEFILEDEBUGGABLE\"" "\"$FILEDEBUGGABLE\"" $LATEFILE
-		replace_fn FILESECURE "\"$LATEFILESECURE\"" "\"$FILESECURE\"" $LATEFILE
-		replace_fn FILETYPE "\"$LATEFILETYPE\"" "\"$FILETYPE\"" $LATEFILE
-		replace_fn FILETAGS "\"$LATEFILETAGS\"" "\"$FILETAGS\"" $LATEFILE
-		replace_fn FILESELINUX "\"$LATEFILESELINUX\"" "\"$FILESELINUX\"" $LATEFILE
-		replace_fn FILEFINGERPRINT "\"$LATEFILEFINGERPRINT\"" "\"$FILEFINGERPRINT\"" $LATEFILE
+		replace_fn ORIGDEBUGGABLE "\"$ORIGDEBUGGABLE\"" "\"$CURRDEBUGGABLE\"" $LATEFILE
+		replace_fn ORIGSECURE "\"$ORIGSECURE\"" "\"$CURRSECURE\"" $LATEFILE
+		replace_fn ORIGTYPE "\"$ORIGTYPE\"" "\"$CURRTYPE\"" $LATEFILE
+		replace_fn ORIGTAGS "\"$ORIGTAGS\"" "\"$CURRTAGS\"" $LATEFILE
+		replace_fn ORIGSELINUX "\"$ORIGSELINUX\"" "\"$CURRSELINUX\"" $LATEFILE
+		replace_fn ORIGFINGERPRINT "\"$ORIGFINGERPRINT\"" "\"$CURRFINGERPRINT\"" $LATEFILE
 		log_handler "Default values saved to $LATEFILE."
+		# Loading the new values
+		orig_values
 
 		# Check if original file values are safe
 		orig_safe
@@ -97,7 +101,7 @@ if [ -d "$MODPATH" ]; then
 				change_prop_file "build"
 				# Fingerprint
 				if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ]; then
-					PRINTSTMP="$(cat /system/build.prop | grep "$FILEFINGERPRINT")"
+					PRINTSTMP="$(cat /system/build.prop | grep "$ORIGFINGERPRINT")"
 					for ITEM in $PRINTSTMP; do
 						replace_fn $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") $MODULEFINGERPRINT $MODPATH/system/build.prop && log_handler "$(get_eq_left "$ITEM")=$MODULEFINGERPRINT"
 					done

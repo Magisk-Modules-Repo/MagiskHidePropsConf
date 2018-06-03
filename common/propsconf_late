@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=7
+SCRIPTV=8
 SETTRANSF=1
 
 # Variables
@@ -103,13 +103,13 @@ if [ -d "$MODPATH" ]; then
 
 			# ---Original values---
 			# default.prop
-			FILEDEBUGGABLE=""
-			FILESECURE=""
+			ORIGDEBUGGABLE=""
+			ORIGSECURE=""
 			# build.prop
-			FILETYPE=""
-			FILETAGS=""
-			FILESELINUX=""
-			FILEFINGERPRINT=""
+			ORIGTYPE=""
+			ORIGTAGS=""
+			ORIGSELINUX=""
+			ORIGFINGERPRINT=""
 
 			# ---Module values---
 			MODULEDEBUGGABLE=""

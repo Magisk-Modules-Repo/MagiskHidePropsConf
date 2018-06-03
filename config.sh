@@ -129,7 +129,11 @@ if [ -f "$LATEFILE" ]; then
 else
 	FILEV=0
 fi
-BBPATH=/data/adb/magisk/busybox
+if [ -d "$IMGPATH/busybox-ndk" ]; then
+	BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+else
+	BBPATH=/data/adb/magisk/busybox
+fi
 $BOOTMODE && alias grep="$BBPATH grep"
 $BOOTMODE && alias sed="$BBPATH sed"
 $BOOTMODE && alias tr="$BBPATH tr"

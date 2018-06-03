@@ -86,7 +86,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v17_**
+**_Current fingerprints list version - v18_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -160,6 +160,12 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.2.2  
+- This is not the changelog you're looking for. You can go about your business. Move along.
+- Fixed a bug with setting custom props where the value contains spaces.
+- Added a couple of fingerprints (OnePlus 6 and Xiaomi Mi Note 2) and cleaned out a few old ones, list v 18.
+- As usual, a whole bunch of script improvements that hopefully won't break anything.
+
 ### v2.2.1  
 - Added a check for entering empty values for fingerprint and custom props.
 - Added a command option to go directly to the settings menu. Run `props` with the -h option for details.
@@ -239,7 +245,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v17  
+### List v18  
 - Asus Zenfone 2 Laser (6.0.1)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
@@ -266,6 +272,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - OnePlus 3T (8.0.0)
 - OnePlus 5T (7.1.1)
 - OnePlus 5T (8.0.0)
+- OnePlus 6 (8.1.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J5 (7.1.1)
@@ -308,6 +315,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi A1 (8.0.0)
 - Xiaomi Mi Max 2 (7.1.1)
+- Xiaomi Mi Note 2 (7.0)
 - Xiaomi Redmi 4 Prime (6.0.1)
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
