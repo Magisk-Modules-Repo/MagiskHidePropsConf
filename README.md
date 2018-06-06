@@ -109,16 +109,16 @@ It's quite easy to change prop values with Magisk. With this module it's even ea
 
 
 ## Prop script settings
-There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check".
+There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option when running the `props` script (use -h for details).
 
 ### Boot stage
-It's possible to move the execution of the boot script from the default late_start service to post-fs-data.d. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations (known: LineageOS 15.1). The option is found under "Script settings" when running the `props` script. The reason late_start service is default is that it's best to try to keep the number of scripts running during post-fs-data mode as low as possible.
+It's possible to move the execution of the boot script from the default late_start service to post-fs-data.d. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations (known: LineageOS 15.1). The reason late_start service is default is that it's best to try to keep the number of scripts running during post-fs-data mode as low as possible, but if late_start service doesn't work, it needs to run in post-fs-data instead.
 
 ### Script colours
 This option will disable or enable colours for the `props` script.
 
 ### Fingerprints list check
-This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option (use -h for details).
+This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option when running the `props` script (use -h for details).
 
 
 ## Configuration file
