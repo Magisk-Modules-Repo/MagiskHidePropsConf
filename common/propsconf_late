@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=8
+SCRIPTV=10
 SETTRANSF=1
 
 # Variables
@@ -27,6 +27,7 @@ DEFAULTEDIT=0
 PROPCOUNT=0
 PROPEDIT=0
 CUSTOMEDIT=0
+DELEDIT=0
 REBOOTCHK=0
 OPTIONLATE=1
 OPTIONCOLOUR=1
@@ -67,6 +68,8 @@ if [ -d "$MODPATH" ]; then
 	else
 		# Load functions
 		. $MODPATH/util_functions.sh
+		log_handler "Functions loaded."
+		log_handler "Using busybox: ${BBPATH}."
 
 		if [ "$OPTIONLATE" == 0 ]; then
 			until [ ! -f "$POSTCHKFILE" ]; do
@@ -121,6 +124,9 @@ if [ -d "$MODPATH" ]; then
 
 			# ---Custom prop values---
 			CUSTOMPROPS=""
+			
+			# ---Delete prop values---
+			DELETEPROPS=""
 
 			# ---MagiskHide sensitive props---
 			REDEBUGGABLE=false
@@ -145,6 +151,8 @@ if [ -d "$MODPATH" ]; then
 				print_edit
 				# ---Setting custom props---
 				custom_edit
+				# ---Deleting props---
+				prop_del
 			fi
 			# Edit MagiskHide sensitive values
 			if [ "$PROPEDIT" == 1 ]; then
@@ -172,11 +180,16 @@ if [ -d "$MODPATH" ]; then
 			fi
 		fi
 
+		# Get currently saved values
+		log_handler "Checking current values."
+		curr_values
+
 		# Check if the late_start service log file exists.
 		if [ -f "$LATELOGFILE" ]; then
 			log_handler "Removing late_start service log ($LATELOGFILE)."
 			rm -fv $LATELOGFILE >> $LOGFILE
 		fi
+
 		log_script_chk "Boot script finished.\n\n=================="
 	fi
 else

@@ -10,6 +10,9 @@
 IMGPATH=IMG_PLACEHOLDER
 MODPATH=$IMGPATH/MagiskHidePropsConf
 
+# Development testing set to false
+DEVTESTING=false
+
 # Colours
 if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's|.*=||' | sed 's|\"||g')" == 0 ] || [ "$LOGNAME" ]; then
 	COLOURCHK="nc"
@@ -169,7 +172,7 @@ reboot_fn() {
 exit_fn() {
 	menu_header "${C}Bye bye.${N}"
 	echo ""
-	log_handler "Exiting... Bye bye."
+	log_handler "Exiting... Bye bye.\n\n===================="	
 	exit 0
 }
 
@@ -187,7 +190,7 @@ menu_change_fingerprint() {
 				echo "because of a conflicting module."
 				echo ""
 				echo "Nothing to do... Returning to main menu."
-				sleep 4
+				sleep 3
 				INPUT=""
 				break
 			else
@@ -235,14 +238,19 @@ menu_change_fingerprint() {
 		case "$INPUT2" in
 			f|F)	menu_pick_print "$1"
 			;;
-			r|R)	
+			r|R)
 				if [ "$PRINTMODULETXT" ]; then
 					menu_reset_print "Reset fingerprint"
 				else
 					menu_new_print "$1" "$INPUT2" 2
 				fi
 			;;
-			u|U)	menu_update_print "Update fingerprints list"
+			u|U)
+				if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
+					menu_update_print "Update fingerprints list"
+				else
+					menu_new_print "$1" "$INPUT2" 2
+				fi
 			;;
 			b|B)
 				INPUT=""
@@ -477,7 +485,7 @@ menu_edit_prop_files() {
 					exit 0
 				else
 					echo "Nothing to do... Returning to main menu."
-					sleep 4
+					sleep 3
 					INPUT=""
 					break
 				fi
@@ -687,7 +695,7 @@ menu_change_prop() {
 				echo "This prop doesn't currently exist on your system."
 				echo ""
 				echo "Nothing to do... Returning to main menu."
-				sleep 4
+				sleep 3
 			fi
 		fi
 		case "$INPUT3" in
@@ -961,7 +969,7 @@ menu_new_custprop() {
 			""|[[:blank:]]*)	blank_input 3
 			;;
 			*)
-				if [ "$(echo $PROPSLIST | grep -o $INPUT3)" ]; then
+				if [ "$(echo $PROPSLIST | grep -o $INPUT3)" ] || [ "$(echo $CUSTOMPROPS | grep -o $INPUT3)" ]; then
 					menu_magiskhide_custprop "$INPUT3"
 				else
 					menu_set_new_custprop "$INPUT3"
@@ -1006,7 +1014,7 @@ menu_reset_all_custprop() {
 	done
 }
 
-# Fourth menu level - MagiskHide custom prop
+# Fourth menu level - MagiskHide custom prop and duplicate props
 menu_magiskhide_custprop() {
 	INPUT4=""
 	while true
@@ -1014,9 +1022,15 @@ menu_magiskhide_custprop() {
 		if [ -z "$INPUT4" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "That prop, ${C}$1${N}, is one of"
-			echo "the sensitive props already set by"
-			echo "MagiskHide. No need to do it again."
+			if [ "$(echo $PROPSLIST | grep -o $1)" ]; then
+				echo "That prop, ${C}$1${N}, is"
+				echo "one of the sensitive props already set"
+				echo "by MagiskHide. No need to do it again."
+			else
+				echo "That prop, ${C}$1${N}, is"
+				echo "already on your list of custom props."
+				echo "No need to set it again."
+			fi
 			echo ""
 			echo "${G}b${N} - Go back."
 			echo ""
@@ -1145,6 +1159,250 @@ menu_set_custprop() {
 			e|E)	exit_fn
 			;;
 			*)	invalid_input 3 5
+			;;
+		esac
+	done
+}
+
+# ======================== Delete Props ========================
+# Second menu level - Delete props
+menu_delete_props() {
+	INPUT2=""
+	while true
+	do
+		if [ -z "$INPUT2" ]; then
+			ITEMCOUNT=1
+			menu_header "${C}$1${N}\n Select an option below:"
+			echo ""			
+			if [ "$(get_file_value $LATEFILE "DELEDIT=")" == 0 ] && [ "$DELETEPROPS" ]; then
+				CTRLSET=0
+				echo "You have a list of ${C}props to delete${N},"
+				echo "but the option is ${R}not activated${N}."
+				echo ""
+				echo "Do you want to activate it (enter ${G}r${N} to reset)?"
+				echo ""
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
+				read -r INPUT2
+			else
+				CTRLSET=1
+				echo "Delete prop values on your device."
+				echo ""
+				if [ "$DELETEPROPS" ]; then
+					echo "Select a prop below to reset it."
+					echo ""
+					for ITEM in $DELETEPROPS; do
+						echo "${G}$ITEMCOUNT${N} - $ITEM"
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				else
+					echo "Currently no props set for removal."
+					echo "Please add one by selecting"
+					echo "\"New prop\" below."
+				fi
+				echo ""
+				echo "${G}n${N} - New prop"
+				if [ "$CUSTOMPROPS" ]; then
+					echo "${G}r${N} - Reset all props"
+				fi
+				echo "${G}b${N} - Go back to main menu"
+				echo ""
+				echo "See the module readme or the"
+				echo "support thread @ XDA for details."
+				echo ""
+				echo -n "Enter '${G}e${N}' to exit: "
+				read -r INPUT2
+			fi
+			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					ITEMCOUNT=1
+					for ITEM in $DELETEPROPS; do
+						if [ "$ITEMCOUNT" == "$INPUT2" ]; then
+							menu_reset_delprop "$ITEM"
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				elif [ "$CTRLSET" == 0 ]; then
+					replace_fn DELEDIT 0 1 $LATEFILE
+					INPUT=""
+					break
+				fi
+			elif [ "$INPUT2" == "n" ] || [ "$INPUT2" == "N" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					menu_new_delprop "New prop"
+				elif [ "$CTRLSET" == 0 ]; then
+					INPUT=""
+					break
+				fi
+			elif [ "$INPUT2" == "r" ] || [ "$INPUT2" == "R" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					menu_reset_all_delprop "Reset all props"
+				elif [ "$CTRLSET" == 0 ]; then
+					menu_reset_all_delprop "Reset all props"
+				fi
+			elif [ "$INPUT2" == "b" ] || [ "$INPUT2" == "B" ]; then
+				if [ "$CTRLSET" == 1 ]; then
+					INPUT=""
+					break
+				elif [ "$CTRLSET" == 0 ]; then
+					invalid_input 4 2
+				fi
+			elif [ "$INPUT2" == "e" ] || [ "$INPUT2" == "E" ]; then
+				exit_fn
+			else
+				if [ "$CTRLSET" == 1 ]; then
+					invalid_input 1 2
+				elif [ "$CTRLSET" == 0 ]; then
+					invalid_input 4 2
+				fi
+			fi
+		fi
+	done
+}
+
+# Third menu level - Reset deleted prop
+menu_reset_delprop() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will remove ${C}$1${N}"
+			echo "from the list of props to delete."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				reset_delprop "$1"
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E)	exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Third menu level - New prop to delete
+menu_new_delprop() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Enter the prop to delete,"
+			echo "or ${G}b${N} to go back."
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			b|B)
+				INPUT2=""
+				break
+			;;
+			e|E)	exit_fn
+			;;
+			""|[[:blank:]]*)	blank_input 3
+			;;
+			*)
+				menu_set_new_delprop "$INPUT3"
+				break
+			;;
+		esac
+	done
+}
+
+# Third menu level - Reset all deleted props
+menu_reset_all_delprop() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will reset the entire"
+			echo "list of props to delete."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				reset_all_delprop
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E)	exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - Set new custom prop
+menu_set_new_delprop() {
+	INPUT4=""
+	TMPPROP=$(resetprop "$1")
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			if [ "$TMPPROP" ]; then
+				echo "The current value is:"
+				echo "${C}$TMPPROP${N}"
+				echo ""
+				echo "This will delete ${C}$1${N}"
+				echo "from your system."
+			else
+				echo "This prop currently doesn't exist on your system."
+				echo ""
+				echo "Nothing to do... Returning to main menu."
+				sleep 3
+				INPUT2=""
+				INPUT3=""
+				break
+			fi
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				set_delprop "$1"
+				INPUT2=""
+				INPUT3=""
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E)	exit_fn
+			;;
+			*)	invalid_input 3 4
 			;;
 		esac
 	done
@@ -1390,6 +1648,61 @@ menu_options_reset() {
 	done
 }
 
+# ======================== Logs ========================
+# Second menu level - Logs
+menu_logs() {
+	INPUT2=""
+	while true
+	do
+		if [ -z "$INPUT2" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will package the Magisk log and the"
+			echo "module specific log files, together"
+			echo "with the device default build.prop"
+			echo "file and all the current prop values"
+			echo "to a file and save it on your device."
+			echo ""
+			echo "Upload the file to the support thread"
+			echo "@ XDA, with a detailed description if"
+			echo "you're having issues."
+			echo ""
+			echo "Do you want to contine?"
+			echo ""
+			if [ "$2" == "l" ]; then
+				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+			else
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			fi
+			read -r INPUT2
+		fi
+		case "$INPUT2" in
+			y|Y)
+				collect_logs "$1" "$2"
+				INPUT=""
+				break
+			;;
+			n|N)
+				if [ "$2" == "l" ]; then
+					exit_fn
+				else
+					INPUT=""
+					break
+				fi
+			;;
+			e|E)
+				if [ "$2" == "l" ]; then
+					invalid_input 1 2
+				else
+					exit_fn
+				fi
+			;;
+			*)	invalid_input 1 2
+			;;
+		esac
+	done
+}
+
 # ======================== Reset all options and settings ========================
 # Second menu level - Reset all options and settings
 reset_everything() {
@@ -1455,6 +1768,9 @@ if [ $(id -u) != 0 ] ; then
 	exit 0
 fi
 
+log_handler "Running props script."
+log_handler "Using busybox: ${BBPATH}."
+
 # ====================================================
 # =================== Script check ===================
 # ====================================================
@@ -1467,8 +1783,7 @@ fi
 orig_check
 if [ "$ORIGLOAD" == 0 ]; then
 	log_handler "Original values are not loaded in propsconf_late."
-	reboot_fn "
-	The original prop values are not loaded,\n possibly due to a full reset of the module,\n or something has gone wrong.\n\n Please reboot your device to reset.\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${N}.\n See the documentations for details." "reset-script"
+	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module,\n or something has gone wrong.\n\n Please reboot your device to reset.\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${N}.\n\n ${R}See the documentations for details.${N}" "reset-script"
 fi
 
 script_ran_check
@@ -1479,6 +1794,25 @@ fi
 if [ "$LATECHECK" == 0 ]; then
 	log_handler "The settings boot script did not run during boot."
 	reboot_fn "The settings boot script does not\n appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs!${N}" "reset-script"
+fi
+
+# ==================================================
+# ================= Busybox check ==================
+# ==================================================
+
+if [ ! -f "$MODPATH/busybox" ]; then
+	log_handler "Module internal busybox not found."
+	log_print "Checking connection."
+	test_connection
+	if [ "$CNTTEST" == "true" ]; then
+		download_bb
+		# Reload functions
+		. $MODPATH/util_functions.sh
+		log_handler "Functions reloaded."
+		log_handler "Using busybox: ${BBPATH}."
+	else
+		log_print "No connection."
+	fi
 fi
 
 # ==================================================
@@ -1501,6 +1835,7 @@ case "$1" in
 		echo ""
 		echo "Options:"
 		echo "  -f		Update fingerprints list."
+		echo "  -l		Save module logs and info."
 		echo "  -h		Show this message."
 		echo "  -nc		Turn off colours."
 		echo "  -nw		Turn off fingerprint startup check."
@@ -1522,6 +1857,9 @@ case "$1" in
 	*f*) # Update fingerprints list
 		download_prints
 	;;
+	*l*) # Save logs
+		menu_logs "Collect logs" "l"
+	;;
 	*p*) # Edit prop files
 		menu_edit_prop_files "Edit prop files" "p"
 	;;
@@ -1531,6 +1869,9 @@ case "$1" in
 	*s*) # Open settings menu
 		menu_options "Script settings" "s"
 	;;
+	*t*) # Development testing
+		DEVTESTING=true
+	;;	
 esac
 
 if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
@@ -1547,7 +1888,7 @@ esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*d*|*f*|*h*|*nc*|*nw*|*p*|*r*|*s*) # Do nothing
+		*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
 		;;
 		*)
 			menu_header "${C}Help${N}"
@@ -1566,8 +1907,6 @@ fi
 # ==================== Main menu ====================
 # ===================================================
 
-log_handler "Running props script."
-
 while true
 do
 	orig_check
@@ -1582,6 +1921,7 @@ do
 		FILETXT=""
 		PROPTXT=""
 		CUSTTXT=""
+		DELTXT=""
 		if [ -z "$INPUT" ]; then
 			if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 0 ]; then
 				PRINTTXT=$DISABLED
@@ -1599,13 +1939,18 @@ do
 			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
 				CUSTTXT=$ACTIVE
 			fi
+			if [ "$(get_file_value $LATEFILE "DELEDIT=")" == 1 ]; then
+				DELTXT=$ACTIVE
+			fi
 			menu_header "Select an option below."
 			echo ""
 			echo "${G}1${N} - Edit device fingerprint${PRINTTXT}"
 			echo "${G}2${N} - Improved hiding${FILETXT}"
 			echo "${G}3${N} - Edit MagiskHide props${PROPTXT}"
 			echo "${G}4${N} - Add/edit custom props${CUSTTXT}"
-			echo "${G}5${N} - Script settings"
+			echo "${G}5${N} - Delete prop values${DELTXT}"
+			echo "${G}6${N} - Script settings"
+			echo "${G}7${N} - Collect logs"
 			echo "${G}r${N} - Reset all options/settings"
 			echo "${G}b${N} - Reboot device"
 			echo ""
@@ -1621,7 +1966,7 @@ do
 			read -r INPUT
 		fi
 		case "$INPUT" in
-			1)	menu_change_fingerprint "ro.build.fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
+			1)	menu_change_fingerprint "Edit fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
 			;;
 			2)	menu_edit_prop_files "Improved hiding${FILETXT}"
 			;;
@@ -1629,7 +1974,11 @@ do
 			;;
 			4)	menu_custom_props "Custom props${CUSTTXT}"
 			;;
-			5)	menu_options "Script settings"
+			5)	menu_delete_props "Delete props${DELTXT}"
+			;;
+			6)	menu_options "Script settings"
+			;;
+			7)	menu_logs "Collect logs"
 			;;
 			r|R)	reset_everything "Reset all options/settings"
 			;;

@@ -7,31 +7,41 @@
 MODVERSION=VER_PLACEHOLDER
 POSTFILE=$IMGPATH/.core/post-fs-data.d/propsconf_post
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
+SYSTEMLOC=SYSTEM_PLACEHOLDER
 CACHELOC=CACHE_PLACEHOLDER
 POSTCHKFILE=$CACHELOC/propsconf_postchk
 RUNFILE=$MODPATH/script_check
 LOGFILE=$CACHELOC/propsconf.log
 LASTLOGFILE=$CACHELOC/propsconf_last.log
+TMPLOGLOC=$CACHELOC/propslogs
+TMPLOGLIST="
+$CACHELOC/magisk.log
+$CACHELOC/magisk.log.bak
+/data/adb/magisk_debug.log
+$CACHELOC/propsconf*
+/sbin/.core/mirror/system/build.prop
+"
 CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
-if [ -d "$IMGPATH/busybox-ndk" ]; then
+BBWWWPATH=BB_PLACEHOLDER
+BBLOC=$MODPATH/busybox
+if [ -f "$BBLOC" ]; then
+	BBPATH=$BBLOC
+elif [ -d "$IMGPATH/busybox-ndk" ]; then
 	BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
-elif [ -f "/system/bin/busybox" ]; then
-	BBPATH=/system/bin/busybox
-elif [ -f "/system/xbin/busybox" ]; then
-	BBPATH=/system/xbin/busybox
 else
 	BBPATH=$MAGISKLOC/busybox
+fi
+if [ -z "$(echo $PATH | grep /sbin:)" ]; then
+	alias resetprop="$MAGISKLOC/magisk resetprop"
 fi
 alias cat="$BBPATH cat"
 alias grep="$BBPATH grep"
 alias printf="$BBPATH printf"
-if [ -z "$(echo $PATH | grep /sbin:)" ]; then
-	alias resetprop="$MAGISKLOC/magisk resetprop"
-fi
 alias sed="$BBPATH sed"
 alias sort="$BBPATH sort"
+alias tar="$BBPATH tar"
 alias tr="$BBPATH tr"
 alias wget="$BBPATH wget"
 PRINTSLOC=$MODPATH/prints.sh
@@ -101,7 +111,7 @@ DIVIDER="${Y}=====================================${N}"
 
 # Header
 menu_header() {
-	if [ -z "$LOGNAME" ]; then
+	if [ -z "$LOGNAME" ] && [ "$DEVTESTING" == "false" ]; then
 		clear
 	fi
 	if [ "$MODVERSION" == "VER_PLACEHOLDER" ]; then
@@ -229,10 +239,12 @@ module_values() {
 	MODULESELINUX=$(get_file_value $LATEFILE "MODULESELINUX=")
 	MODULEFINGERPRINT=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 	CUSTOMPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
+	DELETEPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
 }
 
 # Run all value functions
 all_values() {
+	log_handler "Loading values."
 	# Currently set values
 	curr_values
 	# Original values
@@ -274,7 +286,7 @@ reset_fn() {
 	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
-	chmod 755 $LATEFILE
+	chmod-v 755 $LATEFILE >> $INSTLOG
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER $CACHELOC
 
@@ -309,7 +321,7 @@ orig_safe() {
 config_file() {
 	log_handler "Checking for configuration file."
 	if [ -f "$CONFFILE" ]; then
-		log_handler "Configuration file detected."
+		log_handler "Configuration file detected (${CONFFILE})."
 		# Loads custom variables
 		. $CONFFILE
 		# Updates prop values (including fingerprint)	
@@ -366,6 +378,22 @@ config_file() {
 			fi
 		fi
 
+		# Updates props to delete
+		if [ "$DELPROPOPTION" != "preserve" ]; then
+			if [ "$CONFDELPROPS" ]; then
+				if [ "$DELPROPOPTION" == "add" ] || [ "$DELPROPOPTION" == "replace" ]; then
+					if [ "$DELPROPOPTION" == "replace" ]; then
+						reset_all_delprop "file"
+					fi
+					for ITEM in $CONFDELPROPS; do
+						set_delprop "$ITEM" "file"
+					done
+				fi
+			else
+				reset_all_delprop "file"
+			fi
+		fi
+
 		# Updates options
 		OPTLCURR=$(get_file_value $LATEFILE "OPTIONLATE=")
 		OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
@@ -402,6 +430,20 @@ config_file() {
 	fi
 }
 
+# Connection test
+test_connection() {
+	ping -c 1 -W 1 google.com >> $LOGFILE 2>> $LOGFILE && CNTTEST="true" || CNTTEST="false"
+}
+
+# Download osm0sis' busybox
+download_bb() {
+	log_print "Downloading busybox."
+	wget -T 5 -O $MODPATH/busybox $BBWWWPATH >> $LOGFILE
+	if [ -f "$MODPATH/busybox" ]; then
+		chmod -v 755 $MODPATH/busybox >> $LOGFILE
+	fi
+}
+
 # ======================== Fingerprint functions ========================
 # Set new fingerprint
 print_edit() {
@@ -417,7 +459,7 @@ print_edit() {
 
 # Checks and updates the prints list
 download_prints() {
-	if [ -z "$LOGNAME" ]; then
+	if [ -z "$LOGNAME" ] && [ "$DEVTESTING" == "false" ]; then
 		clear
 	fi
 	if [ "$1" == "Dev" ]; then
@@ -425,24 +467,32 @@ download_prints() {
 	fi
 	menu_header "Updating fingerprints list"
 	echo ""
-	log_print "Checking list version."
-	wget -T 10 -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE	
-	if [ -f "$PRINTSTMP" ]; then
-		LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
-		if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
-			if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
-				mv -f $PRINTSTMP $PRINTSLOC
-				# Updates list version in module.prop
-				VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
-				replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
-				log_print "Updated list to v${LISTVERSION}."
+	# Testing connection
+	log_print "Checking connection."
+	test_connection
+	# Checking and downloading fingerprints list
+	if [ "$CNTTEST" == "true" ]; then
+		log_print "Checking list version."
+		wget -T 5 -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE
+		if [ -f "$PRINTSTMP" ]; then
+			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
+			if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+				if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
+					mv -f $PRINTSTMP $PRINTSLOC
+					# Updates list version in module.prop
+					VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
+					replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
+					log_print "Updated list to v${LISTVERSION}."
+				else
+					rm -f $PRINTSTMP
+					log_print "New fingerprints list requires module update."
+				fi
 			else
 				rm -f $PRINTSTMP
-				log_print "New fingerprints list requires module update."
+				log_print "Fingerprints list up-to-date."
 			fi
 		else
-			rm -f $PRINTSTMP
-			log_print "Fingerprints list up-to-date."
+			log_print "File not downloaded."
 		fi
 	else
 		log_print "No connection."
@@ -536,7 +586,7 @@ edit_prop_files() {
 	else
 		# Checking if the device fingerprint is set by the module
 		if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
-			if [ "$(cat /system/build.prop | grep "$ORIGFINGERPRINT")" ]; then
+			if [ "$(cat $SYSTEMLOC/build.prop | grep "$ORIGFINGERPRINT")" ]; then
 				log_handler "Enabling prop file editing for device fingerprint."
 				replace_fn SETFINGERPRINT "false" "true" $LATEFILE
 			fi
@@ -555,7 +605,7 @@ edit_prop_files() {
 			if [ "$PROPTYPE" == "ro.debuggable" ] || [ "$PROPTYPE" == "ro.secure" ]; then
 				PROPVALUE=$(get_file_value /default.prop "${PROPTYPE}=")
 			else
-				PROPVALUE=$(get_file_value /system/build.prop "${PROPTYPE}=")
+				PROPVALUE=$(get_file_value $SYSTEMLOC/build.prop "${PROPTYPE}=")
 			fi
 		fi
 
@@ -801,4 +851,117 @@ reset_custprop() {
 	fi
 
 	after_change "$1"
+}
+
+# ======================== Delete Props functions ========================
+# Delete props
+prop_del() {
+	if [ "$(get_file_value $LATEFILE "DELEDIT=")" == 1 ]; then
+		log_handler "Deleting props."
+		TMPLST="$(get_file_value $LATEFILE "DELETEPROPS=")"
+		for ITEM in $TMPLST; do			
+			log_handler "Deleting $ITEM."
+			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
+			resetprop -v $ITEM 2>> $LOGFILE
+			resetprop -v --delete $ITEM 2>> $LOGFILE
+		done
+	fi
+}
+
+# Set prop to delete
+set_delprop() {
+	if [ "$1" ]; then
+		CURRDELPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
+		TMPDELPROPS=$(echo "$CURRDELPROPS  ${1}" | sed 's|^[ \t]*||')
+		SORTDELPROPS=$(echo $(printf '%s\n' $TMPDELPROPS | sort -u))
+
+		log_handler "Setting prop to delete, $1."
+		replace_fn DELETEPROPS "\"$CURRDELPROPS\"" "\"$SORTDELPROPS\"" $LATEFILE
+		replace_fn DELEDIT 0 1 $LATEFILE
+
+		if [ "$2" != "file" ]; then
+			after_change "Delete $1"
+		fi
+	fi
+}
+
+# Reset all props to delete
+reset_all_delprop() {
+	CURRDELPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
+
+	log_handler "Resetting list of props to delete."
+	# Removing all props to delete
+	replace_fn DELETEPROPS "\"$CURRDELPROPS\"" "\"\"" $LATEFILE
+	replace_fn DELEDIT 1 0 $LATEFILE
+
+	if [ "$1" != "file" ]; then
+		after_change "Delete $1"
+	fi
+}
+
+# Reset prop to delete
+reset_delprop() {
+	CURRDELPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
+
+	log_handler "Resetting prop to delete, $1."
+	TMPDELPROPS=$(echo $CURRDELPROPS | sed "s|${1}||" | tr -s " " | sed 's|^[ \t]*||')
+
+	# Resetting prop to delete
+	replace_fn DELETEPROPS "\"$CURRDELPROPS\"" "\"$TMPDELPROPS\"" $LATEFILE
+	CURRDELPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
+	if [ -z "$CURRDELPROPS" ]; then
+		replace_fn DELEDIT 1 0 $LATEFILE
+	fi
+
+	after_change "Delete $1"
+}
+
+# ======================== Log collecting functions ========================
+# Collects useful logs and info for troubleshooting
+collect_logs() {
+	log_handler "Collecting logs and information."
+	# Create temporary directory
+	mkdir -pv $TMPLOGLOC 2>> $LOGFILE
+
+	# Saving Magisk and module log files and device original build.prop
+	for ITEM in $TMPLOGLIST; do
+		cp -afv $ITEM $TMPLOGLOC >> $LOGFILE
+	done
+
+	# Saving the current prop values
+	resetprop > $TMPLOGLOC/props.txt
+
+	# Package the files
+	cd $CACHELOC
+	tar -zcvf propslogs.tar.gz propslogs >> $LOGFILE
+
+	# Copy package to internal storage
+	mv -fv $CACHELOC/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE
+
+	# Remove temporary directory
+	rm -rf $TMPLOGLOC >> $LOGFILE
+
+	log_handler "Logs and information collected."
+
+	INPUTTMP=""
+	menu_header "${C}$1${N}"
+	echo ""
+	echo "Logs and information collected."
+	echo ""
+	echo "The packaged file has been saved to the"
+	echo "root of your device's internal storage."
+	echo ""
+	echo "Attach the file to a post in the support"
+	echo "thread @ XDA, with a detailed description"
+	echo "of your issue."
+	echo ""
+	echo -n "Press enter to continue..."
+	read -r INPUTTMP
+	case "$INPUTTMP" in
+		*)
+			if [ "$2" == "l" ]; then
+				exit_fn
+			fi
+		;;
+	esac
 }

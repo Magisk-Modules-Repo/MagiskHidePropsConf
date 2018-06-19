@@ -26,7 +26,7 @@ if [ ! -f "$POSTFILE" ]; then
 	log_handler "Post-fs-data boot script not found."
 	log_handler "Restoring boot script (${POSTFILE})."
 	cp -afv $MODPATH/propsconf_post $POSTFILE >> $LOGFILE
-	chmod 755 $POSTFILE
+	chmod -v 755 $POSTFILE >> $INSTLOG
 	# Deleting settings script to force a restore
 	rm -f $LATEFILE
 fi
@@ -39,7 +39,7 @@ if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	fi	
 	log_handler "$RSTTXT boot script (${LATEFILE})."
 	cp -afv $MODPATH/propsconf_late $LATEFILE >> $LOGFILE
-	chmod 755 $LATEFILE
+	chmod -v 755 $LATEFILE >> $INSTLOG
 fi
 
 log_handler "post-fs-data.sh finished.\n\n===================="

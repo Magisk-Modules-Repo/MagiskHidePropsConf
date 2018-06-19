@@ -89,6 +89,10 @@ set_permissions() {
   
   # Permissions for the props file
   set_perm $MODPATH/system/$BIN/props 0 0 0777
+  # Busybox permissions
+  if [ -f "$MODPATH/busybox" ]; then
+    set_perm $MODPATH/busybox 0 0 0755
+  fi
 }
 
 ##########################################################################################
@@ -100,6 +104,12 @@ set_permissions() {
 # update-binary. Refrain from adding code directly into update-binary, as it will make it
 # difficult for you to migrate your modules to newer template versions.
 # Make update-binary as clean as possible, try to only do function calls in it.
+
+
+##########################################################################################
+# Installation variables and functions for the Magisk module "MagiskHide Props Config"
+# by Didgeridoohan @ XDA Developers.
+##########################################################################################
 
 # Finding file values
 get_file_value() {
@@ -117,27 +127,27 @@ LATEFILE=$SERVICEPATH/propsconf_late
 POSTLATEFILE=$POSTPATH/propsconf_late
 UPDATELATEFILE=$INSTALLER/common/propsconf_late
 if [ -z $SLOT ]; then
+	SYSTEMLOC=/system
 	CACHELOC=/cache
 else
+	SYSTEMLOC=/system/system
 	CACHELOC=/data/cache
 fi
 INSTLOG=$CACHELOC/propsconf_install.log
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 SETTRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
-if [ -f "$LATEFILE" ]; then
-	FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
+if [ "$ARCH" == "x64" ]; then
+	BBARCH=x86_64
 else
-	FILEV=0
+	BBARCH=$ARCH
 fi
-if [ -d "$IMGPATH/busybox-ndk" ]; then
-	BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
-else
-	BBPATH=/data/adb/magisk/busybox
-fi
+BBWWWPATH="https://raw.githubusercontent.com/Magisk-Modules-Repo/Busybox-Installer/master/busybox-${BBARCH}"
+BBPATH=/data/adb/magisk/busybox
 $BOOTMODE && alias grep="$BBPATH grep"
 $BOOTMODE && alias sed="$BBPATH sed"
 $BOOTMODE && alias tr="$BBPATH tr"
 $BOOTMODE && alias ls="$BBPATH ls"
+$BOOTMODE && alias wget="$BBPATH wget"
 SETTINGSLIST="
 FINGERPRINTENB
 PRINTEDIT
@@ -148,7 +158,7 @@ DEFAULTEDIT
 PROPCOUNT
 PROPEDIT
 CUSTOMEDIT
-CUSTOMCHK
+DELEDIT
 REBOOTCHK
 OPTIONLATE
 OPTIONCOLOUR
@@ -162,6 +172,7 @@ MODULETAGS
 MODULESELINUX
 MODULEFINGERPRINT
 CUSTOMPROPS
+DELETEPROPS
 "
 PROPSLIST="
 debuggable
@@ -195,12 +206,17 @@ log_print() {
 
 # Places various module scripts in their proper places
 script_placement() {
+	if [ -f "$LATEFILE" ]; then
+		FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
+	else
+		FILEV=0
+	fi
 	log_print "- Installing scripts"
 	cp -afv $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG
 	cp -afv $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG
 	cp -afv $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG
 	cp -afv $UPDATEPOSTFILE $POSTFILE >> $INSTLOG
-	chmod 755 $POSTFILE
+	chmod -v 755 $POSTFILE >> $INSTLOG
 	cp -afv $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG
 	if [ "$UPDATEV" -gt "$FILEV" ]; then
 		if [ "$FILEV" == 0 ]; then
@@ -243,12 +259,13 @@ script_placement() {
 				fi
 			done
 		fi
+		log_handler "Setting up late_start settings script."
 		cp -afv $UPDATELATEFILE $LATEFILE >> $INSTLOG
-		chmod 755 $LATEFILE
+		chmod -v 755 $LATEFILE >> $INSTLOG
 	elif [ "$UPDATEV" -lt "$FILEV" ]; then
 		log_print "- Settings cleared (script downgraded)"
 		cp -afv $UPDATELATEFILE $LATEFILE >> $INSTLOG
-		chmod 755 $LATEFILE
+		chmod -v 755 $LATEFILE >> $INSTLOG
 	else
 		log_print "- Module settings preserved"
 	fi
@@ -314,7 +331,7 @@ bin_check() {
 
 # Magisk installation check
 install_check() {
-	if [ ! -d "$SERVICEPATH"]; then
+	if [ ! -d "$SERVICEPATH" ]; then
 		log_handler "Fresh Magisk installation detected."
 		log_handler "Creating path for boot script."
 		mkdir -pv $SERVICEPATH >> $INSTLOG
@@ -329,19 +346,58 @@ post_check() {
 	fi
 }
 
+# Check installed busybox
+check_bb() {
+	BBCURR=1.28.4
+	if [ -f "$IMGPATH/$MODID/busybox" ]; then
+		BBV=$($IMGPATH/$MODID/busybox | grep "BusyBox v" | sed 's|.*BusyBox v||' | sed 's|-osm0sis.*||')
+		log_handler "Current/installed busybox - v${BBCURR}/v${BBV}."
+		if [ "$BBCURR" == "$BBV" ]; then
+			log_handler "Backing up current busybox."
+			cp -afv $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG
+		fi
+	fi
+}
+
+# Download osm0sis' busybox
+download_bb() {
+	if [ -f "$CACHELOC/busybox_post" ]; then
+		log_handler "Restoring current busybox."
+		mv -fv $CACHELOC/busybox_post $MODPATH/busybox >> $INSTLOG
+	elif [ "$BOOTMODE" == "true" ]; then
+		# Testing connection
+		log_print "- Testing connection"
+		log_print "- Wait..."
+		ping -c 1 -W 1 google.com >> $INSTLOG 2>> $INSTLOG && CNTTEST="true" || CNTTEST="false"
+
+		# Downloading busybox
+		if [ "$CNTTEST" == "true" ]; then
+			log_print "- Downloading busybox"
+			wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>> $INSTLOG
+		else
+			log_print "- No connection"
+		fi
+	elif [ "$BOOTMODE" == "false" ]; then
+		log_handler "Recovery installation, can't download busybox."
+	fi
+}
+
 # Installs everything
 script_install() {
 	build_prop_check
 	usnf_check
 	bin_check
 	post_check
+	download_bb
 	script_placement
 	log_print "- Updating placeholders"
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
+	placeholder_update $MODPATH/util_functions.sh SYSTEMLOC SYSTEM_PLACEHOLDER "$SYSTEMLOC"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $MODPATH/util_functions.sh BBWWWPATH BB_PLACEHOLDER "$BBWWWPATH"
 	placeholder_update $POSTFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
 	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
