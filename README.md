@@ -154,9 +154,9 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 ### Logs, etc
-In case of issues, please provide the logs by either running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l command, use -h for details). All the relevant logs, together with the Magisk logs, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of your internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
+In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l command, use -h for details). All the relevant logs, together with the Magisk logs, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of your internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
 
-The logs are stored in /cache (or /data/cache for A/B devices), and the Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't use the "Collect logs" option mentioned above. Providing the output from terminal might also be useful.
+The logs are also stored in /cache (or /data/cache for A/B devices), and the Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't use the "Collect logs" option mentioned above. Providing the output from terminal might also be useful.
 
 If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release (the only difference is the more verbose logging), so that you can collect the debug log.
 
