@@ -2013,24 +2013,4 @@ do
 			;;
 		esac
 	fi
-doneskHide props${PROPTXT}"
-			;;
-			4)	menu_custom_props "Custom props${CUSTTXT}"
-			;;
-			5)	menu_delete_props "Delete props${DELTXT}"
-			;;
-			6)	menu_options "Script settings"
-			;;
-			7)	menu_logs "Collect logs"
-			;;
-			r|R)	reset_everything "Reset all options/settings"
-			;;
-			b|B)	reboot_fn "Reboot device" "reboot"
-			;;
-			e|E)	exit_fn
-			;;
-			*)	invalid_input 1 1
-			;;
-		esac
-	fi
-donee
+done
