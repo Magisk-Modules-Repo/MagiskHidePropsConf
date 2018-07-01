@@ -9,12 +9,26 @@
 
 IMGPATH=IMG_PLACEHOLDER
 MODPATH=$IMGPATH/MagiskHidePropsConf
+LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 
 # Development testing set to false
 DEVTESTING=false
 
+BBT=module
+case "$1" in
+	*bo*) # Use osm0sis' Busybox
+		BBT=osm0sis
+	;;
+	*bj*) # Use topjohnwu's Busybox
+		BBT=topjohnwu
+	;;
+	*t*) # Development testing
+		DEVTESTING=true
+	;;
+esac
+
 # Colours
-if [ "$(cat $IMGPATH/.core/service.d/propsconf_late | grep "OPTIONCOLOUR=" | sed 's|.*=||' | sed 's|\"||g')" == 0 ] || [ "$LOGNAME" ]; then
+if [ -f "$LATEFILE" ] && [ "$(cat $LATEFILE | grep "OPTIONCOLOUR=" | sed 's|.*=||' | sed 's|\"||g')" == 0 ] || [ "$LOGNAME" ]; then
 	COLOURCHK="nc"
 else
 	COLOURCHK="$1"
@@ -934,7 +948,7 @@ menu_edit_custprop() {
 			e|E)	exit_fn
 			;;
 			*)
-				if [ "$PROPNOTSET" == 0]; then
+				if [ "$PROPNOTSET" == 0 ]; then
 					menu_set_custprop "$1" "$INPUT3"
 					break
 				else
@@ -1775,27 +1789,39 @@ log_handler "Using busybox: ${BBPATH}."
 # =================== Script check ===================
 # ====================================================
 
-if [ ! -f "$LATEFILE" ]; then
-	log_handler "Boot script can't be found. Please reboot."
-	reboot_fn "The module boot script can't be found.\n Please reboot your device to reset." "reset-script"
+ISSUECHK=0
+if [ "$ISSUECHK" == 0 ] && [ ! -f "$LATEFILE" ]; then
+	log_handler "Boot script can't be found."
+	ISSUECHK=1
+	ISSUETXT="The module boot script can't be found.\n Please reboot your device to reset."
 fi
 
 orig_check
-if [ "$ORIGLOAD" == 0 ]; then
+if  [ "$ISSUECHK" == 0 ] && [ "$ORIGLOAD" == 0 ]; then
 	log_handler "Original values are not loaded in propsconf_late."
-	reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module,\n or something has gone wrong.\n\n Please reboot your device to reset.\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${N}.\n\n ${R}See the documentations for details.${N}" "reset-script"
+	ISSUECHK=1
+	ISSUETXT="The original prop values are not loaded,\n possibly due to a full reset of the module,\n or something has gone wrong.\n\n Please reboot your device to reset."
 fi
 
 script_ran_check
-if [ "$POSTCHECK" == 0 ]; then
-	log_handler "The post-fs-data script did not run during boot."
-	reboot_fn "The post-fs-data boot script does not appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs!${N}" "reset-script"
-fi
-if [ "$LATECHECK" == 0 ]; then
-	log_handler "The settings boot script did not run during boot."
-	reboot_fn "The settings boot script does not\n appear to have run during boot.\n\n That means the module won't work.\n\n Please reboot your device and see if\n it does run. If it doesn't, please\n report the issue, ${R}with logs!${N}" "reset-script"
+if [ "$ISSUECHK" == 0 ] && [ "$POSTCHECK" == 0 ] && [ "$LATECHECK" == 0 ]; then
+	log_handler "None of the boot scripts ran during boot."
+	ISSUECHK=1
+	ISSUETXT="None of the boot scripts appear\n to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n they do run."
+elif [ "$ISSUECHK" == 0 ] && [ "$POSTCHECK" == 0 ]; then
+	log_handler "The post-fs-data.d script did not run during boot."
+	ISSUECHK=1
+	ISSUETXT="The post-fs-data.d boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
+elif [ "$ISSUECHK" == 0 ] && [ "$LATECHECK" == 0 ]; then
+	log_handler "The service.d boot script did not run during boot."
+	ISSUECHK=1
+	ISSUETXT="The service.d boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
 fi
 
+if [ "$ISSUECHK" == 1 ]; then
+	collect_logs "issue"
+	reboot_fn "${ISSUETXT}\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n ${G}See the documentation for details.${N}" "reset-script"
+fi
 # ==================================================
 # ================= Busybox check ==================
 # ==================================================
@@ -1869,9 +1895,6 @@ case "$1" in
 	*s*) # Open settings menu
 		menu_options "Script settings" "s"
 	;;
-	*t*) # Development testing
-		DEVTESTING=true
-	;;	
 esac
 
 if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
@@ -1888,7 +1911,7 @@ esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
+		*bo*|*bt*|*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
 		;;
 		*)
 			menu_header "${C}Help${N}"
@@ -1990,4 +2013,24 @@ do
 			;;
 		esac
 	fi
-done
+doneskHide props${PROPTXT}"
+			;;
+			4)	menu_custom_props "Custom props${CUSTTXT}"
+			;;
+			5)	menu_delete_props "Delete props${DELTXT}"
+			;;
+			6)	menu_options "Script settings"
+			;;
+			7)	menu_logs "Collect logs"
+			;;
+			r|R)	reset_everything "Reset all options/settings"
+			;;
+			b|B)	reboot_fn "Reboot device" "reboot"
+			;;
+			e|E)	exit_fn
+			;;
+			*)	invalid_input 1 1
+			;;
+		esac
+	fi
+donee
