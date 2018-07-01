@@ -20,16 +20,21 @@ $CACHELOC/magisk.log.bak
 /data/adb/magisk_debug.log
 $CACHELOC/propsconf*
 /sbin/.core/mirror/system/build.prop
+/sbin/.core/mirror/vendor/build.prop
 "
 CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
 BBWWWPATH=BB_PLACEHOLDER
 BBLOC=$MODPATH/busybox
-if [ -f "$BBLOC" ]; then
+if [ -f "$BBLOC" ] && [ "$BBT" == "module" ]; then
 	BBPATH=$BBLOC
 elif [ -d "$IMGPATH/busybox-ndk" ]; then
-	BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+	if  [ "$BBT" != "topjohnwu" ]; then
+		BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+	else
+		BBPATH=$MAGISKLOC/busybox
+	fi
 else
 	BBPATH=$MAGISKLOC/busybox
 fi
@@ -37,7 +42,10 @@ if [ -z "$(echo $PATH | grep /sbin:)" ]; then
 	alias resetprop="$MAGISKLOC/magisk resetprop"
 fi
 alias cat="$BBPATH cat"
+alias chmod="$BBPATH chmod"
+alias cp="$BBPATH cp"
 alias grep="$BBPATH grep"
+alias mv="$BBPATH mv"
 alias printf="$BBPATH printf"
 alias sed="$BBPATH sed"
 alias sort="$BBPATH sort"
@@ -77,7 +85,9 @@ ro.vendor.build.fingerprint
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed "s|.*${2}||" | sed 's|\"||g'
+	if [ -f "$1" ]; then
+		cat $1 | grep $2 | sed "s|.*${2}||" | sed 's|\"||g'
+	fi
 }
 
 # Logs
@@ -195,11 +205,11 @@ orig_check() {
 
 script_ran_check() {
 	POSTCHECK=0
-	if [ "$(cat $RUNFILE | grep "post-fs-data.d finished")" ]; then
+	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "post-fs-data.d finished")" ]; then
 		POSTCHECK=1
 	fi
 	LATECHECK=0
-	if [ "$(cat $RUNFILE | grep "Boot script finished")" ]; then
+	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "Boot script finished")" ]; then
 		LATECHECK=1
 	fi
 }
@@ -279,14 +289,14 @@ reboot_chk() {
 reset_fn() {
 	BUILDPROPENB=$(get_file_value $LATEFILE "BUILDPROPENB=")
 	FINGERPRINTENB=$(get_file_value $LATEFILE "FINGERPRINTENB=")
-	cp -afv $MODPATH/propsconf_late $LATEFILE >> $LOGFILE
+	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE
 	if [ "$BUILDPROPENB" ] && [ "$BUILDPROPENB" != 1 ]; then
 		replace_fn BUILDPROPENB 1 $BUILDPROPENB $LATEFILE
 	fi
 	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
-	chmod-v 755 $LATEFILE >> $INSTLOG
+	chmod -v 755 $LATEFILE >> $LOGFILE
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER $CACHELOC
 
@@ -441,6 +451,8 @@ download_bb() {
 	wget -T 5 -O $MODPATH/busybox $BBWWWPATH >> $LOGFILE
 	if [ -f "$MODPATH/busybox" ]; then
 		chmod -v 755 $MODPATH/busybox >> $LOGFILE
+	else
+		log_print "No connection."
 	fi
 }
 
@@ -478,7 +490,7 @@ download_prints() {
 			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
 			if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
 				if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
-					mv -f $PRINTSTMP $PRINTSLOC
+					mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE
 					# Updates list version in module.prop
 					VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
 					replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
@@ -925,7 +937,17 @@ collect_logs() {
 
 	# Saving Magisk and module log files and device original build.prop
 	for ITEM in $TMPLOGLIST; do
-		cp -afv $ITEM $TMPLOGLOC >> $LOGFILE
+		if [ -f "$ITEM" ]; then
+			case "$ITEM" in
+				*build.prop*)	BPNAME="build_$(echo $ITEM | sed 's|\/build.prop||' | sed 's|.*\/||g').prop"
+				;;
+				*)	BPNAME=""
+				;;
+			esac
+			cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE
+		else
+			log_handler "$ITEM not available."
+		fi
 	done
 
 	# Saving the current prop values
@@ -936,32 +958,34 @@ collect_logs() {
 	tar -zcvf propslogs.tar.gz propslogs >> $LOGFILE
 
 	# Copy package to internal storage
-	mv -fv $CACHELOC/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE
+	mv -f $CACHELOC/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE
 
 	# Remove temporary directory
 	rm -rf $TMPLOGLOC >> $LOGFILE
 
 	log_handler "Logs and information collected."
 
-	INPUTTMP=""
-	menu_header "${C}$1${N}"
-	echo ""
-	echo "Logs and information collected."
-	echo ""
-	echo "The packaged file has been saved to the"
-	echo "root of your device's internal storage."
-	echo ""
-	echo "Attach the file to a post in the support"
-	echo "thread @ XDA, with a detailed description"
-	echo "of your issue."
-	echo ""
-	echo -n "Press enter to continue..."
-	read -r INPUTTMP
-	case "$INPUTTMP" in
-		*)
-			if [ "$2" == "l" ]; then
-				exit_fn
-			fi
-		;;
-	esac
+	if [ "$1" != "issue" ]; then
+		INPUTTMP=""
+		menu_header "${C}$1${N}"
+		echo ""
+		echo "Logs and information collected."
+		echo ""
+		echo "The packaged file has been saved to the"
+		echo "root of your device's internal storage."
+		echo ""
+		echo "Attach the file to a post in the support"
+		echo "thread @ XDA, with a detailed description"
+		echo "of your issue."
+		echo ""
+		echo -n "Press enter to continue..."
+		read -r INPUTTMP
+		case "$INPUTTMP" in
+			*)
+				if [ "$2" == "l" ]; then
+					exit_fn
+				fi
+			;;
+		esac
+	fi
 }

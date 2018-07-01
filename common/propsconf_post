@@ -98,7 +98,7 @@ if [ -d "$MODPATH" ]; then
 				# Copies the stock build.prop to the module. Only if set in propsconf_late.
 				if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ]; then
 					log_handler "Stock build.prop copied from /system."
-					cp -afv $SYSTEMLOC/build.prop $MODPATH/system/build.prop >> $LOGFILE
+					cp -af $SYSTEMLOC/build.prop $MODPATH/system/build.prop >> $LOGFILE
 					
 					# Edits the module copy of build.prop
 					module_values
@@ -134,3 +134,4 @@ else
 	echo "$MODPATH not found." >> $POSTLOGFILE
 	echo "Module no longer installed." >> $POSTLOGFILE
 fi
+
