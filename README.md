@@ -363,5 +363,3 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - ZTE Axon 7 (7.1.1)
 - ZTE Nubia Z17 (7.1.1)
 - Zuk Z2 Pro (7.0)
-.1.1)
-- Zuk Z2 Pro (7.0)
