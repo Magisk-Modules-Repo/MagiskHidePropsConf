@@ -63,11 +63,11 @@ Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 
 ### I still can't pass the ctsProfile check
 If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
-- First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under "Miscellaneous MagiskHide issues" below.
+- First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
 - Go into the script options and move the execution of the boot script to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
 - Try a different fingerprint (pick one from the provided list).
 - Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide. Check in your ROM thread or with the creator/developer.
-- You might have remnants of previous tampering on your device. A clean install of your system may be required.
+- You might have remnants of previous modifications that trigger SafetyNet on your device. A clean install of your system may be required.
 - If you can't get things working, and want help, make sure to provide logs and details. See ["Logs, etc"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs-etc) below.
 
 
@@ -143,6 +143,14 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 ## Issues, support, etc
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
+### I can't pass the ctsProfile check
+See ["I still can't pass the ctsProfile check"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check) above.
+
+Also see ["Props don't seem to set properly"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly) below.
+
+### I can't pass the basicIntegrity check
+This module can only really help with the ctsProfile check, by spoofing the device fingerprint. If you can't pass basicIntegrity, there's probably something else going on with your device. See ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) above.
+
 ### Props don't seem to set properly
 If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the execution of the boot script to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) above.
 
@@ -154,9 +162,11 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 ### Logs, etc
-In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l command, use -h for details). All the relevant logs, together with the Magisk logs, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of your internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
+In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l command, use -h for details). All the relevant logs, together with the Magisk logs, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
 
-The logs are also stored in /cache (or /data/cache for A/B devices), and the Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't use the "Collect logs" option mentioned above. Providing the output from terminal might also be useful.
+The logs will also automatically be saved to the root of the device's internal storage if there's an issue with the module scripts.
+
+If you can't run the `props` script for some reason, the logs are also stored in /cache (or /data/cache for A/B devices). The Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't use the "Collect logs" option mentioned above). Providing the output from terminal might also be useful.
 
 If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release (the only difference is the more verbose logging), so that you can collect the debug log.
 
@@ -171,6 +181,13 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.3.1  
+- Fixed permissions for the settings boot script when using the reset option.
+- Fixed log collecting.
+- Added automatic log collecting when there's an issue with the boot scripts.
+- Some updates to the documentation, mainly regarding troubleshooting issues.
+- Miscellaneous improvements and fixes.
+
 ### v2.3.0  
 - Added a function for removing props. See the documentation for details.
 - Added a function to collect and package the logs and relevant troubleshooting files for easy uploading.
@@ -345,4 +362,6 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Xiaomi Redmi Note 5 Pro (8.1.0)
 - ZTE Axon 7 (7.1.1)
 - ZTE Nubia Z17 (7.1.1)
+- Zuk Z2 Pro (7.0)
+.1.1)
 - Zuk Z2 Pro (7.0)

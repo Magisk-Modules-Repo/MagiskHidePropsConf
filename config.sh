@@ -85,13 +85,16 @@ set_permissions() {
   # set_perm  $MODPATH/system/lib/libart.so       0       0       0644
 
   # The following is default permissions, DO NOT remove
-  set_perm_recursive  $MODPATH  0  0  0755  0644
+  set_perm_recursive  $MODPATH  0  0  0755  0644 >> $INSTLOG
   
   # Permissions for the props file
-  set_perm $MODPATH/system/$BIN/props 0 0 0777
+  set_perm $MODPATH/system/$BIN/props 0 0 0777 >> $INSTLOG
+  # Permissions for boot scripts
+  set_perm $LATEFILE 0 0 0755 >> $INSTLOG
+  set_perm $POSTFILE 0 0 0755 >> $INSTLOG
   # Busybox permissions
   if [ -f "$MODPATH/busybox" ]; then
-    set_perm $MODPATH/busybox 0 0 0755
+    set_perm $MODPATH/busybox 0 0 0755 >> $INSTLOG
   fi
 }
 
@@ -212,12 +215,11 @@ script_placement() {
 		FILEV=0
 	fi
 	log_print "- Installing scripts"
-	cp -afv $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG
-	cp -afv $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG
-	cp -afv $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG
-	cp -afv $UPDATEPOSTFILE $POSTFILE >> $INSTLOG
-	chmod -v 755 $POSTFILE >> $INSTLOG
-	cp -afv $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG
+	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG
+	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG
+	cp -af $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG
+	cp -af $UPDATEPOSTFILE $POSTFILE >> $INSTLOG
+	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG
 	if [ "$UPDATEV" -gt "$FILEV" ]; then
 		if [ "$FILEV" == 0 ]; then
 			log_print "- Placing settings script"
@@ -260,12 +262,10 @@ script_placement() {
 			done
 		fi
 		log_handler "Setting up late_start settings script."
-		cp -afv $UPDATELATEFILE $LATEFILE >> $INSTLOG
-		chmod -v 755 $LATEFILE >> $INSTLOG
+		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG
 	elif [ "$UPDATEV" -lt "$FILEV" ]; then
 		log_print "- Settings cleared (script downgraded)"
-		cp -afv $UPDATELATEFILE $LATEFILE >> $INSTLOG
-		chmod -v 755 $LATEFILE >> $INSTLOG
+		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG
 	else
 		log_print "- Module settings preserved"
 	fi
@@ -326,7 +326,7 @@ bin_check() {
 		BIN=bin
 	fi
 	log_handler "Using /system/$BIN."
-	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN
+	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN >> $INSTLOG
 }
 
 # Magisk installation check
@@ -354,7 +354,7 @@ check_bb() {
 		log_handler "Current/installed busybox - v${BBCURR}/v${BBV}."
 		if [ "$BBCURR" == "$BBV" ]; then
 			log_handler "Backing up current busybox."
-			cp -afv $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG
+			cp -af $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG
 		fi
 	fi
 }
@@ -363,7 +363,7 @@ check_bb() {
 download_bb() {
 	if [ -f "$CACHELOC/busybox_post" ]; then
 		log_handler "Restoring current busybox."
-		mv -fv $CACHELOC/busybox_post $MODPATH/busybox >> $INSTLOG
+		mv -f $CACHELOC/busybox_post $MODPATH/busybox >> $INSTLOG
 	elif [ "$BOOTMODE" == "true" ]; then
 		# Testing connection
 		log_print "- Testing connection"
@@ -374,8 +374,13 @@ download_bb() {
 		if [ "$CNTTEST" == "true" ]; then
 			log_print "- Downloading busybox"
 			wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>> $INSTLOG
+			if [ -f "$MODPATH/busybox" ]; then
+				log_print "- Busybox downloaded"
+			else
+				log_print "! No busybox downloaded!"
+			fi
 		else
-			log_print "- No connection"
+			log_print "! No connection!"
 		fi
 	elif [ "$BOOTMODE" == "false" ]; then
 		log_handler "Recovery installation, can't download busybox."
@@ -402,3 +407,4 @@ script_install() {
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
 	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
 }
+
