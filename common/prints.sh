@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=19
+PRINTSV=20
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -33,19 +33,26 @@ Motorola Moto E4 (7.1.1)=motorola/sperry_sprint/sperry:7.1.1/NCQ26.69-64/68:user
 Motorola Moto G4 (7.0)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys
 Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
 Motorola Moto G5 Plus (7.0)=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
+Motorola Moto G5S (7.1.1)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
-OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR6.170623.013/12041042:user/release-keys
-OnePlus 5T (8.0.0)=OnePlus/OnePlus5T/OnePlus5T:8.0.0/OPR1.170623.032/02040656:user/release-keys
+OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
+OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
+OnePlus 3 (8.0.0)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/05171653:user/release-keys
+OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/05171658:user/release-keys
+OnePlus 5 (8.1.0)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/06131715:user/release-keys
+OnePlus 5T (8.1.0)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/06131716:user/release-keys
 OnePlus 6 (8.1.0)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
+Samsung Galaxy J3 (5.1.1)=ro.build.fingerprint=samsung/j3xnltexx/j3xnlte:5.1.1/LMY47V/J320FNXXU0ARB1:user/release-keys
 Samsung Galaxy J5 (7.1.1)=samsung/j5xnltexx/j5xnlte:7.1.1/NMF26X/J510FNXXS2BRA2:user/release-keys
 Samsung Galaxy J5 Prime (7.0)=samsung/on5xeltejv/on5xelte:7.0/NRD90M/G570FXXU1BQI6:user/release-keys
 Samsung Galaxy Note 3 (7.1.1)=samsung/greatltexx/greatlte:7.1.1/NMF26X/N950FXXU1AQHA:user/release-keys
 Samsung Galaxy Note 4 (6.0.1)=samsung/trltexx/trlte:6.0.1/MMB29M/N910FXXS1DQH9:user/release-keys
 Samsung Galaxy Note 5 (7.0)=samsung/nobleltejv/noblelte:7.0/NRD90M/N920CXXU3CQH6:user/release-keys
 Samsung Galaxy Note 8 (8.0.0)=samsung/greatltexx/greatlte:8.0.0/R16NW/N950FXXU3CRC1:user/release-keys
+Samsung Galaxy Note 10.1 2014 (5.1.1)=samsung/lt03wifixx/lt03wifi:5.1.1/LMY47X/P600XXUDOJ3:user/release-keys
 Samsung Galaxy S3 Neo (4.4.4)=samsung/s3ve3gdd/s3ve3gdd:4.4.4/KTU84P/I9300IDDUBQE2:user/release-keys
 Samsung Galaxy S4 (5.0.1)=samsung/jfltexx/jflte:5.0.1/LRX22C/I9505XXUHPF4:user/release-keys
 Samsung Galaxy S6 (7.0)=samsung/zerofltexx/zeroflte:7.0/NRD90M/G920FXXS5EQL1:user/release-keys
