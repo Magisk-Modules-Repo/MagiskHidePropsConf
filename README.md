@@ -48,17 +48,17 @@ You can find the file to download in your device's forum on XDA Developers (eith
 Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
 
 - Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
-- For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
+- For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere.
 
 Take a look below for an example of what a device fingerprint looks like.
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name=fingerprint`.
+You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name
 Here's an example:
 ```
-Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
+Google Nexus 6
 ```
 
 ### I still can't pass the ctsProfile check
@@ -86,7 +86,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v20_**
+**_Current fingerprints list version - v21_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -182,6 +182,13 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.3.2  
+- Finally fixed installing with the configuration file on a clean Magisk installation.
+- Fixed updating placeholders if boot scripts gets restored at boot.
+- Updated the power requirements to 1.21 gigawatts.
+- Updated and added new fingerprints (Asus Zenfone 2 Laser, Huawei P9, LG G4, Motorola Moto C Plus and G6 Play, Samsung Galaxy J5 2015, Xiaomi Mi 4C and Mi Mix 2S), list v21.
+- Miscellaneous fixes and updates.
+
 ### v2.3.1  
 - Fixed permissions for the settings boot script when using the reset option.
 - Fixed log collecting.
@@ -194,7 +201,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Added a function to collect and package the logs and relevant troubleshooting files for easy uploading.
 - Updated and clarified the documentation on how to use the configuration file.
 - A bunch of improvements and tweaks. Several of which may go horribly wrong.
-- Updated and added bunch of new fingerprints (Asus ZenPad S 8.0, Huawei P20 Pro, Samsung Galaxy S8, Sony Xperia XZ1 Dual and XZ1 Compact, Xiaomi Mi 4C and Redmi Note 3 Pro SE), list v19
+- Updated and added bunch of new fingerprints (Asus ZenPad S 8.0, Huawei P20 Pro, Samsung Galaxy S8, Sony Xperia XZ1 Dual and XZ1 Compact, Xiaomi Mi 4C and Redmi Note 3 Pro SE), list v19.
 - Don’t turn your back, don’t look away, and *don’t blink!* Good luck.
 
 ### v2.2.2  
@@ -282,7 +289,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v20  
+### List v21  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus ZenPad S 8.0 (6.0.1)
 - Google Nexus 4 (5.1.1)
@@ -301,12 +308,16 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - HTC 10 (6.0.1)
 - Huawei Honor 9 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
+- Huawei P9 (7.0)
 - Huawei P20 Pro (8.1.0)
+- LG G4 H812 (6.0)
+- Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
 - Motorola Moto G5S (7.1.1)
+- Motorola Moto G6 Play (8.0.0)
 - Motorola Moto X4 (8.0.0)
 - Nvidia Shield K1 (7.0)
 - OnePlus 2 (6.0.1)
@@ -319,6 +330,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J3 (5.1.1)
+- Samsung Galaxy J5 2015 (6.0.1)
 - Samsung Galaxy J5 (7.1.1)
 - Samsung Galaxy J5 Prime (7.0)
 - Samsung Galaxy Note 3 (7.1.1)
@@ -360,6 +372,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi A1 (8.0.0)
 - Xiaomi Mi Max 2 (7.1.1)
+- Xiaomi Mi Mix 2S (8.0.0)
 - Xiaomi Mi Note 2 (7.0)
 - Xiaomi Redmi 4 Prime (6.0.1)
 - Xiaomi Redmi 4X (6.0.1)

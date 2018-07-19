@@ -27,16 +27,38 @@ RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
 BBWWWPATH=BB_PLACEHOLDER
 BBLOC=$MODPATH/busybox
-if [ -f "$BBLOC" ] && [ "$BBT" == "module" ]; then
-	BBPATH=$BBLOC
-elif [ -d "$IMGPATH/busybox-ndk" ]; then
-	if  [ "$BBT" != "topjohnwu" ]; then
+if [ "$BBT" ]; then
+	case $BBT in
+		module)
+			if [ -f "$BBLOC" ]; then
+				BBPATH=$BBLOC
+			elif [ -d "$IMGPATH/busybox-ndk" ]; then
+				BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+			else
+				BBPATH=$MAGISKLOC/busybox
+			fi
+		;;
+		osm0sis)
+			if [ -d "$IMGPATH/busybox-ndk" ]; then
+				BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+			elif [ -f "$BBLOC" ]; then
+				BBPATH=$BBLOC
+			else
+				BBPATH=$MAGISKLOC/busybox
+			fi
+		;;
+		topjohnwu)
+			BBPATH=$MAGISKLOC/busybox
+		;;
+	esac
+else
+	if [ -f "$BBLOC" ]; then
+		BBPATH=$BBLOC
+	elif [ -d "$IMGPATH/busybox-ndk" ]; then
 		BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
 	else
 		BBPATH=$MAGISKLOC/busybox
 	fi
-else
-	BBPATH=$MAGISKLOC/busybox
 fi
 if [ -z "$(echo $PATH | grep /sbin:)" ]; then
 	alias resetprop="$MAGISKLOC/magisk resetprop"
@@ -459,13 +481,14 @@ download_bb() {
 # ======================== Fingerprint functions ========================
 # Set new fingerprint
 print_edit() {
+	MODPRINT=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 -o "$(get_file_value $LATEFILE "PRINTMODULE=")" == "false" ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
 		log_handler "Changing fingerprint."
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
 			resetprop -v $ITEM 2>> $LOGFILE
-			resetprop -nv $ITEM "$(get_file_value $LATEFILE "MODULEFINGERPRINT=")" 2>> $LOGFILE
-		done				
+			resetprop -nv $ITEM "$MODPRINT" 2>> $LOGFILE
+		done
 	fi
 }
 
@@ -989,3 +1012,7 @@ collect_logs() {
 		esac
 	fi
 }
+
+# Log print
+log_handler "Functions loaded."
+log_handler "Using busybox: ${BBPATH}."

@@ -36,7 +36,7 @@ if [ -d "$MODPATH" ]; then
 			# Clears out the script control file
 			rm -f $POSTCHKFILE
 			touch $POSTCHKFILE
-			
+
 			# Get default values
 			log_handler "Checking device default values."
 			curr_values

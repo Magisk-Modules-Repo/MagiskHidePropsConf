@@ -185,7 +185,7 @@ tags
 selinux
 fingerprint
 "
-USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix"
+USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoofingTool4Magisk"
 
 log_handler() {
 	echo "" >> $INSTLOG
@@ -331,9 +331,10 @@ bin_check() {
 
 # Magisk installation check
 install_check() {
-	if [ ! -d "$SERVICEPATH" ]; then
+	if [ ! -d "$SERVICEPATH" ] || [ ! -d "$POSTPATH" ]; then
 		log_handler "Fresh Magisk installation detected."
 		log_handler "Creating path for boot script."
+		mkdir -pv $POSTPATH >> $INSTLOG
 		mkdir -pv $SERVICEPATH >> $INSTLOG
 	fi
 }

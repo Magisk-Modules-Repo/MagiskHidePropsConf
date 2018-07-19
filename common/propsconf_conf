@@ -50,6 +50,9 @@ CONFWEB=enabled
 # ro.config.media_vol_steps=30
 # net.tethering.noprovisioning=true
 # "
+# Please observe that if the prop you're trying to set contains spaces, you'll
+# need to replace those spaces with "_sp_" (without the quotation marks).
+#
 # With PROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",
 # "add", or "preserve". The default option is to replace the list.
@@ -66,6 +69,7 @@ CONFWEB=enabled
 # ro.config.media_vol_steps
 # net.tethering.noprovisioning
 # "
+#
 # With DELPROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",
 # "add", or "preserve". The default option is to replace the list.

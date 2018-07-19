@@ -65,6 +65,8 @@ esac
 # Load functions
 . $MODPATH/util_functions.sh
 
+log_handler "Running props script."
+
 blank_input() {
 	# Find menu level
 	case $1 in
@@ -1452,9 +1454,9 @@ menu_options() {
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
-			echo "${G}1${N} - Boot stage ${C}(${BOOTTXT})${N}"
-			echo "${G}2${N} - Script colours ${CC}(${COLOURTXT})${N}"
-			echo "${G}3${N} - Fingerprints list check ${CP}(${PRINTSCHKTXT})${N}"
+			echo "${G}1${N} - Boot stage (currently ${C}${BOOTTXT}${N})"
+			echo "${G}2${N} - Script colours (currently ${CC}${COLOURTXT}${N})"
+			echo "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
 			echo "${G}r${N} - Reset all settings"
 			if [ "$2" != "s" ]; then
 				echo "${G}b${N} - Go back to main menu"
@@ -1777,13 +1779,11 @@ reset_everything() {
 # ====================================================
 
 if [ $(id -u) != 0 ] ; then
+	log_handler "No superuser access."
 	menu_header "${C}This script must be run with\n superuser access. Try again.${N}"
 	echo ""
 	exit 0
 fi
-
-log_handler "Running props script."
-log_handler "Using busybox: ${BBPATH}."
 
 # ====================================================
 # =================== Script check ===================
@@ -1833,9 +1833,8 @@ if [ ! -f "$MODPATH/busybox" ]; then
 	if [ "$CNTTEST" == "true" ]; then
 		download_bb
 		# Reload functions
+		log_handler "Reloading functions."
 		. $MODPATH/util_functions.sh
-		log_handler "Functions reloaded."
-		log_handler "Using busybox: ${BBPATH}."
 	else
 		log_print "No connection."
 	fi
@@ -1863,8 +1862,8 @@ case "$1" in
 		echo "  -f		Update fingerprints list."
 		echo "  -l		Save module logs and info."
 		echo "  -h		Show this message."
-		echo "  -nc		Turn off colours."
-		echo "  -nw		Turn off fingerprint startup check."
+		echo "  -nc		Run without colours."
+		echo "  -nw		Run without fingerprint startup check."
 		echo "  -p		Improved hiding (edit prop files)."
 		echo "  -r		Reset all options/settings."
 		echo "  -s		Open script settings menu."
@@ -1911,7 +1910,7 @@ esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*bo*|*bt*|*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
+		*bo*|*bj*|*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
 		;;
 		*)
 			menu_header "${C}Help${N}"

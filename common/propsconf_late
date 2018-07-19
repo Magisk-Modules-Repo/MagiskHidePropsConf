@@ -68,8 +68,6 @@ if [ -d "$MODPATH" ]; then
 	else
 		# Load functions
 		. $MODPATH/util_functions.sh
-		log_handler "Functions loaded."
-		log_handler "Using busybox: ${BBPATH}."
 
 		if [ "$OPTIONLATE" == 0 ]; then
 			until [ ! -f "$POSTCHKFILE" ]; do

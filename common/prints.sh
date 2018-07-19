@@ -3,14 +3,14 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=20
+PRINTSV=21
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
 
 # Certified fingerprints
 PRINTSLIST="
-Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2179_20170803:user/release-keys
+Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
@@ -28,12 +28,16 @@ Google Pixel 2 XL (P DP1)=google/taimen/taimen:P/PPP1.180208.014/4633861:user/re
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 Huawei Honor 9 (8.0.0)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
+Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P20 Pro (8.1.0)=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys
+LG G4 H812 (6.0)=lge/p1_rgs_ca/p1:6.0/MRA58K/1601215569825:user/release-keys
+Motorola Moto C Plus (7.0)=motorola/panell_21_d/panell_d:7.0/NRD90M.03.040/040:user/release-keys
 Motorola Moto E4 (7.1.1)=motorola/sperry_sprint/sperry:7.1.1/NCQ26.69-64/68:user/release-keys
 Motorola Moto G4 (7.0)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys
 Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
 Motorola Moto G5 Plus (7.0)=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
 Motorola Moto G5S (7.1.1)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys
+Motorola Moto G6 Play (8.0.0)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
@@ -46,6 +50,7 @@ OnePlus 6 (8.1.0)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
 Samsung Galaxy J3 (5.1.1)=ro.build.fingerprint=samsung/j3xnltexx/j3xnlte:5.1.1/LMY47V/J320FNXXU0ARB1:user/release-keys
+Samsung Galaxy J5 2015 (6.0.1)=samsung/j5nltexx/j5nlte:6.0.1/MMB29M/J500FNXXS1BQG1:user/release-keys
 Samsung Galaxy J5 (7.1.1)=samsung/j5xnltexx/j5xnlte:7.1.1/NMF26X/J510FNXXS2BRA2:user/release-keys
 Samsung Galaxy J5 Prime (7.0)=samsung/on5xeltejv/on5xelte:7.0/NRD90M/G570FXXU1BQI6:user/release-keys
 Samsung Galaxy Note 3 (7.1.1)=samsung/greatltexx/greatlte:7.1.1/NMF26X/N950FXXU1AQHA:user/release-keys
@@ -79,7 +84,7 @@ Sony Xperia Z5 Compact (7.1.1)=Sony/E5823/E5823:7.1.1/32.4.A.1.54/3761073091:use
 Sony Xperia Z5 Dual (7.1.1)=Sony/E6633/E6633:7.1.1/32.4.A.1.54/3761073091:user/release-keys
 Vodafone Smart Ultra 6 (5.1.1)=Vodafone/P839V55/P839V55:5.1.1/LMY47V/20161227.134319.15534:user/release-keys
 Xiaomi Mi 3/4 (6.0.1)=Xiaomi/cancro/cancro:6.0.1/MMB29M/V9.5.2.0.MXDMIFA:user/release-keys
-Xiaomi Mi 4C (7.0)=Xiaomi/libra/libra:7.0/NRD90M/V9.5.2.0.NXKCNFA:user/release-keys
+Xiaomi Mi 4C (7.0)=Xiaomi/libra/libra:7.0/NRD90M/V9.6.2.0.NXKCNFD:user/release-keys
 Xiaomi Mi 5/5 Pro (7.0)=Xiaomi/gemini/gemini:7.0/NRD90M/V9.2.1.0.NAAMIEK:user/release-keys
 Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.2.1.0.NAGMIEK:user/release-keys
 Xiaomi Mi 5S Plus (6.0.1)=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys
@@ -87,6 +92,7 @@ Xiaomi Mi 6 (7.1.1)=Xiaomi/sagit/sagit:7.1.1/NMF26X/V8.2.17.0.NCACNEC:user/relea
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
 Xiaomi Mi A1 (8.0.0)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys
 Xiaomi Mi Max 2 (7.1.1)=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
+Xiaomi Mi Mix 2S (8.0.0)=Xiaomi/polaris/polaris:8.0.0/OPR1.170623.032/V9.5.19.0.ODGMIFA:user/release-keys
 Xiaomi Mi Note 2 (7.0)=Xiaomi/scorpio/scorpio:7.0/NRD90M/V9.2.1.0.NADMIEK:user/release-keys
 Xiaomi Redmi 4 Prime (6.0.1)=Xiaomi/markw/markw:6.0.1/MMB29M/V9.5.3.0.MBEMIFA:user/release-keys
 Xiaomi Redmi 4X (6.0.1)=Xiaomi/santoni/santoni:6.0.1/MMB29M/V8.5.4.0.MAMCNED:user/release-keys
