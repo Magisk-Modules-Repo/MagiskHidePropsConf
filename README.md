@@ -351,6 +351,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Sony Xperia X (8.0.0)
 - Sony Xperia X Performance (8.0.0)
 - Sony Xperia XZ (8.0.0)
+- Sony Xperia XZ1 (8.0.0)
 - Sony Xperia XZ1 Dual (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
 - Sony Xperia Z (5.1.1)

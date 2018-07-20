@@ -71,6 +71,7 @@ Samsung Galaxy S9 Plus (8.0.0)=samsung/star2ltexx/star2lte:8.0.0/R16NW/G965FXXU1
 Sony Xperia X (8.0.0)=Sony/F5121/F5121:8.0.0/34.4.A.2.32/1455699507:user/release-keys
 Sony Xperia X Performance (8.0.0)=Sony/F8131/F8131:8.0.0/41.3.A.2.99/1455830589:user/release-keys
 Sony Xperia XZ (8.0.0)=Sony/F8331/F8331:8.0.0/41.3.A.2.99/1455830589:user/release-keys
+Sony Xperia XZ1 (8.0.0)=Sony/G8341/G8341:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia XZ1 Dual (8.0.0)=Sony/G8342/G8342:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia XZ1 Compact (8.0.0)=Sony/G8441/G8441:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia Z (5.1.1)=Sony/C6603/C6603:5.1.1/10.7.A.0.228/58103698:user/release-keys
