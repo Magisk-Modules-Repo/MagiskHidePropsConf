@@ -349,6 +349,8 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Samsung Galaxy S9 (8.0.0)
 - Samsung Galaxy S9 Plus (8.0.0)
 - Sony Xperia X (8.0.0)
+- Sony Xperia X Dual (8.0.0)
+- Sony Xperia X Compact (8.0.0)
 - Sony Xperia X Performance (8.0.0)
 - Sony Xperia XZ (8.0.0)
 - Sony Xperia XZ1 (8.0.0)
