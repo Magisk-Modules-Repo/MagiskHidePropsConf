@@ -357,6 +357,8 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Sony Xperia XA2 Ultra (8.0.0)
 - Sony Xperia XA2 Ultra Dual (8.0.0)
 - Sony Xperia XZ (8.0.0)
+- Sony Xperia XZ Premium (8.0.0)
+- Sony Xperia XZ Premium Dual (8.0.0)
 - Sony Xperia XZ1 (8.0.0)
 - Sony Xperia XZ1 Dual (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
