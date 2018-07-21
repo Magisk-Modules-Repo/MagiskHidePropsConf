@@ -86,7 +86,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v21_**
+**_Current fingerprints list version - v22_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -182,6 +182,10 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Changelog
+### v2.3.2  
+- Tiny update for installation logic and documentation.
+- Also added and updated a whole bunch of fingerprints (Huawei Honor 6X, Sony Xperia X Dual, X Compact, X Performance Dual, XZ Dual, XZ Premium, XZ Premium Dual, XZ1, XZ2, XZ2 Dual, XZ2 Compact, XZ2 Compact Dual and Xiaomi Mi5/5 Pro), list v22.
+
 ### v2.3.2  
 - Finally fixed installing with the configuration file on a clean Magisk installation.
 - Fixed updating placeholders if boot scripts gets restored at boot.
@@ -289,7 +293,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 
 
 ## Current fingerprints list
-### List v21  
+### List v22  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus ZenPad S 8.0 (6.0.1)
 - Google Nexus 4 (5.1.1)
@@ -306,6 +310,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Google Pixel 2 XL (8.1.0)
 - Google Pixel 2 XL (P DP1)
 - HTC 10 (6.0.1)
+- Huawei Honor 6X (8.0.0)
 - Huawei Honor 9 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
 - Huawei P9 (7.0)
@@ -349,10 +354,21 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Samsung Galaxy S9 (8.0.0)
 - Samsung Galaxy S9 Plus (8.0.0)
 - Sony Xperia X (8.0.0)
+- Sony Xperia X Compact (8.0.0)
+- Sony Xperia X Dual (8.0.0)
 - Sony Xperia X Performance (8.0.0)
+- Sony Xperia X Performance Dual (8.0.0)
 - Sony Xperia XZ (8.0.0)
-- Sony Xperia XZ1 Dual (8.0.0)
+- Sony Xperia XZ Dual (8.0.0)
+- Sony Xperia XZ Premium (8.0.0)
+- Sony Xperia XZ Premium Dual (8.0.0)
+- Sony Xperia XZ1 (8.0.0)
 - Sony Xperia XZ1 Compact (8.0.0)
+- Sony Xperia XZ1 Dual (8.0.0)
+- Sony Xperia XZ2 (8.0.0)
+- Sony Xperia XZ2 Compact (8.0.0)
+- Sony Xperia XZ2 Compact Dual (8.0.0)
+- Sony Xperia XZ2 Dual (8.0.0)
 - Sony Xperia Z (5.1.1)
 - Sony Xperia Z1 (5.1.1)
 - Sony Xperia Z2 (6.0.1)
@@ -365,7 +381,7 @@ If you have the latest beta release of Magisk installed, the "magisk_debug.log" 
 - Vodafone Smart Ultra 6 (5.1.1)
 - Xiaomi Mi 3/4 (6.0.1)
 - Xiaomi Mi 4C (7.0)
-- Xiaomi Mi 5/5 Pro (7.0)
+- Xiaomi Mi 5/5 Pro (8.0.0)
 - Xiaomi Mi 5S (7.0)
 - Xiaomi Mi 5S Plus (6.0.1)
 - Xiaomi Mi 6 (7.1.1)

@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=21
+PRINTSV=22
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -26,6 +26,7 @@ Google Pixel 2 (P DP1)=google/walleye/walleye:P/PPP1.180208.014/4633861:user/rel
 Google Pixel 2 XL (8.1.0)=google/taimen/taimen:8.1.0/OPM4.171019.016.B1/4720843:user/release-keys
 Google Pixel 2 XL (P DP1)=google/taimen/taimen:P/PPP1.180208.014/4633861:user/release-keys
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
+Huawei Honor 6X (8.0.0)=HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/528(C00):user/release-keys
 Huawei Honor 9 (8.0.0)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
@@ -69,10 +70,21 @@ Samsung Galaxy S8 Plus (8.0.0)=samsung/dream2ltexx/dream2lte:8.0.0/R16NW/G955FXX
 Samsung Galaxy S9 (8.0.0)=samsung/starltexx/starlte:8.0.0/R16NW/G960FXXU1ARCC:user/release-keys
 Samsung Galaxy S9 Plus (8.0.0)=samsung/star2ltexx/star2lte:8.0.0/R16NW/G965FXXU1ARCC:user/release-keys
 Sony Xperia X (8.0.0)=Sony/F5121/F5121:8.0.0/34.4.A.2.32/1455699507:user/release-keys
+Sony Xperia X Compact (8.0.0)=Sony/F5321/F5321:8.0.0/34.4.A.2.32/1455699507:user/release-keys
+Sony Xperia X Dual (8.0.0)=Sony/F5122/F5122:8.0.0/34.4.A.2.32/1455699507:user/release-keys
 Sony Xperia X Performance (8.0.0)=Sony/F8131/F8131:8.0.0/41.3.A.2.99/1455830589:user/release-keys
+Sony Xperia X Performance Dual (8.0.0)=Sony/F8132/F8132:8.0.0/41.3.A.2.99/1455830589:user/release-keys
 Sony Xperia XZ (8.0.0)=Sony/F8331/F8331:8.0.0/41.3.A.2.99/1455830589:user/release-keys
-Sony Xperia XZ1 Dual (8.0.0)=Sony/G8342/G8342:8.0.0/47.1.A.12.179/1909673090:user/release-keys
+Sony Xperia XZ Dual (8.0.0)=Sony/F8332/F8332:8.0.0/41.3.A.2.99/1455830589:user/release-keys
+Sony Xperia XZ Premium (8.0.0)=Sony/G8141/G8141:8.0.0/47.1.A.12.179/1909673090:user/release-keys
+Sony Xperia XZ Premium Dual (8.0.0)=Sony/G8142/G8142:8.0.0/47.1.A.12.179/1909673090:user/release-keys
+Sony Xperia XZ1 (8.0.0)=Sony/G8341/G8341:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia XZ1 Compact (8.0.0)=Sony/G8441/G8441:8.0.0/47.1.A.12.179/1909673090:user/release-keys
+Sony Xperia XZ1 Dual (8.0.0)=Sony/G8342/G8342:8.0.0/47.1.A.12.179/1909673090:user/release-keys
+Sony Xperia XZ2 (8.0.0)=Sony/H8216/H8216:8.0.0/51.1.A.3.159/620448843:user/release-keys
+Sony Xperia XZ2 Compact (8.0.0)=Sony/H8314/H8314:8.0.0/51.1.A.3.159/620448843:user/release-keys
+Sony Xperia XZ2 Compact Dual (8.0.0)=Sony/H8324/H8324:8.0.0/51.1.A.3.159/620448843:user/release-keys
+Sony Xperia XZ2 Dual (8.0.0)=Sony/H8266/H8266:8.0.0/51.1.A.3.159/620448843:user/release-keys
 Sony Xperia Z (5.1.1)=Sony/C6603/C6603:5.1.1/10.7.A.0.228/58103698:user/release-keys
 Sony Xperia Z1 (5.1.1)=Sony/C6903/C6903:5.1.1/14.6.A.1.236/2031203603:user/release-keys
 Sony Xperia Z2 (6.0.1)=Sony/D6503/D6503:6.0.1/23.5.A.1.291/2769308465:user/release-keys
@@ -85,7 +97,7 @@ Sony Xperia Z5 Dual (7.1.1)=Sony/E6633/E6633:7.1.1/32.4.A.1.54/3761073091:user/r
 Vodafone Smart Ultra 6 (5.1.1)=Vodafone/P839V55/P839V55:5.1.1/LMY47V/20161227.134319.15534:user/release-keys
 Xiaomi Mi 3/4 (6.0.1)=Xiaomi/cancro/cancro:6.0.1/MMB29M/V9.5.2.0.MXDMIFA:user/release-keys
 Xiaomi Mi 4C (7.0)=Xiaomi/libra/libra:7.0/NRD90M/V9.6.2.0.NXKCNFD:user/release-keys
-Xiaomi Mi 5/5 Pro (7.0)=Xiaomi/gemini/gemini:7.0/NRD90M/V9.2.1.0.NAAMIEK:user/release-keys
+Xiaomi Mi 5/5 Pro (8.0.0)=Xiaomi/gemini/gemini:8.0.0/OPR1.170623.032/V9.6.1.0.OAAMIFD:user/release-keys
 Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.2.1.0.NAGMIEK:user/release-keys
 Xiaomi Mi 5S Plus (6.0.1)=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys
 Xiaomi Mi 6 (7.1.1)=Xiaomi/sagit/sagit:7.1.1/NMF26X/V8.2.17.0.NCACNEC:user/release-keys

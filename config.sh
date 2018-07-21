@@ -320,7 +320,7 @@ usnf_check() {
 
 # Check for bin/xbin
 bin_check() {
-	if [ -d "/system/xbin" ]; then
+	if [ -d "/sbin/.core/mirror/system/xbin" ]; then
 		BIN=xbin
 	else
 		BIN=bin
