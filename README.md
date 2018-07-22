@@ -143,6 +143,11 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 ## Issues, support, etc
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
+### An option is marked as "disabled"
+A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
+- _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed. Check the logs to get information about which module this is.
+- _"Improved hiding"_ will be disable if all relevant prop values already are "safe".
+
 ### I can't pass the ctsProfile check
 See ["I still can't pass the ctsProfile check"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check) above.
 
@@ -161,14 +166,13 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
-### Logs, etc
+## Logs
 In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l command, use -h for details). All the relevant logs, together with the Magisk logs, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
 
 The logs will also automatically be saved to the root of the device's internal storage if there's an issue with the module scripts.
 
-If you can't run the `props` script for some reason, the logs are also stored in /cache (or /data/cache for A/B devices). The Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't use the "Collect logs" option mentioned above). Providing the output from terminal might also be useful.
-
-If you have the latest beta release of Magisk installed, the "magisk_debug.log" is also useful. If there's no new beta released, there's always a beta version of the latest stable Magisk release (the only difference is the more verbose logging), so that you can collect the debug log.
+### Collecting logs manually
+If you can't run the `props` script for some reason, the logs are also stored in /cache (or /data/cache for A/B devices). The Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't, or can't, use the "Collect logs" option mentioned above). Providing the output from terminal might also be useful.
 
 
 ## Source
