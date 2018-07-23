@@ -186,7 +186,11 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
-### v2.3.2  
+### v2.3.4  
+- Updated for Busybox v1.29.1. Thank you @osm0sis.
+- Bugfixes. Because I'm blind.
+
+### v2.3.3  
 - Tiny update for installation logic and documentation.
 - Also added and updated a whole bunch of fingerprints (Huawei Honor 6X, Sony Xperia X Dual, X Compact, X Performance Dual, XZ Dual, XZ Premium, XZ Premium Dual, XZ1, XZ2, XZ2 Dual, XZ2 Compact, XZ2 Compact Dual and Xiaomi Mi5/5 Pro), list v22.
 

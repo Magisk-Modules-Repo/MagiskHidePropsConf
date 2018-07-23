@@ -1014,5 +1014,6 @@ collect_logs() {
 }
 
 # Log print
+BBV=$($BBPATH | grep "BusyBox v" | sed 's|.*BusyBox ||' | sed 's| (.*||')
 log_handler "Functions loaded."
-log_handler "Using busybox: ${BBPATH}."
+log_handler "Using busybox: ${BBPATH} (${BBV})."

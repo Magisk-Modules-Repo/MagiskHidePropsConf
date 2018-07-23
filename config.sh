@@ -139,6 +139,7 @@ fi
 INSTLOG=$CACHELOC/propsconf_install.log
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 SETTRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
+BBCURR=1.29.1
 if [ "$ARCH" == "x64" ]; then
 	BBARCH=x86_64
 else
@@ -320,7 +321,8 @@ usnf_check() {
 
 # Check for bin/xbin
 bin_check() {
-	if [ -d "/sbin/.core/mirror/system/xbin" ]; then
+	$BOOTMODE && BINCHECK=/sbin/.core/mirror/system/xbin || BINCHECK=/system/xbin
+	if [ -d "$BINCHECK" ]; then
 		BIN=xbin
 	else
 		BIN=bin
@@ -349,11 +351,10 @@ post_check() {
 
 # Check installed busybox
 check_bb() {
-	BBCURR=1.28.4
 	if [ -f "$IMGPATH/$MODID/busybox" ]; then
 		BBV=$($IMGPATH/$MODID/busybox | grep "BusyBox v" | sed 's|.*BusyBox v||' | sed 's|-osm0sis.*||')
 		log_handler "Current/installed busybox - v${BBCURR}/v${BBV}."
-		if [ "$BBCURR" == "$BBV" ]; then
+		if [ "$BBCURR" -le "$BBV" ]; then
 			log_handler "Backing up current busybox."
 			cp -af $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG
 		fi

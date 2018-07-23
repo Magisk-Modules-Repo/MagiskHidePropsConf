@@ -1820,7 +1820,7 @@ fi
 
 if [ "$ISSUECHK" == 1 ]; then
 	collect_logs "issue"
-	reboot_fn "${ISSUETXT}\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n ${G}See the documentation for details.${N}" "reset-script"
+	reboot_fn "${ISSUETXT}\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for details.${N}" "reset-script"
 fi
 # ==================================================
 # ================= Busybox check ==================
