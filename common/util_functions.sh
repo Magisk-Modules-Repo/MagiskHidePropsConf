@@ -5,6 +5,7 @@
 
 # Variables
 MODVERSION=VER_PLACEHOLDER
+MIRRORPATH=$COREPATH/mirror
 POSTFILE=$IMGPATH/.core/post-fs-data.d/propsconf_post
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 SYSTEMLOC=SYSTEM_PLACEHOLDER
@@ -19,8 +20,9 @@ $CACHELOC/magisk.log
 $CACHELOC/magisk.log.bak
 /data/adb/magisk_debug.log
 $CACHELOC/propsconf*
-/sbin/.core/mirror/system/build.prop
-/sbin/.core/mirror/vendor/build.prop
+$MIRRORPATH/system/build.prop
+$MIRRORPATH/vendor/build.prop
+$LATEFILE
 "
 CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
@@ -126,8 +128,10 @@ log_start() {
 	log_script_chk "Log start."
 }
 log_handler() {
-	echo "" >> $LOGFILE
-	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE
+	if [ $(id -u) == 0 ] ; then
+		echo "" >> $LOGFILE
+		echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE
+	fi
 }
 log_print() {
 	echo "$1"
@@ -338,13 +342,17 @@ orig_safe() {
 		PROP=$(get_prop_type $V)
 		FILEPROP=$(echo "CURR${PROP}" | tr '[:lower:]' '[:upper:]')
 		FILEVALUE=$(eval "echo \$$FILEPROP")
-		log_handler "Checking $FILEPROP=$FILEVALUE"
+		log_handler "Checking ${FILEPROP}=${FILEVALUE}"
 		safe_props $V $FILEVALUE
 		if [ "$SAFE" == 0 ]; then
 			log_handler "Prop $V set to triggering value in prop file."
 			replace_fn FILESAFE 1 0 $LATEFILE
 		else
-			log_handler "Prop $V set to \"safe\" value in prop file."
+			if [ -z "$FILEVALUE" ]; then
+				log_handler "Could not retrieve value for prop $V."
+			elif [ "$SAFE" == 1 ]; then
+				log_handler "Prop $V set to \"safe\" value in prop file."
+			fi
 		fi
 	done
 }
@@ -969,7 +977,23 @@ collect_logs() {
 			esac
 			cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE
 		else
-			log_handler "$ITEM not available."
+			case "$ITEM" in
+				*/cache)
+					if [ "$CACHELOC" == "/cache" ]; then
+						CACHELOCTMP=/data/cache
+					else
+						CACHELOCTMP=/cache
+					fi
+					ITEMTPM=$(echo $ITEM | sed 's|$CACHELOC|$CACHELOCTMP|')
+					if [ -f "$ITEMTPM" ]; then
+						cp -af $ITEMTPM $TMPLOGLOC >> $LOGFILE
+					else
+						log_handler "$ITEM not available."
+					fi
+				;;
+				*)	log_handler "$ITEM not available."
+				;;
+			esac
 		fi
 	done
 

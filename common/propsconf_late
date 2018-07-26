@@ -9,11 +9,12 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=11
+SCRIPTV=12
 SETTRANSF=1
 
 # Variables
-IMGPATH=IMG_PLACEHOLDER
+COREPATH=CORE_PLACEHOLDER
+IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
 CACHELOC=CACHE_PLACEHOLDER
 LATELOGFILE=$CACHELOC/propsconf_latefile.log

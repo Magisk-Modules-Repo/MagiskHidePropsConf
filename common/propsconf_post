@@ -9,7 +9,8 @@
 # In that case, feel free to delete it.
 
 # Variables
-IMGPATH=IMG_PLACEHOLDER
+COREPATH=CORE_PLACEHOLDER
+IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
 POSTLOGFILE=$CACHELOC/propsconf_postfile.log
 

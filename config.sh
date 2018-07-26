@@ -120,7 +120,8 @@ get_file_value() {
 }
 
 # Variables
-BIMGPATH=/sbin/.core/img
+COREPATH=/sbin/.core
+BIMGPATH=$COREPATH/img
 $BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
 POSTPATH=$IMGPATH/.core/post-fs-data.d
 SERVICEPATH=$IMGPATH/.core/service.d
@@ -146,12 +147,6 @@ else
 	BBARCH=$ARCH
 fi
 BBWWWPATH="https://raw.githubusercontent.com/Magisk-Modules-Repo/Busybox-Installer/master/busybox-${BBARCH}"
-BBPATH=/data/adb/magisk/busybox
-$BOOTMODE && alias grep="$BBPATH grep"
-$BOOTMODE && alias sed="$BBPATH sed"
-$BOOTMODE && alias tr="$BBPATH tr"
-$BOOTMODE && alias ls="$BBPATH ls"
-$BOOTMODE && alias wget="$BBPATH wget"
 SETTINGSLIST="
 FINGERPRINTENB
 PRINTEDIT
@@ -321,7 +316,7 @@ usnf_check() {
 
 # Check for bin/xbin
 bin_check() {
-	$BOOTMODE && BINCHECK=/sbin/.core/mirror/system/xbin || BINCHECK=/system/xbin
+	$BOOTMODE && BINCHECK=$COREPATH/mirror/system/xbin || BINCHECK=/system/xbin
 	if [ -d "$BINCHECK" ]; then
 		BIN=xbin
 	else
@@ -354,7 +349,7 @@ check_bb() {
 	if [ -f "$IMGPATH/$MODID/busybox" ]; then
 		BBV=$($IMGPATH/$MODID/busybox | grep "BusyBox v" | sed 's|.*BusyBox v||' | sed 's|-osm0sis.*||')
 		log_handler "Current/installed busybox - v${BBCURR}/v${BBV}."
-		if [ "$BBCURR" -le "$BBV" ]; then
+		if [ "$(echo $BBCURR | sed 's|\.||g')" -le "$(echo $BBV | sed 's|\.||g')" ]; then
 			log_handler "Backing up current busybox."
 			cp -af $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG
 		fi
@@ -405,8 +400,8 @@ script_install() {
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
 	placeholder_update $MODPATH/util_functions.sh BBWWWPATH BB_PLACEHOLDER "$BBWWWPATH"
-	placeholder_update $POSTFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
-	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
-	placeholder_update $MODPATH/system/$BIN/props IMGPATH IMG_PLACEHOLDER "$BIMGPATH"
+	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
+	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
+	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
 }
 

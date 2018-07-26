@@ -7,7 +7,8 @@
 # ================ Paths and variables ================
 # =====================================================
 
-IMGPATH=IMG_PLACEHOLDER
+COREPATH=CORE_PLACEHOLDER
+IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
 LATEFILE=$IMGPATH/.core/service.d/propsconf_late
 
@@ -1779,10 +1780,8 @@ reset_everything() {
 # ====================================================
 
 if [ $(id -u) != 0 ] ; then
-	log_handler "No superuser access."
-	menu_header "${C}This script must be run with\n superuser access. Try again.${N}"
-	echo ""
-	exit 0
+	su -c props "$@"
+	exit
 fi
 
 # ====================================================
@@ -1822,6 +1821,7 @@ if [ "$ISSUECHK" == 1 ]; then
 	collect_logs "issue"
 	reboot_fn "${ISSUETXT}\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for details.${N}" "reset-script"
 fi
+
 # ==================================================
 # ================= Busybox check ==================
 # ==================================================
@@ -1852,6 +1852,7 @@ all_values
 
 case "$1" in
 	-h)
+		log_handler "Showing help (-h)."
 		menu_header "${C}Help${N}"
 		echo ""
 		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
@@ -1871,6 +1872,7 @@ case "$1" in
 		echo "See the module readme or the"
 		echo "support thread @ XDA for details."
 		echo ""
+		log_handler "Exiting... Bye bye.\n\n===================="	
 		exit 0
 	;;	
 esac
@@ -1913,6 +1915,7 @@ if [ "$1" ]; then
 		*bo*|*bj*|*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
 		;;
 		*)
+			log_handler "Invalid option."
 			menu_header "${C}Help${N}"
 			echo ""
 			echo "${R}Invalid option.${N}"
@@ -1920,6 +1923,7 @@ if [ "$1" ]; then
 			echo "Try again without options,"
 			echo "or use -h for help and details."
 			echo ""
+			log_handler "Exiting... Bye bye.\n\n===================="	
 			exit 0
 		;;
 	esac

@@ -12,11 +12,8 @@ The current release is always attached to the OP of the [module support thread](
 
 
 ## Usage
-After installing the module and rebooting, run the command `props` (as su) in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options.
-```
-su
-props
-```
+After installing the module and rebooting, run the command `props` in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options. If you use Termux, you'll have to call su before running the command.
+
 You can also run the command with options. Use -h for details.
 
 
@@ -48,18 +45,19 @@ You can find the file to download in your device's forum on XDA Developers (eith
 Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
 
 - Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
-- For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p
+- For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere.
 
 Take a look below for an example of what a device fingerprint looks like.
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows:`device name
+You can add your own fingerprint to the list by placing a file, named `printslist`, in the root of your internal storage with the fingerprint. It needs to be formated as follows: `device name=fingerprint`.
 Here's an example:
 ```
-Google Nexus 6
+Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
+
 
 ### I still can't pass the ctsProfile check
 If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
@@ -68,7 +66,7 @@ If you've picked a certified fingerprint from the provided list, or you're using
 - Try a different fingerprint (pick one from the provided list).
 - Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide. Check in your ROM thread or with the creator/developer.
 - You might have remnants of previous modifications that trigger SafetyNet on your device. A clean install of your system may be required.
-- If you can't get things working, and want help, make sure to provide logs and details. See ["Logs, etc"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs-etc) below.
+- If you can't get things working, and want help, make sure to provide logs and details. See ["Logs"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs) below.
 
 
 ## Keeping your device "certified"
@@ -86,7 +84,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v22_**
+**_Current fingerprints list version - v23_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -113,7 +111,7 @@ If you would like to delete a certain prop value from your system, that can be d
 
 
 ## Prop script settings
-There are a couple of persistent options that you can set for the props script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the props script. The settings menu can also be opened by using the -s option when running the props script (use -h for details).
+There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option (use -h for details).
 
 ### Boot stage
 It's possible to move the execution of the boot script from the default late_start service to post-fs-data.d. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations (known: LineageOS 15.1). The reason late_start service is default is that it's best to try to keep the number of scripts running during post-fs-data mode as low as possible, but if late_start service doesn't work, it needs to run in post-fs-data instead.
@@ -122,7 +120,7 @@ It's possible to move the execution of the boot script from the default late_sta
 This option will disable or enable colours for the `props` script.
 
 ### Fingerprints list check
-This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option when running the props script (use -h for details).
+This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option (use -h for details).
 
 
 ## Configuration file
@@ -167,7 +165,7 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 ## Logs
-In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l command, use -h for details). All the relevant logs, together with the Magisk logs, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
+In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l option, use -h for details). All the relevant logs and module files, together with the Magisk log, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
 
 The logs will also automatically be saved to the root of the device's internal storage if there's an issue with the module scripts.
 
@@ -186,6 +184,13 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.3.5  
+- Fixed issue with busybox version detection.
+- Fixed the documentation. Some parts had been accidentally deleted. Oops...
+- Improved log collecting.
+- Added and updated fingerprints for the Xiaomi Mi Note 2 and Redmi Note 5A Lite, list v23.
+- Minor improvements here and there. Hopefully I haven't broken something this time...
+
 ### v2.3.4  
 - Updated for Busybox v1.29.1. Thank you @osm0sis.
 - Bugfixes. Because I'm blind.
@@ -301,7 +306,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v22  
+### List v23  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus ZenPad S 8.0 (6.0.1)
 - Google Nexus 4 (5.1.1)
@@ -405,6 +410,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Xiaomi Redmi Note 4/4X (7.0)
 - Xiaomi Redmi Note 5/5 Plus (7.1.2)
 - Xiaomi Redmi Note 5 Pro (8.1.0)
+- Xiaomi Redmi Note 5A Lite (7.1.2)
 - ZTE Axon 7 (7.1.1)
 - ZTE Nubia Z17 (7.1.1)
 - Zuk Z2 Pro (7.0)
