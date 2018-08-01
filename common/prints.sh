@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=24
+PRINTSV=25
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -42,6 +42,7 @@ Motorola Moto G5S (7.1.1)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/
 Motorola Moto G6 Play (8.0.0)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
+Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
 OnePlus 3 (8.0.0)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/05171653:user/release-keys
