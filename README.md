@@ -399,7 +399,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Xiaomi Mi 4C (7.0)
 - Xiaomi Mi 5/5 Pro (8.0.0)
 - Xiaomi Mi 5S (7.0)
-- Xiaomi Mi 5S Plus (6.0.1)
+- Xiaomi Mi 5S Plus (7.0)
 - Xiaomi Mi 6 (7.1.1)
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi A1 (8.0.0)
