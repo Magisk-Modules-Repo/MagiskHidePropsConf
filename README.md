@@ -84,7 +84,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v26_**
+**_Current fingerprints list version - v27_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -306,7 +306,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v26  
+### List v27  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -350,6 +350,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - OnePlus 6 (8.1.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
+- Samsung Galaxy J2 (5.1.1)
 - Samsung Galaxy J3 (5.1.1)
 - Samsung Galaxy J5 2015 (6.0.1)
 - Samsung Galaxy J5 (7.1.1)

@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=26
+PRINTSV=27
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -53,6 +53,7 @@ OnePlus 5T (8.1.0)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/06131716:us
 OnePlus 6 (8.1.0)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
+Samsung Galaxy J2 (5.1.1)=samsung/j23gdd/j23g:5.1.1/LMY48B/J200HXXU0AQK2:user/release-keys
 Samsung Galaxy J3 (5.1.1)=ro.build.fingerprint=samsung/j3xnltexx/j3xnlte:5.1.1/LMY47V/J320FNXXU0ARB1:user/release-keys
 Samsung Galaxy J5 2015 (6.0.1)=samsung/j5nltexx/j5nlte:6.0.1/MMB29M/J500FNXXS1BQG1:user/release-keys
 Samsung Galaxy J5 (7.1.1)=samsung/j5xnltexx/j5xnlte:7.1.1/NMF26X/J510FNXXS2BRA2:user/release-keys
