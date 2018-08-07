@@ -120,7 +120,7 @@ If you would like to delete a certain prop value from your system, that can be d
 There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option (use -h for details).
 
 ### Boot stage
-It's possible to move the execution of the boot script from the default late_start service to post-fs-data.d. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations (known: LineageOS 15.1). The reason late_start service is default is that it's best to try to keep the number of scripts running during post-fs-data mode as low as possible, but if late_start service doesn't work, it needs to run in post-fs-data instead.
+It's possible to move the execution of the boot script from the default post-fs-data to late_start service. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations, and is also more reliable overall. If there are any kind of issues during boot, try changing the boot stage to late_start service instead. Just keep in mind that this might cause setting the build fingerprint to fail.
 
 ### Script colours
 This option will disable or enable colours for the `props` script.
