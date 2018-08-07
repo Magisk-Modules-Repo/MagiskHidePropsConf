@@ -85,16 +85,16 @@ set_permissions() {
   # set_perm  $MODPATH/system/lib/libart.so       0       0       0644
 
   # The following is default permissions, DO NOT remove
-  set_perm_recursive  $MODPATH  0  0  0755  0644 >> $INSTLOG
+  set_perm_recursive  $MODPATH  0  0  0755  0644
   
   # Permissions for the props file
-  set_perm $MODPATH/system/$BIN/props 0 0 0777 >> $INSTLOG
+  set_perm $MODPATH/system/$BIN/props 0 0 0777
   # Permissions for boot scripts
-  set_perm $LATEFILE 0 0 0755 >> $INSTLOG
-  set_perm $POSTFILE 0 0 0755 >> $INSTLOG
+  set_perm $LATEFILE 0 0 0755
+  set_perm $POSTFILE 0 0 0755
   # Busybox permissions
   if [ -f "$MODPATH/busybox" ]; then
-    set_perm $MODPATH/busybox 0 0 0755 >> $INSTLOG
+    set_perm $MODPATH/busybox 0 0 0755
   fi
 }
 
@@ -139,14 +139,15 @@ else
 fi
 INSTLOG=$CACHELOC/propsconf_install.log
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
-SETTRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
-BBCURR=1.29.1
+UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
+NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
+BBCURR=1.29.2
 if [ "$ARCH" == "x64" ]; then
 	BBARCH=x86_64
 else
 	BBARCH=$ARCH
 fi
-BBWWWPATH="https://raw.githubusercontent.com/Magisk-Modules-Repo/Busybox-Installer/master/busybox-${BBARCH}"
+BBWWWPATH="https://raw.githubusercontent.com/Didgeridoohan/MHPCBB/master/busybox-${BBARCH}"
 SETTINGSLIST="
 FINGERPRINTENB
 PRINTEDIT
@@ -183,19 +184,20 @@ fingerprint
 "
 USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoofingTool4Magisk"
 
+# Log functions
 log_handler() {
 	echo "" >> $INSTLOG
-	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $INSTLOG
+	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $INSTLOG 2>&1
 }
 log_start() {
 	if [ -f "$INSTLOG" ]; then
 		rm -f $INSTLOG
 	fi
 	touch $INSTLOG
-	echo "***************************************************" >> $INSTLOG
-	echo "******** MagiskHide Props Config $MODVERSION ********" >> $INSTLOG
-	echo "**************** By Didgeridoohan ***************" >> $INSTLOG
-	echo "***************************************************" >> $INSTLOG
+	echo "***************************************************" >> $INSTLOG 2>&1
+	echo "******** MagiskHide Props Config $MODVERSION ********" >> $INSTLOG 2>&1
+	echo "**************** By Didgeridoohan ***************" >> $INSTLOG 2>&1
+	echo "***************************************************" >> $INSTLOG 2>&1
 	log_handler "Starting module installation script"
 }
 log_print() {
@@ -207,30 +209,53 @@ log_print() {
 script_placement() {
 	if [ -f "$LATEFILE" ]; then
 		FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
+		FILETRANSF=$(get_file_value $LATEFILE "SETTRANSF=")
 	else
 		FILEV=0
+		FILETRANSF=$UPDATETRANSF
 	fi
 	log_print "- Installing scripts"
-	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG
-	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG
-	cp -af $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG
-	cp -af $UPDATEPOSTFILE $POSTFILE >> $INSTLOG
-	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG
+	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG 2>&1
+	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG 2>&1
+	cp -af $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG 2>&1
+	cp -af $UPDATEPOSTFILE $POSTFILE >> $INSTLOG 2>&1
+	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG 2>&1
+	# New script
 	if [ "$UPDATEV" -gt "$FILEV" ]; then
+		# Fresh install
 		if [ "$FILEV" == 0 ]; then
 			log_print "- Placing settings script"
-		elif [ "$SETTRANSF" -gt "$FILEV" ]; then
+		# Updated script with a required clearing of settings
+		elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ -z "$NOTTRANSF" ]; then
 			log_print "- Settings cleared (script updated)"
+		# Updated script
 		else
 			log_print "- Script updated"
 			log_print "- Transferring settings from old script"
 			# Prop settings
 			for ITEM in $SETTINGSLIST; do
-				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
-				SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
-				if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
-					log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
-					sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
+				# Checking if a script update requires some options not to transfer
+				case "$NOTTRANSF" in
+					*${ITEM}*)						
+						if [ "$UPDATETRANSF" -gt "$FILETRANSF" ]; then
+							TRANSFOPT=1
+						else
+							TRANSFOPT=0
+						fi
+					;;
+					*)
+						TRANSFOPT=0
+					;;
+				esac
+				if [ "$TRANSFOPT" == 1 ]; then
+					log_handler "Not transfering settings for ${ITEM}."
+				else
+					SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+					SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
+					if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
+						log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
+						sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
+					fi
 				fi
 			done
 			# Prop values
@@ -258,10 +283,12 @@ script_placement() {
 			done
 		fi
 		log_handler "Setting up late_start settings script."
-		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG
+		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG 2>&1
+	# Downgraded script (flashed old module version)
 	elif [ "$UPDATEV" -lt "$FILEV" ]; then
 		log_print "- Settings cleared (script downgraded)"
-		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG
+		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG 2>&1
+	# No update of script
 	else
 		log_print "- Module settings preserved"
 	fi
@@ -323,7 +350,7 @@ bin_check() {
 		BIN=bin
 	fi
 	log_handler "Using /system/$BIN."
-	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN >> $INSTLOG
+	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN >> $INSTLOG 2>&1
 }
 
 # Magisk installation check
@@ -331,8 +358,8 @@ install_check() {
 	if [ ! -d "$SERVICEPATH" ] || [ ! -d "$POSTPATH" ]; then
 		log_handler "Fresh Magisk installation detected."
 		log_handler "Creating path for boot script."
-		mkdir -pv $POSTPATH >> $INSTLOG
-		mkdir -pv $SERVICEPATH >> $INSTLOG
+		mkdir -pv $POSTPATH >> $INSTLOG 2>&1
+		mkdir -pv $SERVICEPATH >> $INSTLOG 2>&1
 	fi
 }
 
@@ -351,7 +378,7 @@ check_bb() {
 		log_handler "Current/installed busybox - v${BBCURR}/v${BBV}."
 		if [ "$(echo $BBCURR | sed 's|\.||g')" -le "$(echo $BBV | sed 's|\.||g')" ]; then
 			log_handler "Backing up current busybox."
-			cp -af $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG
+			cp -af $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG 2>&1
 		fi
 	fi
 }
@@ -360,19 +387,38 @@ check_bb() {
 download_bb() {
 	if [ -f "$CACHELOC/busybox_post" ]; then
 		log_handler "Restoring current busybox."
-		mv -f $CACHELOC/busybox_post $MODPATH/busybox >> $INSTLOG
+		mv -f $CACHELOC/busybox_post $MODPATH/busybox >> $INSTLOG 2>&1
 	elif [ "$BOOTMODE" == "true" ]; then
+		# Creating md5 file
+		log_handler "Creating md5 checksum file"
+		MD5TMP=$(cat $INSTALLER/common/busybox-${BBARCH}.md5)
+		log_handler "Checksum - $MD5TMP"
+		echo "$MD5TMP  $MODPATH/busybox" > $INSTALLER/busybox.md5 2>&1 | tee -a $INSTLOG
+		echo "$MD5TMP  $BIMGPATH/$MODID/busybox" > $MODPATH/busybox.md5 2>&1 | tee -a $INSTLOG
+
 		# Testing connection
 		log_print "- Testing connection"
 		log_print "- Wait..."
-		ping -c 1 -W 1 google.com >> $INSTLOG 2>> $INSTLOG && CNTTEST="true" || CNTTEST="false"
+		ping -c 1 -W 1 google.com >> $INSTLOG 2>&1 && CNTTEST="true" || CNTTEST="false"
 
 		# Downloading busybox
 		if [ "$CNTTEST" == "true" ]; then
 			log_print "- Downloading busybox"
-			wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>> $INSTLOG
+			wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $INSTLOG
 			if [ -f "$MODPATH/busybox" ]; then
-				log_print "- Busybox downloaded"
+				if [ -f "$INSTALLER/busybox.md5" ]; then
+					if md5sum -s -c $INSTALLER/busybox.md5 2>/dev/null; then
+						log_print "- Busybox downloaded"
+						md5sum -c $INSTALLER/busybox.md5 >> $INSTLOG 2>&1
+					else
+						log_print "! Busybox md5 mismatch!"
+						log_print "! No busybox downloaded!"
+						rm -f $MODPATH/busybox >> $INSTLOG 2>&1
+					fi
+				else
+					log_print "- Busybox downloaded"
+					log_handler "Couldn't check md5 checksum"
+				fi
 			else
 				log_print "! No busybox downloaded!"
 			fi

@@ -5,6 +5,12 @@
 [Support Thread @ XDA](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228)
 
 
+## What's this?
+This module is a very complicated way of doing something very simple. Complicated for me, that is... The aim is to make it easy for you, the user. The module changes prop values using the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop), something that is very easy to do with a [Magisk boot script](https://github.com/topjohnwu/Magisk/blob/master/docs/details.md#boot-stages) and some simple commands.
+
+What this module does is that it adds a terminal based UI for those that don't want (or can't) create a boot script for themselves, making the process of creating such a boot script very simple. With this module I'm also maintaining a list of certified build fingerprints for a number of devices, so that it's easy to pick one you want to use.
+
+
 ## Installation
 Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), and install through the Magisk Manager -> Modules, or from recovery.
 
@@ -151,6 +157,8 @@ See ["I still can't pass the ctsProfile check"](https://github.com/Magisk-Module
 
 Also see ["Props don't seem to set properly"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly) below.
 
+*NOTE* Xiaomi devices often have issus passing the ctsProfile check, particularly China releases. This is under investigation...
+
 ### I can't pass the basicIntegrity check
 This module can only really help with the ctsProfile check, by spoofing the device fingerprint. If you can't pass basicIntegrity, there's probably something else going on with your device. See ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) above.
 
@@ -179,11 +187,16 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 ## Credits
 @topjohnwu @ XDA Developers, for Magisk  
-@osm0sis, for his busybox binaries  
+@osm0sis, for his Busybox binaries  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration
 
 
 ## Changelog
+### v2.3.6  
+- Added md5 checksum when downloading the internal Busybox.
+- Changed the default boot stage from late_start service to post-fs-data.
+- Various fixes and improvements, as usual.
+
 ### v2.3.5  
 - Fixed issue with busybox version detection.
 - Fixed the documentation. Some parts had been accidentally deleted. Oops...

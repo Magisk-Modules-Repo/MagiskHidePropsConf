@@ -18,7 +18,7 @@ POSTLOGFILE=$CACHELOC/propsconf_postfile.log
 if [ -d "$MODPATH" ]; then
 	# Checks if the module is set for removal
 	if [ -f "$MODPATH/remove" ]; then
-		echo "Module set for removal." >> $POSTLOGFILE
+		echo "Module set for removal." >> $POSTLOGFILE 2>&1
 	else
 		# Load functions
 		. $MODPATH/util_functions.sh
@@ -64,7 +64,7 @@ if [ -d "$MODPATH" ]; then
 
 			# Edits prop values if set for post-fs-data
 			if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 0 ]; then
-				echo "\n--------------------" >> $LOGFILE
+				echo -e "\n--------------------" >> $LOGFILE 2>&1
 				log_handler "Editing prop values in post-fs-data mode."
 				# ---Setting/Changing fingerprint---
 				print_edit
@@ -72,7 +72,7 @@ if [ -d "$MODPATH" ]; then
 				custom_edit
 				# ---Deleting props---
 				prop_del
-				echo "\n--------------------" >> $LOGFILE
+				echo -e "\n--------------------" >> $LOGFILE 2>&1
 			fi
 
 			# Edits build.prop
@@ -99,7 +99,7 @@ if [ -d "$MODPATH" ]; then
 				# Copies the stock build.prop to the module. Only if set in propsconf_late.
 				if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ] && [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ]; then
 					log_handler "Stock build.prop copied from /system."
-					cp -af $SYSTEMLOC/build.prop $MODPATH/system/build.prop >> $LOGFILE
+					cp -af $SYSTEMLOC/build.prop $MODPATH/system/build.prop >> $LOGFILE 2>&1
 					
 					# Edits the module copy of build.prop
 					module_values
@@ -132,7 +132,7 @@ if [ -d "$MODPATH" ]; then
 		log_script_chk "post-fs-data.d finished.\n\n===================="
 	fi
 else
-	echo "$MODPATH not found." >> $POSTLOGFILE
-	echo "Module no longer installed." >> $POSTLOGFILE
+	echo "$MODPATH not found." >> $POSTLOGFILE 2>&1
+	echo "Module no longer installed." >> $POSTLOGFILE 2>&1
 fi
 

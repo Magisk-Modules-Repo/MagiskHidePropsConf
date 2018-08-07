@@ -69,11 +69,13 @@ alias cat="$BBPATH cat"
 alias chmod="$BBPATH chmod"
 alias cp="$BBPATH cp"
 alias grep="$BBPATH grep"
+alias md5sum="$BBPATH md5sum"
 alias mv="$BBPATH mv"
 alias printf="$BBPATH printf"
 alias sed="$BBPATH sed"
 alias sort="$BBPATH sort"
 alias tar="$BBPATH tar"
+alias tee="$BBPATH tee"
 alias tr="$BBPATH tr"
 alias wget="$BBPATH wget"
 PRINTSLOC=$MODPATH/prints.sh
@@ -114,23 +116,23 @@ get_file_value() {
 	fi
 }
 
-# Logs
+# Log functions
 # Saves the previous log (if available) and creates a new one
 log_start() {
 	if [ -f "$LOGFILE" ]; then
 		mv -f $LOGFILE $LASTLOGFILE
 	fi
 	touch $LOGFILE
-	echo "***************************************************" >> $LOGFILE
-	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE
-	echo "***************** By Didgeridoohan ***************" >> $LOGFILE
-	echo "***************************************************" >> $LOGFILE
+	echo "***************************************************" >> $LOGFILE 2>&1
+	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
+	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
+	echo "***************************************************" >> $LOGFILE 2>&1
 	log_script_chk "Log start."
 }
 log_handler() {
 	if [ $(id -u) == 0 ] ; then
-		echo "" >> $LOGFILE
-		echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE
+		echo "" >> $LOGFILE 2>&1
+		echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE 2>&1
 	fi
 }
 log_print() {
@@ -139,7 +141,7 @@ log_print() {
 }
 log_script_chk() {
 	log_handler "$1"
-	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $RUNFILE
+	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $RUNFILE 2>&1
 }
 
 #Divider
@@ -214,6 +216,7 @@ placeholder_update() {
 	esac
 }
 
+# Check for original prop values
 orig_check() {
 	PROPSTMPLIST=$PROPSLIST"
 	ro.build.fingerprint
@@ -229,6 +232,7 @@ orig_check() {
 	done
 }
 
+# Check if boot scripts ran during boot
 script_ran_check() {
 	POSTCHECK=0
 	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "post-fs-data.d finished")" ]; then
@@ -240,23 +244,23 @@ script_ran_check() {
 	fi
 }
 
-# Currently set values
+# Load currently set values
 curr_values() {
-	CURRDEBUGGABLE=$(resetprop -v ro.debuggable) 2>> $LOGFILE
-	CURRSECURE=$(resetprop -v ro.secure) 2>> $LOGFILE
-	CURRTYPE=$(resetprop -v ro.build.type) 2>> $LOGFILE
-	CURRTAGS=$(resetprop -v ro.build.tags) 2>> $LOGFILE
-	CURRSELINUX=$(resetprop -v ro.build.selinux) 2>> $LOGFILE
-	CURRFINGERPRINT=$(resetprop -v ro.build.fingerprint) 2>> $LOGFILE
+	CURRDEBUGGABLE=$(resetprop -v ro.debuggable) >> $LOGFILE 2>&1
+	CURRSECURE=$(resetprop -v ro.secure) >> $LOGFILE 2>&1
+	CURRTYPE=$(resetprop -v ro.build.type) >> $LOGFILE 2>&1
+	CURRTAGS=$(resetprop -v ro.build.tags) >> $LOGFILE 2>&1
+	CURRSELINUX=$(resetprop -v ro.build.selinux) >> $LOGFILE 2>&1
+	CURRFINGERPRINT=$(resetprop -v ro.build.fingerprint) >> $LOGFILE 2>&1
 	if [ -z "$CURRFINGERPRINT" ]; then
-		CURRFINGERPRINT=$(resetprop -v ro.bootimage.build.fingerprint) 2>> $LOGFILE
+		CURRFINGERPRINT=$(resetprop -v ro.bootimage.build.fingerprint) >> $LOGFILE 2>&1
 		if [ -z "$CURRFINGERPRINT" ]; then
-			CURRFINGERPRINT=$(resetprop -v ro.vendor.build.fingerprint) 2>> $LOGFILE
+			CURRFINGERPRINT=$(resetprop -v ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
 		fi
 	fi
 }
 
-# Original values
+# Load original values
 orig_values() {
 	ORIGDEBUGGABLE=$(get_file_value $LATEFILE "ORIGDEBUGGABLE=")
 	ORIGSECURE=$(get_file_value $LATEFILE "ORIGSECURE=")
@@ -266,7 +270,7 @@ orig_values() {
 	ORIGFINGERPRINT=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
 }
 
-# Module values
+# Load module values
 module_values() {
 	MODULEDEBUGGABLE=$(get_file_value $LATEFILE "MODULEDEBUGGABLE=")
 	MODULESECURE=$(get_file_value $LATEFILE "MODULESECURE=")
@@ -278,7 +282,7 @@ module_values() {
 	DELETEPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
 }
 
-# Run all value functions
+# Run all value loading functions
 all_values() {
 	log_handler "Loading values."
 	# Currently set values
@@ -289,6 +293,7 @@ all_values() {
 	module_values
 }
 
+# Run after updated props/settings
 after_change() {
 	# Update the reboot variable
 	reboot_chk
@@ -298,6 +303,7 @@ after_change() {
 	reboot_fn "$1"
 }
 
+# Run after changing props/settings with configuration file
 after_change_file() {
 	# Update the reboot variable
 	reboot_chk
@@ -308,21 +314,23 @@ after_change_file() {
 	reboot_fn "$1" "$2"
 }
 
+# Check if module needs a reboot
 reboot_chk() {
 	replace_fn REBOOTCHK 0 1 $LATEFILE
 }
 
+# Reset module
 reset_fn() {
 	BUILDPROPENB=$(get_file_value $LATEFILE "BUILDPROPENB=")
 	FINGERPRINTENB=$(get_file_value $LATEFILE "FINGERPRINTENB=")
-	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE
+	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 	if [ "$BUILDPROPENB" ] && [ "$BUILDPROPENB" != 1 ]; then
 		replace_fn BUILDPROPENB 1 $BUILDPROPENB $LATEFILE
 	fi
 	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
-	chmod -v 755 $LATEFILE >> $LOGFILE
+	chmod -v 755 $LATEFILE >> $LOGFILE 2>&1
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER $CACHELOC
 
@@ -472,17 +480,31 @@ config_file() {
 
 # Connection test
 test_connection() {
-	ping -c 1 -W 1 google.com >> $LOGFILE 2>> $LOGFILE && CNTTEST="true" || CNTTEST="false"
+	ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
 }
 
 # Download osm0sis' busybox
 download_bb() {
 	log_print "Downloading busybox."
-	wget -T 5 -O $MODPATH/busybox $BBWWWPATH >> $LOGFILE
+	wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $LOGFILE
 	if [ -f "$MODPATH/busybox" ]; then
-		chmod -v 755 $MODPATH/busybox >> $LOGFILE
+		if [ -f "$MODPATH/busybox.md5" ]; then
+			if md5sum -s -c $MODPATH/busybox.md5 2>/dev/null; then 
+				log_print "- Busybox downloaded"
+				md5sum -c $MODPATH/busybox.md5 >> $LOGFILE 2>&1
+				chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
+			else
+				log_print "! Busybox md5 mismatch!"
+				log_print "! No busybox downloaded!"
+				rm -f $MODPATH/busybox >> $LOGFILE 2>&1
+			fi
+		else
+			log_print "- Busybox downloaded"
+			log_handler "Couldn't check md5 checksum"
+			chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
+		fi
 	else
-		log_print "No connection."
+		log_print "! No busybox downloaded!"
 	fi
 }
 
@@ -494,8 +516,8 @@ print_edit() {
 		log_handler "Changing fingerprint."
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
-			resetprop -v $ITEM 2>> $LOGFILE
-			resetprop -nv $ITEM "$MODPRINT" 2>> $LOGFILE
+			resetprop -v $ITEM >> $LOGFILE 2>&1
+			resetprop -nv $ITEM "$MODPRINT" >> $LOGFILE 2>&1
 		done
 	fi
 }
@@ -516,12 +538,12 @@ download_prints() {
 	# Checking and downloading fingerprints list
 	if [ "$CNTTEST" == "true" ]; then
 		log_print "Checking list version."
-		wget -T 5 -O $PRINTSTMP $PRINTSWWW 2>> $LOGFILE
+		wget -T 5 -O $PRINTSTMP $PRINTSWWW >> $LOGFILE 2>&1
 		if [ -f "$PRINTSTMP" ]; then
 			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
 			if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
 				if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
-					mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE
+					mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
 					# Updates list version in module.prop
 					VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
 					replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
@@ -615,7 +637,7 @@ reset_prop_files() {
 	fi
 }
 
-# Editing prop files
+# Editing prop files settings
 edit_prop_files() {	
 	log_handler "Modifying prop files$3."
 
@@ -674,6 +696,7 @@ edit_prop_files() {
 	fi
 }
 
+# Edit the prop files
 change_prop_file() {
 	case $1 in
 		build)
@@ -840,8 +863,8 @@ custom_edit() {
 		for ITEM in $TMPLST; do			
 			log_handler "Changing/writing $(get_eq_left "$ITEM")."
 			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
-			resetprop -v $(get_eq_left "$ITEM") 2>> $LOGFILE
-			resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" 2>> $LOGFILE
+			resetprop -v $(get_eq_left "$ITEM") >> $LOGFILE 2>&1
+			resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" >> $LOGFILE 2>&1
 		done
 	fi
 }
@@ -905,8 +928,8 @@ prop_del() {
 		for ITEM in $TMPLST; do			
 			log_handler "Deleting $ITEM."
 			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
-			resetprop -v $ITEM 2>> $LOGFILE
-			resetprop -v --delete $ITEM 2>> $LOGFILE
+			resetprop -v $ITEM >> $LOGFILE 2>&1
+			resetprop -v --delete $ITEM >> $LOGFILE 2>&1
 		done
 	fi
 }
@@ -964,7 +987,7 @@ reset_delprop() {
 collect_logs() {
 	log_handler "Collecting logs and information."
 	# Create temporary directory
-	mkdir -pv $TMPLOGLOC 2>> $LOGFILE
+	mkdir -pv $TMPLOGLOC >> $LOGFILE 2>&1
 
 	# Saving Magisk and module log files and device original build.prop
 	for ITEM in $TMPLOGLIST; do
@@ -975,7 +998,7 @@ collect_logs() {
 				*)	BPNAME=""
 				;;
 			esac
-			cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE
+			cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE 2>&1
 		else
 			case "$ITEM" in
 				*/cache)
@@ -986,7 +1009,7 @@ collect_logs() {
 					fi
 					ITEMTPM=$(echo $ITEM | sed 's|$CACHELOC|$CACHELOCTMP|')
 					if [ -f "$ITEMTPM" ]; then
-						cp -af $ITEMTPM $TMPLOGLOC >> $LOGFILE
+						cp -af $ITEMTPM $TMPLOGLOC >> $LOGFILE 2>&1
 					else
 						log_handler "$ITEM not available."
 					fi
@@ -1002,13 +1025,13 @@ collect_logs() {
 
 	# Package the files
 	cd $CACHELOC
-	tar -zcvf propslogs.tar.gz propslogs >> $LOGFILE
+	tar -zcvf propslogs.tar.gz propslogs >> $LOGFILE 2>&1
 
 	# Copy package to internal storage
-	mv -f $CACHELOC/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE
+	mv -f $CACHELOC/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE 2>&1
 
 	# Remove temporary directory
-	rm -rf $TMPLOGLOC >> $LOGFILE
+	rm -rf $TMPLOGLOC >> $LOGFILE 2>&1
 
 	log_handler "Logs and information collected."
 

@@ -9,8 +9,9 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=12
-SETTRANSF=1
+SCRIPTV=13
+SETTRANSF=2
+NOTTRANSF="OPTIONLATE"
 
 # Variables
 COREPATH=CORE_PLACEHOLDER
@@ -30,7 +31,7 @@ PROPEDIT=0
 CUSTOMEDIT=0
 DELEDIT=0
 REBOOTCHK=0
-OPTIONLATE=1
+OPTIONLATE=0
 OPTIONCOLOUR=1
 OPTIONWEB=1
 
@@ -46,24 +47,24 @@ rm -f $LATELOGFILE
 
 # Function to clean up different files after the module has been uninstalled
 cleanup() {
-	echo "Cleaning up files in $CACHELOC." >> $LATELOGFILE
+	echo "Cleaning up files in $CACHELOC." >> $LATELOGFILE 2>&1
 	for ITEM in $CACHEFILES; do
 		if [ -f "$CACHELOC/$ITEM" ]; then
-			echo "Deleting ${ITEM}." >> $LATELOGFILE
-			rm -fv $CACHELOC/$ITEM >> $LATELOGFILE
+			echo "Deleting ${ITEM}." >> $LATELOGFILE 2>&1
+			rm -f $CACHELOC/$ITEM >> $LATELOGFILE 2>&1
 		fi
 	done
 	# Suicide.
-	echo "Removing scripts." >> $LATELOGFILE
-	rm -fv $IMGPATH/.core/post-fs-data.d/propsconf_post >> $LATELOGFILE
-	rm -fv $0 >> $LATELOGFILE
+	echo "Removing scripts." >> $LATELOGFILE 2>&1
+	rm -f $IMGPATH/.core/post-fs-data.d/propsconf_post >> $LATELOGFILE 2>&1
+	rm -f $0 >> $LATELOGFILE 2>&1
 }
 
 # Checks if the module is installed. Deletes itself if it isn't.
 if [ -d "$MODPATH" ]; then
 	# Checks if the module is set for removal
 	if [ -f "$MODPATH/remove" ]; then
-		echo "Module set for removal." >> $LATELOGFILE
+		echo "Module set for removal." >> $LATELOGFILE 2>&1
 		# Cleanup
 		cleanup
 	else
@@ -162,8 +163,8 @@ if [ -d "$MODPATH" ]; then
 					MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
 					if [ "$(eval "echo \$$REPROP")" == "true" ]; then
 						log_handler "Changing/writing $ITEM."
-						resetprop -v $ITEM 2>> $LOGFILE
-						resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") 2>> $LOGFILE
+						resetprop -v $ITEM >> $LOGFILE 2>&1
+						resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
 					fi
 				done
 			fi
@@ -186,14 +187,14 @@ if [ -d "$MODPATH" ]; then
 		# Check if the late_start service log file exists.
 		if [ -f "$LATELOGFILE" ]; then
 			log_handler "Removing late_start service log ($LATELOGFILE)."
-			rm -fv $LATELOGFILE >> $LOGFILE
+			rm -f $LATELOGFILE >> $LOGFILE 2>&1
 		fi
 
 		log_script_chk "Boot script finished.\n\n=================="
 	fi
 else
-	echo "$MODPATH not found." >> $LATELOGFILE
-	echo "Module no longer installed." >> $LATELOGFILE
+	echo "$MODPATH not found." >> $LATELOGFILE 2>&1
+	echo "Module no longer installed." >> $LATELOGFILE 2>&1
 	# Cleanup
 	cleanup
 fi
