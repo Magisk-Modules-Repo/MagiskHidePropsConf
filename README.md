@@ -120,7 +120,7 @@ If you would like to delete a certain prop value from your system, that can be d
 There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option (use -h for details).
 
 ### Boot stage
-It's possible to move the execution of the boot script from the default post-fs-data to late_start service. This is required for the SafetyNet fix and custom props to work on some ROM/device combinations, and is also more reliable overall. If there are any kind of issues during boot, try changing the boot stage to late_start service instead. Just keep in mind that this might cause setting the build fingerprint to fail.
+It's possible to move the execution of the boot script from the default post-fs-data to late_start service. Running the script in post-fs-data is required for the SafetyNet fix and custom props to work on some ROM/device combinations, and is also more reliable overall. If there are any kind of issues during boot, try changing the boot stage to late_start service instead. Just keep in mind that this might cause setting the build fingerprint to fail.
 
 ### Script colours
 This option will disable or enable colours for the `props` script.
@@ -147,6 +147,9 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 ## Issues, support, etc
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
+### Known issues
+- Xiaomi devices often have issus passing the ctsProfile check, particularly China releases. This is under investigation...
+
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
 - _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed. Check the logs to get information about which module this is.
@@ -156,8 +159,6 @@ A couple of the options in the `props` script will be automatically disabled in 
 See ["I still can't pass the ctsProfile check"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check) above.
 
 Also see ["Props don't seem to set properly"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly) below.
-
-*NOTE* Xiaomi devices often have issus passing the ctsProfile check, particularly China releases. This is under investigation...
 
 ### I can't pass the basicIntegrity check
 This module can only really help with the ctsProfile check, by spoofing the device fingerprint. If you can't pass basicIntegrity, there's probably something else going on with your device. See ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) above.
