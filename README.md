@@ -149,6 +149,7 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 
 ### Known issues
 - Xiaomi devices often have issues passing the ctsProfile check, particularly China releases. This is under investigation...
+- On Android Pie it is no longer possible to edit ro.build.fingerprint (and a bunch of other props). The SafetyNet fix from this module will not work until Magisk's resetprop tool has been updated (no ETA).
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
