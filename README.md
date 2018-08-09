@@ -148,7 +148,7 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
 ### Known issues
-- Xiaomi devices often have issus passing the ctsProfile check, particularly China releases. This is under investigation...
+- Xiaomi devices often have issues passing the ctsProfile check, particularly China releases. This is under investigation...
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
