@@ -199,6 +199,9 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.4.1  
+- Updated to Magisk module template v17000. Compatible with Magisk v17+ only.
+
 ### v2.4.0  
 - Added a check for if the download of the internal Busybox fails.
 - Added an option for picking what boot stage a custom prop should be set in.
