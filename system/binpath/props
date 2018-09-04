@@ -829,7 +829,7 @@ menu_custom_props() {
 				DEFSTAGETXT=" (post-fs-data)"
 			else
 				DEFSTAGETXT=" (late_start service)"
-			end if
+			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""			
 			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" ]; then
