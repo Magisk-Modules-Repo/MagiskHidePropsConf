@@ -14,6 +14,8 @@ CONFTAGS=""
 CONFSELINUX=""
 
 CONFPROPS=""
+CONFPROPSPOST=""
+CONFPROPSLATE=""
 PROPOPTION=replace
 
 CONFDELPROPS=""
@@ -53,11 +55,15 @@ CONFWEB=enabled
 # Please observe that if the prop you're trying to set contains spaces, you'll
 # need to replace those spaces with "_sp_" (without the quotation marks).
 #
+# If you want a specific prop to run in either post-fs-data or late_start service,
+# use either CONFPROPSPOST or CONFPROPSLATE instead. Any props added to CONFPROPS
+# will run in the boot stage currently set in the module options (see CONFLATE below).
+#
 # With PROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",
 # "add", or "preserve". The default option is to replace the list.
 # This option supersedes the preserve option described below, but only
-# for the CONFPROPS variable.
+# for the CONFPROPS variables.
 
 # CONFDELPROPS is a list of props you want to remove from your system.
 # Be very careful when using this option, removing the wrong props might

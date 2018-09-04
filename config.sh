@@ -172,6 +172,8 @@ MODULETAGS
 MODULESELINUX
 MODULEFINGERPRINT
 CUSTOMPROPS
+CUSTOMPROPSPOST
+CUSTOMPROPSLATE
 DELETEPROPS
 "
 PROPSLIST="
@@ -220,77 +222,83 @@ script_placement() {
 	cp -af $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG 2>&1
 	cp -af $UPDATEPOSTFILE $POSTFILE >> $INSTLOG 2>&1
 	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG 2>&1
-	# New script
-	if [ "$UPDATEV" -gt "$FILEV" ]; then
-		# Fresh install
-		if [ "$FILEV" == 0 ]; then
-			log_print "- Placing settings script"
-		# Updated script with a required clearing of settings
-		elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ -z "$NOTTRANSF" ]; then
-			log_print "- Settings cleared (script updated)"
-		# Updated script
-		else
-			log_print "- Script updated"
-			log_print "- Transferring settings from old script"
-			# Prop settings
-			for ITEM in $SETTINGSLIST; do
-				# Checking if a script update requires some options not to transfer
-				case "$NOTTRANSF" in
-					*${ITEM}*)						
-						if [ "$UPDATETRANSF" -gt "$FILETRANSF" ]; then
-							TRANSFOPT=1
-						else
+	if [ "$FILEV" ]; then
+		# New script
+		if [ "$UPDATEV" -gt "$FILEV" ]; then
+			# Fresh install
+			if [ "$FILEV" == 0 ]; then
+				log_print "- Placing settings script"
+			# Updated script with a required clearing of settings
+			elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ -z "$NOTTRANSF" ]; then
+				log_print "- Settings cleared (script updated)"
+			# Updated script
+			else
+				log_print "- Script updated"
+				log_print "- Transferring settings from old script"
+				# Prop settings
+				for ITEM in $SETTINGSLIST; do
+					# Checking if a script update requires some options not to transfer
+					case "$NOTTRANSF" in
+						*${ITEM}*)						
+							if [ "$UPDATETRANSF" -gt "$FILETRANSF" ]; then
+								TRANSFOPT=1
+							else
+								TRANSFOPT=0
+							fi
+						;;
+						*)
 							TRANSFOPT=0
+						;;
+					esac
+					if [ "$TRANSFOPT" == 1 ]; then
+						log_handler "Not transfering settings for ${ITEM}."
+					else
+						SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+						SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
+						if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
+							log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
+							sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
 						fi
-					;;
-					*)
-						TRANSFOPT=0
-					;;
-				esac
-				if [ "$TRANSFOPT" == 1 ]; then
-					log_handler "Not transfering settings for ${ITEM}."
-				else
-					SOLD=$(get_file_value $LATEFILE "${ITEM}=")
-					SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
-					if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
-						log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
-						sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
 					fi
-				fi
-			done
-			# Prop values
-			for ITEM in $PROPSETTINGSLIST; do
-				SOLD=$(get_file_value $LATEFILE "${ITEM}=")
-				if [ "$SOLD" ]; then
-					log_handler "Setting ${ITEM} to ${SOLD}."
-					sed -i "s|${ITEM}=\"\"|${ITEM}=\"${SOLD}\"|" $UPDATELATEFILE
-				fi
-			done
-			# Prop and file edits
-			for ITEM in $PROPSLIST; do
-				REPROP=$(echo "RE${ITEM}" | tr '[:lower:]' '[:upper:]')
-				SETPROP=$(echo "SET${ITEM}" | tr '[:lower:]' '[:upper:]')
-				REOLD=$(get_file_value $LATEFILE "${REPROP}=")
-				SETOLD=$(get_file_value $LATEFILE "${SETPROP}=")
-				if [ "$REOLD" ] && [ "$REOLD" != "false" ]; then
-					log_handler "Setting sensitive prop ${ITEM} to ${REOLD}."
-					sed -i "s/${REPROP}=false/${REPROP}=${REOLD}/" $UPDATELATEFILE
-				fi
-				if [ "$SETOLD" ] && [ "$SETOLD" != "false" ]; then
-					log_handler "Setting file edit ${ITEM} to ${SETOLD}."
-					sed -i "s/${SETPROP}=false/${SETPROP}=${SETOLD}/" $UPDATELATEFILE
-				fi
-			done
+				done
+				# Prop values
+				for ITEM in $PROPSETTINGSLIST; do
+					SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+					if [ "$SOLD" ]; then
+						log_handler "Setting ${ITEM} to ${SOLD}."
+						sed -i "s|${ITEM}=\"\"|${ITEM}=\"${SOLD}\"|" $UPDATELATEFILE
+					fi
+				done
+				# Prop and file edits
+				for ITEM in $PROPSLIST; do
+					REPROP=$(echo "RE${ITEM}" | tr '[:lower:]' '[:upper:]')
+					SETPROP=$(echo "SET${ITEM}" | tr '[:lower:]' '[:upper:]')
+					REOLD=$(get_file_value $LATEFILE "${REPROP}=")
+					SETOLD=$(get_file_value $LATEFILE "${SETPROP}=")
+					if [ "$REOLD" ] && [ "$REOLD" != "false" ]; then
+						log_handler "Setting sensitive prop ${ITEM} to ${REOLD}."
+						sed -i "s/${REPROP}=false/${REPROP}=${REOLD}/" $UPDATELATEFILE
+					fi
+					if [ "$SETOLD" ] && [ "$SETOLD" != "false" ]; then
+						log_handler "Setting file edit ${ITEM} to ${SETOLD}."
+						sed -i "s/${SETPROP}=false/${SETPROP}=${SETOLD}/" $UPDATELATEFILE
+					fi
+				done
+			fi
+			log_handler "Setting up late_start settings script."
+			cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG 2>&1
+		# Downgraded script (flashed old module version)
+		elif [ "$UPDATEV" -lt "$FILEV" ]; then
+			log_print "- Settings cleared (script downgraded)"
+			cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG 2>&1
+		# No update of script
+		else
+			log_print "- Module settings preserved"
 		fi
+	else
+		log_print "- Placing settings script"
 		log_handler "Setting up late_start settings script."
 		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG 2>&1
-	# Downgraded script (flashed old module version)
-	elif [ "$UPDATEV" -lt "$FILEV" ]; then
-		log_print "- Settings cleared (script downgraded)"
-		cp -af $UPDATELATEFILE $LATEFILE >> $INSTLOG 2>&1
-	# No update of script
-	else
-		log_print "- Module settings preserved"
 	fi
 }
 
@@ -383,6 +391,23 @@ check_bb() {
 	fi
 }
 
+# Busybox md5 check
+md5_bb() {
+	if [ -f "$INSTALLER/busybox.md5" ]; then
+		if md5sum -s -c $INSTALLER/busybox.md5 2>/dev/null; then
+			log_print "- Busybox downloaded"
+			md5sum -c $INSTALLER/busybox.md5 >> $INSTLOG 2>&1
+		else
+			log_print "! Busybox md5 mismatch!"
+			log_print "! No busybox downloaded!"
+			rm -f $MODPATH/busybox >> $INSTLOG 2>&1
+		fi
+	else
+		log_print "- Busybox downloaded"
+		log_handler "Couldn't check md5 checksum"
+	fi
+}
+
 # Download osm0sis' busybox
 download_bb() {
 	if [ -f "$CACHELOC/busybox_post" ]; then
@@ -403,21 +428,21 @@ download_bb() {
 
 		# Downloading busybox
 		if [ "$CNTTEST" == "true" ]; then
-			log_print "- Downloading busybox"
+			log_print "- Downloading busybox (${BBARCH})"
 			wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $INSTLOG
-			if [ -f "$MODPATH/busybox" ]; then
-				if [ -f "$INSTALLER/busybox.md5" ]; then
-					if md5sum -s -c $INSTALLER/busybox.md5 2>/dev/null; then
-						log_print "- Busybox downloaded"
-						md5sum -c $INSTALLER/busybox.md5 >> $INSTLOG 2>&1
-					else
-						log_print "! Busybox md5 mismatch!"
-						log_print "! No busybox downloaded!"
-						rm -f $MODPATH/busybox >> $INSTLOG 2>&1
-					fi
+			if [ -s "$MODPATH/busybox" ]; then
+				md5_bb
+			elif [ -f "$MODPATH/busybox" ]; then
+				log_print "! Download failed!"
+				log_print "! Second attempt!"
+				rm -f $MODPATH/busybox >> $INSTLOG 2>&1
+				log_print "- Downloading without progress bar"
+				wget -T 5 -q -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $INSTLOG
+				if [ -s "$MODPATH/busybox" ]; then
+					md5_bb
 				else
-					log_print "- Busybox downloaded"
-					log_handler "Couldn't check md5 checksum"
+					log_print "! No busybox downloaded!"
+					rm -f $MODPATH/busybox >> $INSTLOG 2>&1
 				fi
 			else
 				log_print "! No busybox downloaded!"

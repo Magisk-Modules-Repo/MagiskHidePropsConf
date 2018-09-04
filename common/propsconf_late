@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=13
+SCRIPTV=14
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
@@ -124,6 +124,8 @@ if [ -d "$MODPATH" ]; then
 
 			# ---Custom prop values---
 			CUSTOMPROPS=""
+			CUSTOMPROPSPOST=""
+			CUSTOMPROPSLATE=""
 			
 			# ---Delete prop values---
 			DELETEPROPS=""
@@ -146,14 +148,16 @@ if [ -d "$MODPATH" ]; then
 			SETFINGERPRINT=false
 
 			# Edits prop values if set for late_start service
+			echo -e "\n--------------------" >> $LOGFILE 2>&1
+			log_handler "Editing prop values in late_start service mode."
 			if [ "$OPTIONLATE" == 1 ]; then
 				# ---Setting/Changing fingerprint---				
 				print_edit
 				# ---Setting custom props---
-				custom_edit
-				# ---Deleting props---
-				prop_del
+				custom_edit "CUSTOMPROPS"
 			fi
+			# Edit custom props set for late_start service
+			custom_edit "CUSTOMPROPSLATE"
 			# Edit MagiskHide sensitive values
 			if [ "$PROPEDIT" == 1 ]; then
 				log_handler "Changing sensitive props."
@@ -168,6 +172,7 @@ if [ -d "$MODPATH" ]; then
 					fi
 				done
 			fi
+			echo -e "\n--------------------" >> $LOGFILE 2>&1
 
 			# ---Edits default.prop---
 			if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then

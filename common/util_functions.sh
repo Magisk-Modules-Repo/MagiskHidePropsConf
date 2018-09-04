@@ -279,6 +279,9 @@ module_values() {
 	MODULESELINUX=$(get_file_value $LATEFILE "MODULESELINUX=")
 	MODULEFINGERPRINT=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 	CUSTOMPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
+	CUSTOMPROPSPOST=$(get_file_value $LATEFILE "CUSTOMPROPSPOST=")
+	CUSTOMPROPSLATE=$(get_file_value $LATEFILE "CUSTOMPROPSLATE=")
+	CUSTOMPROPSLIST="$CUSTOMPROPS $CUSTOMPROPSPOST $CUSTOMPROPSLATE"
 	DELETEPROPS=$(get_file_value $LATEFILE "DELETEPROPS=")
 }
 
@@ -412,14 +415,26 @@ config_file() {
 
 		# Updates custom props
 		if [ "$PROPOPTION" != "preserve" ]; then
-			if [ "$CONFPROPS" ]; then
+			if [ "$CONFPROPS" ] || [ "$CONFPROPSPOST" ] || [ "$CONFPROPSLATE" ]; then
 				if [ "$PROPOPTION" == "add" ] || [ "$PROPOPTION" == "replace" ]; then
 					if [ "$PROPOPTION" == "replace" ]; then
 						reset_all_custprop "file"
 					fi
-					for ITEM in $CONFPROPS; do
-						set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "file"
-					done
+					if [ "$CONFPROPS" ]; then
+						for ITEM in $CONFPROPS; do
+							set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "default" "file"
+						done
+					fi
+					if [ "$CONFPROPSPOST" ]; then
+						for ITEM in $CONFPROPSPOST; do
+							set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "post" "file"
+						done
+					fi
+					if [ "$CONFPROPSLATE" ]; then
+						for ITEM in $CONFPROPSLATE; do
+							set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "late" "file"
+						done
+					fi
 				fi
 			else
 				reset_all_custprop "file"
@@ -483,25 +498,42 @@ test_connection() {
 	ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
 }
 
+# Busybox md5 check
+md5_bb() {
+	if [ -f "$MODPATH/busybox.md5" ]; then
+		if md5sum -s -c $MODPATH/busybox.md5 2>/dev/null; then 
+			log_print "- Busybox downloaded"
+			md5sum -c $MODPATH/busybox.md5 >> $LOGFILE 2>&1
+			chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
+		else
+			log_print "! Busybox md5 mismatch!"
+			log_print "! No busybox downloaded!"
+			rm -f $MODPATH/busybox >> $LOGFILE 2>&1
+		fi		
+	else
+		log_print "- Busybox downloaded"
+		log_handler "Couldn't check md5 checksum"
+		chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
+	fi
+}
+
 # Download osm0sis' busybox
 download_bb() {
 	log_print "Downloading busybox."
 	wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $LOGFILE
-	if [ -f "$MODPATH/busybox" ]; then
-		if [ -f "$MODPATH/busybox.md5" ]; then
-			if md5sum -s -c $MODPATH/busybox.md5 2>/dev/null; then 
-				log_print "- Busybox downloaded"
-				md5sum -c $MODPATH/busybox.md5 >> $LOGFILE 2>&1
-				chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
-			else
-				log_print "! Busybox md5 mismatch!"
-				log_print "! No busybox downloaded!"
-				rm -f $MODPATH/busybox >> $LOGFILE 2>&1
-			fi
+	if [ -s "$MODPATH/busybox" ]; then
+		md5_bb
+	elif [ -f "$MODPATH/busybox" ]; then
+		log_print "! Download failed!"
+		log_print "! Second attempt!"
+		rm -f $MODPATH/busybox >> $LOGFILE 2>&1
+		log_print "Downloading without progress bar"
+		wget -T 5 -q -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $LOGFILE
+		if [ -s "$MODPATH/busybox" ]; then
+			md5_bb
 		else
-			log_print "- Busybox downloaded"
-			log_handler "Couldn't check md5 checksum"
-			chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
+			log_print "! No busybox downloaded!"
+			rm -f $MODPATH/busybox >> $LOGFILE 2>&1
 		fi
 	else
 		log_print "! No busybox downloaded!"
@@ -538,35 +570,42 @@ download_prints() {
 	# Checking and downloading fingerprints list
 	if [ "$CNTTEST" == "true" ]; then
 		log_print "Checking list version."
-		wget -T 5 -O $PRINTSTMP $PRINTSWWW >> $LOGFILE 2>&1
-		if [ -f "$PRINTSTMP" ]; then
+		wget -T 5 -q -O $PRINTSTMP $PRINTSWWW >> $LOGFILE 2>&1
+		if [ -s "$PRINTSTMP" ]; then
 			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
-			if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
-				if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
-					mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
-					# Updates list version in module.prop
-					VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
-					replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
-					log_print "Updated list to v${LISTVERSION}."
+			if [ "$LISTVERSION" ]; then
+				if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+					if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
+						mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
+						# Updates list version in module.prop
+						VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
+						replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
+						log_print "Updated list to v${LISTVERSION}."
+					else
+						rm -f $PRINTSTMP
+						log_print "New fingerprints list requires module update."
+					fi
 				else
 					rm -f $PRINTSTMP
-					log_print "New fingerprints list requires module update."
+					log_print "Fingerprints list up-to-date."
 				fi
 			else
 				rm -f $PRINTSTMP
-				log_print "Fingerprints list up-to-date."
+				log_print "! File not downloaded!"
+				log_handler "Couldn't extract list version."
 			fi
+		elif [ -f "$PRINTSTMP" ]; then
+			rm -f $PRINTSTMP
+			log_print "! File not downloaded!"
+			log_handler "File is empty."
 		else
-			log_print "File not downloaded."
+			log_print "! File not downloaded!"
 		fi
 	else
 		log_print "No connection."
 	fi
 	if [ "$1" == "manual" ]; then
 		sleep 2
-	elif [ "$1" == "Dev" ]; then
-		sleep 2
-		exit_fn
 	else
 		sleep 0.5
 	fi
@@ -857,31 +896,39 @@ reset_prop_all() {
 # ======================== Custom Props functions ========================
 # Set custom props
 custom_edit() {
-	if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
-		log_handler "Writing custom props."
-		TMPLST="$(get_file_value $LATEFILE "CUSTOMPROPS=")"
-		for ITEM in $TMPLST; do			
-			log_handler "Changing/writing $(get_eq_left "$ITEM")."
-			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
-			resetprop -v $(get_eq_left "$ITEM") >> $LOGFILE 2>&1
-			resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" >> $LOGFILE 2>&1
-		done
+	if [ "$1" ] && [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
+		TMPLST="$(get_file_value $LATEFILE "${1}=")"
+		if [ "$TMPLST" ]; then
+			log_handler "Writing custom props."
+			for ITEM in $TMPLST; do			
+				log_handler "Changing/writing $(get_eq_left "$ITEM")."
+				TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
+				resetprop -v $(get_eq_left "$ITEM") >> $LOGFILE 2>&1
+				resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" >> $LOGFILE 2>&1
+			done
+		fi
 	fi
 }
 
 # Set custom prop value
 set_custprop() {
 	if [ "$2" ]; then
+		PROPSBOOTSTAGE="CUSTOMPROPS"
+		if [ "$3" == "post" ]; then
+			PROPSBOOTSTAGE="CUSTOMPROPSPOST"
+		elif [ "$3" == "late" ]; then
+			PROPSBOOTSTAGE="CUSTOMPROPSLATE"
+		fi
 		TMPVALUE=$(echo "$2" | sed 's| |_sp_|g')
-		CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
+		CURRCUSTPROPS=$(get_file_value $LATEFILE "${PROPSBOOTSTAGE}=")
 		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${TMPVALUE}" | sed 's|^[ \t]*||')
 		SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
 
 		log_handler "Setting custom prop $1."
-		replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$SORTCUSTPROPS\"" $LATEFILE
+		replace_fn $PROPSBOOTSTAGE "\"$CURRCUSTPROPS\"" "\"$SORTCUSTPROPS\"" $LATEFILE
 		replace_fn CUSTOMEDIT 0 1 $LATEFILE
 
-		if [ "$3" != "file" ]; then
+		if [ "$4" != "file" ]; then
 			after_change "$1"
 		fi
 	fi
@@ -890,10 +937,14 @@ set_custprop() {
 # Reset all custom prop values
 reset_all_custprop() {
 	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
+	CURRCUSTPROPSPOST=$(get_file_value $LATEFILE "CUSTOMPROPSPOST=")
+	CURRCUSTPROPSLATE=$(get_file_value $LATEFILE "CUSTOMPROPSLATE=")
 
 	log_handler "Resetting all custom props."
 	# Removing all custom props
 	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"\"" $LATEFILE
+	replace_fn CUSTOMPROPSPOST "\"$CURRCUSTPROPSPOST\"" "\"\"" $LATEFILE
+	replace_fn CUSTOMPROPSLATE "\"$CURRCUSTPROPSLATE\"" "\"\"" $LATEFILE
 	replace_fn CUSTOMEDIT 1 0 $LATEFILE
 
 	if [ "$1" != "file" ]; then
@@ -903,20 +954,34 @@ reset_all_custprop() {
 
 # Reset custom prop value
 reset_custprop() {
+	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
+		PROPSBOOTSTAGE="CUSTOMPROPS"
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
+		PROPSBOOTSTAGE="CUSTOMPROPSPOST"
+	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+		PROPSBOOTSTAGE="CUSTOMPROPSLATE"
+	fi
 	TMPVALUE=$(echo "$2" | sed 's| |_sp_|g')
-	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
+	CURRCUSTPROPS=$(get_file_value $LATEFILE "${PROPSBOOTSTAGE}=")
 
 	log_handler "Resetting custom prop $1."
 	TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${TMPVALUE}||" | tr -s " " | sed 's|^[ \t]*||')
 
 	# Updating custom props string
-	replace_fn CUSTOMPROPS "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE
-	CURRCUSTPROPS=$(get_file_value $LATEFILE "CUSTOMPROPS=")
-	if [ -z "$CURRCUSTPROPS" ]; then
+	replace_fn $PROPSBOOTSTAGE "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE
+	if [ -z "$(get_file_value $LATEFILE "CUSTOMPROPS=")" ] && [ -z "$(get_file_value $LATEFILE "CUSTOMPROPSPOST=")" ] && [ -z "$(get_file_value $LATEFILE "CUSTOMPROPSLATE=")" ]; then
 		replace_fn CUSTOMEDIT 1 0 $LATEFILE
 	fi
 
-	after_change "$1"
+	if [ "$3" != "bootstage" ]; then
+		after_change "$1"
+	fi
+}
+
+# Change what boot stage is used for custom prop
+change_bootstage_custprop() {
+	reset_custprop "$1" "$(resetprop $1)" "bootstage"
+	set_custprop "$1" "$(resetprop $1)" "$2"
 }
 
 # ======================== Delete Props functions ========================
@@ -1029,7 +1094,7 @@ collect_logs() {
 
 	# Copy package to internal storage
 	mv -f $CACHELOC/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE 2>&1
-
+	
 	# Remove temporary directory
 	rm -rf $TMPLOGLOC >> $LOGFILE 2>&1
 

@@ -7,7 +7,7 @@
 # ==================== Root check ====================
 # ====================================================
 
-if [ $(id -u) != 0 ] ; then
+if [ "$(id -u)" != 0 ] ; then
 	su -c props "$@"
 	exit
 fi
@@ -95,6 +95,12 @@ blank_input() {
 	echo ""
 	echo "${R}Don't enter an empty value${N}."
 	echo "Try again."
+	sleep 2
+}
+
+active_option() {
+	echo ""
+	echo "${R}That's already the active option.${N}"
 	sleep 2
 }
 
@@ -819,9 +825,14 @@ menu_custom_props() {
 	do
 		if [ -z "$INPUT2" ]; then
 			ITEMCOUNT=1
+			if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 0 ]; then
+				DEFSTAGETXT=" (post-fs-data)"
+			else
+				DEFSTAGETXT=" (late_start service)"
+			end if
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""			
-			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 0 ] && [ "$CUSTOMPROPS" ]; then
+			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" ]; then
 				CTRLSET=0
 				echo "You have ${C}custom props set${N},"
 				echo "but the option is ${R}not activated${N}."
@@ -834,11 +845,30 @@ menu_custom_props() {
 				CTRLSET=1
 				echo "Set or edit custom prop values for your device."
 				echo ""
-				if [ "$CUSTOMPROPS" ]; then
-					for ITEM in $CUSTOMPROPS; do
-						echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
-						ITEMCOUNT=$(($ITEMCOUNT+1))
-					done
+				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ]; then
+					if [ "$CUSTOMPROPS" ]; then
+						echo "${C}Default boot stage${G}${DEFSTAGETXT}${N}"
+						for ITEM in $CUSTOMPROPS; do
+							echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+							ITEMCOUNT=$(($ITEMCOUNT+1))
+						done
+					fi
+					if [ "$CUSTOMPROPSPOST" ]; then
+						echo ""
+						echo "${C}post-fs-data boot stage${N}"
+						for ITEM in $CUSTOMPROPSPOST; do
+							echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+							ITEMCOUNT=$(($ITEMCOUNT+1))
+						done
+					fi
+					if [ "$CUSTOMPROPSLATE" ]; then
+						echo ""
+						echo "${C}late_start service boot stage${N}"
+						for ITEM in $CUSTOMPROPSLATE; do
+							echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+							ITEMCOUNT=$(($ITEMCOUNT+1))
+						done
+					fi
 				else
 					echo "Currently no custom props set."
 					echo "Please add one by selecting"
@@ -846,7 +876,7 @@ menu_custom_props() {
 				fi
 				echo ""
 				echo "${G}n${N} - New custom prop"
-				if [ "$CUSTOMPROPS" ]; then
+				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ]; then
 					echo "${G}r${N} - Reset all custom props"
 				fi
 				echo "${G}b${N} - Go back to main menu"
@@ -860,7 +890,7 @@ menu_custom_props() {
 			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					ITEMCOUNT=1
-					for ITEM in $CUSTOMPROPS; do
+					for ITEM in $CUSTOMPROPSLIST; do
 						if [ "$ITEMCOUNT" == "$INPUT2" ]; then
 							menu_edit_custprop "$(get_eq_left "$ITEM")"
 							break
@@ -908,10 +938,19 @@ menu_custom_props() {
 # Third menu level - Edit custom prop
 menu_edit_custprop() {
 	INPUT3=""
+	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
+		STAGETXT=" ${G}(default)${N}"
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
+		STAGETXT=" ${G}(post-fs-data)${N}"
+	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+		STAGETXT=" ${G}(late_start service)${N}"
+	else
+		TMPBSTAGE=""
+	fi
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			for ITEM in $CUSTOMPROPS; do
+			for ITEM in $CUSTOMPROPSLIST; do
 				TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
 				if [ "$(get_eq_left "$ITEM")" == "$1" ]; then
 					if [ "$TMPITEM" == "$(resetprop $1)" ]; then
@@ -925,7 +964,9 @@ menu_edit_custprop() {
 			done
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "The current value for ${C}'$1'${N} is:"
+			echo "The current value for"
+			echo "${C}'$1'${N} is:"
+			echo ""
 			echo "${C}$(resetprop $1)${N}"
 			if [ "$PROPNOTSET" == 0 ]; then
 				echo "(Set by this module.)"
@@ -933,6 +974,7 @@ menu_edit_custprop() {
 				echo "Enter a new value or select"
 				echo "from the options below."
 				echo ""
+				echo "${G}s${N} - Prop boot stage$STAGETXT"
 				echo "${G}r${N} - Reset prop"
 			else
 				echo "${R}Not yet set by this module. Please reboot to set.${N}"
@@ -945,6 +987,9 @@ menu_edit_custprop() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
+			s|S)
+				menu_bootstage_custprop "$1"
+			;;
 			r|R)
 				if [ "$PROPNOTSET" == 0 ]; then
 					menu_reset_custprop "$1" "$SETPROPVALUE"
@@ -995,7 +1040,7 @@ menu_new_custprop() {
 			""|[[:blank:]]*)	blank_input 3
 			;;
 			*)
-				if [ "$(echo $PROPSLIST | grep -o $INPUT3)" ] || [ "$(echo $CUSTOMPROPS | grep -o $INPUT3)" ]; then
+				if [ "$(echo $PROPSLIST | grep -o $INPUT3)" ] || [ "$(echo $CUSTOMPROPSLIST | grep -o $INPUT3)" ]; then
 					menu_magiskhide_custprop "$INPUT3"
 				else
 					menu_set_new_custprop "$INPUT3"
@@ -1085,7 +1130,8 @@ menu_set_new_custprop() {
 		if [ -z "$INPUT4" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Enter the value to set ${C}$1${N} to,"
+			echo "Enter the value to set"
+			echo "${C}$1${N} to,"
 			echo "or select from the options below."
 			echo ""
 			if [ "$TMPPROP" ]; then
@@ -1114,6 +1160,90 @@ menu_set_new_custprop() {
 				INPUT2=""
 				INPUT3=""
 				break
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - Custom prop boot stage
+menu_bootstage_custprop() {
+	INPUT4=""
+	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
+		TMPBSTAGE="default"
+		DEFAULTTXT="${G} (current)${N}"
+		POSTTXT=""
+		LATETXT=""
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
+		TMPBSTAGE="post-fs-data"
+		DEFAULTTXT=""
+		POSTTXT="${G} (current)${N}"
+		LATETXT=""
+	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+		TMPBSTAGE="late_start service"
+		DEFAULTTXT=""
+		POSTTXT=""
+		LATETXT="${G} (current)${N}"
+	else
+		TMPBSTAGE=""
+	fi
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Select what boot stage"
+			echo "${C}$1${N}"
+			echo "should be set in."
+			echo ""
+			echo "Currently, the"
+			echo "${G}${TMPBSTAGE}${N}"
+			echo "boot stage is used."
+			echo ""
+			echo "Select an option below."
+			echo ""
+			echo "${G}1${N} - Default${DEFAULTTXT}"
+			echo "${G}2${N} - post-fs-data${POSTTXT}"
+			echo "${G}3${N} - late_start service${LATETXT}"
+			echo "${G}b${N} - Go back."
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			1)
+				if [ "$DEFAULTTXT" ]; then
+					active_option
+				else
+					change_bootstage_custprop "$1" "default"
+					INPUT3=""
+					break
+				fi
+			;;
+			2)
+				if [ "$POSTTXT" ]; then
+					active_option
+				else
+					change_bootstage_custprop "$1" "post"
+					INPUT3=""
+					break
+				fi
+			;;
+			3)
+				if [ "$LATETXT" ]; then
+					active_option
+				else
+					change_bootstage_custprop "$1" "late"
+					INPUT3=""
+					break
+				fi
+			;;
+			b|B)
+				INPUT3=""
+				break
+			;;
+			e|E)	exit_fn
+			;;
+			*)	invalid_input 1 4
 			;;
 		esac
 	done
@@ -1156,6 +1286,10 @@ menu_reset_custprop() {
 
 # Fifth menu level - Set custom prop
 menu_set_custprop() {
+	PROPSTAGE="default"
+	DEFAULTTXT=" ${G}(current)${N}"
+	POSTTXT=""
+	LATETXT=""
 	INPUT5=""
 	while true
 	do
@@ -1165,14 +1299,55 @@ menu_set_custprop() {
 			echo "This will set ${C}$1${N} to:"
 			echo "${C}$2${N}"
 			echo ""
+			echo "Pick an option below to change"
+			echo "what boot stage the prop will"
+			echo "be set in:"
+			echo ""
+			echo "${G}1${N} - Default${DEFAULTTXT}"
+			echo "${G}2${N} - post-fs-data${POSTTXT}"
+			echo "${G}3${N} - late_start service${LATETXT}"
+			echo ""
 			echo "Do you want to continue?"
 			echo ""
 			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT5
 		fi
 		case "$INPUT5" in
+			1)
+				if [ "$DEFAULTTXT" ]; then
+					active_option
+				else
+					PROPSTAGE="default"
+					DEFAULTTXT=" ${G}(current)${N}"
+					POSTTXT=""
+					LATETXT=""
+					INPUT5=""
+				fi
+			;;
+			2)
+				if [ "$POSTTXT" ]; then
+					active_option
+				else
+					PROPSTAGE="post"
+					DEFAULTTXT=""
+					POSTTXT=" ${G}(current)${N}"
+					LATETXT=""
+					INPUT5=""
+				fi
+			;;
+			3)
+				if [ "$LATETXT" ]; then
+					active_option
+				else
+					PROPSTAGE="late"
+					DEFAULTTXT=""
+					POSTTXT=""
+					LATETXT=" ${G}(current)${N}"
+					INPUT5=""
+				fi
+			;;
 			y|Y)
-				set_custprop "$1" "$2"
+				set_custprop "$1" "$2" "$PROPSTAGE"
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
@@ -1180,6 +1355,7 @@ menu_set_custprop() {
 			;;
 			n|N)
 				INPUT4=""
+				INPUT5=""
 				break
 			;;
 			e|E)	exit_fn
@@ -1385,7 +1561,7 @@ menu_reset_all_delprop() {
 	done
 }
 
-# Fourth menu level - Set new custom prop
+# Fourth menu level - Set new prop to delete
 menu_set_new_delprop() {
 	INPUT4=""
 	TMPPROP=$(resetprop "$1")
@@ -1398,7 +1574,8 @@ menu_set_new_delprop() {
 				echo "The current value is:"
 				echo "${C}$TMPPROP${N}"
 				echo ""
-				echo "This will delete ${C}$1${N}"
+				echo "This will delete"
+				echo "${C}$1${N}"
 				echo "from your system."
 			else
 				echo "This prop currently doesn't exist on your system."

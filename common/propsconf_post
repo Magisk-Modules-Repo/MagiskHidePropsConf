@@ -63,17 +63,19 @@ if [ -d "$MODPATH" ]; then
 			config_file
 
 			# Edits prop values if set for post-fs-data
+			echo -e "\n--------------------" >> $LOGFILE 2>&1
+			log_handler "Editing prop values in post-fs-data mode."
 			if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 0 ]; then
-				echo -e "\n--------------------" >> $LOGFILE 2>&1
-				log_handler "Editing prop values in post-fs-data mode."
 				# ---Setting/Changing fingerprint---
 				print_edit
 				# ---Setting custom props---
-				custom_edit
-				# ---Deleting props---
-				prop_del
-				echo -e "\n--------------------" >> $LOGFILE 2>&1
+				custom_edit "CUSTOMPROPS"
 			fi
+			# Deleting props
+			prop_del
+			# Edit custom props set for post-fs-data
+			custom_edit "CUSTOMPROPSPOST"
+			echo -e "\n--------------------" >> $LOGFILE 2>&1
 
 			# Edits build.prop
 			if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 0 ]; then

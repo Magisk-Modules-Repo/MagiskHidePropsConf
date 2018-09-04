@@ -90,7 +90,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v28_**
+**_Current fingerprints list version - v29_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -110,6 +110,11 @@ If, for some reason, you need one or more of these to be kept as their original 
 
 ## Change/set custom prop values
 It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop, default.prop, etc, you can now do with this module instead.
+
+When setting a custom prop you can also pick in what boot stage it should be set in. This can also be changed later for each individual custom prop. There are three options:
+- Default - The main module option will decide (see Prop script settings below).
+- post-fs-data - The prop will always be set in post-fs-data, regardless of the main module option.
+- late_start service - The prop will always be set in late_start service, regardless of the main module option.
 
 
 ## Removing prop values
@@ -194,6 +199,14 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.4.0  
+- Added a check for if the download of the internal Busybox fails.
+- Added an option for picking what boot stage a custom prop should be set in.
+- Updated the internal Busybox to @osm0sis' latest 1.29.2 build.
+- Don't panick!
+- Updated and added a couple of fingerprints.
+- Various improvements, etc.
+
 ### v2.3.6  
 - Added md5 checksum when downloading the internal Busybox.
 - Changed the default boot stage from late_start service to post-fs-data.
@@ -321,7 +334,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v28  
+### List v29  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -339,6 +352,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Google Pixel 2 XL (8.1.0)
 - Google Pixel 2 XL (P DP1)
 - HTC 10 (6.0.1)
+- HTC U11 (8.0.0)
 - Huawei Honor 6X (8.0.0)
 - Huawei Honor 9 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
@@ -371,7 +385,6 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Samsung Galaxy J5 2015 (6.0.1)
 - Samsung Galaxy J5 (7.1.1)
 - Samsung Galaxy J5 Prime (7.0)
-- Samsung Galaxy Note 3 (7.1.1)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
 - Samsung Galaxy Note 8 (8.0.0)
@@ -421,8 +434,9 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi A1 (8.0.0)
 - Xiaomi Mi Max 2 (7.1.1)
+- Xiaomi Mi Mix 2 (8.0.0)
 - Xiaomi Mi Mix 2S (8.0.0)
-- Xiaomi Mi Note 2 (7.0)
+- Xiaomi Mi Note 2 (8.0.0)
 - Xiaomi Redmi 3S/X Prime (6.0.1)
 - Xiaomi Redmi 4 Prime (6.0.1)
 - Xiaomi Redmi 4X (6.0.1)
