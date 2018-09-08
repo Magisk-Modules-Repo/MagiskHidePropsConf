@@ -153,7 +153,7 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
 ### Known issues
-- Xiaomi devices often have issues passing the ctsProfile check, particularly China releases. This is under investigation...
+- Xiaomi devices (MIUI) often have issues passing the ctsProfile check, particularly China releases. This is under investigation...
 - On Android Pie it is no longer possible to edit ro.build.fingerprint (and a bunch of other props). The SafetyNet fix from this module will not work until Magisk's resetprop tool has been updated (no ETA).
 
 ### An option is marked as "disabled"
