@@ -84,6 +84,7 @@ Before setting up your device, install Magisk, this module and use the configura
 
 If you're having issues getting your device certified, take a look in the Magisk troubleshooting guide linked below.
 
+In case you can't get the Play Store to report your device as "certified", see ["Issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#issues-support-etc) below.
 
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) for info.
@@ -178,6 +179,9 @@ In case of issues, if you've set a prop value that doesn't work on your device c
 Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and reboot.
 
 It is possible to use this in combination with the configuration file described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
+
+### The Play Store is "uncertified"
+If your device's Play Store reports that the device is "uncertified", this is usually fixed by making sure that you pass SafetyNet and then clearing data for the Play Store (and possibly rebooting). More details in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Device_uncertified_in_Play_storeNetflix_and_other_apps_wont_install_or_doesnt_show_up).
 
 ## Logs
 In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l option, use -h for details). All the relevant logs and module files, together with the Magisk log, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
