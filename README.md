@@ -43,12 +43,12 @@ getprop ro.build.fingerprint
 ```
 If you're already on a custom ROM that can't pass the CTS profile check, this might not be an option... Head over to your device's forum and ask for help. If someone can run the getprop command on their device for you, you're good to go. Or, you can try the other method described below.
 
-**Note that this is the only surefire way of getting the proper fingerprint.**
+*Note that this is the only surefire way of getting the proper fingerprint.*
 
 #### The stock ROM/firmware/factory image method
 Another way to find a certified fingerprint is to download a stock ROM/firmware/factory image for your device and extract the fingerprint from there.
 
-**Note that this is possibly not the best way of finding the fingerprint. Using getprop is always preferred.**
+*Note that this is possibly not the best way of finding the fingerprint. Using getprop is always preferred.*
 
 You can find the file to download in your device's forum on XDA Developers (either as a firmware file, a proper stock ROM, or in the development section as a debloated stock ROM), from the manufacturer's website, or elsewhere on the great interweb (just remember to be careful when downloading unknown files, it's dangerous to go alone!).
 
