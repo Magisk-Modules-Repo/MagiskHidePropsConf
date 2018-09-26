@@ -95,7 +95,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v29_**
+**_Current fingerprints list version - v30_**
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -345,7 +345,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v29  
+### List v30  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -354,14 +354,10 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Google Nexus 6 (7.1.1)
 - Google Nexus 5X (8.1.0)
 - Google Nexus 6P (8.1.0)
-- Google Pixel (8.1.0)
-- Google Pixel (P DP1)
-- Google Pixel XL (8.1.0)
-- Google Pixel XL (P DP1)
-- Google Pixel 2 (8.1.0)
-- Google Pixel 2 (P DP1)
-- Google Pixel 2 XL (8.1.0)
-- Google Pixel 2 XL (P DP1)
+- Google Pixel (9)
+- Google Pixel XL (9)
+- Google Pixel 2 (9)
+- Google Pixel 2 XL (9)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
 - Huawei Honor 6X (8.0.0)
@@ -370,9 +366,11 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Huawei P8 Lite (8.0.0)
 - Huawei P9 (7.0)
 - Huawei P20 Pro (8.1.0)
+- LG G2 BS980 (5.0.2)
 - LG G4 H812 (6.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
+- Motorola Moto E4 Plus (7.1.1)
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
@@ -388,7 +386,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - OnePlus 3T (8.0.0)
 - OnePlus 5 (8.1.0)
 - OnePlus 5T (8.1.0)
-- OnePlus 6 (8.1.0)
+- Oneplus 6 (9)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
@@ -435,6 +433,8 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Sony Xperia Z5 (7.1.1)
 - Sony Xperia Z5 Compact (7.1.1)
 - Sony Xperia Z5 Dual (7.1.1)
+- Sony Xperia Z5 Premium (7.1.1)
+- Sony Xperia Z5 Premium Dual (7.1.1)
 - Vodafone Smart Ultra 6 (5.1.1)
 - Xiaomi Mi 3/4 (6.0.1)
 - Xiaomi Mi 4C (7.0)
