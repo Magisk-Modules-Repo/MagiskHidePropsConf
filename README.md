@@ -386,7 +386,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - OnePlus 3T (8.0.0)
 - OnePlus 5 (8.1.0)
 - OnePlus 5T (8.1.0)
-- Oneplus 6 (9)
+- OnePlus 6 (9)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
