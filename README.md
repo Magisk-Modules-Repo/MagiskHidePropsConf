@@ -222,6 +222,9 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.4.2  
+- Small update to the root detection logic. Should fix issues on devices with a broken `id` command.
+
 ### v2.4.1  
 - Updated to Magisk module template v17000. Compatible with Magisk v17+ only.
 
