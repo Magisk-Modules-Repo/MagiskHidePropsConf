@@ -7,8 +7,10 @@
 # ==================== Root check ====================
 # ====================================================
 
-if [ "$(id -u)" != 0 ] ; then
-	su -c props "$@"
+# Check for access to the Magisk internals. No access = no root
+ls /data/adb>/dev/null
+if [ "$?" != 0 ]; then
+	su -c props "$@" # Rerun script with root access
 	exit
 fi
 
