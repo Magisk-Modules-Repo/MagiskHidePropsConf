@@ -121,9 +121,24 @@ When setting a custom prop you can also pick in what boot stage it should be set
 - post-fs-data - The prop will always be set in post-fs-data, regardless of the main module option.
 - late_start service - The prop will always be set in late_start service, regardless of the main module option.
 
+### My build.prop doesn't change after setting a custom prop
+Magisk doesn't alter the build.prop file when changing a custom prop value, it simply loads the new value instead of the one in build.prop. If you want to check if the new value has been loaded you can see this by selecting the prop in the "Add/edit custom props" menu of the `props` script.
+
+You can also use the `getprop` command in a terminal emulator to check the set value. Example:
+```
+getprop ro.build.fingerprint
+```
+
 
 ## Removing prop values
 If you would like to delete a certain prop value from your system, that can be done with the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop). With this module you can easily set that up by adding whatever prop you want removed to the "Delete props" list. Be very careful when using this option, since removing the wrong prop may cause isses with your device. See ["Device issues because of the module"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#device-issues-because-of-the-module) below if this happens.
+
+### My build.prop doesn't change after removing a prop value
+Magisk doesn't alter the build.prop file when removing a prop value, it simply prevents the prop to load instead of removing it from build.prop. If you want to check if the prop has been removed use the `getprop` command in a terminal emulator to check. Example:
+```
+getprop ro.build.fingerprint
+```
+If the prop has been removed, the command should return nothing.
 
 
 ## Prop script settings
