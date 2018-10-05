@@ -222,6 +222,9 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.4.3  
+- Another small update, fixing my bad memory (I wish).
+
 ### v2.4.2  
 - Small update to the root detection logic. Should fix issues on devices with a broken `id` command.
 
