@@ -69,6 +69,7 @@ alias cat="$BBPATH cat"
 alias chmod="$BBPATH chmod"
 alias cp="$BBPATH cp"
 alias grep="$BBPATH grep"
+alias id="$BBPATH id"
 alias md5sum="$BBPATH md5sum"
 alias mv="$BBPATH mv"
 alias printf="$BBPATH printf"
@@ -130,7 +131,7 @@ log_start() {
 	log_script_chk "Log start."
 }
 log_handler() {
-	if [ $(id -u) == 0 ] ; then
+	if [ "$(id -u)" == 0 ] ; then
 		echo "" >> $LOGFILE 2>&1
 		echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $LOGFILE 2>&1
 	fi
