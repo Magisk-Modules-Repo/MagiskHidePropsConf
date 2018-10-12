@@ -101,6 +101,12 @@ Just run the `props` command and the list will be updated automatically. Use the
 **_Current fingerprints list version - v30_**
 
 
+## Please add support for device X
+Adding device fingerprints to the list relies heavily on the users. You guys. I've looked up a fingerprint from time to time, but it is a bit time consuming and I don't have that time...
+
+If you want a specific device fingerprint to be added to the module, take a look in the docs, under [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint). If you can find a fingerprint for the device you have in mind, post it in the thread. I'll test it out and if it passes the ctsProfile check I'll add it to the list.
+
+
 ## Improved root hiding - Editing build.prop and default.prop
 In some rare cases, apps and services look at the actual files (build.prop and default.prop), rather than the set prop values. With this module feature you can make sure that the actual prop in build.prop and default.prop is changed to match whatever value the prop has been set to by either MagiskHide or the module. If there's a prop value set by the module (see ["Set/reset MagiskHide Sensitive props"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#setreset-magiskhide-sensitive-props) below), that value takes precedence.
 
