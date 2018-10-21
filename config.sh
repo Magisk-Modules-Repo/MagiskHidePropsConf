@@ -92,10 +92,6 @@ set_permissions() {
   # Permissions for boot scripts
   set_perm $LATEFILE 0 0 0755
   set_perm $POSTFILE 0 0 0755
-  # Busybox permissions
-  if [ -f "$MODPATH/busybox" ]; then
-    set_perm $MODPATH/busybox 0 0 0755
-  fi
 }
 
 ##########################################################################################
@@ -141,13 +137,6 @@ INSTLOG=$CACHELOC/propsconf_install.log
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
 NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
-BBCURR=1.29.2
-if [ "$ARCH" == "x64" ]; then
-	BBARCH=x86_64
-else
-	BBARCH=$ARCH
-fi
-BBWWWPATH="https://raw.githubusercontent.com/Didgeridoohan/MHPCBB/master/busybox-${BBARCH}"
 SETTINGSLIST="
 FINGERPRINTENB
 PRINTEDIT
@@ -184,7 +173,7 @@ tags
 selinux
 fingerprint
 "
-USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoofingTool4Magisk"
+USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoofingTool4Magisk universal-safetynet-fix samodx-safetyskipper"
 
 # Log functions
 log_handler() {
@@ -344,7 +333,6 @@ usnf_check() {
 			log_print "! Fingerprint modification disabled!"
 			log_print ""
 			sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
-			break
 		fi
 	done
 }
@@ -379,89 +367,12 @@ post_check() {
 	fi
 }
 
-# Check installed busybox
-check_bb() {
-	if [ -f "$IMGPATH/$MODID/busybox" ]; then
-		BBV=$($IMGPATH/$MODID/busybox | grep "BusyBox v" | sed 's|.*BusyBox v||' | sed 's|-osm0sis.*||')
-		log_handler "Current/installed busybox - v${BBCURR}/v${BBV}."
-		if [ "$(echo $BBCURR | sed 's|\.||g')" -le "$(echo $BBV | sed 's|\.||g')" ]; then
-			log_handler "Backing up current busybox."
-			cp -af $IMGPATH/$MODID/busybox $CACHELOC/busybox_post >> $INSTLOG 2>&1
-		fi
-	fi
-}
-
-# Busybox md5 check
-md5_bb() {
-	if [ -f "$INSTALLER/busybox.md5" ]; then
-		if md5sum -s -c $INSTALLER/busybox.md5 2>/dev/null; then
-			log_print "- Busybox downloaded"
-			md5sum -c $INSTALLER/busybox.md5 >> $INSTLOG 2>&1
-		else
-			log_print "! Busybox md5 mismatch!"
-			log_print "! No busybox downloaded!"
-			rm -f $MODPATH/busybox >> $INSTLOG 2>&1
-		fi
-	else
-		log_print "- Busybox downloaded"
-		log_handler "Couldn't check md5 checksum"
-	fi
-}
-
-# Download osm0sis' busybox
-download_bb() {
-	if [ -f "$CACHELOC/busybox_post" ]; then
-		log_handler "Restoring current busybox."
-		mv -f $CACHELOC/busybox_post $MODPATH/busybox >> $INSTLOG 2>&1
-	elif [ "$BOOTMODE" == "true" ]; then
-		# Creating md5 file
-		log_handler "Creating md5 checksum file"
-		MD5TMP=$(cat $INSTALLER/common/busybox-${BBARCH}.md5)
-		log_handler "Checksum - $MD5TMP"
-		echo "$MD5TMP  $MODPATH/busybox" > $INSTALLER/busybox.md5 2>&1 | tee -a $INSTLOG
-		echo "$MD5TMP  $BIMGPATH/$MODID/busybox" > $MODPATH/busybox.md5 2>&1 | tee -a $INSTLOG
-
-		# Testing connection
-		log_print "- Testing connection"
-		log_print "- Wait..."
-		ping -c 1 -W 1 google.com >> $INSTLOG 2>&1 && CNTTEST="true" || CNTTEST="false"
-
-		# Downloading busybox
-		if [ "$CNTTEST" == "true" ]; then
-			log_print "- Downloading busybox (${BBARCH})"
-			wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $INSTLOG
-			if [ -s "$MODPATH/busybox" ]; then
-				md5_bb
-			elif [ -f "$MODPATH/busybox" ]; then
-				log_print "! Download failed!"
-				log_print "! Second attempt!"
-				rm -f $MODPATH/busybox >> $INSTLOG 2>&1
-				log_print "- Downloading without progress bar"
-				wget -T 5 -q -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $INSTLOG
-				if [ -s "$MODPATH/busybox" ]; then
-					md5_bb
-				else
-					log_print "! No busybox downloaded!"
-					rm -f $MODPATH/busybox >> $INSTLOG 2>&1
-				fi
-			else
-				log_print "! No busybox downloaded!"
-			fi
-		else
-			log_print "! No connection!"
-		fi
-	elif [ "$BOOTMODE" == "false" ]; then
-		log_handler "Recovery installation, can't download busybox."
-	fi
-}
-
 # Installs everything
 script_install() {
 	build_prop_check
 	usnf_check
 	bin_check
 	post_check
-	download_bb
 	script_placement
 	log_print "- Updating placeholders"
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
@@ -470,9 +381,7 @@ script_install() {
 	placeholder_update $MODPATH/util_functions.sh SYSTEMLOC SYSTEM_PLACEHOLDER "$SYSTEMLOC"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
-	placeholder_update $MODPATH/util_functions.sh BBWWWPATH BB_PLACEHOLDER "$BBWWWPATH"
 	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
 }
-

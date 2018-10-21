@@ -37,6 +37,22 @@ if [ -d "$MODPATH" ]; then
 			# Clears out the script control file
 			rm -f $POSTCHKFILE
 			touch $POSTCHKFILE
+			
+			# Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
+			PRINTMODULE=false
+			for USNF in $USNFLIST; do
+				if [ -d "$IMGPATH/$USNF" ]; then
+					NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
+					log_handler "'$NAME' installed (modifies the device fingerprint)."
+					PRINTMODULE=true
+				fi
+			done
+			if [ "$PRINTMODULE" == "true" ]; then
+				replace_fn FINGERPRINTENB 1 0 $LATEFILE
+				log_handler "Fingerprint modification disabled."
+			else
+				replace_fn FINGERPRINTENB 0 1 $LATEFILE
+			fi
 
 			# Get default values
 			log_handler "Checking device default values."
@@ -109,7 +125,7 @@ if [ -d "$MODPATH" ]; then
 					# ro.build props
 					change_prop_file "build"
 					# Fingerprint
-					if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ]; then
+					if [ "$MODULEFINGERPRINT" ] && [ "$(get_file_value $LATEFILE "SETFINGERPRINT=")" == "true" ] && [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 ]; then
 						PRINTSTMP="$(cat $SYSTEMLOC/build.prop | grep "$ORIGFINGERPRINT")"
 						for ITEM in $PRINTSTMP; do
 							replace_fn $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") $MODULEFINGERPRINT $MODPATH/system/build.prop && log_handler "$(get_eq_left "$ITEM")=$MODULEFINGERPRINT"
@@ -137,4 +153,3 @@ else
 	echo "$MODPATH not found." >> $POSTLOGFILE 2>&1
 	echo "Module no longer installed." >> $POSTLOGFILE 2>&1
 fi
-

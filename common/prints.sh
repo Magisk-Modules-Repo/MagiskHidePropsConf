@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=30
+PRINTSV=31
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -13,15 +13,18 @@ PRINTSLIST="
 Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
+Essential PH-1 (9)=essential/mata/mata:9/PPR1.180610.091/249:user/release-keys§2018-07-05
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
 Google Nexus 6 (7.1.1)=google/shamu/shamu:7.1.1/N6F27M/4299435:user/release-keys
 Google Nexus 5X (8.1.0)=google/bullhead/bullhead:8.1.0/OPM2.171019.029/4657601:user/release-keys
 Google Nexus 6P (8.1.0)=google/angler/angler:8.1.0/OPM5.171019.019/4619337:user/release-keys
-Google Pixel (9)=google/sailfish/sailfish:9/PPR2.180905.006/4945130:user/release-keys
-Google Pixel XL (9)=google/marlin/marlin:9/PPR2.180905.006/4945130:user/release-keys
-Google Pixel 2 (9)=google/walleye/walleye:9/PPR2.180905.005/4928864:user/release-keys
-Google Pixel 2 XL (9)=google/taimen/taimen:9/PPR2.180905.005/4928864:user/release-keys
+Google Pixel (9)=google/sailfish/sailfish:9/PPR2.181005.003/4984323:user/release-keys§2018-10-05
+Google Pixel XL (9)=google/marlin/marlin:9/PPR2.181005.003/4984323:user/release-keys§2018-10-05
+Google Pixel 2 (9)=google/walleye/walleye:9/PPR2.181005.003/4984323:user/release-keys§2018-10-05
+Google Pixel 2 XL (9)=google/taimen/taimen:9/PPR2.181005.003/4984323:user/release-keys§2018-10-05
+Google Pixel 3 (9)=google/blueline/blueline:9/PD1A.180720.030/4972053:user/release-keys§2018-09-05
+Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PD1A.180720.030/4972053:user/release-keys§2018-09-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
 Huawei Honor 6X (8.0.0)=HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/528(C00):user/release-keys
@@ -42,6 +45,7 @@ Motorola Moto G5S (7.1.1)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/
 Motorola Moto G6 Play (8.0.0)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
+Nokia 7 Plus (9)=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_22C:user/release-keys§2018-09-01
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
@@ -50,7 +54,7 @@ OnePlus 3 (8.0.0)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/05171653:user/
 OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/05171658:user/release-keys
 OnePlus 5 (8.1.0)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/06131715:user/release-keys
 OnePlus 5T (8.1.0)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/06131716:user/release-keys
-OnePlus 6 (9)=OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys
+OnePlus 6 (9)=OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys§2018-09-05
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
 Samsung Galaxy J2 (5.1.1)=samsung/j23gdd/j23g:5.1.1/LMY48B/J200HXXU0AQK2:user/release-keys

@@ -104,8 +104,6 @@ mount_magisk_img
 log_start
 # Check for fresh Magisk installation
 install_check
-# Check busybox version
-check_bb
 
 # Create mod paths
 rm -rf $MODPATH 2>/dev/null

@@ -83,21 +83,6 @@ if [ -d "$MODPATH" ]; then
 			log_start
 			log_handler "Module disabled."
 		else
-			# Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
-			PRINTMODULE=false
-			for USNF in $USNFLIST; do
-				if [ -d "$IMGPATH/$USNF" ]; then
-					NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
-					log_handler "'$NAME' installed (modifies the device fingerprint)."
-					PRINTMODULE=true
-				fi
-			done
-			if [ "$PRINTMODULE" == "true" ]; then
-				replace_fn FINGERPRINTENB 1 0 $LATEFILE
-				log_handler "Fingerprint modification disabled."
-			else
-				replace_fn FINGERPRINTENB 0 1 $LATEFILE
-			fi
 
 			# Check the reboot variable
 			if [ "$(get_file_value $LATEFILE "REBOOTCHK\=")" == 1 ]; then
@@ -180,6 +165,30 @@ if [ -d "$MODPATH" ]; then
 				mount -wo remount rootfs /
 				change_prop_file "default"
 				mount -ro remount rootfs /
+			else
+				log_handler "Default.prop editing disabled."
+			fi
+		fi
+
+		# Get currently saved values
+		log_handler "Checking current values."
+		curr_values
+
+		# Check if the late_start service log file exists.
+		if [ -f "$LATELOGFILE" ]; then
+			log_handler "Removing late_start service log ($LATELOGFILE)."
+			rm -f $LATELOGFILE >> $LOGFILE 2>&1
+		fi
+
+		log_script_chk "Boot script finished.\n\n=================="
+	fi
+else
+	echo "$MODPATH not found." >> $LATELOGFILE 2>&1
+	echo "Module no longer installed." >> $LATELOGFILE 2>&1
+	# Cleanup
+	cleanup
+fi
+s /
 			else
 				log_handler "Default.prop editing disabled."
 			fi

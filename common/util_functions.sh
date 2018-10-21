@@ -27,41 +27,7 @@ $LATEFILE
 CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
-BBWWWPATH=BB_PLACEHOLDER
-BBLOC=$MODPATH/busybox
-if [ "$BBT" ]; then
-	case $BBT in
-		module)
-			if [ -f "$BBLOC" ]; then
-				BBPATH=$BBLOC
-			elif [ -d "$IMGPATH/busybox-ndk" ]; then
-				BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
-			else
-				BBPATH=$MAGISKLOC/busybox
-			fi
-		;;
-		osm0sis)
-			if [ -d "$IMGPATH/busybox-ndk" ]; then
-				BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
-			elif [ -f "$BBLOC" ]; then
-				BBPATH=$BBLOC
-			else
-				BBPATH=$MAGISKLOC/busybox
-			fi
-		;;
-		topjohnwu)
-			BBPATH=$MAGISKLOC/busybox
-		;;
-	esac
-else
-	if [ -f "$BBLOC" ]; then
-		BBPATH=$BBLOC
-	elif [ -d "$IMGPATH/busybox-ndk" ]; then
-		BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
-	else
-		BBPATH=$MAGISKLOC/busybox
-	fi
-fi
+BBPATH=$MAGISKLOC/busybox
 if [ -z "$(echo $PATH | grep /sbin:)" ]; then
 	alias resetprop="$MAGISKLOC/magisk resetprop"
 fi
@@ -70,7 +36,6 @@ alias chmod="$BBPATH chmod"
 alias cp="$BBPATH cp"
 alias grep="$BBPATH grep"
 alias id="$BBPATH id"
-alias md5sum="$BBPATH md5sum"
 alias mv="$BBPATH mv"
 alias printf="$BBPATH printf"
 alias sed="$BBPATH sed"
@@ -199,6 +164,28 @@ get_device_used() {
 		echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N}"
 		echo ""
 	fi
+}
+
+# Get Android version for current fingerprint
+get_android_version() {
+	VERTMP="$(echo $1 | sed 's|:user.*||' | sed 's|.*:||' | sed 's|/.*||' | sed 's|\.||g')"
+	if [ "${#VERTMP}" -lt 3 ]; then
+		until [ "${#VERTMP}" == 3 ]
+		do
+			VERTMP="$(echo ${VERTMP}0)"
+		done
+	fi
+	echo $VERTMP
+}
+
+# Get security patch date for current fingerprint
+get_sec_patch() {
+	echo $1 | sed 's|.*§||'
+}
+
+# Get the fingerprint for displaying in the ui
+get_print_display() {
+	echo $1 | sed 's|§.*||'
 }
 
 # Replace file values
@@ -499,59 +486,24 @@ test_connection() {
 	ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
 }
 
-# Busybox md5 check
-md5_bb() {
-	if [ -f "$MODPATH/busybox.md5" ]; then
-		if md5sum -s -c $MODPATH/busybox.md5 2>/dev/null; then 
-			log_print "- Busybox downloaded"
-			md5sum -c $MODPATH/busybox.md5 >> $LOGFILE 2>&1
-			chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
-		else
-			log_print "! Busybox md5 mismatch!"
-			log_print "! No busybox downloaded!"
-			rm -f $MODPATH/busybox >> $LOGFILE 2>&1
-		fi		
-	else
-		log_print "- Busybox downloaded"
-		log_handler "Couldn't check md5 checksum"
-		chmod -v 755 $MODPATH/busybox >> $LOGFILE 2>&1
-	fi
-}
-
-# Download osm0sis' busybox
-download_bb() {
-	log_print "Downloading busybox."
-	wget -T 5 -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $LOGFILE
-	if [ -s "$MODPATH/busybox" ]; then
-		md5_bb
-	elif [ -f "$MODPATH/busybox" ]; then
-		log_print "! Download failed!"
-		log_print "! Second attempt!"
-		rm -f $MODPATH/busybox >> $LOGFILE 2>&1
-		log_print "Downloading without progress bar"
-		wget -T 5 -q -O $MODPATH/busybox $BBWWWPATH 2>&1 | tee -a $LOGFILE
-		if [ -s "$MODPATH/busybox" ]; then
-			md5_bb
-		else
-			log_print "! No busybox downloaded!"
-			rm -f $MODPATH/busybox >> $LOGFILE 2>&1
-		fi
-	else
-		log_print "! No busybox downloaded!"
-	fi
-}
-
 # ======================== Fingerprint functions ========================
 # Set new fingerprint
 print_edit() {
-	MODPRINT=$(get_file_value $LATEFILE "MODULEFINGERPRINT=")
 	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 -o "$(get_file_value $LATEFILE "PRINTMODULE=")" == "false" ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
 		log_handler "Changing fingerprint."
+		PRINTCHNG="$(get_file_value $LATEFILE "MODULEFINGERPRINT=" | sed 's|§.*||')"
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
 			resetprop -v $ITEM >> $LOGFILE 2>&1
-			resetprop -nv $ITEM "$MODPRINT" >> $LOGFILE 2>&1
+			resetprop -nv $ITEM $PRINTCHNG >> $LOGFILE 2>&1
 		done
+		# Edit security patch date if the print is for Android Pie+
+		SECPATCH="$(get_sec_patch $(get_file_value $LATEFILE "MODULEFINGERPRINT="))"
+		if [ "$(get_android_version $PRINTCHNG)" -ge 900 ] && [ "$SECPATCH" ]; then
+			log_handler "Update security patch date to match fingerprint used."
+			resetprop -v ro.build.version.security_patch >> $LOGFILE 2>&1
+			resetprop -v ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
+		fi
 	fi
 }
 
@@ -922,7 +874,15 @@ set_custprop() {
 		fi
 		TMPVALUE=$(echo "$2" | sed 's| |_sp_|g')
 		CURRCUSTPROPS=$(get_file_value $LATEFILE "${PROPSBOOTSTAGE}=")
-		TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${TMPVALUE}" | sed 's|^[ \t]*||')
+		case "$CURRCUSTPROPS" in
+			*$1*)
+				TMPORIG=$(echo "$4" | sed 's| |_sp_|g')
+				TMPCUSTPROPS=$(echo "$CURRCUSTPROPS" | sed "s|${1}=${TMPORIG}|${1}=${TMPVALUE}|")
+			;;
+			*)
+				TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${TMPVALUE}" | sed 's|^[ \t]*||')
+			;;
+		esac
 		SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
 
 		log_handler "Setting custom prop $1."
@@ -1127,6 +1087,4 @@ collect_logs() {
 }
 
 # Log print
-BBV=$($BBPATH | grep "BusyBox v" | sed 's|.*BusyBox ||' | sed 's| (.*||')
 log_handler "Functions loaded."
-log_handler "Using busybox: ${BBPATH} (${BBV})."
