@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=31
+PRINTSV=32
 PRINTSTRANSF=1
 
 PRINTSFILE=/sdcard/printslist
@@ -33,6 +33,7 @@ Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):u
 Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/367(C432):user/release-keys
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P20 Pro (8.1.0)=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys
+LeEco Le Pro3 (6.0.1)=LeEco/ZL1_NA/le_zl1:6.0.1/WEXNAOP5802101261S/letv01261206:user/release-keys
 LG G2 BS980 (5.0.2)=lge/g2_vzw/g2:5.0.2/LRX22G/15046001715f9:user/release-keys
 LG G4 H812 (6.0)=lge/p1_rgs_ca/p1:6.0/MRA58K/1601215569825:user/release-keys
 Motorola Moto C Plus (7.0)=motorola/panell_21_d/panell_d:7.0/NRD90M.03.040/040:user/release-keys
