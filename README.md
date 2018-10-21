@@ -73,7 +73,7 @@ Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
-NOTE: If you're using a fingerprint for Android Pie (9) you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`ง`) at the end of the fingerprint directly followed by the date (`ง2018-09-05`). You can also use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
+NOTE: If you're using a fingerprint for Android Pie (9) you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`ยง`) at the end of the fingerprint directly followed by the date (`ยง2018-09-05`). You can also use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
 
 
 ### I still can't pass the ctsProfile check
@@ -102,7 +102,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v31_**
+**_Current fingerprints list version - v32_**
 
 
 ## Please add support for device X
@@ -392,7 +392,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v31  
+### List v32  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -416,6 +416,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Huawei P8 Lite (8.0.0)
 - Huawei P9 (7.0)
 - Huawei P20 Pro (8.1.0)
+- LeEco Le Pro3 (6.0.1)
 - LG G2 BS980 (5.0.2)
 - LG G4 H812 (6.0)
 - Motorola Moto C Plus (7.0)
