@@ -30,7 +30,7 @@ This might be because your device simply hasn't been certified or that the ROM y
 
 To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
-There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details. If it's a fingerprint for Android Pie (9), please also include the Android security patch date that corresponds to the fingerprint.
+There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details. Please also include the Android security patch date for the factory image/firmware/ROM that the fingerprint comes from.
 
 ### Matching the Android security patch date
 For some devices, if the fingerprint is for Android Pie (9), it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). Use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
@@ -108,7 +108,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 ## Please add support for device X
 Adding device fingerprints to the list relies heavily on the users. You guys. I've looked up a fingerprint from time to time, but it is a bit time consuming and I don't have that time...
 	
-If you want a specific device fingerprint to be added to the module, take a look in the docs, under [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint). If you can find a fingerprint for the device you have in mind, post it in the thread. I'll test it out and if it passes the ctsProfile check I'll add it to the list. If it's a fingerprint for Android Pie (9), please also include the Android security patch date that corresponds to the fingerprint.
+If you want a specific device fingerprint to be added to the module, see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint) above. If you can find a fingerprint for the device you have in mind, post it in the thread. I'll test it out and if it passes the ctsProfile check I'll add it to the list. Please also include the Android security patch date for the factory image/firmware/ROM that the fingerprint comes from.
 
 
 ## Improved root hiding - Editing build.prop and default.prop
