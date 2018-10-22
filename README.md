@@ -30,6 +30,8 @@ This might be because your device simply hasn't been certified or that the ROM y
 
 To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
+NOTE: If you're using a fingerprint for an Android build after March 16th you might have to change the security patch date to one that matches the fingerprint used. You can use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
+
 There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details. Please also include the Android security patch date for the factory image/firmware/ROM that the fingerprint comes from.
 
 ### Matching the Android security patch date
@@ -73,7 +75,7 @@ Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
-NOTE: If you're using a fingerprint for Android Pie (9) you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`§`) at the end of the fingerprint directly followed by the date (`§2018-09-05`). You can also use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
+NOTE: If you're using a fingerprint for an Android build after March 16th you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`§`) at the end of the fingerprint directly followed by the date (`§2018-09-05`). You can also use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
 
 
 ### I still can't pass the ctsProfile check
