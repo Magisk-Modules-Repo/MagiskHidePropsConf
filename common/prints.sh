@@ -4,7 +4,7 @@
 # By Didgeridoohan @ XDA Developers
 
 PRINTSV=32
-PRINTSTRANSF=1
+PRINTSTRANSF=2
 
 PRINTSFILE=/sdcard/printslist
 
