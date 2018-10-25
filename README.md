@@ -30,12 +30,12 @@ This might be because your device simply hasn't been certified or that the ROM y
 
 To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
-NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. You can use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
+NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. You can use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error. The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
 
 There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details. Please also include the Android security patch date for the factory image/firmware/ROM that the fingerprint comes from.
 
 ### Matching the Android security patch date
-For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). Use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values)an unction of this module to change `ro.build.version.security_patch` to the desired date.
+For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). Use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
 
 ### Can I use any fingerprint?
 It's possible to use any fingerprint that's certified for your device. It doesn't have to match, either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter.
@@ -75,14 +75,15 @@ Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
-NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`ยง`) at the end of the fingerprint directly followed by the date (`ยง2018-09-05`). You can also use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
+NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`ง`) at the end of the fingerprint directly followed by the date (`ง2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error. The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
 
 
 ### I still can't pass the ctsProfile check
 If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
 - First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
-- Go into the script options and move the execution of the boot script to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
+- Go into the script options and make sure the execution of the boot script is in post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
 - Try a different fingerprint (pick one from the provided list).
+- Make sure you have a matching security patch date set in [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values). See ["Matching the Android security patch date"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above.
 - Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide. Check in your ROM thread or with the creator/developer.
 - You might have remnants of previous modifications that trigger SafetyNet on your device. A clean install of your system may be required.
 - If you can't get things working, and want help, make sure to provide logs and details. See ["Logs"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs) below.
@@ -104,7 +105,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v32_**
+**_Current fingerprints list version - v33_**
 
 
 ## Please add support for device X
@@ -193,12 +194,12 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 
 ### Known issues
 - Xiaomi devices (MIUI) often have issues passing the ctsProfile check, particularly China releases. Try using [ShellHide](https://forum.xda-developers.com/apps/magisk/magisk-shellhide-t3855616) by @JayminSuthar together with this module. They might work in conjunction to get the device to pass SafetyNet.
-- If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and in Magisk v17.2 the resetprop tool has been updated for this change.
+- If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and in Magisk v17.2 the resetprop tool wwas been updated for this change.
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
 - _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed. Check the logs to get information about which module this is.
-- _"Improved hiding"_ will be disable if all relevant prop values already are "safe".
+- _"Improved hiding"_ will be disable if all relevant prop values already are "safe", or if conflicting modules that also Magic Mounts build.prop are found. 
 
 ### I can't pass the ctsProfile check
 See ["I still can't pass the ctsProfile check"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check) above.
@@ -209,10 +210,10 @@ Also see ["Props don't seem to set properly"](https://github.com/Magisk-Modules-
 This module can only really help with the ctsProfile check, by spoofing the device fingerprint. If you can't pass basicIntegrity, there's probably something else going on with your device. See ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) above.
 
 ### Props don't seem to set properly
-If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the execution of the boot script to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) above.
+If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the boot stage at which the props are being set, or change the boot stage for that particular prop. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) or ["Custom prop values"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) above.
 
 ### My device's Android security patch date changed
-For some devices, when using an Android Pie fingerprint, it is necessary to also change the security patch date to match the fingerprint. This is automatically done by the module when using a Pie fingerprint. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and add back the original date.
+For some devices it is necessary to also change the security patch date to match the fingerprint. This is automatically done by the module when using a fingerprint from a build after March 16 2018. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and load back the original date.
 
 ### Device issues because of the module
 In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
@@ -243,6 +244,14 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.6.0  
+- Updated the fingerprints list to load much, much faster. 
+- Added and updated fingerprints for Huawei Mate 10, Nextbook Ares 8A, OnePlus 3, 3T, 5 and 5T, ZTE Axon 7. List updated to v33.
+- The new and improved SafetyNet fix turns out to be not only for Android Pie. Gone through the entire list and added security patch dates where needed.
+- Fixed some seriously botched code in v2.5.0.
+- As usual, small bug fixes and improvemnts.
+- No Yoshis where harmed during the making of this release.
+
 ### v2.5.0  
 - Improved/fixed the SafetyNet fix when using Android Pie fingerprints.
 - Updated/changed Busybox logic.
@@ -394,7 +403,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v32  
+### List v33  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -414,6 +423,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - HTC U11 (8.0.0)
 - Huawei Honor 6X (8.0.0)
 - Huawei Honor 9 (8.0.0)
+- Huawei Mate 10 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
 - Huawei P8 Lite (8.0.0)
 - Huawei P9 (7.0)
@@ -431,6 +441,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Motorola Moto G6 Play (8.0.0)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
+- Nextbook Ares 8A (6.0.1)
 - Nokia 7 Plus (9)
 - Nvidia Shield K1 (7.0)
 - Nvidia Shield Tablet (7.0)
@@ -513,7 +524,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Xiaomi Redmi Note 5/5 Plus (7.1.2)
 - Xiaomi Redmi Note 5 Pro (8.1.0)
 - Xiaomi Redmi Note 5A Lite (7.1.2)
-- ZTE Axon 7 (7.1.1)
+- ZTE Axon 7 (8.0.0)
 - ZTE Blade (6.0.1)
 - ZTE Nubia Z17 (7.1.1)
 - Zuk Z2 Pro (7.0)

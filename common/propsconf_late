@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=14
+SCRIPTV=15
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
@@ -133,31 +133,33 @@ if [ -d "$MODPATH" ]; then
 			SETFINGERPRINT=false
 
 			# Edits prop values if set for late_start service
-			echo -e "\n--------------------" >> $LOGFILE 2>&1
-			log_handler "Editing prop values in late_start service mode."
-			if [ "$OPTIONLATE" == 1 ]; then
-				# ---Setting/Changing fingerprint---				
-				print_edit
-				# ---Setting custom props---
-				custom_edit "CUSTOMPROPS"
+			if [ "$OPTIONLATE" == 1 ] || [ "$CUSTOMPROPSLATE" -a "$CUSTOMEDIT" == 1 ] || [ "$PROPEDIT" == 1 ]; then
+				echo -e "\n--------------------" >> $LOGFILE 2>&1
+				log_handler "Editing prop values in late_start service mode."
+				if [ "$OPTIONLATE" == 1 ]; then
+					# ---Setting/Changing fingerprint---				
+					print_edit
+					# ---Setting custom props---
+					custom_edit "CUSTOMPROPS"
+				fi
+				# Edit custom props set for late_start service
+				custom_edit "CUSTOMPROPSLATE"
+				# Edit MagiskHide sensitive values
+				if [ "$PROPEDIT" == 1 ]; then
+					log_handler "Changing sensitive props."
+					for ITEM in $PROPSLIST; do
+						PROP=$(get_prop_type $ITEM)
+						REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
+						MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
+						if [ "$(eval "echo \$$REPROP")" == "true" ]; then
+							log_handler "Changing/writing $ITEM."
+							resetprop -v $ITEM >> $LOGFILE 2>&1
+							resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
+						fi
+					done
+				fi
+				echo -e "\n--------------------" >> $LOGFILE 2>&1
 			fi
-			# Edit custom props set for late_start service
-			custom_edit "CUSTOMPROPSLATE"
-			# Edit MagiskHide sensitive values
-			if [ "$PROPEDIT" == 1 ]; then
-				log_handler "Changing sensitive props."
-				for ITEM in $PROPSLIST; do
-					PROP=$(get_prop_type $ITEM)
-					REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-					MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-					if [ "$(eval "echo \$$REPROP")" == "true" ]; then
-						log_handler "Changing/writing $ITEM."
-						resetprop -v $ITEM >> $LOGFILE 2>&1
-						resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
-					fi
-				done
-			fi
-			echo -e "\n--------------------" >> $LOGFILE 2>&1
 
 			# ---Edits default.prop---
 			if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then
@@ -168,43 +170,19 @@ if [ -d "$MODPATH" ]; then
 			else
 				log_handler "Default.prop editing disabled."
 			fi
-		fi
 
-		# Get currently saved values
-		log_handler "Checking current values."
-		curr_values
+			# Get currently saved values
+			log_handler "Checking current values."
+			curr_values
 
-		# Check if the late_start service log file exists.
-		if [ -f "$LATELOGFILE" ]; then
-			log_handler "Removing late_start service log ($LATELOGFILE)."
-			rm -f $LATELOGFILE >> $LOGFILE 2>&1
-		fi
-
-		log_script_chk "Boot script finished.\n\n=================="
-	fi
-else
-	echo "$MODPATH not found." >> $LATELOGFILE 2>&1
-	echo "Module no longer installed." >> $LATELOGFILE 2>&1
-	# Cleanup
-	cleanup
-fi
-s /
-			else
-				log_handler "Default.prop editing disabled."
+			# Check if the late_start service log file exists.
+			if [ -f "$LATELOGFILE" ]; then
+				log_handler "Removing late_start service log ($LATELOGFILE)."
+				rm -f $LATELOGFILE >> $LOGFILE 2>&1
 			fi
+
+			log_script_chk "Boot script finished.\n\n=================="
 		fi
-
-		# Get currently saved values
-		log_handler "Checking current values."
-		curr_values
-
-		# Check if the late_start service log file exists.
-		if [ -f "$LATELOGFILE" ]; then
-			log_handler "Removing late_start service log ($LATELOGFILE)."
-			rm -f $LATELOGFILE >> $LOGFILE 2>&1
-		fi
-
-		log_script_chk "Boot script finished.\n\n=================="
 	fi
 else
 	echo "$MODPATH not found." >> $LATELOGFILE 2>&1

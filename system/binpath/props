@@ -111,6 +111,8 @@ invalid_input() {
 		;;
 		4)	INPMSG="Only enter '${G}y${N}', '${G}n${N}', '${G}r${N}' or '${G}e${N}'."
 		;;
+		5)	INPMSG="Enter a fingerprint or pick from the options, one at a time."
+		;;
 	esac
 
 	# Find menu level
@@ -287,7 +289,12 @@ menu_change_fingerprint() {
 			;;
 			""|[[:blank:]]*)	blank_input 2
 			;;
-			*)	menu_new_print "$1" "$INPUT2" 2
+			*)
+				if [ "${#INPUT2}" -lt 10 ]; then
+					invalid_input 5 2
+				else
+					menu_new_print "$1" "$INPUT2" 2
+				fi
 			;;
 		esac
 	done
@@ -295,22 +302,12 @@ menu_change_fingerprint() {
 
 # Third menu level - pick fingerprint
 menu_pick_print() {
-	# Loading fingerprints
-	. $MODPATH/prints.sh
 	INPUT3=""
 	OEMLIST=""
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			SAVEIFS=$IFS
-			IFS=$(echo -en "\n\b")
-			for ITEM in $PRINTSLIST; do
-				TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's|^[ \t]*||')
-				OEMLIST="$TMPOEMLIST"
-			done
-			IFS=$SAVEIFS
-			TMPOEMLIST=$(echo $(printf '%s\n' $OEMLIST | sort -u))
-			OEMLIST="$TMPOEMLIST"
+			OEMLIST="$(ls $PRINTFILES | sed 's|\.sh||g')"
 			ITEMCOUNT=1
 			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
 			echo ""
@@ -345,6 +342,8 @@ menu_pick_print() {
 
 # Fourth menu level - pick fingerprint
 menu_pick_print_sub() {
+	# Loading fingerprints
+	. ${PRINTFILES}/${2}\.sh
 	INPUT4=""
 	while true
 	do
@@ -974,6 +973,13 @@ menu_edit_custprop() {
 				echo "${G}r${N} - Reset prop"
 			else
 				echo "${R}Not yet set by this module. Please reboot to set.${N}"
+				if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 0 ] || [ "$STAGETXT" == " ${G}(post-fs-data)${N}" ]; then
+					echo ""
+					echo "This might be caused by the prop being set to early."
+					echo "If the above state does not change after a reboot,"
+					echo "try changing the boot stage when the prop is set"
+					echo "to late_start service."
+				fi
 				echo ""
 				echo "${G}r${N} - Reboot"
 			fi
@@ -2028,7 +2034,7 @@ case "$1" in
 		echo "See the module readme or the"
 		echo "support thread @ XDA for details."
 		echo ""
-		log_handler "Exiting... Bye bye.\n\n===================="	
+		log_handler "Exiting... Bye bye.\n\n===================="
 		exit 0
 	;;	
 esac

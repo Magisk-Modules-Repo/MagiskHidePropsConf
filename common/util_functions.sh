@@ -47,6 +47,7 @@ alias wget="$BBPATH wget"
 PRINTSLOC=$MODPATH/prints.sh
 PRINTSTMP=$CACHELOC/prints.sh
 PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
+PRINTFILES=$MODPATH/printfiles
 BIN=BIN_PLACEHOLDER
 USNFLIST=USNF_PLACEHOLDER
 
@@ -180,12 +181,12 @@ get_android_version() {
 
 # Get security patch date for current fingerprint
 get_sec_patch() {
-	echo $1 | sed 's|.*§||'
+	echo $1 | sed 's|.*||'
 }
 
 # Get the fingerprint for displaying in the ui
 get_print_display() {
-	echo $1 | sed 's|§.*||'
+	echo $1 | sed 's|.*||'
 }
 
 # Replace file values
@@ -491,20 +492,50 @@ test_connection() {
 print_edit() {
 	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 -o "$(get_file_value $LATEFILE "PRINTMODULE=")" == "false" ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
 		log_handler "Changing fingerprint."
-		PRINTCHNG="$(get_file_value $LATEFILE "MODULEFINGERPRINT=" | sed 's|§.*||')"
+		PRINTCHNG="$(get_file_value $LATEFILE "MODULEFINGERPRINT=" | sed 's|.*||')"
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
 			resetprop -v $ITEM >> $LOGFILE 2>&1
 			resetprop -nv $ITEM $PRINTCHNG >> $LOGFILE 2>&1
 		done
-		# Edit security patch date if the print is for Android Pie+
+		# Edit security patch date if included
 		SECPATCH="$(get_sec_patch $(get_file_value $LATEFILE "MODULEFINGERPRINT="))"
-		if [ "$(get_android_version $PRINTCHNG)" -ge 900 ] && [ "$SECPATCH" ]; then
-			log_handler "Update security patch date to match fingerprint used."
-			resetprop -v ro.build.version.security_patch >> $LOGFILE 2>&1
-			resetprop -v ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
-		fi
+		case "$(get_file_value $LATEFILE "MODULEFINGERPRINT=")" in
+			**)
+				if [ "$SECPATCH" ]; then
+					log_handler "Update security patch date to match fingerprint used."
+					resetprop -v ro.build.version.security_patch >> $LOGFILE 2>&1
+					resetprop -v ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
+				fi
+			;;
+		esac
 	fi
+}
+
+# Create fingerprint files
+print_files() {
+	log_print "Creating fingerprint files."
+	rm -rf $PRINTFILES >> $LOGFILE 2>&1
+	mkdir -pv $PRINTFILES >> $LOGFILE 2>&1
+	# Loading prints
+	. $PRINTSLOC
+	# Saving manufacturers
+	log_handler "Saving manufacturers."
+	SAVEIFS=$IFS
+	IFS=$(echo -en "\n\b")
+	for ITEM in $PRINTSLIST; do
+		TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's|^[ \t]*||')
+		OEMLIST="$TMPOEMLIST"
+	done
+	IFS=$SAVEIFS
+	TMPOEMLIST=$(echo $(printf '%s\n' $OEMLIST | sort -u))
+	OEMLIST="$TMPOEMLIST"
+	log_handler "Creating files."
+	for OEM in $OEMLIST; do
+		echo -e "PRINTSLIST=\"" >> $PRINTFILES/${OEM}\.sh
+		cat $PRINTSLOC | grep $OEM >> $PRINTFILES/${OEM}\.sh
+		echo -e "\"" >> $PRINTFILES/${OEM}\.sh
+	done
 }
 
 # Checks and updates the prints list
@@ -528,12 +559,14 @@ download_prints() {
 			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
 			if [ "$LISTVERSION" ]; then
 				if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
-					if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le "$(get_file_value $PRINTSLOC "PRINTSTRANSF=")" ]; then
+					VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
+					VERSIONCMP=$(echo $VERSIONTMP | sed 's|v||g' | sed 's|-.*||' | sed 's|\.||g')
+					if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le $VERSIONCMP ]; then
 						mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
 						# Updates list version in module.prop
-						VERSIONTMP=$(get_file_value $MODPATH/module.prop "version=")
 						replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
 						log_print "Updated list to v${LISTVERSION}."
+						print_files
 					else
 						rm -f $PRINTSTMP
 						log_print "New fingerprints list requires module update."

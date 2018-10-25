@@ -114,6 +114,19 @@ set_permissions() {
 get_file_value() {
 	cat $1 | grep $2 | sed "s|.*$2||" | sed 's|\"||g'
 }
+# Get left side of =
+get_eq_left() {
+	echo $1 | sed 's|=.*||'
+}
+# Get first word in string
+get_first() {
+	case $1 in
+		*\ *) echo $1 | sed 's|\ .*||'
+		;;
+		*=*) get_eq_left "$1"
+		;;
+	esac
+}
 
 # Variables
 COREPATH=/sbin/.core
@@ -291,6 +304,32 @@ script_placement() {
 	fi
 }
 
+# Create fingerprint files
+print_files() {
+	log_print "- Creating fingerprint files."
+	rm -rf $MODPATH/printfiles >> $INSTLOG 2>&1
+	mkdir -pv $MODPATH/printfiles >> $INSTLOG 2>&1
+	# Loading prints
+	. $MODPATH/prints.sh
+	# Saving manufacturers
+	log_handler "Saving manufacturers"
+	SAVEIFS=$IFS
+	IFS=$(echo -en "\n\b")
+	for ITEM in $PRINTSLIST; do
+		TMPOEMLIST=$(echo "$OEMLIST $(get_first $ITEM)" | sed 's|^[ \t]*||')
+		OEMLIST="$TMPOEMLIST"
+	done
+	IFS=$SAVEIFS
+	TMPOEMLIST=$(echo $(printf '%s\n' $OEMLIST | sort -u))
+	OEMLIST="$TMPOEMLIST"
+	log_handler "Creating files"
+	for OEM in $OEMLIST; do
+		echo -e "PRINTSLIST=\"" >> $MODPATH/printfiles/${OEM}\.sh
+		cat $MODPATH/prints.sh | grep $OEM >> $MODPATH/printfiles/${OEM}\.sh
+		echo -e "\"" >> $MODPATH/printfiles/${OEM}\.sh
+	done
+}
+
 # Updates placeholders
 placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
@@ -314,8 +353,7 @@ build_prop_check() {
 				log_print "! Module - '$NAME'!"
 				log_print "! Modification of build.prop disabled!"
 				log_print ""
-				sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE			
-				break
+				sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE
 			fi
 		fi
 	done
@@ -352,7 +390,7 @@ bin_check() {
 # Magisk installation check
 install_check() {
 	if [ ! -d "$SERVICEPATH" ] || [ ! -d "$POSTPATH" ]; then
-		log_handler "Fresh Magisk installation detected."
+		log_print "Fresh Magisk installation detected."
 		log_handler "Creating path for boot script."
 		mkdir -pv $POSTPATH >> $INSTLOG 2>&1
 		mkdir -pv $SERVICEPATH >> $INSTLOG 2>&1
@@ -384,4 +422,5 @@ script_install() {
 	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
+	print_files
 }
