@@ -181,12 +181,12 @@ get_android_version() {
 
 # Get security patch date for current fingerprint
 get_sec_patch() {
-	echo $1 | sed 's|.*||'
+	echo $1 | sed 's|.*\_\_||'
 }
 
 # Get the fingerprint for displaying in the ui
 get_print_display() {
-	echo $1 | sed 's|.*||'
+	echo $1 | sed 's|\_\_.*||'
 }
 
 # Replace file values
@@ -492,7 +492,7 @@ test_connection() {
 print_edit() {
 	if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 1 -o "$(get_file_value $LATEFILE "PRINTMODULE=")" == "false" ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
 		log_handler "Changing fingerprint."
-		PRINTCHNG="$(get_file_value $LATEFILE "MODULEFINGERPRINT=" | sed 's|.*||')"
+		PRINTCHNG="$(get_file_value $LATEFILE "MODULEFINGERPRINT=" | sed 's|\_\_.*||')"
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
 			resetprop -v $ITEM >> $LOGFILE 2>&1
@@ -501,7 +501,7 @@ print_edit() {
 		# Edit security patch date if included
 		SECPATCH="$(get_sec_patch $(get_file_value $LATEFILE "MODULEFINGERPRINT="))"
 		case "$(get_file_value $LATEFILE "MODULEFINGERPRINT=")" in
-			**)
+			*__*)
 				if [ "$SECPATCH" ]; then
 					log_handler "Update security patch date to match fingerprint used."
 					resetprop -v ro.build.version.security_patch >> $LOGFILE 2>&1

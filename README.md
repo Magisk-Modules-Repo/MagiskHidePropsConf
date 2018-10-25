@@ -75,7 +75,7 @@ Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
-NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding a paragraph sign (`§`) at the end of the fingerprint directly followed by the date (`§2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error. The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
+NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding two underscores directly followd by the date at the end of the fingerprint (`__2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error. The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
 
 
 ### I still can't pass the ctsProfile check
@@ -244,6 +244,9 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.6.2  
+- Another quick fix. Keep 'em coming...
+
 ### v2.6.1  
 - Small fix (revert really) for possible issue with setting prop values (including fingerprint).
 
