@@ -33,7 +33,7 @@ CONFWEB=enabled
 # CONFFINGERPRINT should be set to the fingerprint of a ROM that passes
 # the ctsProfile check. See the prints.sh file for usable prints,
 # or the documentation for information on how to find one.
-# Note that Android Pie fingerprints often also need to match the Android
+# Note that Android builds after March 16 2018 often also need to match the Android
 # security patch date. Use the CONFPROPS setting to set ro.build.version.security_patch
 # to the matching date (example: 2018-10-05). 
 

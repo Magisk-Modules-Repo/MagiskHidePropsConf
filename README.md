@@ -244,9 +244,12 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.6.1  
+- Small fix (revert really) for possible issue with setting prop values (including fingerprint).
+
 ### v2.6.0  
-- Updated the fingerprints list to load much, much faster. 
-- Added and updated fingerprints for Huawei Mate 10, Nextbook Ares 8A, OnePlus 3, 3T, 5 and 5T, ZTE Axon 7. List updated to v33.
+- Updated the fingerprints list to load much, much faster.
+- Added and updated fingerprints for Huawei Mate 10, Nextbook Ares 8A, OnePlus 3, 3T, 5 and 5T, and ZTE Axon 7. List updated to v33.
 - The new and improved SafetyNet fix turns out to be not only for Android Pie. Gone through the entire list and added security patch dates where needed.
 - Fixed some seriously botched code in v2.5.0.
 - As usual, small bug fixes and improvemnts.
