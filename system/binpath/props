@@ -316,7 +316,7 @@ menu_pick_print() {
 				if [ -f "$CSTMPRINTS" ] && [ ! -f "$CSTMFILE" ]; then
 					log_handler "Found custom fingerprints list."
 					log_handler "Creating custom prints file."
-					cat $CSTMPRINTS >> $LOGFILE > 2>&1 && echo "" >> $LOGFILE > 2>&1
+					cat $CSTMPRINTS >> $LOGFILE 2>&1 && echo "" >> $LOGFILE 2>&1
 					echo -e "PRINTSLIST=\"" >> $CSTMFILE
 					cat $CSTMPRINTS >> $CSTMFILE
 					echo -e "\"" >> $CSTMFILE
