@@ -47,7 +47,10 @@ alias wget="$BBPATH wget"
 PRINTSLOC=$MODPATH/prints.sh
 PRINTSTMP=$CACHELOC/prints.sh
 PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
+PRINTSDEV="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/prints.sh"
 PRINTFILES=$MODPATH/printfiles
+CSTMPRINTS=/sdcard/printslist
+CSTMFILE=$PRINTFILES/Custom.sh
 BIN=BIN_PLACEHOLDER
 USNFLIST=USNF_PLACEHOLDER
 
@@ -74,6 +77,11 @@ PRINTPROPS="
 ro.build.fingerprint
 ro.bootimage.build.fingerprint
 ro.vendor.build.fingerprint
+"
+
+# Additional SafetyNet props
+SNPROPS="
+ro.build.version.security_patch
 "
 
 # Finding file values
@@ -247,6 +255,7 @@ curr_values() {
 			CURRFINGERPRINT=$(resetprop -v ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
 		fi
 	fi
+	CURRPATCH=$(resetprop -v ro.build.version.security_patch) >> $LOGFILE 2>&1
 }
 
 # Load original values
@@ -257,6 +266,7 @@ orig_values() {
 	ORIGTAGS=$(get_file_value $LATEFILE "ORIGTAGS=")
 	ORIGSELINUX=$(get_file_value $LATEFILE "ORIGSELINUX=")
 	ORIGFINGERPRINT=$(get_file_value $LATEFILE "ORIGFINGERPRINT=")
+	ORIGPATCH=$(get_file_value $LATEFILE "ORIGPATCH=")
 }
 
 # Load module values
@@ -544,7 +554,7 @@ download_prints() {
 		clear
 	fi
 	if [ "$1" == "Dev" ]; then
-		PRINTSWWW="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/prints.sh"
+		PRINTSWWW=$PRINTSDEV
 	fi
 	menu_header "Updating fingerprints list"
 	echo ""

@@ -68,6 +68,7 @@ if [ -d "$MODPATH" ]; then
 			replace_fn ORIGTAGS "\"$ORIGTAGS\"" "\"$CURRTAGS\"" $LATEFILE
 			replace_fn ORIGSELINUX "\"$ORIGSELINUX\"" "\"$CURRSELINUX\"" $LATEFILE
 			replace_fn ORIGFINGERPRINT "\"$ORIGFINGERPRINT\"" "\"$CURRFINGERPRINT\"" $LATEFILE
+			replace_fn ORIGPATCH "\"$ORIGPATCH\"" "\"$CURRPATCH\"" $LATEFILE
 			log_handler "Default values saved to $LATEFILE."
 			# Loading the new values
 			orig_values

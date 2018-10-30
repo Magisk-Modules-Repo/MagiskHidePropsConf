@@ -70,7 +70,7 @@ Take a look below for an example of what a device fingerprint looks like.
 Sometimes you can also find up to date and certified fingerprints at [firmware.mobi](https://desktop.firmware.mobi/).
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file, named `printslist` (no file extension), in the root of your internal storage with the fingerprint. It needs to be formated as follows: `device name=fingerprint`.
+You can add your own fingerprint to the list by placing a file, named `printslist` (no file extension), in the root of your internal storage with the fingerprints. It needs to be formated as follows: `device name=fingerprint`. The fingerprints added to this list will be found under the `Custom` category in the fingerprints menu.
 Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
@@ -105,7 +105,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v33_**
+**_Current fingerprints list version - v34_**
 
 
 ## Please add support for device X
@@ -244,6 +244,11 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Changelog
+### v2.6.3  
+- Fixed custom fingerprints list that broke with the fingerprints list optimisation in v2.5.0.
+- Added fingerprints for Huawei P9 Plus and HTC U12 Plus. List updated to v34.
+- Minor improvements.
+
 ### v2.6.2  
 - Another quick fix. Keep 'em coming...
 
@@ -409,7 +414,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Current fingerprints list
-### List v33  
+### List v34  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -427,12 +432,14 @@ If you can't run the `props` script for some reason, the logs are also stored in
 - Google Pixel 3 XL (9)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
+- HTC U12 Plus (8.0.0)
 - Huawei Honor 6X (8.0.0)
 - Huawei Honor 9 (8.0.0)
 - Huawei Mate 10 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
 - Huawei P8 Lite (8.0.0)
 - Huawei P9 (7.0)
+- Huawei P9 Plus (7.0)
 - Huawei P20 Pro (8.1.0)
 - LeEco Le Pro3 (6.0.1)
 - LG G2 BS980 (5.0.2)

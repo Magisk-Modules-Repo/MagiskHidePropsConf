@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=16
+SCRIPTV=17
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
@@ -98,6 +98,7 @@ if [ -d "$MODPATH" ]; then
 			ORIGTAGS=""
 			ORIGSELINUX=""
 			ORIGFINGERPRINT=""
+			ORIGPATCH=""
 
 			# ---Module values---
 			MODULEDEBUGGABLE=""

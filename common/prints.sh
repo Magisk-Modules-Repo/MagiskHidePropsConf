@@ -3,10 +3,8 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=33
+PRINTSV=34
 PRINTSTRANSF=250
-
-PRINTSFILE=/sdcard/printslist
 
 # Certified fingerprints
 PRINTSLIST="
@@ -27,12 +25,14 @@ Google Pixel 3 (9)=google/blueline/blueline:9/PD1A.180720.030/4972053:user/relea
 Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PD1A.180720.030/4972053:user/release-keys__2018-09-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
+HTC U12 Plus (8.0.0)=htc/imeuhl_00617/htc_imeuhl:8.0.0/OPR1.170623.032/1041457.3:user/release-keys__2018-06-01
 Huawei Honor 6X (8.0.0)=HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/528(C00):user/release-keys
 Huawei Honor 9 (8.0.0)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys
 Huawei Mate 10 (8.0.0)=HUAWEI/ALP-L29/HWALP:8.0.0/HUAWEIALP-L29S/143(C636):user/release-keys__2018-10-01
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
 Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/367(C432):user/release-keys
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
+Huawei P9 Plus (7.0)=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
 Huawei P20 Pro (8.1.0)=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys
 LeEco Le Pro3 (6.0.1)=LeEco/ZL1_NA/le_zl1:6.0.1/WEXNAOP5802101261S/letv01261206:user/release-keys
 LG G2 BS980 (5.0.2)=lge/g2_vzw/g2:5.0.2/LRX22G/15046001715f9:user/release-keys
@@ -135,12 +135,3 @@ ZTE Blade (6.0.1)=ZTE/P809A50_MY_MAX/P809A50:6.0.1/MMB29M/20161017.095504:user/r
 ZTE Nubia Z17 (7.1.1)=nubia/NX563J/NX563J:7.1.1/NMF26X/eng.nubia.20171019.101529:user/release-keys
 Zuk Z2 Pro (7.0)=ZUK/z2_row/z2_row:7.0/NRD90M/2.5.435_170525:user/release-keys
 "
-
-if [ -f "$PRINTSFILE" ]; then
-	FLINE=$(head -1 $PRINTSFILE)
-	if [ "$FLINE" ]; then
-		sed -i '1s/^/\n/' $PRINTSFILE
-	fi
-	LISTFILE=$(cat $PRINTSFILE)
-	PRINTSLIST=$PRINTSLIST$LISTFILE
-fi

@@ -1,4 +1,4 @@
- #!/system/bin/sh
+#!/system/bin/sh
 
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
@@ -208,6 +208,7 @@ exit_fn() {
 # ======================== Device's fingerprint ========================
 # Second menu level - fingerprint
 menu_change_fingerprint() {
+	rm -f $CSTMFILE
 	INPUT2=""
 	while true
 	do
@@ -307,18 +308,51 @@ menu_pick_print() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
+			# Load the list of fingerprint files
+			log_handler "Loading fingerprints list v$(get_file_value $PRINTSLOC "PRINTSV=")."
 			OEMLIST="$(ls $PRINTFILES | sed 's|\.sh||g')"
-			ITEMCOUNT=1
-			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
-			echo ""
-			for ITEM in $OEMLIST; do
-				echo "${G}$ITEMCOUNT${N} - $ITEM"
-				ITEMCOUNT=$(($ITEMCOUNT+1))
-			done
-			echo "${G}b${N} - Go back"
-			echo ""
-			echo -n "Enter '${G}e${N}' to exit: "
-			read -r INPUT3
+			if [ "$OEMLIST" ]; then
+				# Check for custom fingerprints list
+				if [ -f "$CSTMPRINTS" ] && [ ! -f "$CSTMFILE" ]; then
+					log_handler "Found custom fingerprints list."
+					log_handler "Creating custom prints file."
+					cat $CSTMPRINTS >> $LOGFILE > 2>&1 && echo "" >> $LOGFILE > 2>&1
+					echo -e "PRINTSLIST=\"" >> $CSTMFILE
+					cat $CSTMPRINTS >> $CSTMFILE
+					echo -e "\"" >> $CSTMFILE
+					# Reload the list with new files
+					OEMLIST="$(ls $PRINTFILES | sed 's|\.sh||g')"
+				fi
+				ITEMCOUNT=1
+				menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
+				echo ""
+				for ITEM in $OEMLIST; do
+					echo "${G}$ITEMCOUNT${N} - $ITEM"
+					ITEMCOUNT=$(($ITEMCOUNT+1))
+				done
+				echo "${G}b${N} - Go back"
+				echo ""
+				echo -n "Enter '${G}e${N}' to exit: "
+				read -r INPUT3
+			else
+				log_handler "No fingerprints list."
+				collect_logs "issue"
+				echo "Hm... That's not right."
+				echo ""
+				echo "There is currently no fingerprints list"
+				echo "available. Try updating it manually."
+				echo ""
+				echo "If the issue persists, report it in the"
+				echo "support thread @ XDA, ${R}with logs!${C}"
+				echo ""
+				echo "Logs have automatically been saved to"
+				echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+				echo ""
+				echo -n "Press enter to continue..."
+				read -r INPUTTMP
+				INPUT2=""
+				break
+			fi
 		fi
 		if [ "$INPUT3" -ge 1 ] && [ "$INPUT3" -le "$ITEMCOUNT" ]; then
 			ITEMCOUNT=1
@@ -343,8 +377,29 @@ menu_pick_print() {
 # Fourth menu level - pick fingerprint
 menu_pick_print_sub() {
 	# Loading fingerprints
-	. ${PRINTFILES}/${2}\.sh
-	INPUT4=""
+	TMPFILE=$PRINTFILES/$2.sh
+	if [ -f "$TMPFILE" ]; then
+		. $TMPFILE
+		INPUT4=""
+	else
+		menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
+		log_handler "Can't find '$TMPFILE'."
+		collect_logs "issue"
+		echo "Oh no! Something went wrong..."
+		echo ""
+		echo "Can't find the fingerprints file."
+		echo "Try updating it manually."
+		echo ""
+		echo "If the issue persists, report it in the"
+		echo "support thread @ XDA, ${R}with logs!${C}"
+		echo ""
+		echo "Logs have automatically been saved to"
+		echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+		echo ""
+		echo -n "Press enter to continue..."
+		read -r INPUTTMP
+		INPUT4="b"
+	fi
 	while true
 	do
 		if [ -z "$INPUT4" ]; then
@@ -354,7 +409,7 @@ menu_pick_print_sub() {
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
-				if [ "$(get_first $ITEM)" == "$2" ]; then
+				if [ "$(get_first $ITEM)" == "$2" ] || [ "$2" == "Custom" ]; then
 					echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
@@ -370,13 +425,11 @@ menu_pick_print_sub() {
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
-				if [ "$(get_first $ITEM)" == "$2" ] && [ "$ITEMCOUNT" == "$INPUT4" ]; then
+				if [ "$ITEMCOUNT" == "$INPUT4" ]; then
 					menu_new_print "$1" $(get_eq_right "$ITEM")					
 					break
 				fi
-				if [ "$(get_first "$ITEM")" == "$2" ]; then
-					ITEMCOUNT=$(($ITEMCOUNT+1))
-				fi
+				ITEMCOUNT=$(($ITEMCOUNT+1))
 			done
 			IFS=$SAVEIFS
 		elif [ "$INPUT4" == "b" ] || [ "$INPUT4" == "B" ]; then
