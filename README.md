@@ -243,6 +243,13 @@ If you can't run the `props` script for some reason, the logs are also stored in
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration
 
 
+## Previous releases
+Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases).
+
+Releases up until v2.4.0 are compatible with Magisk v15 to v16.7.  
+Releases from v2.4.1 are compatible with Magisk v17+.
+
+
 ## Changelog
 ### v2.6.3  
 - Fixed custom fingerprints list that broke with the fingerprints list optimisation in v2.5.0.
