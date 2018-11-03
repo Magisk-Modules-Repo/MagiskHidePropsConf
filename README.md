@@ -6,7 +6,7 @@
 
 
 ## What's this?
-This module is a very complicated way of doing something very simple. Complicated for me, that is... The aim is to make it easy for you, the user. The module changes prop values using the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop), something that is very easy to do with a [Magisk boot script](https://github.com/topjohnwu/Magisk/blob/master/docs/details.md#boot-stages) and some simple commands.
+This module is a very complicated way of doing something very simple. Complicated for me, that is... The aim is to make it easy for you, the user. The module changes prop values using the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop), something that is very easy to do with a [Magisk boot script](https://github.com/topjohnwu/Magisk/blob/master/docs/details.md#magisk-booting-process) and some simple commands.
 
 What this module does is that it adds a terminal based UI for those that don't want (or can't) create a boot script for themselves, making the process of creating such a boot script very simple. With this module I'm also maintaining a list of certified build fingerprints for a number of devices, so that it's easy to pick one you want to use.
 
