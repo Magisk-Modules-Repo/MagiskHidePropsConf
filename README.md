@@ -60,7 +60,7 @@ You can find the file to download in your device's forum on XDA Developers (eith
 Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
 
 - Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
-- For some devices you'll have to unpackage the system.img to get to the build.prop file. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
+- For some devices you'll have to unpackage the system.img to get to the build.prop or default.prop file, where you'll find the info you want. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere. 
 
@@ -112,6 +112,14 @@ Just run the `props` command and the list will be updated automatically. Use the
 Adding device fingerprints to the list relies heavily on the users. You guys. I've looked up a fingerprint from time to time, but it is a bit time consuming and I don't have that time...
 	
 If you want a specific device fingerprint to be added to the module, see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint) above. If you can find a fingerprint for the device you have in mind, post it in the thread. I'll test it out and if it passes the ctsProfile check I'll add it to the list. Please also include the Android security patch date for the factory image/firmware/ROM that the fingerprint comes from.
+
+
+## Please update fingerprint X
+Fingerprints included in the module are updated once in a while. Mainly if a user (that's you) provides the updated fingerprint, but sometimes I do look up new fingerprints on [firmware.mobi](https://desktop.firmware.mobi). That is purely based on how much time I have on my hands and how bored I am though...
+
+If you have an updated fingerprint available (and you've posted it for me to update the list), but I haven't yet updated the fingerprints list (which might be a while depending on how much IRL stuff I have to do), it is still perfectly possible for you to use the updated fingerprint.
+
+You can enter the fingerprint manually in the `Edit device fingerprint` menu in the module, you can use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#configuration-file), or you can make a [custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#custom-fingerprints-list).
 
 
 ## Improved root hiding - Editing build.prop and default.prop
