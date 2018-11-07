@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=35
+PRINTSV=36
 PRINTSTRANSF=250
 
 # Certified fingerprints
@@ -11,18 +11,18 @@ PRINTSLIST="
 Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
-Essential PH-1 (9)=essential/mata/mata:9/PPR1.180610.091/249:user/release-keys__2018-07-05
+Essential PH-1 (9)=essential/mata/mata:9/PPR1.181005.076/390:user/release-keys__2018-11-05
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
 Google Nexus 6 (7.1.1)=google/shamu/shamu:7.1.1/N6F27M/4299435:user/release-keys
-Google Nexus 5X (8.1.0)=google/bullhead/bullhead:8.1.0/OPM2.171019.029/4657601:user/release-keys
-Google Nexus 6P (8.1.0)=google/angler/angler:8.1.0/OPM5.171019.019/4619337:user/release-keys
+Google Nexus 5x (8.1.0)=google/bullhead/bullhead:8.1.0/OPM7.181105.004/5038062:user/release-keys__2018-11-05
+Google Nexus 6P (8.1.0)=google/angler/angler:8.1.0/OPM7.181105.004/5038062:user/release-keys__2018-11-05
 Google Pixel (9)=google/sailfish/sailfish:9/PPR2.181005.003/4984323:user/release-keys__2018-10-05
 Google Pixel XL (9)=google/marlin/marlin:9/PPR2.181005.003/4984323:user/release-keys__2018-10-05
-Google Pixel 2 (9)=google/walleye/walleye:9/PPR2.181005.003/4984323:user/release-keys__2018-10-05
-Google Pixel 2 XL (9)=google/taimen/taimen:9/PPR2.181005.003/4984323:user/release-keys__2018-10-05
-Google Pixel 3 (9)=google/blueline/blueline:9/PD1A.180720.030/4972053:user/release-keys__2018-09-05
-Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PD1A.180720.030/4972053:user/release-keys__2018-09-05
+Google Pixel 2 (9)=google/walleye/walleye:9/PQ1A.181105.017.A1/5081125:user/release-keys__2018-11-05
+Google Pixel 2 XL (9)=google/taimen/taimen:9/PQ1A.181105.017.A1/5081125:user/release-keys__2018-11-05
+Google Pixel 3 (9)=google/blueline/blueline:9/PQ1A.181105.017.A1/5081125:user/release-keys__2018-11-05
+Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PQ1A.181105.017.A1/5081125:user/release-keys__2018-11-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
 HTC U12 Plus (8.0.0)=htc/imeuhl_00617/htc_imeuhl:8.0.0/OPR1.170623.032/1041457.3:user/release-keys__2018-06-01
@@ -30,7 +30,7 @@ Huawei Honor 6X (8.0.0)=HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/528(C00):user
 Huawei Honor 9 (8.0.0)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys
 Huawei Mate 10 (8.0.0)=HUAWEI/ALP-L29/HWALP:8.0.0/HUAWEIALP-L29S/143(C636):user/release-keys__2018-10-01
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
-Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/367(C432):user/release-keys
+Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/386(C432):user/release-keys__2018-09-01
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P9 Lite (7.0)=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/release-keys__2018-06-01
 Huawei P9 Plus (7.0)=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
@@ -66,6 +66,7 @@ Samsung Galaxy J3 (5.1.1)=ro.build.fingerprint=samsung/j3xnltexx/j3xnlte:5.1.1/L
 Samsung Galaxy J5 2015 (6.0.1)=samsung/j5nltexx/j5nlte:6.0.1/MMB29M/J500FNXXS1BQG1:user/release-keys
 Samsung Galaxy J5 (7.1.1)=samsung/j5xnltexx/j5xnlte:7.1.1/NMF26X/J510FNXXS2BRA2:user/release-keys
 Samsung Galaxy J5 Prime (7.0)=samsung/on5xeltejv/on5xelte:7.0/NRD90M/G570FXXU1BQI6:user/release-keys
+Samsung Galaxy Note 3 (5.0)=samsung/hltezh/hlte:5.0/LRX21V/N9005ZSUGPJ2:user/release-keys
 Samsung Galaxy Note 4 (6.0.1)=samsung/trltexx/trlte:6.0.1/MMB29M/N910FXXS1DQH9:user/release-keys
 Samsung Galaxy Note 5 (7.0)=samsung/nobleltejv/noblelte:7.0/NRD90M/N920CXXU3CQH6:user/release-keys
 Samsung Galaxy Note 8 (8.0.0)=samsung/greatltexx/greatlte:8.0.0/R16NW/N950FXXU3CRC1:user/release-keys
