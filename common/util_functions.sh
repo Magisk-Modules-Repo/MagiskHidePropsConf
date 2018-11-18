@@ -6,8 +6,8 @@
 # Variables
 MODVERSION=VER_PLACEHOLDER
 MIRRORPATH=$COREPATH/mirror
-POSTFILE=$IMGPATH/.core/post-fs-data.d/propsconf_post
-LATEFILE=$IMGPATH/.core/service.d/propsconf_late
+POSTFILE=POST_PLACEHOLDER
+LATEFILE=LATE_PLACEHOLDER
 SYSTEMLOC=SYSTEM_PLACEHOLDER
 CACHELOC=CACHE_PLACEHOLDER
 POSTCHKFILE=$CACHELOC/propsconf_postchk
@@ -998,7 +998,14 @@ prop_del() {
 			log_handler "Deleting $ITEM."
 			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
 			resetprop -v $ITEM >> $LOGFILE 2>&1
-			resetprop -v --delete $ITEM >> $LOGFILE 2>&1
+			case "$ITEM" in
+				persist*)
+					resetprop -pv --delete $ITEM >> $LOGFILE 2>&1
+				;;
+				*)
+					resetprop -v --delete $ITEM >> $LOGFILE 2>&1
+				;;
+			esac
 		done
 	fi
 }

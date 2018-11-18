@@ -21,7 +21,7 @@ fi
 COREPATH=CORE_PLACEHOLDER
 IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
-LATEFILE=$IMGPATH/.core/service.d/propsconf_late
+LATEFILE=LATE_PLACEHOLDER
 
 # Development testing set to false
 DEVTESTING=false
@@ -337,6 +337,7 @@ menu_pick_print() {
 			else
 				log_handler "No fingerprints list."
 				collect_logs "issue"
+				menu_header "${C}$1${N}\n Something's wrong!"
 				echo "Hm... That's not right."
 				echo ""
 				echo "There is currently no fingerprints list"

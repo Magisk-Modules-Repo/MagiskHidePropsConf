@@ -148,7 +148,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v36_**
+**_Current fingerprints list version - v37_**
 
 
 ## Please add support for device X
@@ -290,7 +290,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Credits
-@topjohnwu @ XDA Developers, for Magisk    
+@topjohnwu @ XDA Developers, for Magisk  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration
 
 
@@ -302,6 +302,12 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v2.6.4  
+- Fixed the "Delete prop values" function to properly delete persistent props.
+- Updated for the new paths introduced in Magisk v17.4-ab5fedda(17316).
+- Added and updated fingerprints for Google Nexus 10, Huawei P8 Lite and LG G5 850. List updated to v37.
+- Miscellaneous fixes.
+
 ### v2.6.3  
 - Fixed custom fingerprints list that broke with the fingerprints list optimisation in v2.5.0.
 - Added fingerprints for Huawei P9 Plus and HTC U12 Plus. List updated to v34.
@@ -472,7 +478,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v36  
+### List v37  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -482,6 +488,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Google Nexus 6 (7.1.1)
 - Google Nexus 5X (8.1.0)
 - Google Nexus 6P (8.1.0)
+- Google Nexus 10 (5.1.1)
 - Google Pixel (9)
 - Google Pixel XL (9)
 - Google Pixel 2 (9)
@@ -503,6 +510,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - LeEco Le Pro3 (6.0.1)
 - LG G2 BS980 (5.0.2)
 - LG G4 H812 (6.0)
+- LG G5 H850 (8.0.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto E4 Plus (7.1.1)

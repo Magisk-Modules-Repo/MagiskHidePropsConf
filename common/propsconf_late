@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=17
+SCRIPTV=18
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
@@ -18,6 +18,7 @@ COREPATH=CORE_PLACEHOLDER
 IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
 CACHELOC=CACHE_PLACEHOLDER
+POSTFILE=POST_PLACEHOLDER
 LATELOGFILE=$CACHELOC/propsconf_latefile.log
 
 FINGERPRINTENB=1
@@ -56,7 +57,7 @@ cleanup() {
 	done
 	# Suicide.
 	echo "Removing scripts." >> $LATELOGFILE 2>&1
-	rm -f $IMGPATH/.core/post-fs-data.d/propsconf_post >> $LATELOGFILE 2>&1
+	rm -f $POSTFILE >> $LATELOGFILE 2>&1
 	rm -f $0 >> $LATELOGFILE 2>&1
 }
 
