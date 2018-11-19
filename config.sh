@@ -140,9 +140,13 @@ $BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
 if [ "$MAGISK_VER_CODE" -ge 17316 ]; then
 	POSTPATH=$ADBPATH/post-fs-data.d
 	SERVICEPATH=$ADBPATH/service.d
+	POSTHOLDER=$ADBPATH/post-fs-data.d/propsconf_post
+	LATEHOLDER=$ADBPATH/service.d/propsconf_late
 else
 	POSTPATH=$IMGPATH/.core/post-fs-data.d
 	SERVICEPATH=$IMGPATH/.core/service.d
+	POSTHOLDER=$BIMGPATH/.core/post-fs-data.d/propsconf_post
+	LATEHOLDER=$BIMGPATH/.core/service.d/propsconf_late
 fi
 POSTFILE=$POSTPATH/propsconf_post
 UPDATEPOSTFILE=$INSTALLER/common/propsconf_post
@@ -428,13 +432,14 @@ script_install() {
 	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
 	placeholder_update $MODPATH/util_functions.sh SYSTEMLOC SYSTEM_PLACEHOLDER "$SYSTEMLOC"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
-	placeholder_update $MODPATH/util_functions.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
-	placeholder_update $MODPATH/util_functions.sh POSTFILE POST_PLACEHOLDER "$POSTFILE"
+	placeholder_update $MODPATH/util_functions.sh LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
+	placeholder_update $MODPATH/util_functions.sh POSTFILE POST_PLACEHOLDER "$POSTHOLDER"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
 	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
-	placeholder_update $LATEFILE POSTFILE POST_PLACEHOLDER "$POSTFILE"
+	placeholder_update $POSTFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+	placeholder_update $LATEFILE POSTFILE POST_PLACEHOLDER "$POSTHOLDER"
 	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
-	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEFILE"
+	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
 	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
 	print_files
 }
