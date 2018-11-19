@@ -12,6 +12,7 @@
 COREPATH=CORE_PLACEHOLDER
 IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
+CACHELOC=CACHE_PLACEHOLDER
 POSTLOGFILE=$CACHELOC/propsconf_postfile.log
 
 # Checks if the module is installed. Deletes itself if it isn't.
