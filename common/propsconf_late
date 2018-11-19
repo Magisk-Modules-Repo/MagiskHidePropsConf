@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=18
+SCRIPTV=19
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
