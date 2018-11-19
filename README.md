@@ -302,6 +302,9 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v2.6.5  
+- Fixed some of the "optimisations" I did in the previous release (read: I messed up).
+
 ### v2.6.4  
 - Fixed the "Delete prop values" function to properly delete persistent props.
 - Updated for the new paths introduced in Magisk v17.4-ab5fedda(17316).
