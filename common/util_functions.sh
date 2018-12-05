@@ -27,9 +27,10 @@ $LATEFILE
 CONFFILE=$CACHELOC/propsconf_conf
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
-BBPATH=$MAGISKLOC/busybox
-if [ -z "$(echo $PATH | grep /sbin:)" ]; then
-	alias resetprop="$MAGISKLOC/magisk resetprop"
+if [ -d "$IMGPATH/busybox-ndk" ]; then
+		BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+else
+	BBPATH=$(which busybox)
 fi
 alias cat="$BBPATH cat"
 alias chmod="$BBPATH chmod"
@@ -44,6 +45,9 @@ alias tar="$BBPATH tar"
 alias tee="$BBPATH tee"
 alias tr="$BBPATH tr"
 alias wget="$BBPATH wget"
+if [ -z "$(echo $PATH | grep /sbin:)" ]; then
+	alias resetprop="$MAGISKLOC/magisk resetprop"
+fi
 PRINTSLOC=$MODPATH/prints.sh
 PRINTSTMP=$CACHELOC/prints.sh
 PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
@@ -232,11 +236,11 @@ orig_check() {
 # Check if boot scripts ran during boot
 script_ran_check() {
 	POSTCHECK=0
-	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "post-fs-data.d finished")" ]; then
+	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "post-fs-data boot script finished")" ]; then
 		POSTCHECK=1
 	fi
 	LATECHECK=0
-	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "Boot script finished")" ]; then
+	if [ -f "$RUNFILE" ] && [ "$(cat $RUNFILE | grep "late_start service boot script finished")" ]; then
 		LATECHECK=1
 	fi
 }

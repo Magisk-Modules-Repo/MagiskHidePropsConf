@@ -71,6 +71,26 @@ esac
 
 log_handler "Running props script."
 
+if [ -z "$BBPATH" ]; then
+	menu_header "${C}No Busybox found${N}"
+	echo ""
+	echo "You don't seem to have Busybox installed"
+	echo "to your system. Please install it, since"
+	echo "it is required to ensure proper"
+	echo "functionality of the scripts."
+	echo ""
+	echo "I recommend osm0sis' Busybox, installable"
+	echo "as a Magisk module from the Magisk repo."
+	echo ""
+	echo "If you do have Busybox installed, please"
+	echo "check the module documentation on how to"
+	echo "ask for support and provide logs."
+	echo ""
+	log_handler "No Busybox found."
+	log_handler "Exiting... Bye bye.\n\n===================="	
+	exit 0
+fi
+
 blank_input() {
 	# Find menu level
 	case $1 in
@@ -2024,14 +2044,14 @@ reset_everything() {
 
 ISSUECHK=0
 if [ "$ISSUECHK" == 0 ] && [ ! -f "$LATEFILE" ]; then
-	log_handler "Boot script can't be found."
+	log_handler "late_start service boot script can't be found."
 	ISSUECHK=1
-	ISSUETXT="The module boot script can't be found.\n Please reboot your device to reset."
+	ISSUETXT="The late_start service boot script can't be found.\n\n Please reboot your device to reset."
 fi
 
 orig_check
 if  [ "$ISSUECHK" == 0 ] && [ "$ORIGLOAD" == 0 ]; then
-	log_handler "Original values are not loaded in propsconf_late."
+	log_handler "Original prop values are not loaded in late_start service boot script."
 	ISSUECHK=1
 	ISSUETXT="The original prop values are not loaded,\n possibly due to a full reset of the module,\n or something has gone wrong.\n\n Please reboot your device to reset."
 fi
@@ -2042,13 +2062,13 @@ if [ "$ISSUECHK" == 0 ] && [ "$POSTCHECK" == 0 ] && [ "$LATECHECK" == 0 ]; then
 	ISSUECHK=1
 	ISSUETXT="None of the boot scripts appear\n to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n they do run."
 elif [ "$ISSUECHK" == 0 ] && [ "$POSTCHECK" == 0 ]; then
-	log_handler "The post-fs-data.d script did not run during boot."
+	log_handler "The post-fs-data boot script did not run during boot."
 	ISSUECHK=1
-	ISSUETXT="The post-fs-data.d boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
+	ISSUETXT="The post-fs-data boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
 elif [ "$ISSUECHK" == 0 ] && [ "$LATECHECK" == 0 ]; then
-	log_handler "The service.d boot script did not run during boot."
+	log_handler "The late_start service boot script did not run during boot."
 	ISSUECHK=1
-	ISSUETXT="The service.d boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
+	ISSUETXT="The late_start service boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
 fi
 
 if [ "$ISSUECHK" == 1 ]; then

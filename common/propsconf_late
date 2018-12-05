@@ -9,7 +9,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=19
+SCRIPTV=20
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
@@ -78,10 +78,9 @@ if [ -d "$MODPATH" ]; then
 			done
 		fi
 
-		log_script_chk "Running boot script."
+		log_script_chk "Running late_start service boot script."
 
 		if [ -f "$MODPATH/disable" ]; then
-			log_start
 			log_handler "Module disabled."
 		else
 
@@ -181,7 +180,7 @@ if [ -d "$MODPATH" ]; then
 				rm -f $LATELOGFILE >> $LOGFILE 2>&1
 			fi
 
-			log_script_chk "Boot script finished.\n\n=================="
+			log_script_chk "late_start service boot script finished.\n\n=================="
 		fi
 	fi
 else

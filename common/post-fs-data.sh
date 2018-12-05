@@ -23,8 +23,8 @@ fi
 if [ ! -f "$POSTFILE" ]; then
 	# Start logging
 	log_start
-	log_handler "Post-fs-data boot script not found."
-	log_handler "Restoring boot script (${POSTFILE})."
+	log_handler "post-fs-data boot script not found."
+	log_handler "Restoring post-fs-data boot script (${POSTFILE})."
 	cp -af $MODPATH/propsconf_post $POSTFILE >> $LOGFILE 2>&1
 	chmod -v 755 $POSTFILE >> $LOGFILE 2>&1
 	placeholder_update $POSTFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
@@ -36,9 +36,9 @@ if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 		RSTTXT="Resetting"
 	else
 		RSTTXT="Restoring"
-		log_handler "Late_start service boot script not found."
+		log_handler "late_start service boot script not found."
 	fi	
-	log_handler "$RSTTXT boot script (${LATEFILE})."
+	log_handler "$RSTTXT late_start service boot script (${LATEFILE})."
 	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 	chmod -v 755 $LATEFILE >> $LOGFILE 2>&1
 	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
@@ -46,7 +46,7 @@ if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	
 fi
 
-log_handler "post-fs-data.sh finished.\n\n===================="
+log_handler "post-fs-data.sh module script finished.\n\n===================="
 
 # Deletes the post-fs-data control file
 rm -f $POSTCHKFILE

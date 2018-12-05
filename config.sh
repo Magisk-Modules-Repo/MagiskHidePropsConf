@@ -42,7 +42,8 @@ LATESTARTSERVICE=false
 print_modname() {
   MODVERSION=$(echo $(get_file_value $INSTALLER/module.prop "version=") | sed 's|-.*||')
   ui_print "*******************************"
-  ui_print " MagiskHide Props Config $MODVERSION"
+  ui_print "MagiskHide Props Config $MODVERSION"
+  ui_print "    By Didgeridoohan @XDA"
   ui_print "*******************************"
 }
 
@@ -200,7 +201,7 @@ tags
 selinux
 fingerprint
 "
-USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoofingTool4Magisk universal-safetynet-fix samodx-safetyskipper"
+USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoofingTool4Magisk universal-safetynet-fix samodx-safetyskipper safetypatcher petnoires-safetyspoofer"
 
 # Log functions
 log_handler() {
@@ -362,11 +363,11 @@ build_prop_check() {
 		if [ "$D" != "$MODID" ]; then
 			if [ -f "$IMGPATH/$D/system/build.prop" ]; then
 				NAME=$(get_file_value $IMGPATH/$D/module.prop "name=")
-				log_print ""
+				ui_print "!"
 				log_print "! Another module editing build.prop detected!"
 				log_print "! Module - '$NAME'!"
 				log_print "! Modification of build.prop disabled!"
-				log_print ""
+				ui_print "!"
 				sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE
 			fi
 		fi
@@ -379,11 +380,11 @@ usnf_check() {
 	for USNF in $USNFLIST; do
 		if [ -d "$IMGPATH/$USNF" ]; then
 			NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
-			log_print ""
+			ui_print "!"
 			log_print "! Module editing fingerprint detected!"
 			log_print "! Module - '$NAME'!"
 			log_print "! Fingerprint modification disabled!"
-			log_print ""
+			ui_print "!"
 			sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
 		fi
 	done
@@ -404,17 +405,17 @@ bin_check() {
 # Magisk installation check
 install_check() {
 	if [ ! -d "$SERVICEPATH" ] || [ ! -d "$POSTPATH" ]; then
-		log_print "Fresh Magisk installation detected."
+		log_print "- Fresh Magisk installation detected."
 		log_handler "Creating path for boot script."
 		mkdir -pv $POSTPATH >> $INSTLOG 2>&1
 		mkdir -pv $SERVICEPATH >> $INSTLOG 2>&1
 	fi
 }
 
-# Check for boot script in post-fs-data.d, in case someone's moved it
+# Check for late_start service boot script in post-fs-data.d, in case someone's moved it
 post_check() {
 	if [ -f "$POSTLATEFILE" ]; then
-		log_handler "Removing boot script from post-fs-data.d."
+		log_handler "Removing late_start service boot script from post-fs-data.d."
 		rm -f $POSTLATEFILE
 	fi
 }
@@ -435,6 +436,7 @@ script_install() {
 	placeholder_update $MODPATH/util_functions.sh LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
 	placeholder_update $MODPATH/util_functions.sh POSTFILE POST_PLACEHOLDER "$POSTHOLDER"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $MODPATH/util_functions.sh BBWWWPATH BB_PLACEHOLDER "$BBWWWPATH"
 	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $POSTFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $LATEFILE POSTFILE POST_PLACEHOLDER "$POSTHOLDER"
@@ -442,4 +444,8 @@ script_install() {
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
 	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
 	print_files
+	ui_print ""
+	ui_print "- Make sure to have Busybox installed."
+	ui_print "- osm0sis' Busybox is recommended."
+	ui_print ""
 }

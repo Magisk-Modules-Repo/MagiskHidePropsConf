@@ -13,6 +13,7 @@ What this module does is that it adds a terminal based UI for those that don't w
 
 ## Documentation index
 
+- [Prerequisites](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prerequisites)
 - [Installation](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#installation)
 - [Usage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#usage)
 - [Spoofing device's fingerprint to pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#spoofing-devices-fingerprint-to-pass-the-ctsprofile-check)
@@ -45,15 +46,18 @@ What this module does is that it adds a terminal based UI for those that don't w
   - [I can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-ctsprofile-check)
   - [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)
   - [Props don't seem to set properly](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly)
-  - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
-  - [The Play Store is "uncertified"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-play-store-is-uncertified)
 - [Logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs)
   - [Collecting logs manually](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#collecting-logs-manually)
 - [Source](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#source)
 - [Credits](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#credits)
 - [Changelog](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changelog)
 - [Current fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#current-fingerprints-list)
+
+
+## Prerequisites
+- Magisk v17+.
+- Busybox, preferably @osm0sis'
 
 
 ## Installation
@@ -150,7 +154,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v37_**
+**_Current fingerprints list version - v38_**
 
 
 ## Please add support for device X
@@ -247,7 +251,7 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 
 ### Known issues
 - Xiaomi devices (MIUI) sometimes have issues passing the ctsProfile check, particularly China releases. Try using [ShellHide](https://forum.xda-developers.com/apps/magisk/magisk-shellhide-t3855616) by @JayminSuthar together with this module. They might work in conjunction to get the device to pass SafetyNet.
-- If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and in Magisk v17.2 the resetprop tool wwas been updated for this change.
+- If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and with Magisk v17.2 the resetprop tool was been updated for this change.
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
@@ -304,6 +308,11 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v2.7.0  
+- Updated Busybox logic (again). It is now required to install Busybox alongside the module, to ensure proper functionality. I recommend @osm0sis' Busybox, installable as a Magisk module from the Magisk repo.
+- Added fingerprints for Google Nexus 7 (2012 & 2013, WiFi & LTE), Nexus 9 (WiFi & LTE) and Pixel C, LG V30, Motorola Moto E5 Plus, OnePlus 6T, Samsung Galaxy J7 Prime and S5, and Xiaomi Mi 8. Updated the fingerprint for Huawei P8 Lite and Xiaomi Mi Mix 2s. List updated to v38.
+- Probably some other small fixes as well. Can't remember...
+
 ### v2.6.5  
 - Fixed some of the "optimisations" I did in the previous release (read: I messed up).
 
@@ -362,7 +371,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Various fixes and improvements, as usual.
 
 ### v2.3.5  
-- Fixed issue with busybox version detection.
+- Fixed issue with Busybox version detection.
 - Fixed the documentation. Some parts had been accidentally deleted. Oops...
 - Improved log collecting.
 - Added and updated fingerprints for the Xiaomi Mi Note 2 and Redmi Note 5A Lite, list v23.
@@ -483,7 +492,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v37  
+### List v38  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -491,8 +500,14 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
 - Google Nexus 6 (7.1.1)
-- Google Nexus 5X (8.1.0)
+- Google Nexus 5x (8.1.0)
 - Google Nexus 6P (8.1.0)
+- Google Nexus 7 2012 WiFi (5.1.1)
+- Google Nexus 7 2012 LTE (5.1.1)
+- Google Nexus 7 2013 WiFi (6.0.1)
+- Google Nexus 7 2013 LTE (6.0.1)
+- Google Nexus 9 WiFi ()
+- Google Nexus 9 LTE (7.1.1)
 - Google Nexus 10 (5.1.1)
 - Google Pixel (9)
 - Google Pixel XL (9)
@@ -500,6 +515,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Google Pixel 2 XL (9)
 - Google Pixel 3 (9)
 - Google Pixel 3 XL (9)
+- Google Pixel C (8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
 - HTC U12 Plus (8.0.0)
@@ -516,9 +532,11 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - LG G2 BS980 (5.0.2)
 - LG G4 H812 (6.0)
 - LG G5 H850 (8.0.0)
+- LG V30 H930 (8.0.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto E4 Plus (7.1.1)
+- Motorola Moto E5 Plus (8.0.0)
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
@@ -537,6 +555,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - OnePlus 5 (8.1.0)
 - OnePlus 5T (8.1.0)
 - OnePlus 6 (9)
+- OnePlus 6T (9)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
@@ -544,6 +563,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Samsung Galaxy J5 2015 (6.0.1)
 - Samsung Galaxy J5 (7.1.1)
 - Samsung Galaxy J5 Prime (7.0)
+- Samsung Galaxy J7 Prime (6.0.1)
 - Samsung Galaxy Note 3 (5.0)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
@@ -551,6 +571,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Samsung Galaxy Note 10.1 2014 (5.1.1)
 - Samsung Galaxy S3 Neo (4.4.4)
 - Samsung Galaxy S4 (5.0.1)
+- Samsung Galaxy S5 (6.0.1)
 - Samsung Galaxy S6 (7.0)
 - Samsung Galaxy S6 Edge (7.0)
 - Samsung Galaxy S7 (8.0.0)
@@ -592,8 +613,8 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Mi 5/5 Pro (8.0.0)
 - Xiaomi Mi 5S (7.0)
 - Xiaomi Mi 5S Plus (7.0)
-- Xiaomi Mi 6 (7.1.1)
 - Xiaomi Mi 6 (8.0.0)
+- Xiaomi Mi 8 (8.1.0)
 - Xiaomi Mi A1 (8.0.0)
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Mix 2 (8.0.0)

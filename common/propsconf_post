@@ -32,7 +32,6 @@ if [ -d "$MODPATH" ]; then
 		log_start
 
 		if [ -f "$MODPATH/disable" ]; then
-			log_start
 			log_handler "Module disabled."
 		else
 			# Clears out the script control file
@@ -149,7 +148,7 @@ if [ -d "$MODPATH" ]; then
 			fi
 		fi
 		
-		log_script_chk "post-fs-data.d finished.\n\n===================="
+		log_script_chk "post-fs-data boot script finished.\n\n===================="
 	fi
 else
 	echo "$MODPATH not found." >> $POSTLOGFILE 2>&1
