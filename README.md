@@ -135,7 +135,7 @@ If you've picked a certified fingerprint from the provided list, or you're using
 - Go into the script options and make sure the execution of the boot script is in post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
 - Try a different fingerprint (pick one from the provided list).
 - If you're not using one of the fingerprints provided in the module, make sure you have a matching security patch date set in [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values). See ["Matching the Android security patch date"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above.
-- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide, or that they are built in a way that they simply can't pass. Check in your ROM thread or with the creator/developer.
+- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide, or that they are built in a way that makes it impossible to pass SafetyNet. Check in your ROM thread or with the creator/developer.
 - You might have remnants of previous modifications that trigger SafetyNet on your device. A clean install of your system may be required.
 - If you can't get things working, and want help, make sure to provide logs and details. See ["Logs"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs) below.
 
