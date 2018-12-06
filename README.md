@@ -121,7 +121,7 @@ Take a look below for an example of what a device fingerprint looks like.
 Sometimes you can also find up to date and certified fingerprints at [firmware.mobi](https://desktop.firmware.mobi/).
 
 ### Custom fingerprints list
-You can add your own fingerprint to the list by placing a file, named `printslist` (no file extension), in the root of your internal storage with the fingerprints. It needs to be formated as follows: `device name=fingerprint`. The fingerprints added to this list will be found under the `Custom` category in the fingerprints menu.
+You can add your own fingerprint to the list by placing a file, named `printslist` (no file extension), in the root of your internal storage with the fingerprints. It needs to be formated as follows: `device name=fingerprint`. The fingerprints added to this list will be found under the `Custom` category in the fingerprints menu. If you create the printslist file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Notepad).
 Here's an example:
 ```
 Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
@@ -234,7 +234,7 @@ This option will disable or enable the automatic updating of the fingerprints li
 
 
 ## Configuration file
-You can use a configuration file to set your desired options, rather than running the `props` command. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip (in the common folder), fill in the desired options (follow the instructions in the file), place it in /cache (or /data/cache if you're using an A/B device) and reboot.
+You can use a configuration file to set your desired options, rather than running the `props` command. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip (in the common folder), fill in the desired options (follow the instructions in the file), place it in /cache (or /data/cache if you're using an A/B device) and reboot. If you edit the configuration file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Notepad).
 
 This can also be done directly at the first install (through Manager or recovery) and even on a brand new clean install of Magisk, before even rebooting your device. Upon detecting the file, the module boot script will load the configured values and then delete the the configuration file. Instant settings.
 
