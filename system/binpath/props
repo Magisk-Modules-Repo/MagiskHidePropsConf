@@ -333,8 +333,9 @@ menu_pick_print() {
 			OEMLIST="$(ls $PRINTFILES | sed 's|\.sh||g')"
 			if [ "$OEMLIST" ]; then
 				# Check for custom fingerprints list
-				if [ -f "$CSTMPRINTS" ] && [ ! -f "$CSTMFILE" ]; then
+				if [ -s "$CSTMPRINTS" ] && [ ! -f "$CSTMFILE" ]; then
 					log_handler "Found custom fingerprints list."
+					format_file $CSTMPRINTS
 					log_handler "Creating custom prints file."
 					cat $CSTMPRINTS >> $LOGFILE 2>&1 && echo "" >> $LOGFILE 2>&1
 					echo -e "PRINTSLIST=\"" >> $CSTMFILE
@@ -375,7 +376,7 @@ menu_pick_print() {
 				break
 			fi
 		fi
-		if [ "$INPUT3" -ge 1 ] && [ "$INPUT3" -le "$ITEMCOUNT" ]; then
+		if [ "$INPUT3" -ge 1 ] && [ "$INPUT3" -lt "$ITEMCOUNT" ]; then
 			ITEMCOUNT=1
 			for ITEM in $OEMLIST; do
 				if [ "$ITEMCOUNT" == "$INPUT3" ]; then
@@ -441,7 +442,7 @@ menu_pick_print_sub() {
 			echo -n "Enter '${G}e${N}' to exit: "
 			read -r INPUT4
 		fi
-		if [ "$INPUT4" -ge 1 ] && [ "$INPUT4" -le "$ITEMCOUNT" ]; then
+		if [ "$INPUT4" -ge 1 ] && [ "$INPUT4" -lt "$ITEMCOUNT" ]; then
 			ITEMCOUNT=1
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")

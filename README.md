@@ -156,7 +156,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v38_**
+**_Current fingerprints list version - v39_**
 
 
 ## Please add support for device X
@@ -310,6 +310,11 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v2.7.1  
+- Fixed an issue when users create custom prints list and configuration files with Windows file endings.
+- Fixed an issue where the currently picked device wouldn't show for the custom prints list.
+- Added fingerprints for Sony Xperia Z4 Tablet LTE and Xiaomi Mi A2 & Redmi Y1. Updated fingerprints for Essential PH-1, Google Nexus 5X & 6P, Pixel 1-3 (both regular and XL) & C and Sony Xperia XZ1 Compact. List updated to v39.
+
 ### v2.7.0  
 - Updated Busybox logic (again). It is now required to install Busybox alongside the module, to ensure proper functionality. I recommend @osm0sis' Busybox, installable as a Magisk module from the Magisk repo.
 - Added fingerprints for Google Nexus 7 (2012 & 2013, WiFi & LTE), Nexus 9 (WiFi & LTE) and Pixel C, LG V30, Motorola Moto E5 Plus, OnePlus 6T, Samsung Galaxy J7 Prime and S5, and Xiaomi Mi 8. Updated the fingerprint for Huawei P8 Lite and Xiaomi Mi Mix 2s. List updated to v38.
@@ -494,7 +499,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v38  
+### List v39  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -604,6 +609,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Sony Xperia Z3 (6.0.1)
 - Sony Xperia Z3 Compact (6.0.1)
 - Sony Xperia Z3 Tablet Compact (6.0.1)
+- Sony Xperia Z4 Tablet LTE (7.1.1)
 - Sony Xperia Z5 (7.1.1)
 - Sony Xperia Z5 Compact (7.1.1)
 - Sony Xperia Z5 Dual (7.1.1)
@@ -618,6 +624,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi 8 (8.1.0)
 - Xiaomi Mi A1 (8.0.0)
+- Xiaomi Mi A2 (8.1.0)
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Mix 2 (8.0.0)
 - Xiaomi Mi Mix 2S (8.0.0)
@@ -635,6 +642,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Redmi Note 5/5 Plus (7.1.2)
 - Xiaomi Redmi Note 5 Pro (8.1.0)
 - Xiaomi Redmi Note 5A Lite (7.1.2)
+- Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (8.0.0)
 - ZTE Blade (6.0.1)
 - ZTE Nubia Z17 (7.1.1)

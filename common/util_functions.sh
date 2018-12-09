@@ -176,6 +176,12 @@ get_device_used() {
 	if [ "$PRINTTMP" ]; then
 		echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N}"
 		echo ""
+	elif [ -s "$CSTMPRINTS" ]; then
+		PRINTTMP=$(cat $CSTMPRINTS | grep "$1")
+		if [ "$PRINTTMP" ]; then
+			echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N} (from custom list)"
+			echo ""
+		fi
 	fi
 }
 
@@ -204,6 +210,17 @@ get_print_display() {
 # Replace file values
 replace_fn() {
 	sed -i "s|${1}=${2}|${1}=${3}|" $4
+}
+
+# Format user files
+format_file() {
+	log_handler "Formating file (${1})."
+	# Remove Windows line endings
+	sed -i 's/\r$//' $1
+	# Check for newline at EOF
+	if [ ! -z "$(tail -c 1 "$1")" ]; then
+		echo "" >> $1
+	fi
 }
 
 # Updates placeholders
@@ -374,8 +391,9 @@ orig_safe() {
 # Checks for configuration file
 config_file() {
 	log_handler "Checking for configuration file."
-	if [ -f "$CONFFILE" ]; then
+	if [ -s "$CONFFILE" ]; then
 		log_handler "Configuration file detected (${CONFFILE})."
+		format_file $CONFFILE
 		# Loads custom variables
 		. $CONFFILE
 		# Updates prop values (including fingerprint)	
