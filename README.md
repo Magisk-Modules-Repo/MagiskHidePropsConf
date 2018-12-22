@@ -311,7 +311,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 ## Changelog
 ### v2.7.2  
-- Re-run the post-fs-data script if the Magisk image wasn't mounted yet.
+- Re-run the post-fs-data script if the Magisk image wasn't mounted yet or if the script has been reset.
 - Added fingeprints for Razer Phone 1 & 2 and Xiaomi Mi Pad 4, and updated fingerprints for Xiaomi Mi 8, Mi A2 & Pocophone F1. List v40.
 - Mostly harmless.
 - Small fixes, as usual.
