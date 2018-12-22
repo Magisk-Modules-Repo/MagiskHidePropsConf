@@ -156,7 +156,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v39_**
+**_Current fingerprints list version - v40_**
 
 
 ## Please add support for device X
@@ -310,6 +310,12 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v2.7.2  
+- Re-run the post-fs-data script if the Magisk image wasn't mounted yet.
+- Added fingeprints for Razer Phone 1 & 2 and Xiaomi Mi Pad 4, and updated fingerprints for Xiaomi Mi 8, Mi A2 & Pocophone F1. List v40.
+- Mostly harmless.
+- Small fixes, as usual.
+
 ### v2.7.1  
 - Fixed an issue when users create custom prints list and configuration files with Windows file endings.
 - Fixed an issue where the currently picked device wouldn't show for the custom prints list.
@@ -499,14 +505,14 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v39  
+### List v40  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
 - Essential PH-1 (9)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
-- Google Nexus 5x (8.1.0)
+- Google Nexus 5X (8.1.0)
 - Google Nexus 6 (7.1.1)
 - Google Nexus 6P (8.1.0)
 - Google Nexus 7 2012 WiFi (5.1.1)
@@ -563,6 +569,8 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - OnePlus 5T (8.1.0)
 - OnePlus 6 (9)
 - OnePlus 6T (9)
+- Razer Phone (8.1.0)
+- Razer Phone 2 (8.1.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
@@ -597,7 +605,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Sony Xperia XZ Premium (8.0.0)
 - Sony Xperia XZ Premium Dual (8.0.0)
 - Sony Xperia XZ1 (8.0.0)
-- Sony Xperia XZ1 Compact (8.0.0)
+- Sony Xperia XZ1 Compact (9)
 - Sony Xperia XZ1 Dual (8.0.0)
 - Sony Xperia XZ2 (8.0.0)
 - Sony Xperia XZ2 Compact (8.0.0)
@@ -622,14 +630,15 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Mi 5S (7.0)
 - Xiaomi Mi 5S Plus (7.0)
 - Xiaomi Mi 6 (8.0.0)
-- Xiaomi Mi 8 (8.1.0)
+- Xiaomi Mi 8 (9)
 - Xiaomi Mi A1 (8.0.0)
-- Xiaomi Mi A2 (8.1.0)
+- Xiaomi Mi A2 (9)
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Mix 2 (8.0.0)
-- Xiaomi Mi Mix 2S (8.0.0)
+- Xiaomi Mi Mix 2S (9.0.0)
 - Xiaomi Mi Note 2 (8.0.0)
-- Xiaomi Pocophone F1 (8.1.0)
+- Xiaomi Mi Pad 4 (8.1.0)
+- Xiaomi Pocophone F1 (9)
 - Xiaomi Redmi 3/3 Pro (5.1.1)
 - Xiaomi Redmi 3S/X Prime (6.0.1)
 - Xiaomi Redmi 4 Prime (6.0.1)

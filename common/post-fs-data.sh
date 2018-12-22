@@ -11,6 +11,9 @@ MODPATH=${0%/*}
 
 # Variables
 IMGPATH=$(dirname "$MODPATH")
+COREPATH=$(dirname "$IMGPATH")
+POSTLOGFILE=$CACHELOC/propsconf_postfile.log
+POSTDEL=0
 
 # Load functions
 . $MODPATH/util_functions.sh
@@ -27,13 +30,16 @@ if [ ! -f "$POSTFILE" ]; then
 	log_handler "Restoring post-fs-data boot script (${POSTFILE})."
 	cp -af $MODPATH/propsconf_post $POSTFILE >> $LOGFILE 2>&1
 	chmod -v 755 $POSTFILE >> $LOGFILE 2>&1
-	placeholder_update $POSTFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
+	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
+	placeholder_update $POSTFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	# Deleting settings script to force a restore
 	rm -f $LATEFILE
+	POSTDEL=1
 fi
 if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	if [ -f "$RESETFILE" ]; then
 		RSTTXT="Resetting"
+		rm -f $RESETFILE
 	else
 		RSTTXT="Restoring"
 		log_handler "late_start service boot script not found."
@@ -41,9 +47,17 @@ if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	log_handler "$RSTTXT late_start service boot script (${LATEFILE})."
 	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 	chmod -v 755 $LATEFILE >> $LOGFILE 2>&1
-	placeholder_update $LATEFILE IMGPATH IMG_PLACEHOLDER $IMGPATH
-	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER $CACHELOC
-	
+	placeholder_update $LATEFILE POSTFILE POST_PLACEHOLDER "$POSTFILE"
+	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
+	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+fi
+
+# Checking if the post-fs-data boot script ran during boot
+if [ -f "$POSTLOGFILE" ] || [ "$POSTDEL" == 1 ]; then
+	if [ "$(cat $POSTLOGFILE | grep "Module no longer installed.")" ] || [ "$POSTDEL" == 1 ]; then
+		log_handler "post-fs-data boot script did not run. Attempting a re-run."
+		. $POSTFILE
+	fi
 fi
 
 log_handler "post-fs-data.sh module script finished.\n\n===================="

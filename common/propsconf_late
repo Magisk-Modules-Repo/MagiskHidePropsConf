@@ -37,9 +37,6 @@ OPTIONCOLOUR=1
 OPTIONWEB=1
 
 CACHEFILES="
-propsconf.log
-propsconf_last.log
-propsconf_install.log
 propsconf_conf
 reset_mhpc
 "

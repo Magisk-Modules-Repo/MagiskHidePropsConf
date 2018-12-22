@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=39
+PRINTSV=40
 PRINTSTRANSF=250
 
 # Certified fingerprints
@@ -71,6 +71,8 @@ OnePlus 5 (8.1.0)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:use
 OnePlus 5T (8.1.0)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01
 OnePlus 6 (9)=OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
 OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1811170214:user/release-keys__2018-11-01
+Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
+Razer Phone 2 (8.1.0)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
 Samsung Galaxy J2 (5.1.1)=samsung/j23gdd/j23g:5.1.1/LMY48B/J200HXXU0AQK2:user/release-keys
@@ -130,14 +132,15 @@ Xiaomi Mi 5/5 Pro (8.0.0)=Xiaomi/gemini/gemini:8.0.0/OPR1.170623.032/V9.6.1.0.OA
 Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.5.4.0.NAGMIFD:user/release-keys
 Xiaomi Mi 5S Plus (7.0)=Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
-Xiaomi Mi 8 (8.1.0)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys
+Xiaomi Mi 8 (9)=Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.1.1.0.PEAMIFI:user/release-keys__2018-11-01
 Xiaomi Mi A1 (8.0.0)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys
-Xiaomi Mi A2 (8.1.0)=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.16.0.ODIMIFE:user/release-keys__2018-11-05
+Xiaomi Mi A2 (9)=xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.2.0.PDIMIFJ:user/release-keys__2018-12-05
 Xiaomi Mi Max 2 (7.1.1)=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
 Xiaomi Mi Mix 2 (8.0.0)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V9.6.1.0.ODEMIFD:user/release-keys
 Xiaomi Mi Mix 2S (9.0.0)=Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.0.6.0.PDGMIFH:user/release-keys__2018-10-01
 Xiaomi Mi Note 2 (8.0.0)=Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
-Xiaomi Pocophone F1 (8.1.0)=Xiaomi/beryllium/beryllium:8.1.0/OPM1.171019.011/V9.6.22.0.OEJMIFD:user/release-keys__2018-08-01
+Xiaomi Mi Pad 4 (8.1.0)=ro.build.fingerprint=Xiaomi/clover/clover:8.1.0/OPM1.171019.019/V10.1.1.0.ODJCNFI:user/release-keys__2018-10-01
+Xiaomi Pocophone F1 (9)=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V10.1.3.0.PEJMIFI:user/release-keys__2018-11-01
 Xiaomi Redmi 3/3 Pro (5.1.1)=Xiaomi/ido/ido:5.1.1/LMY47V/V9.6.2.0.LAIMIFD:user/release-keys
 Xiaomi Redmi 3S/X Prime (6.0.1)=Xiaomi/land/land:6.0.1/MMB29M/V9.5.1.0.MALMIFA:user/release-keys
 Xiaomi Redmi 4 Prime (6.0.1)=Xiaomi/markw/markw:6.0.1/MMB29M/V9.5.3.0.MBEMIFA:user/release-keys
