@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=40
+PRINTSV=41
 PRINTSTRANSF=250
 
 # Certified fingerprints
@@ -21,7 +21,7 @@ Google Nexus 7 2012 WiFi (5.1.1)=google/nakasi/grouper:5.1.1/LMY47V/1836172:user
 Google Nexus 7 2012 LTE (5.1.1)=google/nakasig/tilapia:5.1.1/LMY47V/1836172:user/release-keys
 Google Nexus 7 2013 WiFi (6.0.1)=google/razor/flo:6.0.1/MOB30X/3036618:user/release-keys
 Google Nexus 7 2013 LTE (6.0.1)=google/razorg/deb:6.0.1/MOB30X/3036618:user/release-keys
-Google Nexus 9 WiFi ()=google/volantis/flounder:7.1.1/N9F27M/4333998:user/release-keys
+Google Nexus 9 WiFi (7.1.1)=google/volantis/flounder:7.1.1/N9F27M/4333998:user/release-keys
 Google Nexus 9 LTE (7.1.1)=google/volantisg/flounder_lte:7.1.1/N4F27P/4333386:user/release-keys
 Google Nexus 10 (5.1.1)=google/mantaray/manta:5.1.1/LMY49J/2640980:user/release-keys
 Google Pixel (9)=google/sailfish/sailfish:9/PQ1A.181205.002.A1/5129870:user/release-keys__2018-12-05
@@ -38,7 +38,7 @@ Huawei Honor 6X (8.0.0)=HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/528(C00):user
 Huawei Honor 9 (8.0.0)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys
 Huawei Mate 10 (8.0.0)=HUAWEI/ALP-L29/HWALP:8.0.0/HUAWEIALP-L29S/143(C636):user/release-keys__2018-10-01
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
-Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/395(C432):user/release-keys__2018-12-05
+Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/399(C432):user/release-keys__2019-01-01
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P9 Lite (7.0)=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/release-keys__2018-06-01
 Huawei P9 Plus (7.0)=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
@@ -51,6 +51,7 @@ LG V30 H930 (8.0.0)=lge/joan_global_com/joan:8.0.0/OPR1.170623.026/181381736b4e9
 Motorola Moto C Plus (7.0)=motorola/panell_21_d/panell_d:7.0/NRD90M.03.040/040:user/release-keys
 Motorola Moto E4 (7.1.1)=motorola/sperry_sprint/sperry:7.1.1/NCQ26.69-64/68:user/release-keys
 Motorola Moto E4 Plus (7.1.1)=motorola/nicklaus_fn/nicklaus_fn:7.1.1/NMA26.42-156/183:user/release-keys
+Motorola Moto E5 Play (8.0.0)=motorola/james_sprint/james:8.0.0/OCPS27.91-140-1/1:user/release-keys__2018-10-01
 Motorola Moto E5 Plus (8.0.0)=motorola/hannah_sprint/hannah:8.0.0/OCPS27.91-32-4/4:user/release-keys__2018-10-01
 Motorola Moto G4 (7.0)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys
 Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
@@ -73,6 +74,7 @@ OnePlus 6 (9)=OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/releas
 OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1811170214:user/release-keys__2018-11-01
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
 Razer Phone 2 (8.1.0)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05
+Samsung Galaxy A5 2017 (8.0.0)=samsung/a5y17ltexx/a5y17lte:8.0.0/R16NW/A520FXXU4CRE8:user/release-keys__2018-05-01
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
 Samsung Galaxy J2 (5.1.1)=samsung/j23gdd/j23g:5.1.1/LMY48B/J200HXXU0AQK2:user/release-keys
@@ -132,12 +134,13 @@ Xiaomi Mi 5/5 Pro (8.0.0)=Xiaomi/gemini/gemini:8.0.0/OPR1.170623.032/V9.6.1.0.OA
 Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.5.4.0.NAGMIFD:user/release-keys
 Xiaomi Mi 5S Plus (7.0)=Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
-Xiaomi Mi 8 (9)=Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.1.1.0.PEAMIFI:user/release-keys__2018-11-01
+Xiaomi Mi 8 (9)=Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.1.2.0.PEAMIFI:user/release-keys__2018-11-01
 Xiaomi Mi A1 (8.0.0)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys
 Xiaomi Mi A2 (9)=xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.2.0.PDIMIFJ:user/release-keys__2018-12-05
+Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
 Xiaomi Mi Max 2 (7.1.1)=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
 Xiaomi Mi Mix 2 (8.0.0)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V9.6.1.0.ODEMIFD:user/release-keys
-Xiaomi Mi Mix 2S (9.0.0)=Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.0.6.0.PDGMIFH:user/release-keys__2018-10-01
+Xiaomi Mi Mix 2S (9)=Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.0.9.0.PDGMIFH:user/release-keys__2018-11-01
 Xiaomi Mi Note 2 (8.0.0)=Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
 Xiaomi Mi Pad 4 (8.1.0)=ro.build.fingerprint=Xiaomi/clover/clover:8.1.0/OPM1.171019.019/V10.1.1.0.ODJCNFI:user/release-keys__2018-10-01
 Xiaomi Pocophone F1 (9)=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V10.1.3.0.PEJMIFI:user/release-keys__2018-11-01
@@ -151,8 +154,9 @@ Xiaomi Redmi Note 3 Pro (6.0.1)=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL
 Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
 Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.2.1.0.NCFMIEK:user/release-keys
 Xiaomi Redmi Note 5/5 Plus (7.1.2)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys
-Xiaomi Redmi Note 5 Pro (8.1.0)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V9.5.11.0.OEIMIFA:user/release-keys
+Xiaomi Redmi Note 5 Pro (8.1.0)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01
 Xiaomi Redmi Note 5A Lite (7.1.2)=xiaomi/ugglite/ugglite:7.1.2/N2G47H/V9.1.2.0.NDFMIEI:user/release-keys
+Xiaomi Redmi Note 6 Pro (8.1.0)=xiaomi/tulip/tulip:8.1.0/OPM1.171019.011/V10.0.5.0.OEKMIFH:user/release-keys__2018-10-01
 Xiaomi Redmi Y1 (7.1.2)=xiaomi/ugg/ugg:7.1.2/N2G47H/V9.6.2.0.NDKMIFD:user/release-keys__2018-07-01
 ZTE Axon 7 (8.0.0)=ZTE/P996A01_O/ailsa_ii:8.0.0/OPR1.170623.032/20180815.171922:user/release-keys__2018-07-01
 ZTE Blade (6.0.1)=ZTE/P809A50_MY_MAX/P809A50:6.0.1/MMB29M/20161017.095504:user/release-keys

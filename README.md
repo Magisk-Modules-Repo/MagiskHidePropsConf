@@ -156,7 +156,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-**_Current fingerprints list version - v40_**
+**_Current fingerprints list version - v41_**
 
 
 ## Please add support for device X
@@ -505,7 +505,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v40  
+### List v41  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -549,6 +549,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto E4 Plus (7.1.1)
+- Motorola Moto E5 Play (8.0.0)
 - Motorola Moto E5 Plus (8.0.0)
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
@@ -571,6 +572,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - OnePlus 6T (9)
 - Razer Phone (8.1.0)
 - Razer Phone 2 (8.1.0)
+- Samsung Galaxy A5 2017 (8.0.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
@@ -633,9 +635,10 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Mi 8 (9)
 - Xiaomi Mi A1 (8.0.0)
 - Xiaomi Mi A2 (9)
+- Xiaomi Mi A2 Lite (9)
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Mix 2 (8.0.0)
-- Xiaomi Mi Mix 2S (9.0.0)
+- Xiaomi Mi Mix 2S (9)
 - Xiaomi Mi Note 2 (8.0.0)
 - Xiaomi Mi Pad 4 (8.1.0)
 - Xiaomi Pocophone F1 (9)
@@ -651,6 +654,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Redmi Note 5/5 Plus (7.1.2)
 - Xiaomi Redmi Note 5 Pro (8.1.0)
 - Xiaomi Redmi Note 5A Lite (7.1.2)
+- Xiaomi Redmi Note 6 Pro (8.1.0)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (8.0.0)
 - ZTE Blade (6.0.1)
