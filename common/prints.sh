@@ -3,7 +3,7 @@
 # MagiskHide Props Config
 # By Didgeridoohan @ XDA Developers
 
-PRINTSV=41
+PRINTSV=42
 PRINTSTRANSF=250
 
 # Certified fingerprints
