@@ -6,7 +6,7 @@ alias grep="/sbin/.core/busybox/grep"
 BBPATH=$MAGIMG/busybox-ndk
 BBMAG=$MAGIMG/busybox-ndk/system/xbin/busybox
 
-if [[ -d "$BBPATH" && -e "$BBPATH/module.prop" ]]; then
+if [[ -d "$BBPATH" && -e "$BBMAG" ]]; then
     echo Busybox is installed
 	touch /sbin/.magisk/img/energizedprotection/busybox_install
 	chmod 777 /sbin/.magisk/img/energizedprotection/busybox_install
