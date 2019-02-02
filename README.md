@@ -167,7 +167,7 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
-If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply.
+If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
 **_Current fingerprints list version - v42_**
 
@@ -260,6 +260,8 @@ This option will disable or enable colours for the `props` script.
 ### Fingerprints list check
 This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option (use -h for details).
 
+### Automatic fingerprints update
+Whenever there is an update to the fingerprints list and if you have a fingerprint applied for a device that is on the list, the fingerprint will automatically be updated (if there is an update to that particular fingerprint).
 
 ## Configuration file
 You can use a configuration file to set your desired options, rather than running the `props` command. This is particularly useful if you have a large amount of custom props you want to set. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip ('propsconf_conf' in the common folder), fill in the desired options (follow the instructions in the file), place it /data or /cache (or /data/cache if you're using an A/B device) and reboot. You can also use the configuration file when first installing the module. Just place the file in the root of your internal storage (or one of the other previously mentioned locations) before flashing the module and the installation script will set everything up.
