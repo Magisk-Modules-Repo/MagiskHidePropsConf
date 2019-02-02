@@ -184,10 +184,8 @@ log_print() {
 # Places various module scripts in their proper places
 script_placement() {
 	if [ -f "$LATEFILE" ]; then
-		# Load module settings
-		load_settings
-		FILEV=$SCRIPTV
-		FILETRANSF=$SETTRANSF
+		FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
+		FILETRANSF=$(get_file_value $LATEFILE "SETTRANSF=")
 	else
 		FILEV=0
 		FILETRANSF=$UPDATETRANSF
@@ -450,6 +448,7 @@ devsim_update() {
 
 # Load module settings and reapply the MODPATH variable
 load_settings() {
+	log_handler "Loading/reloading module settings."
 	. $LATEFILE
 	MODPATH=$MOUNTPATH/$MODID
 }

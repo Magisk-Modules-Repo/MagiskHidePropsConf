@@ -350,6 +350,9 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v3.0.1  
+- Quickfix for updating the module from v2.7.2 or earlier.
+
 ### v3.0.0  
 - New function for device simulation. The module sets a number of device specifying props based on the used fingerprint. See the documentation for details.
 - New function for Treble GSI users that have a stock vendor partition: The module can use the certified vendor fingerprint found there. See the documentation for details. Thank you to @oF2pks for making me aware of this possibility.
