@@ -1,15 +1,16 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# By Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Licence: MIT
 
-# This is a script file for the Magisk module "MagiskHide Props Config" By Didgeridoohan @ XDA Developers.
+# This is the settings file for the Magisk module "MagiskHide Props Config" By Didgeridoohan @ XDA Developers.
 # DO NOT DELETE!
 # Unless: If you don't have the module installed something has gone horribly wrong and this file is an orphan.
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=21
+SCRIPTV=22
 SETTRANSF=2
 NOTTRANSF="OPTIONLATE"
 
@@ -18,11 +19,13 @@ COREPATH=CORE_PLACEHOLDER
 IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
 CACHELOC=CACHE_PLACEHOLDER
-POSTFILE=POST_PLACEHOLDER
 LATELOGFILE=$CACHELOC/propsconf_latefile.log
 
 FINGERPRINTENB=1
+PRINTMODULE=0
 PRINTEDIT=0
+PRINTVEND=0
+DEVSIM=0
 BUILDPROPENB=1
 FILESAFE=1
 BUILDEDIT=0
@@ -32,18 +35,89 @@ PROPEDIT=0
 CUSTOMEDIT=0
 DELEDIT=0
 REBOOTCHK=0
+PRINTCHK=0
 OPTIONLATE=0
 OPTIONCOLOUR=1
 OPTIONWEB=1
+OPTIONUPDATE=1
+
+BRANDSET=1
+NAMESET=1
+DEVICESET=1
+RELEASESET=1
+IDSET=1
+INCREMENTALSET=1
+DESCRIPTIONSET=1
 
 CACHEFILES="
 propsconf_conf
 reset_mhpc
 "
 
+# ---Original values---
+# default.prop
+ORIGDEBUGGABLE=""
+ORIGSECURE=""
+# build.prop
+ORIGTYPE=""
+ORIGTAGS=""
+ORIGSELINUX=""
+ORIGFINGERPRINT=""
+ORIGVENDPRINT=""
+ORIGPATCH=""
+ORIGBRAND=""
+ORIGNAME=""
+ORIGDEVICE=""
+ORIGRELEASE=""
+ORIGID=""
+ORIGINCREMENTAL=""
+ORIGDESCRIPTION=""
+
+# ---Module values---
+MODULEDEBUGGABLE=""
+MODULESECURE=""
+MODULETYPE=""
+MODULETAGS=""
+MODULESELINUX=""
+MODULEFINGERPRINT=""
+
+# ---Device simulation values---
+SIMBRAND=""
+SIMNAME=""
+SIMDEVICE=""
+SIMRELEASE=""
+SIMID=""
+SIMINCREMENTAL=""
+SIMDESCRIPTION=""
+
+# ---Custom prop values---
+CUSTOMPROPS=""
+CUSTOMPROPSPOST=""
+CUSTOMPROPSLATE=""
+
+# ---Delete prop values---
+DELETEPROPS=""
+
+# ---MagiskHide sensitive props---
+REDEBUGGABLE=false
+RESECURE=false
+RETYPE=false
+RETAGS=false
+RESELINUX=false
+
+# ---Editing default.prop---
+SETDEBUGGABLE=false
+SETSECURE=false
+
+# ---Editing build.prop---
+SETTYPE=false
+SETTAGS=false
+SETSELINUX=false
+SETFINGERPRINT=false
+
 rm -f $LATELOGFILE
 
-# Function to clean up different files after the module has been uninstalled
+# Function to clean up some files after the module has been uninstalled
 cleanup() {
 	echo "Cleaning up files in $CACHELOC." >> $LATELOGFILE 2>&1
 	for ITEM in $CACHEFILES; do
@@ -53,8 +127,7 @@ cleanup() {
 		fi
 	done
 	# Suicide.
-	echo "Removing scripts." >> $LATELOGFILE 2>&1
-	rm -f $POSTFILE >> $LATELOGFILE 2>&1
+	echo "Removing script." >> $LATELOGFILE 2>&1
 	rm -f $0 >> $LATELOGFILE 2>&1
 }
 
@@ -65,120 +138,6 @@ if [ -d "$MODPATH" ]; then
 		echo "Module set for removal." >> $LATELOGFILE 2>&1
 		# Cleanup
 		cleanup
-	else
-		# Load functions
-		. $MODPATH/util_functions.sh
-
-		if [ "$OPTIONLATE" == 0 ]; then
-			until [ ! -f "$POSTCHKFILE" ]; do
-				sleep 1
-			done
-		fi
-
-		log_script_chk "Running late_start service boot script."
-
-		if [ -f "$MODPATH/disable" ]; then
-			log_handler "Module disabled."
-		else
-
-			# Check the reboot variable
-			if [ "$(get_file_value $LATEFILE "REBOOTCHK\=")" == 1 ]; then
-				replace_fn REBOOTCHK 1 0 $LATEFILE
-			fi
-
-			# ---Original values---
-			# default.prop
-			ORIGDEBUGGABLE=""
-			ORIGSECURE=""
-			# build.prop
-			ORIGTYPE=""
-			ORIGTAGS=""
-			ORIGSELINUX=""
-			ORIGFINGERPRINT=""
-			ORIGPATCH=""
-
-			# ---Module values---
-			MODULEDEBUGGABLE=""
-			MODULESECURE=""
-			MODULETYPE=""
-			MODULETAGS=""
-			MODULESELINUX=""
-			MODULEFINGERPRINT=""
-
-			# ---Custom prop values---
-			CUSTOMPROPS=""
-			CUSTOMPROPSPOST=""
-			CUSTOMPROPSLATE=""
-			
-			# ---Delete prop values---
-			DELETEPROPS=""
-
-			# ---MagiskHide sensitive props---
-			REDEBUGGABLE=false
-			RESECURE=false
-			RETYPE=false
-			RETAGS=false
-			RESELINUX=false
-
-			# ---Editing default.prop---
-			SETDEBUGGABLE=false
-			SETSECURE=false
-
-			# ---Editing build.prop---
-			SETTYPE=false
-			SETTAGS=false
-			SETSELINUX=false
-			SETFINGERPRINT=false
-
-			# Edits prop values if set for late_start service
-			echo -e "\n--------------------" >> $LOGFILE 2>&1
-			log_handler "Editing prop values in late_start service mode."
-			if [ "$OPTIONLATE" == 1 ]; then
-				# ---Setting/Changing fingerprint---				
-				print_edit
-				# ---Setting custom props---
-				custom_edit "CUSTOMPROPS"
-			fi
-			# Edit custom props set for late_start service
-			custom_edit "CUSTOMPROPSLATE"
-			# Edit MagiskHide sensitive values
-			if [ "$PROPEDIT" == 1 ]; then
-				log_handler "Changing sensitive props."
-				for ITEM in $PROPSLIST; do
-					PROP=$(get_prop_type $ITEM)
-					REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-					MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-					if [ "$(eval "echo \$$REPROP")" == "true" ]; then
-						log_handler "Changing/writing $ITEM."
-						resetprop -v $ITEM >> $LOGFILE 2>&1
-						resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
-					fi
-				done
-			fi
-			echo -e "\n--------------------" >> $LOGFILE 2>&1
-
-			# ---Edits default.prop---
-			if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then
-				log_handler "Editing default.prop."
-				mount -wo remount rootfs /
-				change_prop_file "default"
-				mount -ro remount rootfs /
-			else
-				log_handler "Default.prop editing disabled."
-			fi
-
-			# Get currently saved values
-			log_handler "Checking current values."
-			curr_values
-
-			# Check if the late_start service log file exists.
-			if [ -f "$LATELOGFILE" ]; then
-				log_handler "Removing late_start service log ($LATELOGFILE)."
-				rm -f $LATELOGFILE >> $LOGFILE 2>&1
-			fi
-
-			log_script_chk "late_start service boot script finished.\n\n=================="
-		fi
 	fi
 else
 	echo "$MODPATH not found." >> $LATELOGFILE 2>&1

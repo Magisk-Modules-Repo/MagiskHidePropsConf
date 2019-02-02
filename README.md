@@ -19,6 +19,7 @@ Keep reading below to find out more details about the different parts of the mod
 - [Installation](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#installation)
 - [Usage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#usage)
 - [Spoofing device's fingerprint to pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#spoofing-devices-fingerprint-to-pass-the-ctsprofile-check)
+  - [Use vendor fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#use-vendor-fingerprint
   - [Matching the Android security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date)
   - [Can I use any fingerprint?](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#can-i-use-any-fingerprint)
   - [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint)
@@ -31,6 +32,7 @@ Keep reading below to find out more details about the different parts of the mod
 - [Current fingerprints list version](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#current-fingerprints-list-version)
 - [Please add support for device X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-add-support-for-device-x)
 - [Please update fingerprint X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-update-fingerprint-x)
+- [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation)
 - [Improved root hiding - Editing build.prop and default.prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#improved-root-hiding---editing-buildprop-and-defaultprop)
 - [Set/reset MagiskHide Sensitive props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setreset-magiskhide-sensitive-props)
 - [Change/set custom prop values](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values)
@@ -40,7 +42,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [Script colours](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours)
   - [Fingerprints list check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#fingerprints-list-check)
 - [Configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file)
-  - [Setting up the module on a clean ROM flash](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setting-up-the-module-on-a-clean-rom-flash)
+  - [Setting up the module on a clean Magisk/ROM flash](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setting-up-the-module-on-a-clean-magiskrom-flash)
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
@@ -51,10 +53,12 @@ Keep reading below to find out more details about the different parts of the mod
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
 - [Logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs)
   - [Collecting logs manually](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#collecting-logs-manually)
+- [Donations](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#donations)
 - [Source](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#source)
 - [Credits](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#credits)
 - [Changelog](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changelog)
 - [Current fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#current-fingerprints-list)
+- [Licence](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#mit-licence)
 
 
 ## Prerequisites
@@ -79,11 +83,18 @@ If your device can't pass SafetyNet fully, the CTS profile check fails while bas
 
 This might be because your device simply hasn't been certified or that the ROM you are using on your device isn't recognised by Google (because it's a custom ROM). 
 
-To fix this, you can use a known working fingerprint (one that has been certified by Google), usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
+To fix this, you can use a known working device fingerprint (`ro.build.fingerprint`), one that has been certified by Google, usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
 NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. You can use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error. The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
 
 There are a few pre-configured certified fingerprints available in the module, just in case you can't get a hold of one for your device. If you have a working fingerprint that could be added to the list, or an updated one for one already on there, please post that in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) toghether with device details. Please also include the Android security patch date for the factory image/firmware/ROM that the fingerprint comes from.
+
+After having applied a device fingerprint from the module, whenever that particular print is updated in the included prints list, the chosen fingerprint will be automatically updated when the fingerprints list is. Just reboot to apply the new fingerprint.
+
+If you are using a Treble GSI ROM you can enable the [Use vendor fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#use-vendor-fingerprint-for-treble-gsi-roms) option (for more details, see below) in the `Edit device fingerprint` menu.
+
+### Use vendor fingerprint (for Treble GSI ROMs)
+When using a Treble GSI ROM with a stock vendor partition, it is possible to use the vendor fingerprint to make the device pass the CTS profile check. Enabling this option will make the module scripts pull the vendor fingerprint on each boot and use this to spoof the device fingerprint. This in turn means you will only have to enable this option once and even if you update your vendor partition the fingerprint used will always be the latest one.
 
 ### Matching the Android security patch date
 For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). Use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
@@ -156,6 +167,8 @@ The fingerprints list will update without the need to update the entire module. 
 
 Just run the `props` command and the list will be updated automatically. Use the -nw option to disable or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu.
 
+If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply.
+
 **_Current fingerprints list version - v42_**
 
 
@@ -171,6 +184,20 @@ Fingerprints included in the module are updated once in a while. Mainly if a use
 If you have an updated fingerprint available (and you've posted it for me to update the list), but I haven't yet updated the fingerprints list (which might be a while depending on how much IRL stuff I have to do), it is still perfectly possible for you to use the updated fingerprint.
 
 You can enter the fingerprint manually in the `Edit device fingerprint` menu in the module, you can use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#configuration-file), or you can make a [custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#custom-fingerprints-list).
+
+
+## Device simulation
+If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that are set are (currently):
+- ro.product.brand
+- ro.product.name
+- ro.product.device
+- ro.build.version.release
+- ro.build.id
+- ro.build.version.incremental
+
+By default all props are set when this option is activated, but it is possible to activate and deactivate each prop individually.
+
+Whenever a fingerprint is set by the module, the `ro.build.description` prop will be set automatically independently from if the general device simulation option is enabled or not.
 
 
 ## Improved root hiding - Editing build.prop and default.prop
@@ -189,12 +216,13 @@ If, for some reason, you need one or more of these to be kept as their original 
 
 
 ## Change/set custom prop values
-It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop, default.prop, etc, you can now do with this module instead.
+It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop, default.prop, etc, you can now do with this module instead. If you have a lot of props that you want to change it'll be a lot easier to use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) (see below).
 
 When setting a custom prop you can also pick in what boot stage it should be set in. This can also be changed later for each individual custom prop. There are three options:
 - Default - The main module option will decide (see [Prop script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#boot-stage) below).
 - post-fs-data - The prop will always be set in post-fs-data, regardless of the main module option.
 - late_start service - The prop will always be set in late_start service, regardless of the main module option.
+- Both post-fs-data late_start service - In some special cases you would want the prop to be set during both boot stages. An example would be if the system reapplies the stock prop value late in the boot process (after post-fs-data).
 
 Note: post-fs-data runs earlier than late_start service.
 
@@ -234,12 +262,16 @@ This option will disable or enable the automatic updating of the fingerprints li
 
 
 ## Configuration file
-You can use a configuration file to set your desired options, rather than running the `props` command. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip (in the common folder), fill in the desired options (follow the instructions in the file), place it in /cache (or /data/cache if you're using an A/B device) and reboot. If you edit the configuration file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Notepad).
+You can use a configuration file to set your desired options, rather than running the `props` command. This is particularly useful if you have a large amount of custom props you want to set. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip ('propsconf_conf' in the common folder), fill in the desired options (follow the instructions in the file), place it /data or /cache (or /data/cache if you're using an A/B device) and reboot. You can also use the configuration file when first installing the module. Just place the file in the root of your internal storage (or one of the other previously mentioned locations) before flashing the module and the installation script will set everything up.
 
-This can also be done directly at the first install (through Manager or recovery) and even on a brand new clean install of Magisk, before even rebooting your device. Upon detecting the file, the module boot script will load the configured values and then delete the the configuration file. Instant settings.
+If you edit the configuration file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Windows Notepad).
 
-### Setting up the module on a clean ROM flash
-After having made a clean ROM flash, the configuration file can be used to set the module up as you want without even having to boot first. Just flash the ROM, Magisk and then the module. If you then place a configuration file with your desired settings (fingerprint, custom props, etc) in /cache (or /data/cache if you're using an A/B device), this will be loaded during the first boot. It is possible that this won't work an all device/ROM combinations. If you experience issues, let the ROM boot once before setting everything up.
+This can also be done directly at the first install (through Manager or recovery) and even on a brand new clean install of Magisk, before even rebooting your device (also see "Setting up the module on a clean Magisk/ROM flash" below).
+
+**NOTE!** Upon detecting the file, the module installation/boot script will load the configured values into the module and then delete the the configuration file, so keep a copy somewhere if you want to use the same settings later.
+
+### Setting up the module on a clean Magisk/ROM flash
+After having made a clean ROM flash, the configuration file can be used to set the module up as you want without even having to boot first. First flash the ROM and Magisk. After that you can place the configuration file (see above) with your desired settings (fingerprint, custom props, etc) in the root of your internal storage, /data or /cache (or /data/cache if you're using an A/B device) and then install the module. This will set the module up just as you want it without having to do anything else. It is also possible to place the configuration file after having installed the module and rebooting (although you can only use /data or /cache as a location for the file). This will set everything up during boot, but it is possible that this won't work an all device/ROM combinations. If you experience issues, let the ROM boot once before setting everything up.
 
 
 ## Miscellaneous MagiskHide issues
@@ -252,13 +284,15 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
 ### Known issues
+- MagiskHide Props Config v2.7.2 and earlier versions won't work on Magisk v18.1-d73127b1(18006) or later, due to internal changes in Magisk.
 - Xiaomi devices (MIUI) sometimes have issues passing the ctsProfile check, particularly China releases. Try using [ShellHide](https://forum.xda-developers.com/apps/magisk/magisk-shellhide-t3855616) by @JayminSuthar together with this module. They might work in conjunction to get the device to pass SafetyNet.
 - If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and with Magisk v17.2 the resetprop tool was been updated for this change.
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
-- _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed. Check the logs to get information about which module this is.
-- _"Improved hiding"_ will be disable if all relevant prop values already are "safe", or if conflicting modules that also Magic Mounts build.prop are found. 
+- _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed.
+- _"Device simulation"_ will be disabled if there is no device fingerprint set by the module.
+- _"Improved hiding"_ will be disable if all relevant prop values already are "safe" (in other words: the option isn't needed), or if a conflicting module that also Magic Mounts build.prop is found.
 
 ### I can't pass the ctsProfile check
 See ["I still can't pass the ctsProfile check"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check) above.
@@ -293,6 +327,10 @@ The logs will also automatically be saved to the root of the device's internal s
 If you can't run the `props` script for some reason, the logs are also stored in /cache (or /data/cache for A/B devices). The Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't, or can't, use the "Collect logs" option mentioned above). Providing the output from terminal might also be useful.
 
 
+## Donations
+If you've had any help from me or this module, any kind of [URL="https://forum.xda-developers.com/donatetome.php?u=4667597"]donation[/URL] to support the work involved would of course be appreciated. 
+
+
 ## Source
 [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config)
 
@@ -310,6 +348,21 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v3.0.0  
+- New function for device simulation. The module sets a number of device specifying props based on the used fingerprint. See the documentation for details.
+- New function for Treble GSI users that have a stock vendor partition: The module can use the certified vendor fingerprint found there. See the documentation for details. Thank you to @oF2pks for making me aware of this possibility.
+- New function where the currently used fingerprint automatically will be updated if there's a new fingerprint for that device added to the fingerprints list. See the documentation for details.
+- New function to set custom props in both post-fs-data and late_start service mode. See the documentation for details. See the documentation for details.
+- Updated the configuration file function so that the file will now be detected during installation or at boot. See the documentation for details.
+- Updated the locations for placing the configuration file when importing settings to the module. See the documentation for details.
+- Updated the configuration file to be version specific. Make sure you use the latest available configuration file.
+- Fixed compatibility with changed boot stages in Magisk v18.1-d73127b1(18006).
+- Fixed double download of fingerprints file if using the -f option and cleaned up the runtime options a bit.
+- Fixed module reset option.
+- Optimised variable and settings retrieval.
+- Optimised module boot scripts.
+- A whole bunch of minor fixes and cleanups.
+
 ### v2.7.2  
 - Re-run the post-fs-data script if the Magisk image wasn't mounted yet or if the script has been reset.
 - Added fingeprints for Razer Phone 1 & 2 and Xiaomi Mi Pad 4, and updated fingerprints for Xiaomi Mi 8, Mi A2 & Pocophone F1. List v40.
@@ -664,7 +717,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 ## MIT Licence
 
-*Copyright (c) 2018 Didgeridoohan*
+*Copyright (c) 2018-2019 Didgeridoohan*
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

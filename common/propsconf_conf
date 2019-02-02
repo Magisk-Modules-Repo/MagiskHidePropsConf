@@ -1,41 +1,96 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# By Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Licence: MIT
 
+# Required module version
+CONFTRANSF=300
+
+# Device fingerprint
 CONFFINGERPRINT=""
+CONFVENDPRINT=false
 
+# Device simulation
+CONFDEVSIM=false
+CONFBRAND=true
+CONFNAME=true
+CONFDEVICE=true
+CONFRELEASE=true
+CONFID=true
+CONFINCREMENTAL=true
+CONFDESCRIPTION=true
+
+# Edit prop files
 CONFPROPFILES=false
 
+# MagiskHide sensitive props
 CONFDEBUGGABLE=""
 CONFSECURE=""
 CONFTYPE=""
 CONFTAGS=""
 CONFSELINUX=""
 
+# Set custom props
 CONFPROPS=""
 CONFPROPSPOST=""
 CONFPROPSLATE=""
 PROPOPTION=replace
 
+# Delete props
 CONFDELPROPS=""
 DELPROPOPTION=replace
 
+# Module settings
 CONFLATE=false
-CONFCOLOUR=enabled
-CONFWEB=enabled
+CONFCOLOUR=true
+CONFWEB=true
 
 # =================================================================
 # ========================== Instructions =========================
 # =================================================================
 # Set the above variables to the desired prop/configuration values.
 
+# If any variables are left unset, that particular prop/configuration
+# will be cleared and the device/Magisk default values will be used.
+# If you want to keep any current module settings (for those that
+# aren't true/false options), add "preserve" to the variable.
+# Example:
+# CONFFINGERPRINT=preserve
+
+# When placed in /cache or the root of your internal storage, the module will load these
+# values during boot and the configuration file will be deleted. Keep a backup of the
+# file if you want to reuse it at a later time (clean ROM flash, etc).
+
+# For more information, see the documentation:
+# https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md
+# and the support thread @ XDA Developers:
+# https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228
+
+# =================================================================
+# =========================== Variables ===========================
+# =================================================================
 # CONFFINGERPRINT should be set to the fingerprint of a ROM that passes
 # the ctsProfile check. See the prints.sh file for usable prints,
 # or the documentation for information on how to find one.
 # Note that Android builds after March 16 2018 often also need to match the Android
-# security patch date. Use the CONFPROPS setting to set ro.build.version.security_patch
-# to the matching date (example: 2018-10-05). 
+# security patch date. Add the date to the end of the fingerprint, preceeded by
+# two underscores (example: __2018-10-05), or use the CONFPROPS setting
+# to set ro.build.version.security_patch to the matching date (example: 2018-10-05).
+#
+# Changing CONFVENDPRINT to 'true' will enable using the stock vendor
+# fingerprint for Treble GSI ROMs (so only us this if you're on a Treble GSI ROM).
+# NOTE! Keep in mind that there is no need to enter a fingerprint in
+# CONFFINGERPRINT when enabling this option, or setting a security patch date.
+
+# CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
+# CONFID, CONFINCREMENTAL and CONFDESCRIPTION are used to set a number
+# of props to simulate a certain deviced based on the fingerprint used.
+# CONFDESCRIPTION will automatically be applied if a fingerprint is set
+# by the module, but the other props will only be set if CONFDEVSIM is
+# set to true, and the default setting for all props are that they will be
+# set by the module. If you want to change this, change "true" to "false"
+# for the applicable variables.
 
 # CONFPROPFILES should be set to "true" if you want to mask the file
 # values in build.prop and default.prop. For better root hiding.
@@ -65,7 +120,7 @@ CONFWEB=enabled
 # With PROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",
 # "add", or "preserve". The default option is to replace the list.
-# This option supersedes the preserve option described below, but only
+# This option supersedes the preserve option described above, but only
 # for the CONFPROPS variables.
 
 # CONFDELPROPS is a list of props you want to remove from your system.
@@ -82,7 +137,7 @@ CONFWEB=enabled
 # With DELPROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",
 # "add", or "preserve". The default option is to replace the list.
-# This option supersedes the preserve option described below, but only
+# This option supersedes the preserve option described above, but only
 # for the CONFDELPROPS variable.
 
 # CONFLATE is by default set to "false". This loads the boot script during the
@@ -91,19 +146,4 @@ CONFWEB=enabled
 # useful if the module's boot script seems to be causing issues during boot.
 #
 # CONFCOLOUR and CONFWEB are the options for colour and automatic fingerprints
-# list update. See the module documentation for more details. Set to "enabled" or "disabled".
-
-# If any variables are left unset, that particular prop/configuration
-# will be cleared and the device/MagiskHide default values will be used.
-# If you want to keep any current module settings, add "preserve" to the variable.
-# Example:
-# CONFFINGERPRINT=preserve
-
-# When placed in /cache or the root of your internal storage, the module will load these
-# values during boot and the configuration file will be deleted. Keep a backup of the
-# file if you want to reuse it at a later time (clean ROM flash, etc).
-
-# For more information, see the documentation:
-# https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md
-# and the support thread @ XDA Developers:
-# https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228
+# list update. See the module documentation for more details. Set to "true" or "false".

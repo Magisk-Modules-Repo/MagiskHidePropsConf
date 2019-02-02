@@ -1,7 +1,8 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# By Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Licence: MIT
 
 # ====================================================
 # ==================== Root check ====================
@@ -13,6 +14,11 @@ if [ "$?" != 0 ]; then
 	su -c props "$@" # Rerun script with root access
 	exit
 fi
+
+# Startup message
+echo ""
+echo "Loading... Please wait."
+echo ""
 
 # =====================================================
 # ================ Paths and variables ================
@@ -32,7 +38,7 @@ case "$1" in
 esac
 
 # Colours
-if [ -f "$LATEFILE" ] && [ "$(cat $LATEFILE | grep "OPTIONCOLOUR=" | sed 's|.*=||' | sed 's|\"||g')" == 0 ] || [ "$LOGNAME" ]; then
+if [ -f "$LATEFILE" ] && [ "$(grep "OPTIONCOLOUR=" $LATEFILE | sed 's|.*=||' | sed 's|\"||g')" == 0 ] || [ "$LOGNAME" ]; then
 	COLOURCHK="nc"
 else
 	COLOURCHK="$1"
@@ -104,6 +110,8 @@ blank_input() {
 		;;
 		5)	INPUT5=""
 		;;
+		6)	INPUT6=""
+		;;
 	esac
 
 	echo ""
@@ -123,29 +131,31 @@ invalid_input() {
 
 	# Set the message text
 	case $1 in
-		1)	INPMSG="Only pick from the list above, one at a time."
+		1) INPMSG="Only pick from the list above, one at a time."
 		;;
-		2)	INPMSG="Only enter '${G}y${N}' or '${G}n${N}'."
+		2) INPMSG="Only enter '${G}y${N}' or '${G}n${N}'."
 		;;
-		3)	INPMSG="Only enter '${G}y${N}', '${G}n${N}' or '${G}e${N}'."
+		3) INPMSG="Only enter '${G}y${N}', '${G}n${N}' or '${G}e${N}'."
 		;;
-		4)	INPMSG="Only enter '${G}y${N}', '${G}n${N}', '${G}r${N}' or '${G}e${N}'."
+		4) INPMSG="Only enter '${G}y${N}', '${G}n${N}', '${G}r${N}' or '${G}e${N}'."
 		;;
-		5)	INPMSG="Enter a fingerprint or pick from the options, one at a time."
+		5) INPMSG="Enter a fingerprint or pick from the options, one at a time."
 		;;
 	esac
 
 	# Find menu level
 	case $2 in
-		1)	INPUT=""
+		1) INPUT=""
 		;;
-		2)	INPUT2=""
+		2) INPUT2=""
 		;;
-		3)	INPUT3=""
+		3) INPUT3=""
 		;;
-		4)	INPUT4=""
+		4) INPUT4=""
 		;;
-		5)	INPUT5=""
+		5) INPUT5=""
+		;;
+		6) INPUT6=""
 		;;
 	esac
 
@@ -159,7 +169,7 @@ reboot_fn() {
 	while true
 	do
 		if [ -z "$INPUT5" ]; then
-			if [ "$2" == "reboot" ] || [ "$2" == "reset-script" ]; then
+			if [ "$2" == "reboot" ] || [ "$2" == "reset-script" ] || [ "$2" == "update" ]; then
 				REBOOTTXT=""
 			else
 				REBOOTTXT="Reboot - "
@@ -167,7 +177,12 @@ reboot_fn() {
 			menu_header "$REBOOTTXT${C}$1${N}"
 			echo ""
 			if  [ "$2" != "reset-script" ] && [ "$2" != "reboot" ]; then
+				if [ "$2" == "update" ]; then
+					echo "The device fingerprint has been updated."
+					echo ""
+				fi
 				echo "Reboot for changes to take effect."
+				echo ""
 			fi
 			echo "Do you want to reboot now (y/n)?"
 			echo ""
@@ -183,7 +198,7 @@ reboot_fn() {
 		case "$INPUT5" in
 			y|Y)
 				echo ""
-				log_print "Rebooting..."
+				log_print "${C}Rebooting...${N}"
 				setprop sys.powerctl reboot
 				sleep 15
 				log_handler "Rebooting failed."
@@ -197,22 +212,22 @@ reboot_fn() {
 				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
 					exit_fn
 				else
-					INPUT=""
 					INPUT2=""
 					INPUT3=""
 					INPUT4=""
 					INPUT5=""
+					INPUT6=""
 					break
 				fi
 			;;
 			e|E)
 				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
-					invalid_input $INV1 5
+					invalid_input $INV1 6
 				else
 					exit_fn
 				fi
 			;;
-			*)	invalid_input $INV1 5
+			*)	invalid_input $INV1 6
 			;;
 		esac
 	done
@@ -235,7 +250,7 @@ menu_change_fingerprint() {
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 0 ]; then
+			if [ "$FINGERPRINTENB" == 0 ]; then
 				echo "Fingerprint modification currently disabled"
 				echo "because of a conflicting module."
 				echo ""
@@ -244,7 +259,7 @@ menu_change_fingerprint() {
 				INPUT=""
 				break
 			else
-				if [ "$4" ] && [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
+				if [ "$4" ] && [ "$PRINTEDIT" == 1 ]; then
 					PRINTMODULETXT=" (by this module)"
 				else
 					PRINTMODULETXT=""
@@ -253,7 +268,7 @@ menu_change_fingerprint() {
 					echo "Currently set to${PRINTMODULETXT}:"
 					echo ""
 					if [ "$PRINTMODULETXT" ]; then
-						get_device_used $2
+						get_device_used "$2"
 					fi
 					echo ${C}$2${N}					
 					if [ "$2" != "$3" ]; then
@@ -273,11 +288,24 @@ menu_change_fingerprint() {
 				if [ "$PRINTMODULETXT" ]; then
 					echo "${G}r${N} - Reset fingerprint"
 				fi
-				if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
+				if [ "$ORIGVENDPRINT" ]; then
+					if [ "$PRINTVEND" == 1 ]; then
+						VENDTXT="${G} (active)${N}"
+					else
+						VENDTXT=""
+					fi
+					echo "${G}v${N} - Use vendor fingerprint (for Treble GSI ROMs)${VENDTXT}"
+				fi
+				if [ "$OPTIONWEB" == 0 ]; then
 					echo "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
 				fi
 				echo "${G}b${N} - Go back."
 				echo ""
+				if [ "$PRINTCHK" == 1 ]; then
+					echo "${R}The device fingerprint has been updated.${N}"
+					echo "${R}Please reboot to apply.${N}"
+					echo ""
+				fi
 				echo "See the module readme or the"
 				echo "support thread @ XDA for details."
 				echo ""
@@ -295,8 +323,15 @@ menu_change_fingerprint() {
 					menu_new_print "$1" "$INPUT2" 2
 				fi
 			;;
+			v|V)
+				if [ "$ORIGVENDPRINT" ]; then
+					menu_vendor_print "$1"
+				else
+					invalid_input 5 2
+				fi
+			;;
 			u|U)
-				if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
+				if [ "$OPTIONWEB" == 0 ]; then
 					menu_update_print "Update fingerprints list"
 				else
 					menu_new_print "$1" "$INPUT2" 2
@@ -306,7 +341,7 @@ menu_change_fingerprint() {
 				INPUT=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			""|[[:blank:]]*)	blank_input 2
 			;;
@@ -465,7 +500,7 @@ menu_pick_print_sub() {
 	done
 }
 
-# Fifth menu level - fingerprint
+# Fifth menu level - confirm fingerprint
 menu_new_print() {
 	INPUT5=""
 	PRINTDISP="$(get_print_display $2)"
@@ -476,7 +511,7 @@ menu_new_print() {
 			echo ""
 			echo "You are about to use the following as your device's fingerprint."
 			echo ""
-			get_device_used $2
+			get_device_used "$2"
 			echo "${V}$PRINTDISP${N}"
 			echo ""
 			echo "Make sure that it is correct before continuing."
@@ -487,6 +522,12 @@ menu_new_print() {
 		case "$INPUT5" in
 			y|Y)
 				change_print "$1" "$2"
+				if [ "$DEVSIM" == 0 ]; then
+					menu_devsim_activate "$1"
+				fi
+				INPUT2=""
+				INPUT3=""
+				INPUT4=""
 				break
 			;;
 			n|N)
@@ -495,9 +536,48 @@ menu_new_print() {
 				INPUT4=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 5
+			;;
+		esac
+	done
+}
+
+# Sixth menu level - activate device simulation
+menu_devsim_activate() {
+	INPUT6=""
+	while true
+	do
+		if [ -z "$INPUT6" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "You have just chosen a new device fingerprint."
+			echo "Would you like to activate device simulation?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT6
+		fi
+		case "$INPUT6" in
+			y|Y)
+				INPUT2=""
+				INPUT3=""
+				INPUT4=""
+				INPUT5=""
+				change_dev_sim "Device simulation"
+				break
+			;;
+			n|N)
+				INPUT2=""
+				INPUT3=""
+				INPUT4=""
+				INPUT5=""
+				after_change "$1"
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 6
 			;;
 		esac
 	done
@@ -522,13 +602,65 @@ menu_reset_print() {
 		case "$INPUT3" in
 			y|Y)	
 				reset_print "$1"
+				INPUT2=""
 				break
 			;;
 			n|N)
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Third menu level - Vendor fingerprint
+menu_vendor_print() {
+	INPUT3=""
+	while true
+	do
+		if [ "$PRINTVEND" == 0 ]; then
+			STATETXT="${G}enable${N}"
+			CURRTXT="${R}disabled${N}"
+			TMPVAL=1
+		else
+			STATETXT="${R}disable${N}"
+			CURRTXT="${G}enabled${N}"
+			TMPVAL=0
+		fi
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will $STATETXT using the vendor"
+			echo "fingerprint for Treble GSI ROMs."
+			echo ""
+			echo "The option is currently $CURRTXT."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				change_print_vendor "$1" "$TMPVAL"
+				if [ "$DEVSIM" == 0 ] && [ "$TMPVAL" == 1 ]; then
+					menu_devsim_activate "$1"
+				fi
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -560,7 +692,209 @@ menu_update_print() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# ======================== Device simulation ========================
+# Second menu level - Device simulation
+menu_dev_sim() {
+	INPUT2=""
+	while true
+	do
+		ENABLE="${G} (enabled)${N}"
+		DISABLE="${R} (disabled)${N}"
+		DEVSIMTXT=""
+		DEVSIMC=""
+		DESCRIPTIONTXT=""
+		DESCRIPTIONC=""
+		if [ "$DEVSIM" == 1 ]; then
+			DEVSIMTXT=$ENABLE
+		else
+			DEVSIMTXT=$DISABLE
+		fi
+		for ITEM in $PRINTPARTS; do
+			TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
+			TMPVAR=$(echo "${TMPPROP}TXT")
+			if [ "$(get_file_value $LATEFILE "${TMPPROP}SET=")" == 1 ]; then
+				eval "${TMPPROP}TXT='$ENABLE'"
+			elif [ "$(get_file_value $LATEFILE "${TMPPROP}SET=")" == 0 ]; then
+				eval "${TMPPROP}TXT='$DISABLE'"
+			else
+				eval "${TMPPROP}TXT="
+			fi
+		done
+		if [ "$DESCRIPTIONSET" == 1 ]; then
+			DESCRIPTIONTXT=$ENABLE
+		else
+			DESCRIPTIONTXT=$DISABLE
+		fi
+		if [ -z "$INPUT2" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			if [ "$PRINTEDIT" == 0 ]; then
+				echo "This option is only enabled if there"
+				echo "is a fingerprint set by the module."
+				echo ""
+				echo "Nothing to do... Returning to main menu."
+				sleep 3
+				INPUT=""
+				break
+			fi
+			echo "This setting will do basic device"
+			echo "simulation by setting certain props"
+			echo "based on the currently set device"
+			echo "fingerprint."
+			echo ""
+			echo "Pick an option below."
+			echo ""
+			echo "${G}s${N} - Device simulation${DEVSIMTXT}"
+			if [ "$DEVSIM" == 1 ]; then
+				echo "${G}1${N} - ro.product.brand${BRANDTXT}"
+				echo "${G}2${N} - ro.product.name${NAMETXT}"
+				echo "${G}3${N} - ro.product.device${DEVICETXT}"
+				echo "${G}4${N} - ro.build.version.release${RELEASETXT}"
+				echo "${G}5${N} - ro.build.id${IDTXT}"
+				echo "${G}6${N} - ro.build.version.incremental${INCREMENTALTXT}"
+			fi
+			echo "${G}d${N} - ro.build.description${DESCRIPTIONTXT}"
+			echo "${G}b${N} - Go back"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT2
+		fi
+		case "$INPUT2" in
+			s|S) menu_dev_sim_enable "$1"
+			;;
+			1|2|3|4|5|6|d|D)
+				if [ "$DEVSIM" == 1 ] || [ "$INPUT2" == "d" -o "$INPUT2" == "D" ]; then
+					menu_dev_sim_prop "$1" "$INPUT2"
+				else
+					invalid_input 1 2
+				fi
+			;;
+			b|B)
+				INPUT=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 1 2
+			;;
+		esac
+	done
+}
+
+# Third menu level - Enable device simulation
+menu_dev_sim_enable() {
+	INPUT3=""
+	while true
+	do
+		if [ "$DEVSIM" == 0 ]; then
+			STATETXT="${G}enable${N}"
+			CURRTXT="${R}disabled${N}"
+		else
+			STATETXT="${R}disable${N}"
+			CURRTXT="${G}enabled${N}"
+		fi
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to $STATETXT basic"
+			echo "device simulation?"
+			echo ""
+			echo "Currently $CURRTXT."
+			echo ""
+			if [ "$DEVSIM" == 0 ]; then
+				echo "Enabling this option will set"
+				echo "certain props based on the"
+				echo "currently set device fingerprint."
+				echo ""
+			fi
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				change_dev_sim "$1"
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Third menu level - Set device simulation props
+menu_dev_sim_prop() {
+	INPUT3=""
+	while true
+	do
+		case "$2" in
+			1) TMPTXT="ro.build.brand"
+			;;
+			2) TMPTXT="ro.build.name"
+			;;
+			3) TMPTXT="ro.build.device"
+			;;
+			4) TMPTXT="ro.build.version.release"
+			;;
+			5) TMPTXT="ro.build.id"
+			;;
+			6) TMPTXT="ro.build.version.incremental"
+			;;
+			d|D) TMPTXT="ro.build.description"
+			;;
+		esac
+		TMPPROP=$(get_prop_type $TMPTXT | tr '[:lower:]' '[:upper:]')
+		if [ "$(get_file_value $LATEFILE "${TMPPROP}SET=")" == 0 ]; then
+			STATETXT="${G}enable${N}"
+			CURRTXT="${R}disabled${N}"
+			TMPVAL=1
+		else
+			STATETXT="${R}disable${N}"
+			CURRTXT="${G}enabled${N}"
+			TMPVAL=0
+		fi
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to $STATETXT editing of"
+			echo "${C}${TMPTXT}${N}?"
+			echo "It is currently $CURRTXT."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				if [ "$TMPPROP" == "DESCRIPTION" ]; then
+					change_sim_descr "$1" "$TMPVAL"
+				else
+					change_sim_prop "$1" "$TMPTXT" "$TMPVAL"
+				fi
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -578,9 +912,11 @@ menu_edit_prop_files() {
 			menu_header "${C}$1${N}"
 			echo ""
 			# Checks if file values are "safe"
-			if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 1 ]; then
+			if [ "$FILESAFE" == 1 ]; then
 				echo "Prop file modification currently disabled,"
 				echo "since all relevant file values are \"safe\"."
+				echo ""
+				echo "The option is not needed."
 				echo ""
 				if [ "$2" == "p" ]; then
 					echo "Nothing to do... Exiting."
@@ -593,32 +929,32 @@ menu_edit_prop_files() {
 				fi
 			else
 				# Checks if editing prop files is enabled and/or active
-				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
-					if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ]; then
-						echo "This will revert the values in build.prop"
-						echo "and default.prop to their original values."
+				if [ "$BUILDEDIT" == 1 ] || [ "$DEFAULTEDIT" == 1 ]; then
+					if [ "$BUILDPROPENB" == 1 ]; then
+						echo "This will ${R}disable${N} editing values in"
+						echo "build.prop and default.prop."
 					else
-						echo "This will revert the values in"
-						echo "default.prop to the original values."
+						echo "This will ${R}disable${N} editing values in"
+						echo "default.prop."
 					fi
 				else
-					if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 1 ]; then
-						echo "This will change values in build.prop"
-						echo "and default.prop to match the values"
+					if [ "$BUILDPROPENB" == 1 ]; then
+						echo "This will ${G}enable${N} editing values in"
+						echo "build.prop and default.prop to match the values"
 					else
-						echo "This will change values in"
+						echo "This will ${G}enable${N} editing values in"
 						echo "default.prop to match the values"
 					fi
 					echo "set by MagiskHide or this module."
 				fi
 				echo ""
-				if [ "$(get_file_value $LATEFILE "BUILDPROPENB=")" == 0 ]; then
+				if [ "$BUILDPROPENB" == 0 ]; then
 					echo "Please note that build.prop editing is"
-					echo "disabled because of a conflicting module."
+					echo "${R}disabled${N} because of a conflicting module."
 					echo ""
 				fi
 				echo "Do you want to continue?"
-				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+				if [ "$BUILDEDIT" == 1 ] || [ "$DEFAULTEDIT" == 1 ]; then
 					echo ""
 					echo "Enter ${G}r${N} to re-apply the settings."
 					echo "This option is only useful if there's been"
@@ -644,11 +980,12 @@ menu_edit_prop_files() {
 		fi
 		case "$INPUT2" in
 			y|Y)
-				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+				if [ "$BUILDEDIT" == 1 ] || [ "$DEFAULTEDIT" == 1 ]; then
 					reset_prop_files "$1" "$2" "$LOGTXT"
 				else
 					edit_prop_files "$1" "$2" "$LOGTXT"
 				fi
+				INPUT=""
 				break
 			;;
 			n|N)
@@ -660,7 +997,7 @@ menu_edit_prop_files() {
 				fi
 			;;
 			r|R)
-				if [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+				if [ "$BUILDEDIT" == 1 ] || [ "$DEFAULTEDIT" == 1 ]; then
 					edit_prop_files "$1" "$2" "$LOGTXT"
 				else
 					invalid_input $INV1 $INV2
@@ -692,19 +1029,19 @@ menu_magiskhide_props() {
 		TAGSTXT=""
 		SELINUXTXT=""
 		if [ -z "$INPUT2" ]; then
-			if [ "$(get_file_value $LATEFILE "REDEBUGGABLE=")" == "true" ]; then
+			if [ "$REDEBUGGABLE" == "true" ]; then
 				DEBUGGABLETXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "RESECURE=")" == "true" ]; then
+			if [ "$RESECURE" == "true" ]; then
 				SECURETXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "RETYPE=")" == "true" ]; then
+			if [ "$RETYPE" == "true" ]; then
 				TYPETXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "RETAGS=")" == "true" ]; then
+			if [ "RETAGS" == "true" ]; then
 				TAGSTXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "RESELINUX=")" == "true" ]; then
+			if [ "$RESELINUX" == "true" ]; then
 				SELINUXTXT=$ACTIVE
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
@@ -716,7 +1053,7 @@ menu_magiskhide_props() {
 			echo "${G}3${N} - ro.build.type${TYPETXT}"
 			echo "${G}4${N} - ro.build.tags${TAGSTXT}"
 			echo "${G}5${N} - ro.build.selinux${SELINUXTXT}"
-			if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" -gt 1 ]; then
+			if [ "$PROPCOUNT" -gt 1 ]; then
 				echo "${G}r${N} - Reset all props"
 			fi
 			echo "${G}b${N} - Go back to main menu"
@@ -739,7 +1076,7 @@ menu_magiskhide_props() {
 			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
 			;;
 			r|R)	
-				if [ "$(get_file_value $LATEFILE "PROPCOUNT=")" -gt 1 ]; then
+				if [ "$PROPCOUNT" -gt 1 ]; then
 					menu_reset_prop_all "Reset all props"
 				else
 					invalid_input 1 2
@@ -749,7 +1086,7 @@ menu_magiskhide_props() {
 				INPUT=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 1 2
 			;;
@@ -807,13 +1144,14 @@ menu_change_prop() {
 				else
 					change_prop "$1" $CHANGE
 				fi
+				INPUT2=""
 				break
 			;;
 			n|N)
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -840,13 +1178,14 @@ menu_reset_prop_all() {
 		case "$INPUT3" in
 			y|Y)	
 				reset_prop_all "$1"
+				INPUT2=""
 				break
 			;;
 			n|N)
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -873,13 +1212,14 @@ menu_reset_prop() {
 		case "$INPUT3" in
 			y|Y)	
 				reset_prop "$2"
+				INPUT2=""
 				break
 			;;
 			n|N)
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -895,14 +1235,14 @@ menu_custom_props() {
 	do
 		if [ -z "$INPUT2" ]; then
 			ITEMCOUNT=1
-			if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 0 ]; then
+			if [ "$OPTIONLATE" == 0 ]; then
 				DEFSTAGETXT=" (post-fs-data)"
 			else
 				DEFSTAGETXT=" (late_start service)"
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""			
-			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" ]; then
+			if [ "$CUSTOMEDIT" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" ]; then
 				CTRLSET=0
 				echo "You have ${C}custom props set${N},"
 				echo "but the option is ${R}not activated${N}."
@@ -1010,6 +1350,8 @@ menu_edit_custprop() {
 	INPUT3=""
 	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
 		STAGETXT=" ${G}(default)${N}"
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+		STAGETXT=" ${G}(both)${N}"
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
 		STAGETXT=" ${G}(post-fs-data)${N}"
 	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
@@ -1048,12 +1390,12 @@ menu_edit_custprop() {
 				echo "${G}r${N} - Reset prop"
 			else
 				echo "${R}Not yet set by this module. Please reboot to set.${N}"
-				if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 0 ] || [ "$STAGETXT" == " ${G}(post-fs-data)${N}" ]; then
+				if [ "$OPTIONLATE" == 0 ] || [ "$STAGETXT" == " ${G}(post-fs-data)${N}" ]; then
 					echo ""
 					echo "This might be caused by the prop being set to early."
 					echo "If the above state does not change after a reboot,"
 					echo "try changing the boot stage when the prop is set"
-					echo "to late_start service."
+					echo "to late_start service (or both)."
 				fi
 				echo ""
 				echo "${G}r${N} - Reboot"
@@ -1079,7 +1421,7 @@ menu_edit_custprop() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)
 				if [ "$PROPNOTSET" == 0 ]; then
@@ -1112,7 +1454,7 @@ menu_new_custprop() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			""|[[:blank:]]*)	blank_input 3
 			;;
@@ -1154,7 +1496,7 @@ menu_reset_all_custprop() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1190,7 +1532,7 @@ menu_magiskhide_custprop() {
 				INPUT3=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 1 4
 			;;
@@ -1229,7 +1571,7 @@ menu_set_new_custprop() {
 				INPUT3=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			""|[[:blank:]]*)	blank_input 4
 			;;
@@ -1248,19 +1590,32 @@ menu_bootstage_custprop() {
 	INPUT4=""
 	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
 		TMPBSTAGE="default"
+		PLEND=" is"
 		DEFAULTTXT="${G} (current)${N}"
 		POSTTXT=""
 		LATETXT=""
+		BOTHTXT=""
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+		TMPBSTAGE="both"
+		PLEND="s are"
+		DEFAULTTXT=""
+		POSTTXT=""
+		LATETXT=""
+		BOTHTXT="${G} (current)${N}"
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
 		TMPBSTAGE="post-fs-data"
+		PLEND=" is"
 		DEFAULTTXT=""
 		POSTTXT="${G} (current)${N}"
 		LATETXT=""
+		BOTHTXT=""
 	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
 		TMPBSTAGE="late_start service"
+		PLEND=" is"
 		DEFAULTTXT=""
 		POSTTXT=""
 		LATETXT="${G} (current)${N}"
+		BOTHTXT=""
 	else
 		TMPBSTAGE=""
 	fi
@@ -1273,15 +1628,15 @@ menu_bootstage_custprop() {
 			echo "${C}$1${N}"
 			echo "should be set in."
 			echo ""
-			echo "Currently, the"
-			echo "${G}${TMPBSTAGE}${N}"
-			echo "boot stage is used."
+			echo "Currently ${C}${TMPBSTAGE}${N}"
+			echo "boot stage$PLEND used."
 			echo ""
 			echo "Select an option below."
 			echo ""
 			echo "${G}1${N} - Default${DEFAULTTXT}"
 			echo "${G}2${N} - post-fs-data${POSTTXT}"
 			echo "${G}3${N} - late_start service${LATETXT}"
+			echo "${G}4${N} - Both boot stages${BOTHTXT}"
 			echo "${G}b${N} - Go back."
 			echo ""
 			echo -n "Enter '${G}e${N}' to exit: "
@@ -1290,27 +1645,40 @@ menu_bootstage_custprop() {
 		case "$INPUT4" in
 			1)
 				if [ "$DEFAULTTXT" ]; then
+					INPUT4=""
 					active_option
 				else
-					change_bootstage_custprop "$1" "default"
+					set_custprop "$1" "$(resetprop $1)" "default"
 					INPUT3=""
 					break
 				fi
 			;;
 			2)
 				if [ "$POSTTXT" ]; then
+					INPUT4=""
 					active_option
 				else
-					change_bootstage_custprop "$1" "post"
+					set_custprop "$1" "$(resetprop $1)" "post"
 					INPUT3=""
 					break
 				fi
 			;;
 			3)
 				if [ "$LATETXT" ]; then
+					INPUT4=""
 					active_option
 				else
-					change_bootstage_custprop "$1" "late"
+					set_custprop "$1" "$(resetprop $1)" "late"
+					INPUT3=""
+					break
+				fi
+			;;
+			4)
+				if [ "$BOTHTXT" ]; then
+					INPUT4=""
+					active_option
+				else
+					set_custprop "$1" "$(resetprop $1)" "both"
 					INPUT3=""
 					break
 				fi
@@ -1319,7 +1687,7 @@ menu_bootstage_custprop() {
 				INPUT3=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 1 4
 			;;
@@ -1354,7 +1722,7 @@ menu_reset_custprop() {
 				INPUT3=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 4
 			;;
@@ -1368,6 +1736,7 @@ menu_set_custprop() {
 	DEFAULTTXT=" ${G}(current)${N}"
 	POSTTXT=""
 	LATETXT=""
+	BOTHTXT=""
 	INPUT5=""
 	while true
 	do
@@ -1384,6 +1753,7 @@ menu_set_custprop() {
 			echo "${G}1${N} - Default${DEFAULTTXT}"
 			echo "${G}2${N} - post-fs-data${POSTTXT}"
 			echo "${G}3${N} - late_start service${LATETXT}"
+			echo "${G}4${N} - both boot stages${BOTHTXT}"
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
@@ -1393,34 +1763,53 @@ menu_set_custprop() {
 		case "$INPUT5" in
 			1)
 				if [ "$DEFAULTTXT" ]; then
+					INPUT5=""
 					active_option
 				else
 					PROPSTAGE="default"
 					DEFAULTTXT=" ${G}(current)${N}"
 					POSTTXT=""
 					LATETXT=""
+					BOTHTXT=""
 					INPUT5=""
 				fi
 			;;
 			2)
 				if [ "$POSTTXT" ]; then
+					INPUT5=""
 					active_option
 				else
 					PROPSTAGE="post"
 					DEFAULTTXT=""
 					POSTTXT=" ${G}(current)${N}"
 					LATETXT=""
+					BOTHTXT=""
 					INPUT5=""
 				fi
 			;;
 			3)
 				if [ "$LATETXT" ]; then
+					INPUT5=""
 					active_option
 				else
 					PROPSTAGE="late"
 					DEFAULTTXT=""
 					POSTTXT=""
 					LATETXT=" ${G}(current)${N}"
+					BOTHTXT=""
+					INPUT5=""
+				fi
+			;;
+			4)
+				if [ "$BOTHTXT" ]; then
+					INPUT5=""
+					active_option
+				else
+					PROPSTAGE="both"
+					DEFAULTTXT=""
+					POSTTXT=""
+					LATETXT=""
+					BOTHTXT=" ${G}(current)${N}"
 					INPUT5=""
 				fi
 			;;
@@ -1429,6 +1818,7 @@ menu_set_custprop() {
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
+				INPUT5=""
 				break
 			;;
 			n|N)
@@ -1436,7 +1826,7 @@ menu_set_custprop() {
 				INPUT5=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 5
 			;;
@@ -1454,7 +1844,7 @@ menu_delete_props() {
 			ITEMCOUNT=1
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""			
-			if [ "$(get_file_value $LATEFILE "DELEDIT=")" == 0 ] && [ "$DELETEPROPS" ]; then
+			if [ "$DELEDIT" == 0 ] && [ "$DELETEPROPS" ]; then
 				CTRLSET=0
 				echo "You have a list of ${C}props to delete${N},"
 				echo "but the option is ${R}not activated${N}."
@@ -1566,7 +1956,7 @@ menu_reset_delprop() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1593,7 +1983,7 @@ menu_new_delprop() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			""|[[:blank:]]*)	blank_input 3
 			;;
@@ -1631,7 +2021,7 @@ menu_reset_all_delprop() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1681,7 +2071,7 @@ menu_set_new_delprop() {
 				INPUT3=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 4
 			;;
@@ -1698,30 +2088,38 @@ menu_options() {
 		COLOURTXT=""
 		PRINTSCHKTXT=""
 		if [ -z "$INPUT2" ]; then
-			if [ "$(get_file_value $LATEFILE "OPTIONLATE=")" == 1 ]; then
+			if [ "$OPTIONLATE" == 1 ]; then
 				BOOTTXT="late_start service"
 			else
 				BOOTTXT="post-fs-data"
 			fi
-			if [ "$(get_file_value $LATEFILE "OPTIONCOLOUR=")" == 1 ]; then
+			if [ "$OPTIONCOLOUR" == 1 ]; then
 				COLOURTXT="enabled"
 				CC=${G}
 			else
 				COLOURTXT="disabled"
 				CC=${R}
 			fi
-			if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 1 ]; then
+			if [ "$OPTIONWEB" == 1 ]; then
 				PRINTSCHKTXT="enabled"
 				CP=${G}
 			else
 				PRINTSCHKTXT="disabled"
 				CP=${R}
 			fi
+			if [ "$OPTIONUPDATE" == 1 ]; then
+				UPDATECHKTXT="enabled"
+				CU=${G}
+			else
+				UPDATECHKTXT="disabled"
+				CU=${R}
+			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
 			echo "${G}1${N} - Boot stage (currently ${C}${BOOTTXT}${N})"
 			echo "${G}2${N} - Script colours (currently ${CC}${COLOURTXT}${N})"
 			echo "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
+			echo "${G}4${N} - Automatic fingerprints update (currently ${CU}${UPDATECHKTXT}${N})"
 			echo "${G}r${N} - Reset all settings"
 			if [ "$2" != "s" ]; then
 				echo "${G}b${N} - Go back to main menu"
@@ -1740,6 +2138,8 @@ menu_options() {
 			;;
 			3)	menu_options_printschk "Fingerprints list check" "$PRINTSCHKTXT"
 			;;
+			4)	menu_options_updatechk "Automatic fingerprints update" "$UPDATECHKTXT"
+			;;
 			r|R)	menu_options_reset "Reset all settings"
 			;;
 			b|B)
@@ -1750,7 +2150,7 @@ menu_options() {
 					break
 				fi
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 1 2
 			;;
@@ -1786,6 +2186,8 @@ menu_options_bootstage() {
 			y|Y)
 				log_handler "Boot stage changed to ${TMPTXT}."
 				replace_fn OPTIONLATE $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
 				INPUT2=""
 				reboot_fn "$1"
 				break
@@ -1794,7 +2196,7 @@ menu_options_bootstage() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1830,6 +2232,8 @@ menu_options_colour() {
 			y|Y)
 				log_handler "The script colour option was ${TMPTXT}d."
 				replace_fn OPTIONCOLOUR $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
 				INPUT2=""
 				break
 			;;
@@ -1837,7 +2241,7 @@ menu_options_colour() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1874,6 +2278,8 @@ menu_options_printschk() {
 			y|Y)
 				log_handler "The script prints list check option was ${TMPTXT}d."
 				replace_fn OPTIONWEB $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
 				INPUT2=""
 				break
 			;;
@@ -1881,7 +2287,53 @@ menu_options_printschk() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Third menu level - Options, prints list check
+menu_options_updatechk() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			if [ "$2" == "enabled" ]; then
+				TMPTXT="disable"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				TMPTXT="enable"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Automatic updating of the applied"
+			echo "fingerprint is currently ${G}$2${N}."
+			echo ""
+			echo "Do you want to ${C}$TMPTXT${N} it?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				log_handler "The script prints list check option was ${TMPTXT}d."
+				replace_fn OPTIONUPDATE $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -1908,12 +2360,11 @@ menu_options_reset() {
 		case "$INPUT3" in
 			y|Y)
 				log_handler "Resetting all script settings."
-				OPTLCURR=$(get_file_value $LATEFILE "OPTIONLATE=")
-				OPTCCURR=$(get_file_value $LATEFILE "OPTIONCOLOUR=")
-				OPTWCURR=$(get_file_value $LATEFILE "OPTIONWEB=")
-				replace_fn OPTIONLATE $OPTLCURR 1 $LATEFILE
-				replace_fn OPTIONCOLOUR $OPTCCURR 1 $LATEFILE
-				replace_fn OPTIONWEB $OPTWCURR 1 $LATEFILE
+				replace_fn OPTIONLATE $OPTIONLATE 1 $LATEFILE
+				replace_fn OPTIONCOLOUR $OPTIONCOLOUR 1 $LATEFILE
+				replace_fn OPTIONWEB $OPTIONWEB 1 $LATEFILE
+				# Load module values
+				. $LATEFILE
 				INPUT2=""
 				break
 			;;
@@ -1921,7 +2372,7 @@ menu_options_reset() {
 				INPUT2=""
 				break
 			;;
-			e|E)	exit_fn
+			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
 			;;
@@ -2016,6 +2467,7 @@ reset_everything() {
 				log_handler "Resetting all module settings$LOGTXT."
 				reset_fn
 				reboot_fn "$1" "$2"
+				INPUT=""
 				break
 			;;
 			n|N)	
@@ -2045,10 +2497,13 @@ reset_everything() {
 
 ISSUECHK=0
 if [ "$ISSUECHK" == 0 ] && [ ! -f "$LATEFILE" ]; then
-	log_handler "late_start service boot script can't be found."
+	log_handler "The module settings file can't be found."
 	ISSUECHK=1
-	ISSUETXT="The late_start service boot script can't be found.\n\n Please reboot your device to reset."
+	ISSUETXT="The module settings file can't be found.\n\n Please reboot your device to reset."
 fi
+
+# Load module settings
+all_values
 
 orig_check
 if  [ "$ISSUECHK" == 0 ] && [ "$ORIGLOAD" == 0 ]; then
@@ -2059,29 +2514,23 @@ fi
 
 script_ran_check
 if [ "$ISSUECHK" == 0 ] && [ "$POSTCHECK" == 0 ] && [ "$LATECHECK" == 0 ]; then
-	log_handler "None of the boot scripts ran during boot."
+	log_handler "None of the module scripts ran during boot."
 	ISSUECHK=1
-	ISSUETXT="None of the boot scripts appear\n to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n they do run."
+	ISSUETXT="None of the module scripts appear\n to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n they do run."
 elif [ "$ISSUECHK" == 0 ] && [ "$POSTCHECK" == 0 ]; then
-	log_handler "The post-fs-data boot script did not run during boot."
+	log_handler "The post-fs-data.sh module script did not run during boot."
 	ISSUECHK=1
-	ISSUETXT="The post-fs-data boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
+	ISSUETXT="The post-fs-data.sh module script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
 elif [ "$ISSUECHK" == 0 ] && [ "$LATECHECK" == 0 ]; then
-	log_handler "The late_start service boot script did not run during boot."
+	log_handler "The service.sh module script did not run during boot."
 	ISSUECHK=1
-	ISSUETXT="The late_start service boot script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
+	ISSUETXT="The service.sh module script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
 fi
 
 if [ "$ISSUECHK" == 1 ]; then
 	collect_logs "issue"
 	reboot_fn "${ISSUETXT}\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for details.${N}" "reset-script"
 fi
-
-# ==================================================
-# ================ Find used values ================
-# ==================================================
-
-all_values
 
 # ====================================================
 # ====================== Options =====================
@@ -2102,7 +2551,6 @@ case "$1" in
 		echo "  -h		Show this message."
 		echo "  -nc		Run without colours."
 		echo "  -nw		Run without fingerprint startup check."
-		echo "  -p		Improved hiding (edit prop files)."
 		echo "  -r		Reset all options/settings."
 		echo "  -s		Open script settings menu."
 		echo ""
@@ -2124,9 +2572,6 @@ case "$1" in
 	*l*) # Save logs
 		menu_logs "Collect logs" "l"
 	;;
-	*p*) # Edit prop files
-		menu_edit_prop_files "Edit prop files" "p"
-	;;
 	*r*) # Reset all settings
 		reset_everything "Reset all settings" "r"
 	;;
@@ -2135,21 +2580,18 @@ case "$1" in
 	;;
 esac
 
-if [ "$(get_file_value $LATEFILE "OPTIONWEB=")" == 0 ]; then
-	WEBCHK="nw"
-else
-	WEBCHK="$1"
+if [ "$OPTIONWEB" == 1 ]; then
+	case "$1" in
+		*d*|*f*) # Do nothing
+		;;
+		*) download_prints
+		;;
+	esac
 fi
-case "$WEBCHK" in
-	*nw*) # Do nothing
-	;;
-	*)	download_prints
-	;;
-esac
 
 if [ "$1" ]; then
 	case "$1" in
-		*d*|*f*|*l*|*h*|*nc*|*nw*|*p*|*r*|*s*|*t*) # Do nothing
+		*d*|*f*|*l*|*h*|*nc*|*nw*|*r*|*s*|*t*) # Do nothing
 		;;
 		*)
 			log_handler "Invalid option."
@@ -2181,45 +2623,57 @@ do
 		ACTIVE="${G} (active)${N}"
 		DISABLED="${R} (disabled)${N}"
 		PRINTTXT=""
+		DEVTXT=""
 		FILETXT=""
 		PROPTXT=""
 		CUSTTXT=""
 		DELTXT=""
 		if [ -z "$INPUT" ]; then
-			if [ "$(get_file_value $LATEFILE "FINGERPRINTENB=")" == 0 ]; then
+			if [ "$FINGERPRINTENB" == 0 ]; then
 				PRINTTXT=$DISABLED
-			elif [ "$(get_file_value $LATEFILE "PRINTEDIT=")" == 1 ]; then
+			elif [ "$PRINTEDIT" == 1 ]; then
 				PRINTTXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "FILESAFE=")" == 1 ]; then
+			if [ "$FINGERPRINTENB" == 0 ] || [ "$PRINTEDIT" == 0 ]; then
+				DEVTXT=$DISABLED
+			elif [ "$DEVSIM" == 1 ]; then
+				DEVTXT=$ACTIVE
+			fi
+			if [ "$FILESAFE" == 1 ]; then
 				FILETXT=$DISABLED
-			elif [ "$(get_file_value $LATEFILE "BUILDEDIT=")" == 1 ] || [ "$(get_file_value $LATEFILE "DEFAULTEDIT=")" == 1 ]; then
+			elif [ "$BUILDEDIT" == 1 ] || [ "$DEFAULTEDIT" == 1 ]; then
 				FILETXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "PROPEDIT=")" == 1 ]; then
+			if [ "$PROPEDIT" == 1 ]; then
 				PROPTXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
+			if [ "$CUSTOMEDIT" == 1 ]; then
 				CUSTTXT=$ACTIVE
 			fi
-			if [ "$(get_file_value $LATEFILE "DELEDIT=")" == 1 ]; then
+			if [ "$DELEDIT" == 1 ]; then
 				DELTXT=$ACTIVE
 			fi
 			menu_header "Select an option below."
 			echo ""
 			echo "${G}1${N} - Edit device fingerprint${PRINTTXT}"
-			echo "${G}2${N} - Improved hiding${FILETXT}"
-			echo "${G}3${N} - Edit MagiskHide props${PROPTXT}"
-			echo "${G}4${N} - Add/edit custom props${CUSTTXT}"
-			echo "${G}5${N} - Delete prop values${DELTXT}"
-			echo "${G}6${N} - Script settings"
-			echo "${G}7${N} - Collect logs"
+			echo "${G}2${N} - Device simulation${DEVTXT}"
+			echo "${G}3${N} - Improved hiding${FILETXT}"
+			echo "${G}4${N} - Edit MagiskHide props${PROPTXT}"
+			echo "${G}5${N} - Add/edit custom props${CUSTTXT}"
+			echo "${G}6${N} - Delete prop values${DELTXT}"
+			echo "${G}7${N} - Script settings"
+			echo "${G}8${N} - Collect logs"
 			echo "${G}r${N} - Reset all options/settings"
 			echo "${G}b${N} - Reboot device"
 			echo ""
-			if [ "$(get_file_value $LATEFILE "REBOOTCHK=")" == 1 ]; then
+			if [ "$REBOOTCHK" == 1 ]; then
 				echo "${R}Some options/settings have been changed.${N}"
 				echo "${R}Please reboot for them to take affect.${N}"
+				echo ""
+			fi
+			if [ "$PRINTCHK" == 1 ]; then
+				echo "${R}The device fingerprint has been updated.${N}"
+				echo "${R}Please reboot to apply.${N}"
 				echo ""
 			fi
 			echo "See the module readme or the"
@@ -2229,27 +2683,29 @@ do
 			read -r INPUT
 		fi
 		case "$INPUT" in
-			1)	menu_change_fingerprint "Edit fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
+			1) menu_change_fingerprint "Edit device fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
 			;;
-			2)	menu_edit_prop_files "Improved hiding${FILETXT}"
+			2) menu_dev_sim "Device simulation${DEVTXT}"
 			;;
-			3)	menu_magiskhide_props "MagiskHide props${PROPTXT}"
+			3) menu_edit_prop_files "Improved hiding${FILETXT}"
 			;;
-			4)	menu_custom_props "Custom props${CUSTTXT}"
+			4) menu_magiskhide_props "MagiskHide props${PROPTXT}"
 			;;
-			5)	menu_delete_props "Delete props${DELTXT}"
+			5) menu_custom_props "Custom props${CUSTTXT}"
 			;;
-			6)	menu_options "Script settings"
+			6) menu_delete_props "Delete props${DELTXT}"
 			;;
-			7)	menu_logs "Collect logs"
+			7) menu_options "Script settings"
 			;;
-			r|R)	reset_everything "Reset all options/settings"
+			8) menu_logs "Collect logs"
 			;;
-			b|B)	reboot_fn "Reboot device" "reboot"
+			r|R) reset_everything "Reset all options/settings"
 			;;
-			e|E)	exit_fn
+			b|B) reboot_fn "Reboot device" "reboot"
 			;;
-			*)	invalid_input 1 1
+			e|E) exit_fn
+			;;
+			*) invalid_input 1 1
 			;;
 		esac
 	fi

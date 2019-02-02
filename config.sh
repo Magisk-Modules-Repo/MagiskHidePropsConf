@@ -5,39 +5,17 @@
 #
 ##########################################################################################
 ##########################################################################################
-#
-# Instructions:
-#
-# 1. Place your files into system folder (delete the placeholder file)
-# 2. Fill in your module's info into module.prop
-# 3. Configure the settings in this file (config.sh)
-# 4. If you need boot scripts, add them into common/post-fs-data.sh or common/service.sh
-# 5. Add your additional or modified system properties into common/system.prop
-#
-##########################################################################################
-
-##########################################################################################
 # Configs
 ##########################################################################################
 
-# Set to true if you need to enable Magic Mount
-# Most mods would like it to be enabled
 AUTOMOUNT=true
-
-# Set to true if you need to load system.prop
 PROPFILE=false
-
-# Set to true if you need post-fs-data script
 POSTFSDATA=true
-
-# Set to true if you need late_start service script
-LATESTARTSERVICE=false
+LATESTARTSERVICE=true
 
 ##########################################################################################
 # Installation Message
 ##########################################################################################
-
-# Set what you want to show when installing your mod
 
 print_modname() {
   MODVERSION=$(echo $(get_file_value $INSTALLER/module.prop "version=") | sed 's|-.*||')
@@ -51,19 +29,6 @@ print_modname() {
 # Replace list
 ##########################################################################################
 
-# List all directories you want to directly replace in the system
-# Check the documentations for more info about how Magic Mount works, and why you need this
-
-# This is an example
-REPLACE="
-/system/app/Youtube
-/system/priv-app/SystemUI
-/system/priv-app/Settings
-/system/framework
-"
-
-# Construct your own list here, it will override the example above
-# !DO NOT! remove this if you don't need to replace anything, leave it empty as it is now
 REPLACE="
 "
 
@@ -72,52 +37,24 @@ REPLACE="
 ##########################################################################################
 
 set_permissions() {
-  # Only some special files require specific permissions
-  # The default permissions should be good enough for most cases
-
-  # Here are some examples for the set_perm functions:
-
-  # set_perm_recursive  <dirname>                <owner> <group> <dirpermission> <filepermission> <contexts> (default: u:object_r:system_file:s0)
-  # set_perm_recursive  $MODPATH/system/lib       0       0       0755            0644
-
-  # set_perm  <filename>                         <owner> <group> <permission> <contexts> (default: u:object_r:system_file:s0)
-  # set_perm  $MODPATH/system/bin/app_process32   0       2000    0755         u:object_r:zygote_exec:s0
-  # set_perm  $MODPATH/system/bin/dex2oat         0       2000    0755         u:object_r:dex2oat_exec:s0
-  # set_perm  $MODPATH/system/lib/libart.so       0       0       0644
-
-  # The following is default permissions, DO NOT remove
   set_perm_recursive  $MODPATH  0  0  0755  0644
-  
-  # Permissions for the props file
   set_perm $MODPATH/system/$BIN/props 0 0 0777
-  # Permissions for boot scripts
   set_perm $LATEFILE 0 0 0755
-  set_perm $POSTFILE 0 0 0755
 }
 
 ##########################################################################################
-# Custom Functions
-##########################################################################################
-
-# This file (config.sh) will be sourced by the main flash script after util_functions.sh
-# If you need custom logic, please add them here as functions, and call these functions in
-# update-binary. Refrain from adding code directly into update-binary, as it will make it
-# difficult for you to migrate your modules to newer template versions.
-# Make update-binary as clean as possible, try to only do function calls in it.
-
-
-##########################################################################################
 # Installation variables and functions for the Magisk module "MagiskHide Props Config"
-# by Didgeridoohan @ XDA Developers.
+# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers.
+# Licence: MIT
 ##########################################################################################
 
 # Finding file values
 get_file_value() {
-	cat $1 | grep $2 | sed "s|.*$2||" | sed 's|\"||g'
+	grep $2 $1 | sed "s|.*$2||" | sed 's|\"||g'
 }
 # Get left side of =
 get_eq_left() {
-	echo $1 | sed 's|=.*||'
+	echo $1 | cut -f 1 -d '='
 }
 # Get first word in string
 get_first() {
@@ -141,33 +78,37 @@ $BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
 if [ "$MAGISK_VER_CODE" -ge 17316 ]; then
 	POSTPATH=$ADBPATH/post-fs-data.d
 	SERVICEPATH=$ADBPATH/service.d
-	POSTHOLDER=$ADBPATH/post-fs-data.d/propsconf_post
 	LATEHOLDER=$ADBPATH/service.d/propsconf_late
 else
 	POSTPATH=$IMGPATH/.core/post-fs-data.d
 	SERVICEPATH=$IMGPATH/.core/service.d
-	POSTHOLDER=$BIMGPATH/.core/post-fs-data.d/propsconf_post
 	LATEHOLDER=$BIMGPATH/.core/service.d/propsconf_late
 fi
 POSTFILE=$POSTPATH/propsconf_post
-UPDATEPOSTFILE=$INSTALLER/common/propsconf_post
 LATEFILE=$SERVICEPATH/propsconf_late
 POSTLATEFILE=$POSTPATH/propsconf_late
 UPDATELATEFILE=$INSTALLER/common/propsconf_late
+MIRRORLOC=/sbin/.magisk/mirror/system
 if [ -z $SLOT ]; then
-	SYSTEMLOC=/system
 	CACHELOC=/cache
 else
-	SYSTEMLOC=/system_root/system
 	CACHELOC=/data/cache
 fi
+CONFFILELST="
+$CACHELOC/propsconf_conf
+/data/propsconf_conf
+/sdcard/propsconf_conf
+"
 INSTLOG=$CACHELOC/propsconf_install.log
 UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
 NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
 SETTINGSLIST="
 FINGERPRINTENB
+PRINTMODULE
 PRINTEDIT
+PRINTVEND
+DEVSIM
 BUILDPROPENB
 FILESAFE
 BUILDEDIT
@@ -177,9 +118,18 @@ PROPEDIT
 CUSTOMEDIT
 DELEDIT
 REBOOTCHK
+PRINTCHK
 OPTIONLATE
 OPTIONCOLOUR
 OPTIONWEB
+OPTIONUPDATE
+BRANDSET
+NAMESET
+DEVICESET
+RELEASESET
+IDSET
+INCREMENTALSET
+DESCRIPTIONSET
 "
 PROPSETTINGSLIST="
 MODULEDEBUGGABLE
@@ -188,6 +138,13 @@ MODULETYPE
 MODULETAGS
 MODULESELINUX
 MODULEFINGERPRINT
+SIMBRAND
+SIMNAME
+SIMDEVICE
+SIMRELEASE
+SIMID
+SIMINCREMENTAL
+SIMDESCRIPTION
 CUSTOMPROPS
 CUSTOMPROPSPOST
 CUSTOMPROPSLATE
@@ -206,7 +163,7 @@ USNFLIST="xiaomi-safetynet-fix safetynet-fingerprint-fix VendingVisa DeviceSpoof
 # Log functions
 log_handler() {
 	echo "" >> $INSTLOG
-	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $INSTLOG 2>&1
+	echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - $1" >> $INSTLOG 2>&1
 }
 log_start() {
 	if [ -f "$INSTLOG" ]; then
@@ -227,8 +184,10 @@ log_print() {
 # Places various module scripts in their proper places
 script_placement() {
 	if [ -f "$LATEFILE" ]; then
-		FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
-		FILETRANSF=$(get_file_value $LATEFILE "SETTRANSF=")
+		# Load module settings
+		load_settings
+		FILEV=$SCRIPTV
+		FILETRANSF=$SETTRANSF
 	else
 		FILEV=0
 		FILETRANSF=$UPDATETRANSF
@@ -236,8 +195,6 @@ script_placement() {
 	log_print "- Installing scripts"
 	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $INSTLOG 2>&1
 	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $INSTLOG 2>&1
-	cp -af $UPDATEPOSTFILE $MODPATH/propsconf_post >> $INSTLOG 2>&1
-	cp -af $UPDATEPOSTFILE $POSTFILE >> $INSTLOG 2>&1
 	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $INSTLOG 2>&1
 	if [ "$FILEV" ]; then
 		# New script
@@ -340,9 +297,29 @@ print_files() {
 	log_handler "Creating files"
 	for OEM in $OEMLIST; do
 		echo -e "PRINTSLIST=\"" >> $MODPATH/printfiles/${OEM}\.sh
-		cat $MODPATH/prints.sh | grep $OEM >> $MODPATH/printfiles/${OEM}\.sh
+		grep $OEM >> $MODPATH/printfiles/${OEM}\.sh $MODPATH/prints.sh
 		echo -e "\"" >> $MODPATH/printfiles/${OEM}\.sh
 	done
+	# Check for updated fingerprint
+	device_print_update
+}
+
+device_print_update() {
+	if [ "$OPTIONUPDATE" == 1 ]; then
+		if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ] && [ "$MODULEFINGERPRINT" ]; then
+			TMPDEV="${VARBRAND}\.${VARNAME}\.${VARDEVICE}"
+			TMPPRINT=$(echo $PRINTSLIST | grep $TMPDEV )
+			if [ "$TMPDEV" ] && [ "$TMPPRINT" ]; then
+				if [ "$(echo $MODULEFINGERPRINT | sed 's|\_\_.*||')" != "$(echo $TMPPRINT | cut -f 2 -d '=' | sed 's|\_\_.*||')" ]; then
+					log_handler "Updating module fingerprint."
+					sed -i "s|MODULEFINGERPRINT=$MODULEFINGERPRINT|MODULEFINGERPRINT=$(echo $TMPPRINT | cut -f 2 -d '=')|" $LATEFILE
+					log_handler "Changing device fingerprint to $(echo $TMPPRINT | cut -f 2 -d '=' | sed 's|\_\_.*||')."
+					# Reloading module settings
+					load_settings
+				fi
+			fi
+		fi
+	fi
 }
 
 # Updates placeholders
@@ -361,7 +338,7 @@ build_prop_check() {
 	log_print "- Checking for build.prop conflicts"
 	for D in $(ls $IMGPATH); do
 		if [ "$D" != "$MODID" ]; then
-			if [ -f "$IMGPATH/$D/system/build.prop" ]; then
+			if [ -f "$IMGPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
 				NAME=$(get_file_value $IMGPATH/$D/module.prop "name=")
 				ui_print "!"
 				log_print "! Another module editing build.prop detected!"
@@ -412,12 +389,69 @@ install_check() {
 	fi
 }
 
-# Check for late_start service boot script in post-fs-data.d, in case someone's moved it
+# Check for late_start service boot script in post-fs-data.d, in case someone's moved it and also delete the old propsconf_post boot script if present
 post_check() {
 	if [ -f "$POSTLATEFILE" ]; then
 		log_handler "Removing late_start service boot script from post-fs-data.d."
 		rm -f $POSTLATEFILE
 	fi
+	if [ -f "$POSTFILE" ]; then
+		log_handler "Removing old post-fs-data boot script from post-fs-data.d"
+		rm -f $POSTFILE
+	fi
+	if [ -f "$CACHELOC/propsconf_postfile.log" ]; then
+		log_handler "Removing old post-fs-data log from /cache."
+		rm -f $CACHELOC/propsconf_postfile.log
+	fi
+}
+
+# Save props values from fingerprint parts
+print_parts() {
+	DLIM1=1
+	DLIM2=1
+	for ITEM in $PROPSETTINGSLIST; do
+		case $ITEM in
+			SIMDESCRIPTION) # Do nothing with the description variable
+			;;
+			SIM*)
+				TMPVAR="$(echo $ITEM | sed 's|SIM||')"
+				TMPVALUE=$(echo $1 | sed 's|\:user/release-keys.*||' | cut -f $DLIM1 -d ':' | cut -f $DLIM2 -d '/')
+				eval "VAR${TMPVAR}='$TMPVALUE'"
+				DLIM2=$(($DLIM2 + 1))
+				if [ "$DLIM2" == 4 ]; then
+					DLIM1=2
+					DLIM2=1
+				fi
+			;;
+		esac
+	done
+	VARDESCRIPTION="${VARNAME}-user $VARRELEASE $VARID $VARINCREMENTAL release-keys"
+}
+
+# Update the device simulation variables if a fingerprint is set
+devsim_update() {
+	if [ "$MODULEFINGERPRINT" ]; then
+		log_handler "Updating device simulation variables."
+		print_parts $MODULEFINGERPRINT
+		for ITEM in $PROPSETTINGSLIST; do
+			case $ITEM in
+				SIM*)
+					SUBA="$(get_file_value $LATEFILE "${ITEM}=")"
+					TMPVAR="$(echo $ITEM | sed 's|SIM|VAR|')"
+					TMPPROP="$(eval "echo \$$TMPVAR")"
+					sed -i "s|${ITEM}=\"${SUBA}\"|${ITEM}=\"${TMPPROP}\"|" $LATEFILE
+				;;
+			esac
+		done
+		# Reload module settings
+		load_settings
+	fi
+}
+
+# Load module settings and reapply the MODPATH variable
+load_settings() {
+	. $LATEFILE
+	MODPATH=$MOUNTPATH/$MODID
 }
 
 # Installs everything
@@ -429,23 +463,38 @@ script_install() {
 	script_placement
 	log_print "- Updating placeholders"
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/util_functions.sh USNFLIST USNF_PLACEHOLDER "$USNFLIST"
-	placeholder_update $MODPATH/util_functions.sh SYSTEMLOC SYSTEM_PLACEHOLDER "$SYSTEMLOC"
+	placeholder_update $MODPATH/util_functions.sh MIRRORLOC MIRROR_PLACEHOLDER "$MIRRORLOC"
 	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
-	placeholder_update $MODPATH/util_functions.sh POSTFILE POST_PLACEHOLDER "$POSTHOLDER"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
-	placeholder_update $MODPATH/util_functions.sh BBWWWPATH BB_PLACEHOLDER "$BBWWWPATH"
-	placeholder_update $POSTFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
-	placeholder_update $POSTFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
-	placeholder_update $LATEFILE POSTFILE POST_PLACEHOLDER "$POSTHOLDER"
-	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
 	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
+	load_settings
+	devsim_update
 	print_files
 	ui_print ""
 	ui_print "- Make sure to have Busybox installed."
 	ui_print "- osm0sis' Busybox is recommended."
 	ui_print ""
+	log_handler "Installation complete."
+	# Checks for configuration file
+	CONFFILE=""
+	for ITEM in $CONFFILELST; do
+		if [ -s "$ITEM" ]; then
+			CONFFILE="$ITEM"
+			break
+		fi
+	done
+	if [ "$CONFFILE" ]; then
+		. $MODPATH/util_functions.sh
+		LOGFILE=$INSTLOG
+		MODPATH=$MOUNTPATH/$MODID
+		ui_print "- Configuration file found."
+		ui_print "- Installing..."
+		ui_print ""
+		config_file
+	fi
 }

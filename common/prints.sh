@@ -1,10 +1,11 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# By Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Licence: MIT
 
 PRINTSV=42
-PRINTSTRANSF=250
+PRINTSTRANSF=260
 
 # Certified fingerprints
 PRINTSLIST="
