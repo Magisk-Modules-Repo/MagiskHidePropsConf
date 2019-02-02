@@ -40,6 +40,7 @@ set_permissions() {
   set_perm_recursive  $MODPATH  0  0  0755  0644
   set_perm $MODPATH/system/$BIN/props 0 0 0777
   set_perm $LATEFILE 0 0 0755
+  set_perm $MODPATH/busybox_check.sh  0  0  0777
 }
 
 ##########################################################################################
