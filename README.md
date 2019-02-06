@@ -100,9 +100,11 @@ When using a Treble GSI ROM with a stock vendor partition, it is possible to use
 For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). Use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
 
 ### Can I use any fingerprint?
-It's possible to use any fingerprint that's certified for your device. It doesn't have to match, either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter.
+It's usually possible to use any fingerprint that's certified for your device. It doesn't have to match, either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter (most of the time, there might of course be exceptions).
 
 ### Finding a certified fingerprint
+If you need a certain fingerprint from a device, here are a few tips on how to find it. Also remember that you might need to get the security patch date that corresponds to the fingerprint you find (see [Matching the Android security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above).
+
 #### The getprop method
 If you don't want to use one of the provided fingerprints, you can get one for your device by running the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
 ```
@@ -122,7 +124,7 @@ You can find the file to download in your device's forum on XDA Developers (eith
 Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
 
 - Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
-- For some devices you'll have to unpackage the system.img to get to the build.prop or default.prop file, where you'll find the info you want. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
+- For some devices you'll have to unpack the system.img to get to the build.prop or default.prop file, where you'll find the info you want.This can sometimes be done with a simple archive app/program, but sometimes more advanced utilities are needed. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere. 
 
@@ -169,7 +171,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v42_**
+**_Current fingerprints list version - v43_**
 
 
 ## Please add support for device X
@@ -566,7 +568,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v42  
+### List v43  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus ZenPad S 8.0 (6.0.1)
@@ -580,7 +582,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Google Nexus 7 2012 LTE (5.1.1)
 - Google Nexus 7 2013 WiFi (6.0.1)
 - Google Nexus 7 2013 LTE (6.0.1)
-- Google Nexus 9 WiFi ()
+- Google Nexus 9 WiFi (7.1.1)
 - Google Nexus 9 LTE (7.1.1)
 - Google Nexus 10 (5.1.1)
 - Google Pixel (9)
@@ -597,15 +599,18 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Huawei Honor 9 (8.0.0)
 - Huawei Mate 10 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
+- Huawei Mate 20 Pro (9)
 - Huawei P8 Lite (8.0.0)
 - Huawei P9 (7.0)
 - Huawei P9 Lite (7.0)
 - Huawei P9 Plus (7.0)
+- Huawei P20 (9)
 - Huawei P20 Pro (8.1.0)
 - LeEco Le Pro3 (6.0.1)
 - LG G2 BS980 (5.0.2)
 - LG G4 H812 (6.0)
 - LG G5 H850 (8.0.0)
+- LG G6 H870 (7.0)
 - LG V30 H930 (8.0.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
@@ -628,18 +633,19 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - OnePlus 3 (8.0.0)
 - OnePlus 3T (8.0.0)
 - OnePlus 5 (8.1.0)
-- OnePlus 5T (8.1.0)
+- OnePlus 5T (9)
 - OnePlus 6 (9)
 - OnePlus 6T (9)
 - Razer Phone (8.1.0)
 - Razer Phone 2 (8.1.0)
+- Samsung Galaxy A5 2015 (6.0.1)
 - Samsung Galaxy A5 2017 (8.0.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
 - Samsung Galaxy J3 (5.1.1)
 - Samsung Galaxy J5 2015 (6.0.1)
-- Samsung Galaxy J5 (7.1.1)
+- Samsung Galaxy J5 2016 (7.1.1)
 - Samsung Galaxy J5 Prime (7.0)
 - Samsung Galaxy J7 2017 (8.1.0)
 - Samsung Galaxy J7 Prime (6.0.1)
@@ -695,7 +701,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Mi 5S Plus (7.0)
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi 8 (9)
-- Xiaomi Mi A1 (8.0.0)
+- Xiaomi Mi A1 (9)
 - Xiaomi Mi A2 (9)
 - Xiaomi Mi A2 Lite (9)
 - Xiaomi Mi Max 2 (7.1.1)
