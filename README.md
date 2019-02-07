@@ -105,6 +105,11 @@ It's usually possible to use any fingerprint that's certified for your device. I
 ### Finding a certified fingerprint
 If you need a certain fingerprint from a device, here are a few tips on how to find it. Also remember that you might need to get the security patch date that corresponds to the fingerprint you find (see [Matching the Android security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above).
 
+Also make sure that you get the actual device fingerprint, since there might be props that look similar to what you need. Here's an example, taken from a Google Nexus 6 (named Shamu):
+```
+google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
+```
+
 #### The getprop method
 If you don't want to use one of the provided fingerprints, you can get one for your device by running the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
 ```
@@ -127,8 +132,6 @@ Once you have the file downloaded, there are several different ways that the fin
 - For some devices you'll have to unpack the system.img to get to the build.prop or default.prop file, where you'll find the info you want.This can sometimes be done with a simple archive app/program, but sometimes more advanced utilities are needed. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere. 
-
-Take a look below for an example of what a device fingerprint looks like.
 
 #### The firmware.mobi method
 Sometimes you can also find up to date and certified fingerprints at [firmware.mobi](https://desktop.firmware.mobi/).
