@@ -368,7 +368,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - New function for device simulation. The module sets a number of device specifying props based on the used fingerprint. See the documentation for details.
 - New function for Treble GSI users that have a stock vendor partition: The module can use the certified vendor fingerprint found there. See the documentation for details. Thank you to @oF2pks for making me aware of this possibility.
 - New function where the currently used fingerprint automatically will be updated if there's a new fingerprint for that device added to the fingerprints list. See the documentation for details.
-- New function to set custom props in both post-fs-data and late_start service mode. See the documentation for details. See the documentation for details.
+- New function to set custom props in both post-fs-data and late_start service mode. See the documentation for details.
 - Updated the configuration file function so that the file will now be detected during installation or at boot. See the documentation for details.
 - Updated the locations for placing the configuration file when importing settings to the module. See the documentation for details.
 - Updated the configuration file to be version specific. Make sure you use the latest available configuration file.
