@@ -41,6 +41,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [Boot stage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#boot-stage)
   - [Script colours](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours)
   - [Fingerprints list check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#fingerprints-list-check)
+  - [Automatic fingerprint update](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#automatic-fingerprint-update)
 - [Configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file)
   - [Setting up the module on a clean Magisk/ROM flash](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setting-up-the-module-on-a-clean-magiskrom-flash)
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
@@ -123,14 +124,16 @@ If you're already on a custom ROM that can't pass the CTS profile check, this mi
 Another way to find a certified fingerprint is to download a stock ROM/firmware/factory image for your device and extract the fingerprint from there.
 
 *Note that this is possibly not the best way of finding the fingerprint. Using getprop is always preferred.*
+The main problem is that it might be hard to find the actual, certified fingerprint since there might also be other similar props that aren't certified. The above mentioned getprop method is always preferred...
 
 You can find the file to download in your device's forum on XDA Developers (either as a firmware file, a proper stock ROM, or in the development section as a debloated stock ROM), from the manufacturer's website, or elsewhere on the great interweb (just remember to be careful when downloading unknown files, it's dangerous to go alone!).
 
 Once you have the file downloaded, there are several different ways that the fingerprint can be found. In all cases you'll have to access the file somehow, and in most cases it's just a matter of unpackaging it. After that it depends on how the package is constructed.
 
-- Sometimes there'll be a build.prop file directly in the zip/package. You'll likely find the fingerprint in there.
-- For some devices you'll have to unpack the system.img to get to the build.prop or default.prop file, where you'll find the info you want.This can sometimes be done with a simple archive app/program, but sometimes more advanced utilities are needed. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
+- Sometimes there'll be a build.prop file directly in the zip/package. You might find the fingerprint in there.
+- For some devices you'll have to unpack the system.img to get to the build.prop or default.prop file, where you might find the info you want.This can sometimes be done with a simple archive app/program, but sometimes more advanced utilities are needed. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
+
 - Etc... Experiment, the fingerprint will be in there somewhere. 
 
 #### The firmware.mobi method
@@ -265,7 +268,7 @@ This option will disable or enable colours for the `props` script.
 ### Fingerprints list check
 This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option (use -h for details).
 
-### Automatic fingerprints update
+### Automatic fingerprint update
 Whenever there is an update to the fingerprints list and if you have a fingerprint applied for a device that is on the list, the fingerprint will automatically be updated (if there is an update to that particular fingerprint).
 
 ## Configuration file
