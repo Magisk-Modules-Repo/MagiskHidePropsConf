@@ -112,7 +112,7 @@ google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
 
 #### The getprop method
-If you don't want to use one of the provided fingerprints, you can get one for your device by running the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
+You can get a certified fingerprint for your device by running the getprop command below on a stock ROM/firmware/factory image that fully passes SafetyNet.
 ```
 getprop ro.build.fingerprint
 ```
@@ -133,7 +133,6 @@ Once you have the file downloaded, there are several different ways that the fin
 - Sometimes there'll be a build.prop file directly in the zip/package. You might find the fingerprint in there.
 - For some devices you'll have to unpack the system.img to get to the build.prop or default.prop file, where you might find the info you want.This can sometimes be done with a simple archive app/program, but sometimes more advanced utilities are needed. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
-
 - Etc... Experiment, the fingerprint will be in there somewhere. 
 
 #### The firmware.mobi method
@@ -177,7 +176,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v43_**
+**_Current fingerprints list version - v44_**
 
 
 ## Please add support for device X
@@ -358,6 +357,10 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
+### v3.0.3  
+- Small update to the query for activating device simulation or not when picking a new fingerprint.
+- Updated the fingerprints list and added Asus Zenfone Max M1 and the Elephone U Pro to the list, and updated the OnePlus 5. List updated to v44.
+
 ### v3.0.2  
 - Another quickfix, this time fixing editing already set custom props (a victim of slightly too heavy-handed optimisations of variable and settings retrieval in v3.0.0).
 
@@ -574,10 +577,12 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v43  
+### List v44  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
+- Asus Zenfone Max M1 (8.0.0)
 - Asus ZenPad S 8.0 (6.0.1)
+- Elephone U Pro (8.0.0)
 - Essential PH-1 (9)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)

@@ -139,7 +139,9 @@ invalid_input() {
 		;;
 		4) INPMSG="Only enter '${G}y${N}', '${G}n${N}', '${G}r${N}' or '${G}e${N}'."
 		;;
-		5) INPMSG="Enter a fingerprint or pick from the options, one at a time."
+		5) INPMSG="Only enter '${G}d${N}', '${G}y${N}', '${G}n${N}' or '${G}e${N}'."
+		;;
+		6) INPMSG="Enter a fingerprint or pick from the options, one at a time."
 		;;
 	esac
 
@@ -197,16 +199,7 @@ reboot_fn() {
 		fi
 		case "$INPUT5" in
 			y|Y)
-				echo ""
-				log_print "${C}Rebooting...${N}"
-				setprop sys.powerctl reboot
-				sleep 15
-				log_handler "Rebooting failed."
-				echo ""
-				echo "That doesn't seem like it worked..."
-				echo "Please reboot manually."
-				echo ""
-				exit 0
+				force_reboot
 			;;
 			n|N)
 				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
@@ -327,7 +320,7 @@ menu_change_fingerprint() {
 				if [ "$ORIGVENDPRINT" ]; then
 					menu_vendor_print "$1"
 				else
-					invalid_input 5 2
+					invalid_input 6 2
 				fi
 			;;
 			u|U)
@@ -347,7 +340,7 @@ menu_change_fingerprint() {
 			;;
 			*)
 				if [ "${#INPUT2}" -lt 10 ]; then
-					invalid_input 5 2
+					invalid_input 6 2
 				else
 					menu_new_print "$1" "$INPUT2" 2
 				fi
@@ -552,20 +545,32 @@ menu_devsim_activate() {
 		if [ -z "$INPUT6" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "You have just chosen a new device fingerprint."
-			echo "Would you like to activate device simulation?"
+			echo "The device fingerprint has been updated."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo "Reboot for changes to take effect."
+			echo ""
+			echo "Do you want to reboot now (y/n)?"
+			echo ""
+			echo "You have just chosen a new device"
+			echo "fingerprint. Enter ${G}d${N} to"
+			echo "activate basic device simulation."
+			echo "See the module documentation for"
+			echo "details about this feature."
+			echo ""
+			echo -n "Enter ${G}d${N}, ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT6
 		fi
 		case "$INPUT6" in
-			y|Y)
+			d|D)
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
 				INPUT5=""
 				change_dev_sim "Device simulation"
 				break
+			;;
+			y|Y)
+				force_reboot
 			;;
 			n|N)
 				INPUT2=""
@@ -577,7 +582,7 @@ menu_devsim_activate() {
 			;;
 			e|E) exit_fn
 			;;
-			*)	invalid_input 3 6
+			*)	invalid_input 5 6
 			;;
 		esac
 	done

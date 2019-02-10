@@ -4,14 +4,16 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=43
+PRINTSV=44
 PRINTSTRANSF=260
 
 # Certified fingerprints
 PRINTSLIST="
 Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys
+Asus Zenfone Max M1 (8.0.0)=asus/WW_X00PD/ASUS_X00P_4:8.0.0/OPR1.170623.032/15.00.1811.91:user/release-keys__2018-11-05
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
+Elephone U Pro (8.0.0)=Elephone/U_Pro/U_Pro:8.0.0/Elephone_U_Pro_20180917/09172123:user/release-keys__2018-09-05
 Essential PH-1 (9)=essential/mata/mata:9/PQ1A.190105.014/451:user/release-keys__2019-02-05
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
@@ -72,7 +74,7 @@ OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
 OnePlus 3 (8.0.0)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01
 OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01
-OnePlus 5 (8.1.0)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01
+OnePlus 5 (9)=OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1812102249:user/release-keys__2018-12-01
 OnePlus 5T (9)=OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1901182129:user/release-keys__2018-12-01
 OnePlus 6 (9)=OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
 OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1811170214:user/release-keys__2018-11-01

@@ -249,6 +249,20 @@ format_file() {
 	fi
 }
 
+# Reboot the device
+force_reboot() {
+	echo ""
+	log_print "${C}Rebooting...${N}"
+	setprop sys.powerctl reboot
+	sleep 15
+	log_handler "Rebooting failed."
+	echo ""
+	echo "That doesn't seem like it worked..."
+	echo "Please reboot manually."
+	echo ""
+	exit 0
+}
+
 # Updates placeholders
 placeholder_update() {
 	FILEVALUE=$(get_file_value $1 "$2=")
