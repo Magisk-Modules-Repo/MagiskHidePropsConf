@@ -337,7 +337,7 @@ If you can't run the `props` script for some reason, the logs are also stored in
 
 
 ## Donations
-If you've had any help from me or this module, any kind of [URL="https://forum.xda-developers.com/donatetome.php?u=4667597"]donation[/URL] to support the work involved would of course be appreciated. 
+If you've had any help from me or this module, any kind of [donation](https://forum.xda-developers.com/donatetome.php?u=4667597) to support the work involved would of course be appreciated. 
 
 
 ## Source
