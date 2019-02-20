@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=44
+PRINTSV=45
 PRINTSTRANSF=260
 
 # Certified fingerprints
@@ -42,11 +42,11 @@ Huawei Honor 9 (8.0.0)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/re
 Huawei Mate 10 (8.0.0)=HUAWEI/ALP-L29/HWALP:8.0.0/HUAWEIALP-L29S/143(C636):user/release-keys__2018-10-01
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
 Huawei Mate 20 Pro (9)=HUAWEI/LYA-L29/HWLYA:9/HUAWEILYA-L29/183AUSC636R1:user/release-keys
-Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/399(C432):user/release-keys__2019-01-01
+Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/401(C432):user/release-keys__2019-01-01
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P9 Lite (7.0)=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/release-keys__2018-06-01
 Huawei P9 Plus (7.0)=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
-Huawei P20 (9)=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/160C432R1:user/release-keys__2018-11-01
+Huawei P20 (9)=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
 Huawei P20 Pro (8.1.0)=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys
 LeEco Le Pro3 (6.0.1)=LeEco/ZL1_NA/le_zl1:6.0.1/WEXNAOP5802101261S/letv01261206:user/release-keys
 LG G2 BS980 (5.0.2)=lge/g2_vzw/g2:5.0.2/LRX22G/15046001715f9:user/release-keys
@@ -98,11 +98,12 @@ Samsung Galaxy Note 8 (8.0.0)=samsung/greatltexx/greatlte:8.0.0/R16NW/N950FXXU3C
 Samsung Galaxy Note 10.1 2014 (5.1.1)=samsung/lt03wifixx/lt03wifi:5.1.1/LMY47X/P600XXUDOJ3:user/release-keys
 Samsung Galaxy S3 Neo (4.4.4)=samsung/s3ve3gdd/s3ve3gdd:4.4.4/KTU84P/I9300IDDUBQE2:user/release-keys
 Samsung Galaxy S4 (5.0.1)=samsung/jfltexx/jflte:5.0.1/LRX22C/I9505XXUHPF4:user/release-keys
+Samsung Galaxy S4 Active (5.0.1)=samsung/jactiveltexx/jactivelte:5.0.1/LRX22C/I9295XXSDQD6:user/release-keys
 Samsung Galaxy S5 (6.0.1)=samsung/k3gxx/k3g:6.0.1/MMB29K/G900HXXU1CPF2:user/release-keys
 Samsung Galaxy S6 (7.0)=samsung/zerofltexx/zeroflte:7.0/NRD90M/G920FXXS5EQL1:user/release-keys
 Samsung Galaxy S6 Edge (7.0)=samsung/zeroltexx/zerolte:7.0/NRD90M/G925FXXS5EQL1:user/release-keys
 Samsung Galaxy S7 (8.0.0)=samsung/heroltexx/herolte:8.0.0/R16NW/G930FXXU2ERD5:user/release-keys
-Samsung Galaxy S7 Edge (8.0.0)=samsung/hero2ltexx/hero2lte:8.0.0/R16NW/G935FXXU2ERD5:user/release-keys
+Samsung Galaxy S7 Edge (8.0.0)=samsung/hero2ltexx/hero2lte:8.0.0/R16NW/G935FXXU3ESA3:user/release-keys__2019-01-01
 Samsung Galaxy S8 (8.0.0)=samsung/dreamltexx/dreamlte:8.0.0/R16NW/G950FXXU1CRC7:user/release-keys
 Samsung Galaxy S8 Plus (8.0.0)=samsung/dream2ltexx/dream2lte:8.0.0/R16NW/G955FXXU1CRC7:user/release-keys
 Samsung Galaxy S9 (8.0.0)=samsung/starltexx/starlte:8.0.0/R16NW/G960FXXU1ARCC:user/release-keys
@@ -146,6 +147,7 @@ Xiaomi Mi 8 (9)=Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.1.2.0.PEAMIFI:user/re
 Xiaomi Mi A1 (9)=xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys_2019-01-05
 Xiaomi Mi A2 (9)=xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.3.0.PDIMIXM:user/release-keys__2019-01-05
 Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
+Xiaomi Mi Max (6.0.1)=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.MBDMIDL:user/release-keys
 Xiaomi Mi Max 2 (7.1.1)=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
 Xiaomi Mi Mix 2 (8.0.0)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V9.6.1.0.ODEMIFD:user/release-keys
 Xiaomi Mi Mix 2S (9)=Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.2.1.0.PDGMIXM:user/release-keys__2018-11-01
