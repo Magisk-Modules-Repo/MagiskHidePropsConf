@@ -58,7 +58,7 @@ CONFWEB=true
 # Example:
 # CONFFINGERPRINT=preserve
 
-# When placed in /cache or the root of your internal storage, the module will load these
+# When placed in /cache or /data, the module will load these
 # values during boot and the configuration file will be deleted. Keep a backup of the
 # file if you want to reuse it at a later time (clean ROM flash, etc).
 
