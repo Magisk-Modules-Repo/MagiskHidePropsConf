@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=46
+PRINTSV=47
 PRINTSTRANSF=260
 
 # Certified fingerprints
@@ -14,7 +14,7 @@ Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.
 Asus Zenfone Max M1 (8.0.0)=asus/WW_X00PD/ASUS_X00P_4:8.0.0/OPR1.170623.032/15.00.1811.91:user/release-keys__2018-11-05
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
 Elephone U Pro (8.0.0)=Elephone/U_Pro/U_Pro:8.0.0/Elephone_U_Pro_20180917/09172123:user/release-keys__2018-09-05
-Essential PH-1 (9)=essential/mata/mata:9/PQ1A.190105.014/451:user/release-keys__2019-02-05
+Essential PH-1 (9)=essential/mata/mata:9/PQ1A.190105.024/462:user/release-keys__2019-03-05
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
 Google Nexus 5X (8.1.0)=google/bullhead/bullhead:8.1.0/OPM7.181205.001/5080180:user/release-keys__2018-12-05
@@ -27,13 +27,13 @@ Google Nexus 7 2013 LTE (6.0.1)=google/razorg/deb:6.0.1/MOB30X/3036618:user/rele
 Google Nexus 9 WiFi (7.1.1)=google/volantis/flounder:7.1.1/N9F27M/4333998:user/release-keys
 Google Nexus 9 LTE (7.1.1)=google/volantisg/flounder_lte:7.1.1/N4F27P/4333386:user/release-keys
 Google Nexus 10 (5.1.1)=google/mantaray/manta:5.1.1/LMY49J/2640980:user/release-keys
-Google Pixel (9)=google/sailfish/sailfish:9/PQ2A.190205.003/5180536:user/release-keys__2019-02-05
-Google Pixel XL (9)=google/marlin/marlin:9/PQ2A.190205.003/5180536:user/release-keys__2019-02-05
-Google Pixel 2 (9)=google/walleye/walleye:9/PQ2A.190205.002/5164942:user/release-keys__2019-02-05
-Google Pixel 2 XL (9)=google/taimen/taimen:9/PQ2A.190205.002/5164942:user/release-keys__2019-02-05
-Google Pixel 3 (9)=google/blueline/blueline:9/PQ2A.190205.001/5163636:user/release-keys__2019-02-05
-Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PQ2A.190205.001/5163636:user/release-keys__2019-02-05
-Google Pixel C (8.1.0)=google/ryu/dragon:8.1.0/OPM8.190205.001/5175807:user/release-keys__2019-02-05
+Google Pixel (9)=google/sailfish/sailfish:9/PQ2A.190305.002/5240760:user/release-keys__2019-03-05
+Google Pixel XL (9)=google/marlin/marlin:9/PQ2A.190305.002/5240760:user/release-keys__2019-03-05
+Google Pixel 2 (9)=google/walleye/walleye:9/PQ2A.190305.002/5240760:user/release-keys__2019-03-05
+Google Pixel 2 XL (9)=google/taimen/taimen:9/PQ2A.190305.002/5240760:user/release-keys__2019-03-05
+Google Pixel 3 (9)=google/blueline/blueline:9/PQ2A.190305.002/5240760:user/release-keys__2019-03-05
+Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PQ2A.190305.002/5240760:user/release-keys__2019-03-05
+Google Pixel C (8.1.0)=google/ryu/dragon:8.1.0/OPM8.190305.001/5238107:user/release-keys__2019-03-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
 HTC U12 Plus (8.0.0)=htc/imeuhl_00617/htc_imeuhl:8.0.0/OPR1.170623.032/1041457.3:user/release-keys__2018-06-01
@@ -75,9 +75,9 @@ OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-key
 OnePlus 3 (8.0.0)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01
 OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01
 OnePlus 5 (9)=OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1812102249:user/release-keys__2018-12-01
-OnePlus 5T (9)=OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1901182129:user/release-keys__2018-12-01
+OnePlus 5T (9)=OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1902221914:user/release-keys__2019-01-01
 OnePlus 6 (9)=OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
-OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1811170214:user/release-keys__2018-11-01
+OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1901231231:user/release-keys__2019-01-01
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
 Razer Phone 2 (8.1.0)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05
 Samsung Galaxy A5 2015 (6.0.1)=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CPH3:user/release-keys
@@ -145,11 +145,11 @@ Xiaomi Mi 5S Plus (7.0)=Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
 Xiaomi Mi 8 (9)=Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.1.2.0.PEAMIFI:user/release-keys__2018-11-01
 Xiaomi Mi A1 (9)=xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys_2019-01-05
-Xiaomi Mi A2 (9)=xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.3.0.PDIMIXM:user/release-keys__2019-01-05
+Xiaomi Mi A2 (9)=xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.4.0.PDIMIXM:user/release-keys__2019-02-05
 Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
 Xiaomi Mi Max (6.0.1)=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.MBDMIDL:user/release-keys
 Xiaomi Mi Max 2 (7.1.1)=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
-Xiaomi Mi Mix 2 (8.0.0)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V9.6.1.0.ODEMIFD:user/release-keys
+Xiaomi Mi Mix 2 (8.0.0)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V10.2.2.0.ODEMIXM:user/release-keys__2018-12-01
 Xiaomi Mi Mix 2S (9)=Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.2.1.0.PDGMIXM:user/release-keys__2018-11-01
 Xiaomi Mi Note 2 (8.0.0)=Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
 Xiaomi Mi Pad 4 (8.1.0)=Xiaomi/clover/clover:8.1.0/OPM1.171019.019/V10.1.1.0.ODJCNFI:user/release-keys__2018-10-01
