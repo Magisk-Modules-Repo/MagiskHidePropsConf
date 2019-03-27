@@ -1,19 +1,15 @@
 #!/system/bin/sh
-# Please don't hardcode /magisk/modname/... ; instead, please use $MODPATH/...
-# This will make your scripts compatible even if Magisk change its mount point in the future
-MODPATH=${0%/*}
-
-# This script will be executed in late_start service mode
-# More info in the main Magisk thread
 
 # MagiskHide Props Config
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
+MODPATH=${0%/*}
+
 # Load functions
 . $MODPATH/util_functions.sh
 
-if [ "$OPTIONLATE" == 0 ]; then
+if [ "$OPTIONBOOT" == 1 ]; then
 	until [ ! -f "$POSTCHKFILE" ]; do
 		sleep 1
 	done
@@ -24,13 +20,25 @@ log_script_chk "Running service.sh module script."
 # Edits prop values if set for late_start service
 echo -e "\n--------------------" >> $LOGFILE 2>&1
 log_handler "Editing prop values in late_start service mode."
-if [ "$OPTIONLATE" == 1 ]; then
+if [ "$OPTIONBOOT" == 2 ]; then
 	# ---Setting/Changing fingerprint---				
-	print_edit
+	if [ "$PRINTSTAGE" == 0 ]; then
+		print_edit
+	fi
 	# ---Setting device simulation props---
-	dev_sim_edit
+	if [ "$SIMSTAGE" == 0 ]; then
+		dev_sim_edit
+	fi
 	# ---Setting custom props---
 	custom_edit "CUSTOMPROPS"
+fi
+# Edit fingerprint if set for late_start service
+if [ "$OPTIONBOOT" != 2 ] && [ "$PRINTSTAGE" == 2 ]; then
+	print_edit
+fi
+# Edit simulation props if set for late_start service
+if [ "$OPTIONBOOT" != 2 ] && [ "$SIMSTAGE" == 2 ]; then
+	dev_sim_edit
 fi
 # Edit custom props set for late_start service
 custom_edit "CUSTOMPROPSLATE"
@@ -43,7 +51,6 @@ if [ "$PROPEDIT" == 1 ]; then
 		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
 		if [ "$(eval "echo \$$REPROP")" == "true" ]; then
 			log_handler "Changing/writing $ITEM."
-			resetprop -v $ITEM >> $LOGFILE 2>&1
 			resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
 		fi
 	done

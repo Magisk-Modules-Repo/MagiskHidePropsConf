@@ -24,10 +24,10 @@ echo ""
 # ================ Paths and variables ================
 # =====================================================
 
-COREPATH=CORE_PLACEHOLDER
+COREPATHPH=CORE_PLACEHOLDER
 IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
-LATEFILE=LATE_PLACEHOLDER
+LATEFILEPH=LATE_PLACEHOLDER
 
 # Development testing set to false
 DEVTESTING=false
@@ -131,7 +131,7 @@ invalid_input() {
 
 	# Set the message text
 	case $1 in
-		1) INPMSG="Only pick from the list above, one at a time."
+		1) INPMSG="Only pick from the options above, one at a time."
 		;;
 		2) INPMSG="Only enter '${G}y${N}' or '${G}n${N}'."
 		;;
@@ -159,71 +159,13 @@ invalid_input() {
 		;;
 		6) INPUT6=""
 		;;
+		7) INPUT7=""
+		;;
 	esac
 
 	echo ""
 	echo "${R}Invalid input${N}. $INPMSG"
 	sleep 2
-}
-
-reboot_fn() {
-	INPUT5=""
-	while true
-	do
-		if [ -z "$INPUT5" ]; then
-			if [ "$2" == "reboot" ] || [ "$2" == "reset-script" ] || [ "$2" == "update" ]; then
-				REBOOTTXT=""
-			else
-				REBOOTTXT="Reboot - "
-			fi
-			menu_header "$REBOOTTXT${C}$1${N}"
-			echo ""
-			if  [ "$2" != "reset-script" ] && [ "$2" != "reboot" ]; then
-				if [ "$2" == "update" ]; then
-					echo "The device fingerprint has been updated."
-					echo ""
-				fi
-				echo "Reboot for changes to take effect."
-				echo ""
-			fi
-			echo "Do you want to reboot now (y/n)?"
-			echo ""
-			if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
-				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
-				INV1=2
-			else
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "	
-				INV1=3
-			fi
-			read -r INPUT5
-		fi
-		case "$INPUT5" in
-			y|Y)
-				force_reboot
-			;;
-			n|N)
-				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
-					exit_fn
-				else
-					INPUT2=""
-					INPUT3=""
-					INPUT4=""
-					INPUT5=""
-					INPUT6=""
-					break
-				fi
-			;;
-			e|E)
-				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
-					invalid_input $INV1 6
-				else
-					exit_fn
-				fi
-			;;
-			*)	invalid_input $INV1 6
-			;;
-		esac
-	done
 }
 
 exit_fn() {
@@ -240,6 +182,13 @@ menu_change_fingerprint() {
 	INPUT2=""
 	while true
 	do
+		if [ "$PRINTSTAGE" == 0 ]; then
+			STAGETXT=" ${C}(default)${N}"
+		elif [ "$PRINTSTAGE" == 1 ]; then
+			STAGETXT=" ${C}(post-fs-data)${N}"
+		elif [ "$PRINTSTAGE" == 2 ]; then
+			STAGETXT=" ${C}(late_start service)${N}"
+		fi
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
@@ -292,6 +241,7 @@ menu_change_fingerprint() {
 				if [ "$OPTIONWEB" == 0 ]; then
 					echo "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
 				fi
+				echo "${G}s${N} - Boot stage$STAGETXT."
 				echo "${G}b${N} - Go back."
 				echo ""
 				if [ "$PRINTCHK" == 1 ]; then
@@ -330,6 +280,8 @@ menu_change_fingerprint() {
 					menu_new_print "$1" "$INPUT2" 2
 				fi
 			;;
+			s|S) menu_bootstage_print "$1"
+			;;
 			b|B)
 				INPUT=""
 				break
@@ -353,6 +305,7 @@ menu_change_fingerprint() {
 menu_pick_print() {
 	INPUT3=""
 	OEMLIST=""
+	HEADERPRINTV="${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
@@ -373,7 +326,7 @@ menu_pick_print() {
 					OEMLIST="$(ls $PRINTFILES | sed 's|\.sh||g')"
 				fi
 				ITEMCOUNT=1
-				menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
+				menu_header "$HEADERPRINTV"
 				echo ""
 				for ITEM in $OEMLIST; do
 					echo "${G}$ITEMCOUNT${N} - $ITEM"
@@ -408,7 +361,7 @@ menu_pick_print() {
 			ITEMCOUNT=1
 			for ITEM in $OEMLIST; do
 				if [ "$ITEMCOUNT" == "$INPUT3" ]; then
-					menu_pick_print_sub "$1" "$ITEM"
+					menu_pick_print_sub "$HEADERPRINTV" "$ITEM"
 					break
 				fi
 				ITEMCOUNT=$(($ITEMCOUNT+1))
@@ -432,7 +385,7 @@ menu_pick_print_sub() {
 		. $TMPFILE
 		INPUT4=""
 	else
-		menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
+		menu_header "$1"
 		log_handler "Can't find '$TMPFILE'."
 		collect_logs "issue"
 		echo "Oh no! Something went wrong..."
@@ -454,7 +407,7 @@ menu_pick_print_sub() {
 	do
 		if [ -z "$INPUT4" ]; then
 			ITEMCOUNT=1
-			menu_header "${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
+			menu_header "$1"
 			echo ""
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
@@ -476,8 +429,20 @@ menu_pick_print_sub() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$ITEMCOUNT" == "$INPUT4" ]; then
-					menu_new_print "$1" $(get_eq_right "$ITEM")					
-					break
+					case "$ITEM" in
+						*\;*)
+							menu_pick_print_version "$1" $(get_eq_left "$ITEM") $(get_eq_right "$ITEM")
+							INPUT2=""
+							INPUT3=""
+							break
+						;;
+						*)
+							menu_new_print "$1" $(get_eq_right "$ITEM")
+							INPUT2=""
+							INPUT3=""
+							break
+						;;
+					esac
 				fi
 				ITEMCOUNT=$(($ITEMCOUNT+1))
 			done
@@ -493,13 +458,63 @@ menu_pick_print_sub() {
 	done
 }
 
-# Fifth menu level - confirm fingerprint
-menu_new_print() {
+# Fifth menu level - pick Android version
+menu_pick_print_version() {
 	INPUT5=""
-	PRINTDISP="$(get_print_display $2)"
+	IFS=$SAVEIFS
+	ANDROIDV="$(get_print_versions "$2")"
 	while true
 	do
 		if [ -z "$INPUT5" ]; then
+			ITEMCOUNT=1
+			menu_header "$1"
+			echo ""
+			echo "There are several fingerprints available"
+			echo "for this device, for different versions"
+			echo "of Android. Pick one."
+			echo ""
+			echo "${C}$(echo "$2" | sed 's| (.*||')${N}"
+			echo ""
+			for ITEM in $ANDROIDV; do
+				echo "${G}$ITEMCOUNT${N} - Android version ${C}$ITEM${N}"
+				ITEMCOUNT=$(($ITEMCOUNT+1))
+			done
+			echo "${G}b${N} - Go back"
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
+			read -r INPUT5
+		fi
+		if [ "$INPUT5" -ge 1 ] && [ "$INPUT5" -lt "$ITEMCOUNT" ]; then
+			ITEMCOUNT=1
+			for ITEM in $ANDROIDV; do
+				if [ "$ITEMCOUNT" == "$INPUT5" ]; then
+					TMPPRINT="$(echo $3 | cut -f $ITEMCOUNT -d ';')"
+					menu_new_print "$1" "$TMPPRINT"
+					INPUT2=""
+					INPUT3=""
+					INPUT4=""
+					break
+				fi
+				ITEMCOUNT=$(($ITEMCOUNT+1))
+			done
+		elif [ "$INPUT5" == "b" ] || [ "$INPUT5" == "B" ]; then
+			INPUT4=""
+			break
+		elif [ "$INPUT5" == "e" ] || [ "$INPUT5" == "E" ]; then
+			exit_fn
+		else
+			invalid_input 1 5
+		fi
+	done
+}
+
+# Sixth menu level - confirm fingerprint
+menu_new_print() {
+	INPUT6=""
+	PRINTDISP="$(get_print_display $2)"
+	while true
+	do
+		if [ -z "$INPUT6" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "You are about to use the following as your device's fingerprint."
@@ -510,9 +525,9 @@ menu_new_print() {
 			echo "Make sure that it is correct before continuing."
 			echo ""
 			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
-			read -r INPUT5
+			read -r INPUT6
 		fi
-		case "$INPUT5" in
+		case "$INPUT6" in
 			y|Y)
 				change_print "$1" "$2"
 				if [ "$DEVSIM" == 0 ]; then
@@ -521,28 +536,30 @@ menu_new_print() {
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
+				INPUT5=""
 				break
 			;;
 			n|N)
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
+				INPUT5=""
 				break
 			;;
 			e|E) exit_fn
 			;;
-			*)	invalid_input 3 5
+			*)	invalid_input 3 6
 			;;
 		esac
 	done
 }
 
-# Sixth menu level - activate device simulation
+# Seventh menu level - activate device simulation
 menu_devsim_activate() {
-	INPUT6=""
+	INPUT7=""
 	while true
 	do
-		if [ -z "$INPUT6" ]; then
+		if [ -z "$INPUT7" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "The device fingerprint has been updated."
@@ -556,16 +573,19 @@ menu_devsim_activate() {
 			echo "activate basic device simulation."
 			echo "See the module documentation for"
 			echo "details about this feature."
+			echo "Note: this is not needed for"
+			echo "passing SafetyNet's CTS profile."
 			echo ""
-			echo -n "Enter ${G}d${N}, ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
-			read -r INPUT6
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}d${N} or ${G}e${N}(xit): "
+			read -r INPUT7
 		fi
-		case "$INPUT6" in
+		case "$INPUT7" in
 			d|D)
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
 				INPUT5=""
+				INPUT6=""
 				change_dev_sim "Device simulation"
 				break
 			;;
@@ -577,12 +597,13 @@ menu_devsim_activate() {
 				INPUT3=""
 				INPUT4=""
 				INPUT5=""
+				INPUT6=""
 				after_change "$1"
 				break
 			;;
 			e|E) exit_fn
 			;;
-			*)	invalid_input 5 6
+			*)	invalid_input 5 7
 			;;
 		esac
 	done
@@ -705,6 +726,90 @@ menu_update_print() {
 	done
 }
 
+# Third menu level - Boot stage
+menu_bootstage_print() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			if [ "$PRINTSTAGE" == 0 ]; then
+				CURRTXT="default"
+				TMPTXT="${C}post-fs-data${N} or ${C}late_start sevice${N}"
+				CHOICETXT="${G}p${N}(ost), ${G}l${N}(ate)"
+			elif [ "$PRINTSTAGE" == 1 ]; then
+				CURRTXT="post-fs-data"
+				TMPTXT="${C}default${N} or ${C}late_start service${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}l${N}(ate)"
+			elif [ "$PRINTSTAGE" == 2 ]; then
+				CURRTXT="late_start service"
+				TMPTXT="${C}default${N} or ${C}post-fs-data${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}p${N}(post)"
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Current boot stage is ${G}$CURRTXT${N}."
+			echo ""
+			echo "Do you want to change it to"
+			echo "$TMPTXT?"
+			echo ""
+			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			d|D)
+				if [ "$PRINTSTAGE" != 0 ]; then
+					OPTNEW=0
+					log_handler "Boot stage changed to default."
+					replace_fn PRINTSTAGE $PRINTSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			p|P)
+				if [ "$PRINTSTAGE" != 1 ]; then
+					OPTNEW=1
+					log_handler "Boot stage changed to post-fs-data."
+					replace_fn PRINTSTAGE $PRINTSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			l|L)
+				if [ "$PRINTSTAGE" != 2 ]; then
+					OPTNEW=2
+					log_handler "Boot stage changed to late_start service."
+					replace_fn PRINTSTAGE $PRINTSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			b|B)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 1 3
+			;;
+		esac
+	done
+}
+
 # ======================== Device simulation ========================
 # Second menu level - Device simulation
 menu_dev_sim() {
@@ -714,9 +819,8 @@ menu_dev_sim() {
 		ENABLE="${G} (enabled)${N}"
 		DISABLE="${R} (disabled)${N}"
 		DEVSIMTXT=""
-		DEVSIMC=""
 		DESCRIPTIONTXT=""
-		DESCRIPTIONC=""
+		SDKTXT=""
 		if [ "$DEVSIM" == 1 ]; then
 			DEVSIMTXT=$ENABLE
 		else
@@ -738,6 +842,18 @@ menu_dev_sim() {
 		else
 			DESCRIPTIONTXT=$DISABLE
 		fi
+		if [ "$SDKSET" == 1 ]; then
+			SDKTXT=$ENABLE
+		else
+			SDKTXT=$DISABLE
+		fi
+		if [ "$SIMSTAGE" == 0 ]; then
+			STAGETXT=" ${G}(default)${N}"
+		elif [ "$SIMSTAGE" == 1 ]; then
+			STAGETXT=" ${G}(post-fs-data)${N}"
+		elif [ "$SIMSTAGE" == 2 ]; then
+			STAGETXT=" ${G}(late_start service)${N}"
+		fi
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
@@ -755,6 +871,9 @@ menu_dev_sim() {
 			echo "based on the currently set device"
 			echo "fingerprint."
 			echo ""
+			echo "Note that this is not necessary to pass"
+			echo "SafetyNet's CTS profile check."
+			echo ""
 			echo "Pick an option below."
 			echo ""
 			echo "${G}s${N} - Device simulation${DEVSIMTXT}"
@@ -765,8 +884,10 @@ menu_dev_sim() {
 				echo "${G}4${N} - ro.build.version.release${RELEASETXT}"
 				echo "${G}5${N} - ro.build.id${IDTXT}"
 				echo "${G}6${N} - ro.build.version.incremental${INCREMENTALTXT}"
+				echo "${G}7${N} - ro.build.version.sdk${SDKTXT}"
 			fi
 			echo "${G}d${N} - ro.build.description${DESCRIPTIONTXT}"
+			echo "${G}t${N} - Boot stage$STAGETXT."
 			echo "${G}b${N} - Go back"
 			echo ""
 			echo "See the module readme or the"
@@ -778,12 +899,14 @@ menu_dev_sim() {
 		case "$INPUT2" in
 			s|S) menu_dev_sim_enable "$1"
 			;;
-			1|2|3|4|5|6|d|D)
+			1|2|3|4|5|6|7|d|D)
 				if [ "$DEVSIM" == 1 ] || [ "$INPUT2" == "d" -o "$INPUT2" == "D" ]; then
 					menu_dev_sim_prop "$1" "$INPUT2"
 				else
 					invalid_input 1 2
 				fi
+			;;
+			t|T) menu_bootstage_sim "$1"
 			;;
 			b|B)
 				INPUT=""
@@ -862,6 +985,8 @@ menu_dev_sim_prop() {
 			;;
 			6) TMPTXT="ro.build.version.incremental"
 			;;
+			7) TMPTXT="ro.build.version.sdk"
+			;;
 			d|D) TMPTXT="ro.build.description"
 			;;
 		esac
@@ -902,6 +1027,90 @@ menu_dev_sim_prop() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
+# Third menu level - Boot stage
+menu_bootstage_sim() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			if [ "$SIMSTAGE" == 0 ]; then
+				CURRTXT="default"
+				TMPTXT="${C}post-fs-data${N} or ${C}late_start sevice${N}"
+				CHOICETXT="${G}p${N}(ost), ${G}l${N}(ate)"
+			elif [ "$SIMSTAGE" == 1 ]; then
+				CURRTXT="post-fs-data"
+				TMPTXT="${C}default${N} or ${C}late_start service${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}l${N}(ate)"
+			elif [ "$SIMSTAGE" == 2 ]; then
+				CURRTXT="late_start service"
+				TMPTXT="${C}default${N} or ${C}post-fs-data${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}p${N}(post)"
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Current boot stage is ${G}$CURRTXT${N}."
+			echo ""
+			echo "Do you want to change it to"
+			echo "$TMPTXT?"
+			echo ""
+			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			d|D)
+				if [ "$SIMSTAGE" != 0 ]; then
+					OPTNEW=0
+					log_handler "Boot stage changed to default."
+					replace_fn SIMSTAGE $SIMSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			p|P)
+				if [ "$SIMSTAGE" != 1 ]; then
+					OPTNEW=1
+					log_handler "Boot stage changed to post-fs-data."
+					replace_fn SIMSTAGE $SIMSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			l|L)
+				if [ "$SIMSTAGE" != 2 ]; then
+					OPTNEW=2
+					log_handler "Boot stage changed to late_start service."
+					replace_fn SIMSTAGE $SIMSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			b|B)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 1 3
 			;;
 		esac
 	done
@@ -1239,10 +1448,12 @@ menu_custom_props() {
 	while true
 	do
 		if [ -z "$INPUT2" ]; then
-			ITEMCOUNT=1
-			if [ "$OPTIONLATE" == 0 ]; then
+			ITEMCOUNT=0
+			if [ "$OPTIONBOOT" == 0 ]; then
+				DEFSTAGETXT=" (default)"
+			elif [ "$OPTIONBOOT" == 1 ]; then
 				DEFSTAGETXT=" (post-fs-data)"
-			else
+			elif [ "$OPTIONBOOT" == 2 ]; then
 				DEFSTAGETXT=" (late_start service)"
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
@@ -1261,6 +1472,7 @@ menu_custom_props() {
 				echo "Set or edit custom prop values for your device."
 				echo ""
 				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ]; then
+					ITEMCOUNT=1
 					if [ "$CUSTOMPROPS" ]; then
 						echo "${C}Default boot stage${G}${DEFSTAGETXT}${N}"
 						for ITEM in $CUSTOMPROPS; do
@@ -1302,7 +1514,7 @@ menu_custom_props() {
 				echo -n "Enter '${G}e${N}' to exit: "
 				read -r INPUT2
 			fi
-			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
+			if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					ITEMCOUNT=1
 					for ITEM in $CUSTOMPROPSLIST; do
@@ -1395,12 +1607,12 @@ menu_edit_custprop() {
 				echo "${G}r${N} - Reset prop"
 			else
 				echo "${R}Not yet set by this module. Please reboot to set.${N}"
-				if [ "$OPTIONLATE" == 0 ] || [ "$STAGETXT" == " ${G}(post-fs-data)${N}" ]; then
+				if [ "$OPTIONBOOT" == 1 ] || [ "$STAGETXT" == " ${G}(post-fs-data)${N}" ]; then
 					echo ""
 					echo "This might be caused by the prop being set to early."
 					echo "If the above state does not change after a reboot,"
 					echo "try changing the boot stage when the prop is set"
-					echo "to late_start service (or both)."
+					echo "to default, late_start service or both."
 				fi
 				echo ""
 				echo "${G}r${N} - Reboot"
@@ -1846,7 +2058,7 @@ menu_delete_props() {
 	while true
 	do
 		if [ -z "$INPUT2" ]; then
-			ITEMCOUNT=1
+			ITEMCOUNT=0
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""			
 			if [ "$DELEDIT" == 0 ] && [ "$DELETEPROPS" ]; then
@@ -1863,6 +2075,7 @@ menu_delete_props() {
 				echo "Delete prop values on your device."
 				echo ""
 				if [ "$DELETEPROPS" ]; then
+					ITEMCOUNT=1
 					echo "Select a prop below to reset it."
 					echo ""
 					for ITEM in $DELETEPROPS; do
@@ -1887,7 +2100,7 @@ menu_delete_props() {
 				echo -n "Enter '${G}e${N}' to exit: "
 				read -r INPUT2
 			fi
-			if [ "$INPUT2" -ge 1 -a "$INPUT2" -le "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
+			if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
 				if [ "$CTRLSET" == 1 ]; then
 					ITEMCOUNT=1
 					for ITEM in $DELETEPROPS; do
@@ -2093,10 +2306,12 @@ menu_options() {
 		COLOURTXT=""
 		PRINTSCHKTXT=""
 		if [ -z "$INPUT2" ]; then
-			if [ "$OPTIONLATE" == 1 ]; then
-				BOOTTXT="late_start service"
-			else
+			if [ "$OPTIONBOOT" == 0 ]; then
+				BOOTTXT="default"
+			elif [ "$OPTIONBOOT" == 1 ]; then
 				BOOTTXT="post-fs-data"
+			elif [ "$OPTIONBOOT" == 2 ]; then
+				BOOTTXT="late_start service"
 			fi
 			if [ "$OPTIONCOLOUR" == 1 ]; then
 				COLOURTXT="enabled"
@@ -2169,41 +2384,76 @@ menu_options_bootstage() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			if [ "$2" == "late_start service" ]; then
-				TMPTXT="post-fs-data"
-				OPTCURR=1
-				OPTNEW=0
-			else
-				TMPTXT="late_start service"
-				OPTCURR=0
-				OPTNEW=1
+			if [ "$2" == "default" ]; then
+				TMPTXT="${C}post-fs-data${N} or ${C}late_start sevice${N}"
+				CHOICETXT="${G}p${N}(ost), ${G}l${N}(ate)"
+			elif [ "$2" == "post-fs-data" ]; then
+				TMPTXT="${C}default${N} or ${C}late_start service${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}l${N}(ate)"
+			elif [ "$2" == "late_start service" ]; then
+				TMPTXT="${C}default${N} or ${C}post-fs-data${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}p${N}(post)"
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Current boot stage is ${G}$2${N}."
 			echo ""
-			echo "Do you want to change it to ${C}$TMPTXT${N}?"
+			echo "Do you want to change it to"
+			echo "$TMPTXT?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y|Y)
-				log_handler "Boot stage changed to ${TMPTXT}."
-				replace_fn OPTIONLATE $OPTCURR $OPTNEW $LATEFILE
-				# Load module values
-				. $LATEFILE
-				INPUT2=""
-				reboot_fn "$1"
-				break
+			d|D)
+				if [ "$OPTIONBOOT" != 0 ]; then
+					OPTNEW=0
+					log_handler "Boot stage changed to default."
+					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
 			;;
-			n|N)
+			p|P)
+				if [ "$OPTIONBOOT" != 1 ]; then
+					OPTNEW=1
+					log_handler "Boot stage changed to post-fs-data."
+					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			l|L)
+				if [ "$OPTIONBOOT" != 2 ]; then
+					OPTNEW=2
+					log_handler "Boot stage changed to late_start service."
+					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT2=""
+					reboot_fn "$1"
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			b|B)
 				INPUT2=""
 				break
 			;;
 			e|E) exit_fn
 			;;
-			*)	invalid_input 3 3
+			*)	invalid_input 1 3
 			;;
 		esac
 	done
@@ -2365,7 +2615,7 @@ menu_options_reset() {
 		case "$INPUT3" in
 			y|Y)
 				log_handler "Resetting all script settings."
-				replace_fn OPTIONLATE $OPTIONLATE 1 $LATEFILE
+				replace_fn OPTIONBOOT $OPTIONBOOT 0 $LATEFILE
 				replace_fn OPTIONCOLOUR $OPTIONCOLOUR 1 $LATEFILE
 				replace_fn OPTIONWEB $OPTIONWEB 1 $LATEFILE
 				# Load module values

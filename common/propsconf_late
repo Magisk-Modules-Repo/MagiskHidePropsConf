@@ -10,37 +10,50 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=23
+SCRIPTV=24
 SETTRANSF=2
-NOTTRANSF="OPTIONLATE"
+NOTTRANSF=""
 
-# Variables
-COREPATH=CORE_PLACEHOLDER
+# Paths
+COREPATHPH=CORE_PLACEHOLDER
 IMGPATH=$COREPATH/img
 MODPATH=$IMGPATH/MagiskHidePropsConf
-CACHELOC=CACHE_PLACEHOLDER
+CACHELOCPH=CACHE_PLACEHOLDER
 LATELOGFILE=$CACHELOC/propsconf_latefile.log
 
+# Fingerprint
 FINGERPRINTENB=1
 PRINTMODULE=0
 PRINTEDIT=0
 PRINTVEND=0
+PRINTCHK=0
+
+# Simulation
 DEVSIM=0
+
+# Prop files
 BUILDPROPENB=1
 FILESAFE=1
 BUILDEDIT=0
 DEFAULTEDIT=0
+
+# Custom props
 PROPCOUNT=0
 PROPEDIT=0
 CUSTOMEDIT=0
 DELEDIT=0
-REBOOTCHK=0
-PRINTCHK=0
-OPTIONLATE=0
+
+# Boot stages
+PRINTSTAGE=0
+SIMSTAGE=0
+
+# Script settings
+OPTIONBOOT=0
 OPTIONCOLOUR=1
 OPTIONWEB=1
 OPTIONUPDATE=1
 
+# Device simulation
 BRANDSET=1
 NAMESET=1
 DEVICESET=1
@@ -48,7 +61,10 @@ RELEASESET=1
 IDSET=1
 INCREMENTALSET=1
 DESCRIPTIONSET=1
+SDKSET=1
 
+# Misc
+REBOOTCHK=0
 CACHEFILES="
 propsconf_conf
 reset_mhpc
@@ -72,6 +88,7 @@ ORIGRELEASE=""
 ORIGID=""
 ORIGINCREMENTAL=""
 ORIGDESCRIPTION=""
+ORIGSDK=""
 
 # ---Module values---
 MODULEDEBUGGABLE=""
@@ -89,6 +106,7 @@ SIMRELEASE=""
 SIMID=""
 SIMINCREMENTAL=""
 SIMDESCRIPTION=""
+SIMSDK=""
 
 # ---Custom prop values---
 CUSTOMPROPS=""
@@ -124,12 +142,12 @@ cleanup() {
 	for ITEM in $CACHEFILES; do
 		if [ -f "$CACHELOC/$ITEM" ]; then
 			echo "Deleting ${ITEM}." >> $LATELOGFILE 2>&1
-			rm -f $CACHELOC/$ITEM >> $LATELOGFILE 2>&1
+			rm -f $CACHELOC/$ITEM
 		fi
 	done
 	# Suicide.
 	echo "Removing script." >> $LATELOGFILE 2>&1
-	rm -f $0 >> $LATELOGFILE 2>&1
+	rm -f $0
 }
 
 # Checks if the module is installed. Deletes itself if it isn't.

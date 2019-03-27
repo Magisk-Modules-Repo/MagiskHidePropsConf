@@ -4,41 +4,137 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
+# Finding file values
+get_file_value() {
+	if [ -f "$1" ]; then
+		grep $2 $1 | sed "s|.*${2}||" | sed 's|\"||g'
+	fi
+}
+
 # ======================== Variables ========================
-MODVERSION=VER_PLACEHOLDER
+if [ "$INSTFN" ]; then
+	# Installation (config.sh)
+	MODVERSION=$(echo $(get_file_value $INSTALLER/module.prop "version=") | sed 's|-.*||')
+	if [ "$MAGISK_VER_CODE" -ge 17316 ]; then
+		COREPATH=/sbin/.magisk
+	else
+		COREPATH=/sbin/.core
+	fi
+	ADBPATH=/data/adb
+	BIMGPATH=$COREPATH/img
+	$BOOTMODE && IMGPATH=$BIMGPATH || IMGPATH=$MOUNTPATH
+	if [ "$MAGISK_VER_CODE" -ge 17316 ]; then
+		POSTPATH=$ADBPATH/post-fs-data.d
+		SERVICEPATH=$ADBPATH/service.d
+		LATEHOLDER=$ADBPATH/service.d/propsconf_late
+	else
+		POSTPATH=$IMGPATH/.core/post-fs-data.d
+		SERVICEPATH=$IMGPATH/.core/service.d
+		LATEHOLDER=$BIMGPATH/.core/service.d/propsconf_late
+	fi
+	POSTFILE=$POSTPATH/propsconf_post
+	LATEFILE=$SERVICEPATH/propsconf_late
+	POSTLATEFILE=$POSTPATH/propsconf_late
+	UPDATELATEFILE=$INSTALLER/common/propsconf_late
+	MIRRORLOC=/sbin/.magisk/mirror/system
+	if [ -z $SLOT ]; then
+		CACHELOC=/cache
+	else
+		CACHELOC=/data/cache
+	fi
+	LOGFILE=$CACHELOC/propsconf_install.log
+	UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
+	UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
+	NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
+	SETTINGSLIST="
+	FINGERPRINTENB
+	PRINTMODULE
+	PRINTEDIT
+	PRINTVEND
+	PRINTCHK
+	DEVSIM
+	BUILDPROPENB
+	FILESAFE
+	BUILDEDIT
+	DEFAULTEDIT
+	PROPCOUNT
+	PROPEDIT
+	CUSTOMEDIT
+	DELEDIT
+	PRINTSTAGE
+	SIMSTAGE
+	OPTIONBOOT
+	OPTIONCOLOUR
+	OPTIONWEB
+	OPTIONUPDATE
+	BRANDSET
+	NAMESET
+	DEVICESET
+	RELEASESET
+	IDSET
+	INCREMENTALSET
+	DESCRIPTIONSET
+	SDKSET
+	REBOOTCHK
+	"
+	PROPSETTINGSLIST="
+	MODULEDEBUGGABLE
+	MODULESECURE
+	MODULETYPE
+	MODULETAGS
+	MODULESELINUX
+	MODULEFINGERPRINT
+	SIMBRAND
+	SIMNAME
+	SIMDEVICE
+	SIMRELEASE
+	SIMID
+	SIMINCREMENTAL
+	SIMDESCRIPTION
+	SIMSDK
+	CUSTOMPROPS
+	CUSTOMPROPSPOST
+	CUSTOMPROPSLATE
+	DELETEPROPS
+	"
+else
+	# Regular
+	# Placeholder variables
+	MODVERSIONPH=VER_PLACEHOLDER
+	LATEFILEPH=LATE_PLACEHOLDER
+	MIRRORLOCPH=MIRROR_PLACEHOLDER
+	CACHELOCPH=CACHE_PLACEHOLDER
+	BINPH=BIN_PLACEHOLDER
+
+	# Log variables
+	LOGFILE=$CACHELOC/propsconf.log
+	LASTLOGFILE=$CACHELOC/propsconf_last.log
+	TMPLOGLOC=$CACHELOC/propslogs
+	TMPLOGLIST="
+	$CACHELOC/magisk.log
+	$CACHELOC/magisk.log.bak
+	$CACHELOC/propsconf*
+	$MIRRORPATH/system/build.prop
+	$MIRRORPATH/vendor/build.prop
+	$LATEFILE
+	"
+fi
+
 MIRRORPATH=$COREPATH/mirror
-LATEFILE=LATE_PLACEHOLDER
-MIRRORLOC=MIRROR_PLACEHOLDER
-CACHELOC=CACHE_PLACEHOLDER
+SYSTEMFILE=$MODPATH/system.prop
 POSTCHKFILE=$CACHELOC/propsconf_postchk
 RUNFILE=$MODPATH/script_check
-LOGFILE=$CACHELOC/propsconf.log
-LASTLOGFILE=$CACHELOC/propsconf_last.log
-TMPLOGLOC=$CACHELOC/propslogs
-TMPLOGLIST="
-$CACHELOC/magisk.log
-$CACHELOC/magisk.log.bak
-/data/adb/magisk_debug.log
-$CACHELOC/propsconf*
-$MIRRORPATH/system/build.prop
-$MIRRORPATH/vendor/build.prop
-$LATEFILE
-"
-CONFFILELST="
-/sdcard/propsconf_conf
-/data/propsconf_conf
-$CACHELOC/propsconf_conf
-"
 RESETFILE=$CACHELOC/reset_mhpc
 MAGISKLOC=/data/adb/magisk
 # Make sure that the terminal app used actually can see resetprop
 alias resetprop="$MAGISKLOC/magisk resetprop"
 # Finding installed Busybox
 if [ -d "$IMGPATH/busybox-ndk" ]; then
-		BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
+	BBPATH=$(find $IMGPATH/busybox-ndk -name 'busybox')
 else
 	BBPATH=$(which busybox)
 fi
+# Fingerprint variables
 PRINTSLOC=$MODPATH/prints.sh
 PRINTSTMP=$CACHELOC/prints.sh
 PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
@@ -46,8 +142,25 @@ PRINTSDEV="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/pri
 PRINTFILES=$MODPATH/printfiles
 CSTMPRINTS=/sdcard/printslist
 CSTMFILE=$PRINTFILES/Custom.sh
-BIN=BIN_PLACEHOLDER
-USNFLIST=USNF_PLACEHOLDER
+
+# Known modules that edit device fingerprint
+USNFLIST="
+xiaomi-safetynet-fix
+safetynet-fingerprint-fix
+VendingVisa
+DeviceSpoofingTool4Magisk
+universal-safetynet-fix
+samodx-safetyskipper
+safetypatcher
+petnoires-safetyspoofer
+"
+
+# Configuration file locations
+CONFFILELST="
+/sdcard/propsconf_conf
+/data/propsconf_conf
+$CACHELOC/propsconf_conf
+"
 
 # MagiskHide props
 PROPSLIST="
@@ -96,41 +209,68 @@ ro.vendor.build.fingerprint
 ro.build.description
 "
 
+# Additional simulation props
+ADNSIMPROPS="
+ro.build.version.sdk
+"
+
+# Android API level
+APILVL="
+4.2=17
+4.3=18
+4.4=19
+5.0=21
+5.1=22
+6.0=23
+7.0=24
+7.1=25
+8.0=26
+8.1=27
+9=28
+"
+
 # Values props list
-VALPROPSLIST=$PROPSLIST$PRINTPARTS$SNPROPS$ADNPROPS
+VALPROPSLIST=$PROPSLIST$PRINTPARTS$SNPROPS$ADNPROPS$ADNSIMPROPS
 
 # Loading module settings
-. $LATEFILE
+if [ -z "$INSTFN" ]; then
+	. $LATEFILE
+fi
 
 # ======================== General functions ========================
-# Finding file values
-get_file_value() {
-	if [ -f "$1" ]; then
-		grep $2 $1 | sed "s|.*${2}||" | sed 's|\"||g'
-	fi
-}
-
 # Log functions
-# Saves the previous log (if available) and creates a new one
-log_start() {
-	if [ -f "$LOGFILE" ]; then
-		mv -f $LOGFILE $LASTLOGFILE
-	fi
-	touch $LOGFILE
-	echo "***************************************************" >> $LOGFILE 2>&1
-	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
-	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
-	echo "***************************************************" >> $LOGFILE 2>&1
-	log_script_chk "Log start."
-}
 log_handler() {
 	if [ "$(id -u)" == 0 ] ; then
 		echo "" >> $LOGFILE 2>&1
 		echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - $1" >> $LOGFILE 2>&1
 	fi
 }
+# Saves the previous log (if available) and creates a new one
+log_start() {
+	if [ -f "$LOGFILE" ]; then
+		if [ "$INSTFN" ]; then
+			rm -f $LOGFILE
+		else
+			mv -f $LOGFILE $LASTLOGFILE
+		fi
+	fi
+	touch $LOGFILE
+	echo "***************************************************" >> $LOGFILE 2>&1
+	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
+	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
+	echo "***************************************************" >> $LOGFILE 2>&1
+	if [ "$INSTFN" ]; then
+		log_handler "Starting module installation script"
+	else
+		log_script_chk "Log start."
+	fi
+}
 log_print() {
-	echo "$1"
+	if [ "$INSTFN" ]; then
+		ui_print "$1"
+	else
+		echo "$1"
+	fi
 	log_handler "$1"
 }
 log_script_chk() {
@@ -210,10 +350,27 @@ get_device_used() {
 	fi
 }
 
-# Get Android version with 3 digits for current fingerprint
+# Get the list of print version
+get_print_versions() {
+	echo "$1" | sed 's|.*(||' | sed 's|).*||' | sed 's| \& | |g'
+}
+
+# Get Android version with 3 digits for input
 get_android_version() {
+	VERTMP=$(echo $1 | sed 's|.||g')
+	if [ "${#VERTMP}" -lt 3 ]; then
+		until [ "${#VERTMP}" == 3 ]
+		do
+			VERTMP="$(echo ${VERTMP}0)"
+		done
+	fi
+	echo $VERTMP
+}
+
+# Get Android version with 3 digits for current fingerprint
+get_android_version_print() {
 	print_parts $1 "var"
-	VERTMP=$VARRELEASE
+	VERTMP=$(echo $VARRELEASE | sed 's|.||g')
 	if [ "${#VERTMP}" -lt 3 ]; then
 		until [ "${#VERTMP}" == 3 ]
 		do
@@ -235,7 +392,11 @@ get_print_display() {
 
 # Replace file values
 replace_fn() {
-	sed -i "s|${1}=${2}|${1}=${3}|" $4
+	if [ "$5" == "placeholder" ]; then
+		sed -i "s|${1}PH=${2}|${1}=${3}|" $4
+	else
+		sed -i "s|${1}=${2}|${1}=${3}|" $4
+	fi
 }
 
 # Format user files to remove Windows file endings
@@ -265,13 +426,17 @@ force_reboot() {
 
 # Updates placeholders
 placeholder_update() {
-	FILEVALUE=$(get_file_value $1 "$2=")
-	log_handler "Checking for ${3} in ${1}. Current value is ${FILEVALUE}."
-	case $FILEVALUE in
-		*PLACEHOLDER*)	replace_fn $2 $3 $4 $1
-						log_handler "Placeholder ${3} updated to ${4} in ${1}."
-		;;
-	esac
+	FILEVALUE=$(get_file_value $1 "${2}PH=")
+	log_handler "Checking for ${3} in ${1}."
+	if [ "$FILEVALUE" ]; then
+		case $FILEVALUE in
+			*PLACEHOLDER*)	replace_fn $2 $3 $4 $1 "placeholder"
+							log_handler "Placeholder ${3} updated to ${4} in ${1}."
+			;;
+		esac
+	else
+		log_handler "No placeholder to update for ${2} in ${1}."
+	fi
 }
 
 # Check if boot scripts ran during boot
@@ -315,28 +480,6 @@ curr_values() {
 	fi
 }
 
-# Check if original file values are safe
-orig_safe() {
-	replace_fn FILESAFE 0 1 $LATEFILE
-	for V in $PROPSLIST; do
-		PROP=$(get_prop_type $V)
-		FILEPROP=$(echo "CURR${PROP}" | tr '[:lower:]' '[:upper:]')
-		FILEVALUE=$(eval "echo \$$FILEPROP")
-		log_handler "Checking ${FILEPROP}=${FILEVALUE}"
-		safe_props $V $FILEVALUE
-		if [ "$SAFE" == 0 ]; then
-			log_handler "Prop $V set to triggering value in prop file."
-			replace_fn FILESAFE 1 0 $LATEFILE
-		else
-			if [ -z "$FILEVALUE" ]; then
-				log_handler "Could not retrieve value for prop $V."
-			elif [ "$SAFE" == 1 ]; then
-				log_handler "Prop $V set to \"safe\" value in prop file."
-			fi
-		fi
-	done
-}
-
 # Run all value loading functions
 all_values() {
 	log_handler "Loading values."
@@ -351,18 +494,23 @@ after_change() {
 	if [ "$2" == "file" ]; then
 		# Load module settings
 		. $LATEFILE
+		if [ "$3" == "install" ]; then
+			MODPATH=$MOUNTPATH/$MODID
+		fi
 	else
 		# Update the reboot variable
 		reboot_chk
 		# Load all values
 		all_values
+		# Update the system.prop file
+		system_prop
 		# Ask to reboot
 		reboot_fn "$1" "$2"
 	fi
 }
 
 # Run after changing props/settings with configuration file
-after_change_file() {
+after_change_propfile() {
 	# Update the reboot variable
 	reboot_chk
 	# Load all values
@@ -375,6 +523,67 @@ after_change_file() {
 # Check if module needs a reboot
 reboot_chk() {
 	replace_fn REBOOTCHK 0 1 $LATEFILE
+}
+
+# Reboot function
+reboot_fn() {
+	INPUT5=""
+	while true
+	do
+		if [ -z "$INPUT5" ]; then
+			if [ "$2" == "reboot" ] || [ "$2" == "reset-script" ] || [ "$2" == "update" ]; then
+				REBOOTTXT=""
+			else
+				REBOOTTXT="Reboot - "
+			fi
+			menu_header "$REBOOTTXT${C}$1${N}"
+			echo ""
+			if  [ "$2" != "reset-script" ] && [ "$2" != "reboot" ]; then
+				if [ "$2" == "update" ]; then
+					echo "The device fingerprint has been updated."
+					echo ""
+				fi
+				echo "Reboot for changes to take effect."
+				echo ""
+			fi
+			echo "Do you want to reboot now (y/n)?"
+			echo ""
+			if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
+				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+				INV1=2
+			else
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "	
+				INV1=3
+			fi
+			read -r INPUT5
+		fi
+		case "$INPUT5" in
+			y|Y)
+				force_reboot
+			;;
+			n|N)
+				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
+					exit_fn
+				else
+					INPUT2=""
+					INPUT3=""
+					INPUT4=""
+					INPUT5=""
+					INPUT6=""
+					break
+				fi
+			;;
+			e|E)
+				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
+					invalid_input $INV1 5
+				else
+					exit_fn
+				fi
+			;;
+			*)	invalid_input $INV1 5
+			;;
+		esac
+	done
 }
 
 # Reset module
@@ -408,12 +617,14 @@ config_file() {
 			break
 		fi
 	done
+
 	if [ "$CONFFILE" ]; then
 		log_handler "Configuration file detected (${CONFFILE})."
 		format_file $CONFFILE
 		# Loads custom variables
 		. $CONFFILE
 		module_v_ctrl
+
 		if [ "$CONFTRANSF" -le $VERSIONCMP ]; then
 			# Check if vendor fingerprint is set
 			if [ "$CONFVENDPRINT" == "true" ]; then
@@ -432,19 +643,19 @@ config_file() {
 					if [ "$TMPPROP" != "preserve" ]; then
 						if [ "$PROPTYPE" == "ro.build.fingerprint" ]; then
 							if [ "$FINGERPRINTENB" == 1 ]; then
-								change_print "$PROPTYPE" "$TMPPROP" "file"
+								change_print "$PROPTYPE" "$TMPPROP" "file" "$1"
 							fi
 						else
-							change_prop "$PROPTYPE" "$TMPPROP" "file"
+							change_prop "$PROPTYPE" "$TMPPROP" "file" "$1"
 						fi
 					fi
 				else
 					if [ "$PROPTYPE" == "ro.build.fingerprint" ]; then
 						if [ "$FINGERPRINTENB" == 1 ]; then
-							reset_print "$PROPTYPE" "file"
+							reset_print "$PROPTYPE" "file" "$1"
 						fi
 					else
-						reset_prop "$PROPTYPE" "file"
+						reset_prop "$PROPTYPE" "file" "$1"
 					fi
 				fi
 			done
@@ -461,23 +672,53 @@ config_file() {
 						else
 							TMPVAL=0
 						fi
-						change_sim_prop "Device simulation" "$ITEM" "$TMPVAL" "file"
+						change_sim_prop "Device simulation" "$ITEM" "$TMPVAL" "file" "$1"
 					done
 				fi
 				# Device description
 				if [ "$CONFDESCRIPTION" == "true" ]; then
-					change_sim_descr "Device simulation" 1 "file"
+					change_sim_descr "Device simulation" 1 "file" "$1"
 				else
-					change_sim_descr "Device simulation" 0 "file"
+					change_sim_descr "Device simulation" 0 "file" "$1"
 				fi
+			fi
+
+			# Updates boot options for fingerprint and simulation props
+			if [ "$PRINTEDIT" == 1 ]; then
+				if [ "$CONFPRINTBOOT" == "default" ]; then
+					OPTLCHNG=0
+					TMPTXT="default"
+				elif [ "$CONFPRINTBOOT" == "post" ]; then
+					OPTLCHNG=1
+					TMPTXT="post-fs-data"
+				elif [ "$CONFPRINTBOOT" == "late" ]; then
+					OPTLCHNG=2
+					TMPTXT="late_start service"
+				fi
+				replace_fn PRINTSTAGE $PRINTSTAGE $OPTLCHNG $LATEFILE
+				log_handler "Fingerprint boot stage is ${TMPTXT}."
+			fi
+			if [ "$DEVSIM" == 1 ]; then
+				if [ "$CONFSIMBOOT" == "default" ]; then
+					OPTLCHNG=0
+					TMPTXT="default"
+				elif [ "$CONFSIMBOOT" == "post" ]; then
+					OPTLCHNG=1
+					TMPTXT="post-fs-data"
+				elif [ "$CONFSIMBOOT" == "late" ]; then
+					OPTLCHNG=2
+					TMPTXT="late_start service"
+				fi
+				replace_fn SIMSTAGE $SIMSTAGE $OPTLCHNG $LATEFILE
+				log_handler "Device simulation boot stage is ${TMPTXT}."
 			fi
 
 			# Updates prop file editing
 			if [ "$FILESAFE" == 0 ]; then
 				if [ "$CONFPROPFILES" == "true" ]; then
-					edit_prop_files "file" "" " (configuration file)"
+					edit_prop_files "file" "" " (configuration file)" "$1"
 				elif [ "$CONFPROPFILES" == "false" ]; then
-					reset_prop_files "file" "" " (configuration file)"
+					reset_prop_files "file" "" " (configuration file)" "$1"
 				fi
 			fi
 
@@ -486,26 +727,26 @@ config_file() {
 				if [ "$CONFPROPS" ] || [ "$CONFPROPSPOST" ] || [ "$CONFPROPSLATE" ]; then
 					if [ "$PROPOPTION" == "add" ] || [ "$PROPOPTION" == "replace" ]; then
 						if [ "$PROPOPTION" == "replace" ]; then
-							reset_all_custprop "file"
+							reset_all_custprop "file" "$1"
 						fi
 						if [ "$CONFPROPS" ]; then
 							for ITEM in $CONFPROPS; do
-								set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "default" "file"
+								set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "default" "file" "$1"
 							done
 						fi
 						if [ "$CONFPROPSPOST" ]; then
 							for ITEM in $CONFPROPSPOST; do
-								set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "post" "file"
+								set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "post" "file" "$1"
 							done
 						fi
 						if [ "$CONFPROPSLATE" ]; then
 							for ITEM in $CONFPROPSLATE; do
-								set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "late" "file"
+								set_custprop "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")" "late" "file" "$1"
 							done
 						fi
 					fi
 				else
-					reset_all_custprop "file"
+					reset_all_custprop "file" "$1"
 				fi
 			fi
 
@@ -514,50 +755,66 @@ config_file() {
 				if [ "$CONFDELPROPS" ]; then
 					if [ "$DELPROPOPTION" == "add" ] || [ "$DELPROPOPTION" == "replace" ]; then
 						if [ "$DELPROPOPTION" == "replace" ]; then
-							reset_all_delprop "file"
+							reset_all_delprop "file" "$1"
 						fi
 						for ITEM in $CONFDELPROPS; do
-							set_delprop "$ITEM" "file"
+							set_delprop "$ITEM" "file" "$1"
 						done
 					fi
 				else
-					reset_all_delprop "file"
+					reset_all_delprop "file" "$1"
 				fi
 			fi
 
 			# Updates options
-			if [ "$CONFLATE" == "true" ]; then
-				OPTLCHNG=1
-				TMPTXT="late_start service"
-			else
+			# Boot stage
+			if [ "$CONFBOOT" == "default" ]; then
 				OPTLCHNG=0
+				TMPTXT="default"
+			elif [ "$CONFBOOT" == "post" ]; then
+				OPTLCHNG=1
 				TMPTXT="post-fs-data"
+			elif [ "$CONFBOOT" == "late" ]; then
+				OPTLCHNG=2
+				TMPTXT="late_start service"
 			fi
-			replace_fn OPTIONLATE $OPTIONLATE $OPTLCHNG $LATEFILE
-			log_handler "Boot stage is ${TMPTXT}."
+			replace_fn OPTIONBOOT $OPTIONBOOT $OPTLCHNG $LATEFILE
+			log_handler "General boot stage is ${TMPTXT}."
+			# Script colours
 			if [ "$CONFCOLOUR" == "true" ]; then
 				OPTCCHNG=1
 			else
 				OPTCCHNG=0
 			fi
 			replace_fn OPTIONCOLOUR $OPTIONCOLOUR $OPTCCHNG $LATEFILE
-			log_handler "Colour $CONFCOLOUR."
+			log_handler "Colour is set to $CONFCOLOUR."
+			# Fingerprints list update
 			if [ "$CONFWEB" == "true" ]; then
 				OPTWCHNG=1
 			else
 				OPTWCHNG=0
 			fi
 			replace_fn OPTIONWEB $OPTIONWEB $OPTWCHNG $LATEFILE
-			log_handler "Automatic fingerprints list update $CONFWEB."
+			log_handler "Automatic fingerprints list update is set to $CONFWEB."
+			# Automatic fingerprints update
+			if [ "$CONFUPDATE" == "true" ]; then
+				OPTFCHNG=1
+			else
+				OPTFCHNG=0
+			fi
+			replace_fn OPTIONUPDATE $OPTIONUPDATE $OPTFCHNG $LATEFILE
+			log_handler "Automatic fingerprint update is set to $CONFUPDATE."
 		else
 			log_handler "The configuration file is not compatible with the current module version."
 		fi
+
+		# Update the system.prop file
+		system_prop
 
 		# Deletes the configuration file
 		log_handler "Deleting configuration file."
 		rm -f $CONFFILE
 		log_handler "Configuration file import complete."
-		
 	else
 		log_handler "No configuration file."
 	fi
@@ -566,6 +823,261 @@ config_file() {
 # Connection test
 test_connection() {
 	ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
+}
+
+# system.prop creation
+system_prop() {
+	rm -f $MODPATH/system.prop
+	if [ "$OPTIONBOOT" == 0 ]; then
+		log_handler "Creating system.prop file."
+		touch $MODPATH/system.prop >> $LOGFILE 2>&1
+		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" >> $MODPATH/system.prop
+		print_edit "$MODPATH/system.prop"
+		dev_sim_edit "$MODPATH/system.prop"
+		custom_edit "CUSTOMPROPS" "$MODPATH/system.prop"
+	fi
+}
+
+# ======================== Installation functions ========================
+# Places various module scripts in their proper places
+script_placement() {
+	if [ -f "$LATEFILE" ]; then
+		FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
+		FILETRANSF=$(get_file_value $LATEFILE "SETTRANSF=")
+	else
+		FILEV=0
+		FILETRANSF=$UPDATETRANSF
+	fi
+	log_print "- Installing scripts"
+	cp -af $INSTALLER/common/util_functions.sh $MODPATH/util_functions.sh >> $LOGFILE 2>&1
+	cp -af $INSTALLER/common/prints.sh $MODPATH/prints.sh >> $LOGFILE 2>&1
+	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $LOGFILE 2>&1
+	if [ "$FILEV" ]; then
+		# New script
+		if [ "$UPDATEV" -gt "$FILEV" ]; then
+			# Fresh install
+			if [ "$FILEV" == 0 ]; then
+				log_print "- Placing settings script"
+			# Updated script with a required clearing of settings
+			elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ -z "$NOTTRANSF" ]; then
+				log_print "- Settings cleared (script updated)"
+			# Updated script
+			else
+				log_print "- Script updated"
+				log_print "- Transferring settings from old script"
+				# Prop settings
+				for ITEM in $SETTINGSLIST; do
+					# Checking if a script update requires some options not to transfer
+					case "$NOTTRANSF" in
+						*${ITEM}*)						
+							if [ "$UPDATETRANSF" -gt "$FILETRANSF" ]; then
+								TRANSFOPT=1
+							else
+								TRANSFOPT=0
+							fi
+						;;
+						*)
+							TRANSFOPT=0
+						;;
+					esac
+					if [ "$TRANSFOPT" == 1 ]; then
+						log_handler "Not transfering settings for ${ITEM}."
+					else
+						SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+						SNEW=$(get_file_value $UPDATELATEFILE "${ITEM}=")
+						if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
+							log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
+							sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
+						fi
+					fi
+				done
+				# Prop values
+				for ITEM in $PROPSETTINGSLIST; do
+					SOLD=$(get_file_value $LATEFILE "${ITEM}=")
+					if [ "$SOLD" ]; then
+						log_handler "Setting ${ITEM} to ${SOLD}."
+						sed -i "s|${ITEM}=\"\"|${ITEM}=\"${SOLD}\"|" $UPDATELATEFILE
+					fi
+				done
+				# Prop and file edits
+				for ITEM in $PROPSLIST; do
+					ITEM="$(get_prop_type $ITEM)"
+					REPROP=$(echo "RE${ITEM}" | tr '[:lower:]' '[:upper:]')
+					SETPROP=$(echo "SET${ITEM}" | tr '[:lower:]' '[:upper:]')
+					REOLD=$(get_file_value $LATEFILE "${REPROP}=")
+					SETOLD=$(get_file_value $LATEFILE "${SETPROP}=")
+					if [ "$REOLD" ] && [ "$REOLD" != "false" ]; then
+						log_handler "Setting sensitive prop ${ITEM} to ${REOLD}."
+						sed -i "s/${REPROP}=false/${REPROP}=${REOLD}/" $UPDATELATEFILE
+					fi
+					if [ "$SETOLD" ] && [ "$SETOLD" != "false" ]; then
+						log_handler "Setting file edit ${ITEM} to ${SETOLD}."
+						sed -i "s/${SETPROP}=false/${SETPROP}=${SETOLD}/" $UPDATELATEFILE
+					fi
+				done
+			fi
+			log_handler "Setting up late_start settings script."
+			cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
+		# Downgraded script (flashed old module version)
+		elif [ "$UPDATEV" -lt "$FILEV" ]; then
+			log_print "- Settings cleared (script downgraded)"
+			cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
+		# No update of script
+		else
+			log_print "- Module settings preserved"
+		fi
+	else
+		log_print "- Placing settings script"
+		log_handler "Setting up late_start settings script."
+		cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
+	fi
+}
+
+# Checks if any other module is using a local copy of build.prop
+build_prop_check() {
+	log_print "- Checking for build.prop conflicts"
+	for D in $(ls $IMGPATH); do
+		if [ "$D" != "$MODID" ]; then
+			if [ -f "$IMGPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
+				NAME=$(get_file_value $IMGPATH/$D/module.prop "name=")
+				ui_print "!"
+				log_print "! Another module editing build.prop detected!"
+				log_print "! Module - '$NAME'!"
+				log_print "! Modification of build.prop disabled!"
+				ui_print "!"
+				sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE
+			fi
+		fi
+	done
+}
+
+# Checks for the Universal SafetyNet Fix module and similar modules editing device fingerprint
+usnf_check() {
+	log_print "- Checking for fingerprint conflicts"
+	for USNF in $USNFLIST; do
+		if [ -d "$IMGPATH/$USNF" ]; then
+			NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
+			ui_print "!"
+			log_print "! Module editing fingerprint detected!"
+			log_print "! Module - '$NAME'!"
+			log_print "! Fingerprint modification disabled!"
+			ui_print "!"
+			sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
+		fi
+	done
+}
+
+# Check for bin/xbin
+bin_check() {
+	$BOOTMODE && BINCHECK=$COREPATH/mirror/system/xbin || BINCHECK=/system/xbin
+	if [ -d "$BINCHECK" ]; then
+		BIN=xbin
+	else
+		BIN=bin
+	fi
+	log_handler "Using /system/$BIN."
+	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN >> $LOGFILE 2>&1
+}
+
+# Magisk installation check
+install_check() {
+	if [ ! -d "$SERVICEPATH" ]; then
+		log_print "- Fresh Magisk installation detected."
+		log_handler "Creating path for boot script."
+		mkdir -pv $SERVICEPATH >> $LOGFILE 2>&1
+	fi
+}
+
+# Check for late_start service boot script in post-fs-data.d, in case someone's moved it and also delete the old propsconf_post boot script if present
+post_check() {
+	if [ -f "$POSTLATEFILE" ]; then
+		log_handler "Removing late_start service boot script from post-fs-data.d."
+		rm -f $POSTLATEFILE
+	fi
+	if [ -f "$POSTFILE" ]; then
+		log_handler "Removing old post-fs-data boot script from post-fs-data.d"
+		rm -f $POSTFILE
+	fi
+	if [ -f "$CACHELOC/propsconf_postfile.log" ]; then
+		log_handler "Removing old post-fs-data log from /cache."
+		rm -f $CACHELOC/propsconf_postfile.log
+	fi
+}
+
+# Update the device simulation variables if a fingerprint is set
+devsim_update() {
+	if [ "$MODULEFINGERPRINT" ]; then
+		log_handler "Updating device simulation variables."
+		print_parts $MODULEFINGERPRINT "var"
+		for ITEM in $PROPSETTINGSLIST; do
+			case $ITEM in
+				SIM*)
+					SUBA="$(get_file_value $LATEFILE "${ITEM}=")"
+					TMPVAR="$(echo $ITEM | sed 's|SIM|VAR|')"
+					TMPPROP="$(eval "echo \$$TMPVAR")"
+					sed -i "s|${ITEM}=\"${SUBA}\"|${ITEM}=\"${TMPPROP}\"|" $LATEFILE
+				;;
+			esac
+		done
+		# Reload module settings
+		load_settings
+	fi
+}
+
+# Load module settings and reapply the MODPATH variable
+load_settings() {
+	log_handler "Loading/reloading module settings."
+	if [ -f "$LATEFILE" ]; then
+		. $LATEFILE
+	fi
+	MODPATH=$MOUNTPATH/$MODID
+}
+
+# Installs everything
+script_install() {
+	load_settings
+	build_prop_check
+	usnf_check
+	bin_check
+	post_check
+	script_placement
+	log_print "- Updating placeholders"
+	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
+	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $MODPATH/util_functions.sh LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
+	placeholder_update $MODPATH/util_functions.sh MIRRORLOC MIRROR_PLACEHOLDER "$MIRRORLOC"
+	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
+	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
+	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEHOLDER"
+	placeholder_update $MODPATH/system/$BIN/props COREPATH CORE_PLACEHOLDER "$COREPATH"
+	load_settings
+	devsim_update
+	print_files
+	ui_print ""
+	ui_print "- Make sure to have Busybox installed."
+	ui_print "- osm0sis' Busybox is recommended."
+	ui_print ""
+	# Checks for configuration file
+	CONFFILE=""
+	for ITEM in $CONFFILELST; do
+		if [ -s "$ITEM" ]; then
+			CONFFILE="$ITEM"
+			break
+		fi
+	done
+	if [ "$CONFFILE" ]; then
+		load_settings
+		ui_print "- Configuration file found."
+		ui_print "- Installing..."
+		ui_print ""
+		config_file "install"
+	else
+		load_settings
+		# Create system.prop in case of no configuration file
+		system_prop
+	fi
+	log_handler "Module installation complete."
 }
 
 # ======================== Fingerprint functions ========================
@@ -583,8 +1095,14 @@ print_edit() {
 		fi
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
-			resetprop -v $ITEM >> $LOGFILE 2>&1
-			resetprop -nv $ITEM $PRINTCHNG >> $LOGFILE 2>&1
+			if [ "$1" ]; then
+				if [ "$PRINTSTAGE" == 0 ]; then
+					log_handler "${ITEM}=${PRINTCHNG}"
+					echo "${ITEM}=${PRINTCHNG}" >> $1
+				fi
+			else
+				resetprop -nv $ITEM $PRINTCHNG >> $LOGFILE 2>&1
+			fi
 		done
 		# Edit security patch date if included
 		if [ "$PRINTVEND" != 1 ]; then
@@ -593,8 +1111,14 @@ print_edit() {
 				*__*)
 					if [ "$SECPATCH" ]; then
 						log_handler "Updating security patch date to match fingerprint used."
-						resetprop -v ro.build.version.security_patch >> $LOGFILE 2>&1
-						resetprop -nv ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
+						if [ "$1" ]; then
+							if [ "$PRINTSTAGE" == 0 ]; then
+								log_handler "ro.build.version.security_patch=${SECPATCH}"
+								echo "ro.build.version.security_patch=${SECPATCH}" >> $1
+							fi
+						else
+							resetprop -nv ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
+						fi
 					fi
 				;;
 			esac
@@ -603,8 +1127,14 @@ print_edit() {
 		if [ "$DESCRIPTIONSET" == 1 ]; then
 			if [ "$SIMDESCRIPTION" ]; then
 				log_handler "Changing/writing ro.build.description."
-				resetprop -v ro.build.description >> $LOGFILE 2>&1
-				resetprop -nv ro.build.description "$SIMDESCRIPTION" >> $LOGFILE 2>&1
+				if [ "$1" ]; then
+					if [ "$PRINTSTAGE" == 0 ]; then
+						log_handler "ro.build.description=${SIMDESCRIPTION}"
+						echo "ro.build.description=${SIMDESCRIPTION}" >> $1
+					fi
+				else
+					resetprop -nv ro.build.description "$SIMDESCRIPTION" >> $LOGFILE 2>&1
+				fi
 			fi
 		else
 			log_handler "Changing/writing ro.build.description is disabled."
@@ -614,11 +1144,15 @@ print_edit() {
 
 # Create fingerprint files
 print_files() {
-	log_print "Creating fingerprint files."
-	rm -rf $PRINTFILES >> $LOGFILE 2>&1
-	mkdir -pv $PRINTFILES >> $LOGFILE 2>&1
+	if [ "$INSTFN" ]; then
+		log_print "- Creating fingerprint files."
+	else
+		log_print "Creating fingerprint files."
+	fi
+	rm -rf $MODPATH/printfiles >> $LOGFILE 2>&1
+	mkdir -pv $MODPATH/printfiles >> $LOGFILE 2>&1
 	# Loading prints
-	. $PRINTSLOC
+	. $MODPATH/prints.sh
 	# Saving manufacturers
 	log_handler "Saving manufacturers."
 	SAVEIFS=$IFS
@@ -632,9 +1166,9 @@ print_files() {
 	OEMLIST="$TMPOEMLIST"
 	log_handler "Creating files."
 	for OEM in $OEMLIST; do
-		echo -e "PRINTSLIST=\"" >> $PRINTFILES/${OEM}\.sh
-		grep $OEM >> $PRINTFILES/${OEM}\.sh $PRINTSLOC
-		echo -e "\"" >> $PRINTFILES/${OEM}\.sh
+		echo -e "PRINTSLIST=\"" >> $MODPATH/printfiles/${OEM}\.sh
+		grep $OEM >> $MODPATH/printfiles/${OEM}\.sh $MODPATH/prints.sh
+		echo -e "\"" >> $MODPATH/printfiles/${OEM}\.sh
 	done
 	# Check for updated fingerprint
 	device_print_update "Updating module fingerprint."
@@ -652,11 +1186,33 @@ device_print_update() {
 					;;
 				esac
 			done
-			log_handler "Checking for updated fingerprint ($TMPDEV)."
+			case $TMPPRINT in
+				*\;*)
+					ITEMCOUNT=1
+					ITEMFOUND=0
+					TMPVPRINT="$(get_print_versions "$TMPPRINT")"
+					TMPVCURR="$(get_android_version_print $MODULEFINGERPRINT)"
+					for ITEM in $TMPVPRINT; do
+						if [ "$(get_android_version $ITEM)" == "$TMPVCURR" ]; then
+							ITEMFOUND=1
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+					if [ "$ITEMFOUND" == 1 ]; then
+						TMPPRINT="$(get_eq_right $TMPPRINT | cut -f $ITEMCOUNT -d ';')"
+					else
+						TMPPRINT=""
+					fi
+				;;
+				*) TMPPRINT="$(get_eq_right $TMPPRINT)"
+				;;
+			esac
 			if [ "$TMPDEV" ] && [ "$TMPPRINT" ]; then
-				if [ "$MODULEFINGERPRINT" != "$(get_eq_right $TMPPRINT))" ]; then
+				log_handler "Checking for updated fingerprint ($TMPDEV)."
+				if [ "$MODULEFINGERPRINT" != "$TMPPRINT" ]; then
 					log_handler "$1"
-					change_print "$1" $(get_eq_right $TMPPRINT) "update"
+					change_print "$1" "$TMPPRINT" "update"
 					replace_fn PRINTCHK 0 1 $LATEFILE
 					# Load module values
 					. $LATEFILE
@@ -744,7 +1300,7 @@ reset_print() {
 	# Clear out device simulation variables
 	print_parts "none"
 
-	after_change "$1" "$2"
+	after_change "$1" "$2" "$3"
 }
 
 # Use fingerprint
@@ -765,7 +1321,7 @@ change_print() {
 	NEWFINGERPRINT=""
 
 	if [ "$DEVSIM" == 1 ]; then
-		after_change "$1" "$3"
+		after_change "$1" "$3" "$4"
 	fi
 }
 
@@ -812,7 +1368,7 @@ print_parts() {
 		TMPVALUE=""
 		TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 		if [ $1 != "none" ]; then
-			TMPVALUE=$(echo $1 | sed 's|\:user\/release-keys||' | cut -f $DLIM1 -d ':' | cut -f $DLIM2 -d '/')
+			TMPVALUE=$(echo $1 | sed 's|\:user\/release-keys.*||' | cut -f $DLIM1 -d ':' | cut -f $DLIM2 -d '/')
 			eval "VAR${TMPPROP}='$TMPVALUE'"
 		fi
 		DLIM2=$(($DLIM2 + 1))
@@ -827,11 +1383,21 @@ print_parts() {
 	done
 
 	VARDESCRIPTION=""
+	VARSDK=""
 	if [ $1 != "none" ]; then
 		VARDESCRIPTION="${VARNAME}-user $VARRELEASE $VARID $VARINCREMENTAL release-keys"
+		for ITEM in $APILVL; do
+			case $VARRELEASE in
+				*$(get_eq_left $ITEM)*)
+					VARSDK="$(get_eq_right $ITEM)"
+					break
+				;;
+			esac
+		done
 	fi
 	if [ "$2" != "var" ]; then
 		replace_fn SIMDESCRIPTION "\"$SIMDESCRIPTION\"" "\"$VARDESCRIPTION\"" $LATEFILE
+		replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE
 	fi
 	# Load module values
 	. $LATEFILE
@@ -843,21 +1409,27 @@ dev_sim_edit() {
 	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ]; then
 		if [ "$DEVSIM" == 1 ]; then
 			log_handler "Editing device simulation props."
-			for ITEM in $PRINTPARTS; do
+			TMPPARTS=$PRINTPARTS$ADNSIMPROPS
+			for ITEM in $TMPPARTS; do
 				TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 				TMPENB=$(get_file_value $LATEFILE "${TMPPROP}SET=")
 				TMPVALUE=$(get_file_value $LATEFILE "SIM${TMPPROP}=")
 				if [ "$TMPENB" == 1 ] && [ "$TMPVALUE" ]; then
 					log_handler "Changing/writing $ITEM."
-					resetprop -v $ITEM >> $LOGFILE 2>&1
-					resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1
+					if [ "$1" ]; then
+						if [ "$SIMSTAGE" == 0 ]; then
+							log_handler "${ITEM}=${TMPVALUE}"
+							echo "${ITEM}=${TMPVALUE}" >> $1
+						fi
+					else
+						resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1
+					fi
 				else
 					log_handler "Changing/writing $ITEM is disabled."
 				fi
 			done
 		fi
 	fi
-	
 }
 
 # Enable/disable the option
@@ -893,7 +1465,7 @@ change_sim_prop() {
 	# Saves new value
 	replace_fn "${TMPPROP}SET" $SUBA $3 $LATEFILE
 
-	after_change "$1" "$4"
+	after_change "$1" "$4" "$5"
 }
 
 # Change if description should be simulated or not
@@ -908,7 +1480,7 @@ change_sim_descr() {
 	# Saves new value
 	replace_fn DESCRIPTIONSET $DESCRIPTIONSET $2 $LATEFILE
 
-	after_change "$1" "$3"
+	after_change "$1" "$3" "$4"
 }
 
 # ======================== Props files functions ========================
@@ -930,7 +1502,7 @@ reset_prop_files() {
 	replace_fn DEFAULTEDIT 1 0 $LATEFILE
 
 	if [ "$1" != "file" ]; then
-		after_change_file "$1" "$2"
+		after_change_propfile "$1" "$2" "$4"
 	fi
 }
 
@@ -989,7 +1561,7 @@ edit_prop_files() {
 	replace_fn DEFAULTEDIT 0 1 $LATEFILE
 
 	if [ "$1" != "file" ]; then
-		after_change_file "$1" "$2"
+		after_change_propfile "$1" "$2" "$4"
 	fi
 }
 
@@ -1093,7 +1665,7 @@ reset_prop() {
 		replace_fn PROPEDIT 1 0 $LATEFILE
 	fi
 
-	after_change "$1" "$2"
+	after_change "$1" "$2" "$3"
 }
 
 # Use prop value
@@ -1118,7 +1690,7 @@ change_prop() {
 	fi
 	replace_fn PROPEDIT 0 1 $LATEFILE
 
-	after_change "$1" "$3"
+	after_change "$1" "$3" "$4"
 }
 
 # Reset all module prop changes
@@ -1154,8 +1726,12 @@ custom_edit() {
 			for ITEM in $TMPLST; do			
 				log_handler "Changing/writing $(get_eq_left "$ITEM")."
 				TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
-				resetprop -v $(get_eq_left "$ITEM") >> $LOGFILE 2>&1
-				resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" >> $LOGFILE 2>&1
+				if [ "$1" == "CUSTOMPROPS" ] && [ "$2" ]; then
+					log_handler "$(get_eq_left "$ITEM")=${TMPITEM}"
+					echo "$(get_eq_left "$ITEM")=${TMPITEM}" >> $2
+				else
+					resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" >> $LOGFILE 2>&1
+				fi
 			done
 		fi
 	fi
@@ -1200,7 +1776,7 @@ set_custprop() {
 			DLIMTMP=$(($DLIMTMP + 1))
 		done
 
-		after_change "$1" "$4"
+		after_change "$1" "$4" "$5"
 	fi
 }
 
@@ -1213,7 +1789,7 @@ reset_all_custprop() {
 	replace_fn CUSTOMPROPSLATE "\"$CUSTOMPROPSLATE\"" "\"\"" $LATEFILE
 	replace_fn CUSTOMEDIT 1 0 $LATEFILE
 
-	after_change "Resetting all custom props" "$1"
+	after_change "Resetting all custom props" "$1" "$2"
 }
 
 # Reset custom prop value
@@ -1246,7 +1822,6 @@ prop_del() {
 		for ITEM in $DELETEPROPS; do			
 			log_handler "Deleting $ITEM."
 			TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
-			resetprop -v $ITEM >> $LOGFILE 2>&1
 			case "$ITEM" in
 				persist*)
 					resetprop -pv --delete $ITEM >> $LOGFILE 2>&1
@@ -1269,7 +1844,7 @@ set_delprop() {
 		replace_fn DELETEPROPS "\"$DELETEPROPS\"" "\"$SORTDELPROPS\"" $LATEFILE
 		replace_fn DELEDIT 0 1 $LATEFILE
 
-		after_change "Delete $1" "$2"
+		after_change "Delete $1" "$2" "$3"
 	fi
 }
 
@@ -1280,7 +1855,7 @@ reset_all_delprop() {
 	replace_fn DELETEPROPS "\"$DELETEPROPS\"" "\"\"" $LATEFILE
 	replace_fn DELEDIT 1 0 $LATEFILE
 
-	after_change "Delete $1" "$2"
+	after_change "Reset all props to delete." "$1" "$2"
 }
 
 # Reset prop to delete
@@ -1296,7 +1871,7 @@ reset_delprop() {
 		replace_fn DELEDIT 1 0 $LATEFILE
 	fi
 
-	after_change "Delete $1" "$2"
+	after_change "Reset prop to delete - $1"
 }
 
 # ======================== Log collecting functions ========================

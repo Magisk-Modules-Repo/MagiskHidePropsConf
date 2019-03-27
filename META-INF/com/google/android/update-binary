@@ -141,7 +141,7 @@ $POSTFSDATA && cp -af $INSTALLER/common/post-fs-data.sh $MODPATH/post-fs-data.sh
 # service mode scripts
 $LATESTARTSERVICE && cp -af $INSTALLER/common/service.sh $MODPATH/service.sh
 
-# Module script placement
+# Module script installation
 script_install
 
 ui_print "- Setting permissions"

@@ -1,14 +1,10 @@
 #!/system/bin/sh
-# Please don't hardcode /magisk/modname/... ; instead, please use $MODPATH/...
-# This will make your scripts compatible even if Magisk change its mount point in the future
-MODPATH=${0%/*}
-
-# This script will be executed in post-fs-data mode
-# More info in the main Magisk thread
 
 # MagiskHide Props Config
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
+
+MODPATH=${0%/*}
 
 # Load functions
 . $MODPATH/util_functions.sh
@@ -88,7 +84,22 @@ done
 log_handler "Default values saved to $LATEFILE."
 
 # Check if default file values are safe
-orig_safe
+replace_fn FILESAFE 0 1 $LATEFILE
+for V in $PROPSLIST; do
+	FILEVALUE=$(resetprop $V)
+	log_handler "Checking ${V}=${FILEVALUE}"
+	safe_props $V $FILEVALUE
+	if [ "$SAFE" == 0 ]; then
+		log_handler "Prop $V set to triggering value in prop file."
+		replace_fn FILESAFE 1 0 $LATEFILE
+	else
+		if [ -z "$FILEVALUE" ]; then
+			log_handler "Could not retrieve value for prop $V."
+		elif [ "$SAFE" == 1 ]; then
+			log_handler "Prop $V set to \"safe\" value in prop file."
+		fi
+	fi
+done
 # Loading the new values
 . $LATEFILE
 
@@ -98,18 +109,30 @@ config_file
 # Edits prop values if set for post-fs-data
 echo -e "\n--------------------" >> $LOGFILE 2>&1
 log_handler "Editing prop values in post-fs-data mode."
-if [ "$OPTIONLATE" == 0 ]; then
+if [ "$OPTIONBOOT" == 1 ]; then
 	# ---Setting/Changing fingerprint---
-	print_edit
+	if [ "$PRINTSTAGE" == 0 ]; then
+		print_edit
+	fi
 	# ---Setting device simulation props---
-	dev_sim_edit
+	if [ "$SIMSTAGE" == 0 ]; then
+		dev_sim_edit
+	fi
 	# ---Setting custom props---
 	custom_edit "CUSTOMPROPS"
 fi
-# Deleting props
-prop_del
+# Edit fingerprint if set for post-fs-data
+if [ "$OPTIONBOOT" != 1 ] && [ "$PRINTSTAGE" == 1 ]; then
+	print_edit
+fi
+# Edit simulation props if set for post-fs-data
+if [ "$OPTIONBOOT" != 1 ] && [ "$SIMSTAGE" == 1 ]; then
+	dev_sim_edit
+fi
 # Edit custom props set for post-fs-data
 custom_edit "CUSTOMPROPSPOST"
+# Deleting props
+prop_del
 echo -e "\n--------------------" >> $LOGFILE 2>&1
 
 # Edits build.prop

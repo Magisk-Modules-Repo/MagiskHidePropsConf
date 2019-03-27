@@ -4,12 +4,13 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-# Required module version
-CONFTRANSF=300
+# Required module version. Do not edit this value!
+CONFTRANSF=350
 
 # Device fingerprint
 CONFFINGERPRINT=""
 CONFVENDPRINT=false
+CONFPRINTBOOT=default
 
 # Device simulation
 CONFDEVSIM=false
@@ -20,6 +21,8 @@ CONFRELEASE=true
 CONFID=true
 CONFINCREMENTAL=true
 CONFDESCRIPTION=true
+CONFSDK=true
+CONFSIMBOOT=default
 
 # Edit prop files
 CONFPROPFILES=false
@@ -42,9 +45,10 @@ CONFDELPROPS=""
 DELPROPOPTION=replace
 
 # Module settings
-CONFLATE=false
+CONFBOOT=default
 CONFCOLOUR=true
 CONFWEB=true
+CONFUPDATE=true
 
 # =================================================================
 # ========================== Instructions =========================
@@ -82,15 +86,25 @@ CONFWEB=true
 # fingerprint for Treble GSI ROMs (so only us this if you're on a Treble GSI ROM).
 # NOTE! Keep in mind that there is no need to enter a fingerprint in
 # CONFFINGERPRINT when enabling this option, or setting a security patch date.
+#
+# CONFPRINTBOOT is by default set to using the module default boot stage for setting props.
+# If the setting is changed to "post" or "late", the props will be set during either
+# post-fs-data or late_start service mode. This is useful if props don't seem to set
+# propely or the module's boot script seems to be causing issues during boot.
 
 # CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
-# CONFID, CONFINCREMENTAL and CONFDESCRIPTION are used to set a number
+# CONFID, CONFINCREMENTAL, CONFDESCRIPTION and CONFSDK are used to set a number
 # of props to simulate a certain deviced based on the fingerprint used.
 # CONFDESCRIPTION will automatically be applied if a fingerprint is set
 # by the module, but the other props will only be set if CONFDEVSIM is
 # set to true, and the default setting for all props are that they will be
 # set by the module. If you want to change this, change "true" to "false"
 # for the applicable variables.
+#
+# CONFSIMBOOT is by default set to using the module default boot stage for setting props.
+# If the setting is changed to "post" or "late", the props will be set during either
+# post-fs-data or late_start service mode. This is useful if props don't seem to set
+# propely or the module's boot script seems to be causing issues during boot.
 
 # CONFPROPFILES should be set to "true" if you want to mask the file
 # values in build.prop and default.prop. For better root hiding.
@@ -140,10 +154,10 @@ CONFWEB=true
 # This option supersedes the preserve option described above, but only
 # for the CONFDELPROPS variable.
 
-# CONFLATE is by default set to "false". This loads the boot script during the
-# post-fs-data mode. If the setting is changed to "true", the boot script
-# will instead be loaded later during boot, in the late_start service mode. This is
-# useful if the module's boot script seems to be causing issues during boot.
+# CONFBOOT is by default set to using the module system.prop file for most props.
+# If the setting is changed to "post" or "late", the props will be set during either
+# post-fs-data or  late_start service mode. This is useful if props don't seem to set
+# propely or the module's boot script seems to be causing issues during boot.
 #
-# CONFCOLOUR and CONFWEB are the options for colour and automatic fingerprints
-# list update. See the module documentation for more details. Set to "true" or "false".
+# CONFCOLOUR, CONFWEB and CONFUPDATE are the options for scrit colours, automatic fingerprints
+# list update and automatic update of the set fingerprint. See the module documentation for more details. Set to "true" or "false".
