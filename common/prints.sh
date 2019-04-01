@@ -66,6 +66,7 @@ Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/relea
 Motorola Moto G5 Plus (7.0)=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
 Motorola Moto G5S (7.1.1 & 8.1.0)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys
 Motorola Moto G6 Play (8.0.0)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys
+Motorola Moto G6 Play (aljeter)(9.0.0)=motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
 Nextbook Ares 8A (6.0.1)=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
