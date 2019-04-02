@@ -5,12 +5,13 @@
 # Licence: MIT
 
 # Required module version. Do not edit this value!
-CONFTRANSF=350
+CONFTRANSF=351
 
 # Device fingerprint
 CONFFINGERPRINT=""
 CONFVENDPRINT=false
 CONFPRINTBOOT=default
+CONFPATCHBOOT=late
 
 # Device simulation
 CONFDEVSIM=false
@@ -91,6 +92,12 @@ CONFUPDATE=true
 # If the setting is changed to "post" or "late", the props will be set during either
 # post-fs-data or late_start service mode. This is useful if props don't seem to set
 # propely or the module's boot script seems to be causing issues during boot.
+#
+# CONFPATCHBOOT is by default set to using late_start service boot stage for setting 
+# ro.build.version.security_patch. If the setting is changed to "default" or "late",
+# the prop will be set during either the default or late_start service stage. The
+# late_start service boot stage is used as to not cause issues for devices with 
+# Keymaster 4 (bootloops). If the prop doesn't seem to set properly, try changing the stage.
 
 # CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
 # CONFID, CONFINCREMENTAL, CONFDESCRIPTION and CONFSDK are used to set a number

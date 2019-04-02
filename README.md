@@ -150,7 +150,7 @@ NOTE: If you're using a fingerprint for an Android build after March 16th 2018 y
 ### I still can't pass the ctsProfile check
 If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
 - First, do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
-- Go into the script options and make sure the execution of the boot script is in post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
+- Go to the "Edit fingerprints menu", select "Boot stages", and start by changing the security patch date boot stage to either default or post-fs-data. If that doesn't work, also try changing the fingerprint boot stage to post-fs-data. The default boot stage can also be changed if you go into the script options and change the boot stage to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
 - Try a different fingerprint (pick one from the provided list).
 - If you're not using one of the fingerprints provided in the module, make sure you have a matching security patch date set in [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values). See ["Matching the Android security patch date"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above.
 - Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide, or that they are built in a way that makes it impossible to pass SafetyNet. Check in your ROM thread or with the creator/developer.
@@ -176,7 +176,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v49_**
+**_Current fingerprints list version - v50_**
 
 
 ## Please add support for device X
@@ -194,6 +194,8 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Device simulation
+**_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it!_**
+
 If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that are set are (currently):
 - ro.product.brand
 - ro.product.name
@@ -260,7 +262,9 @@ There are a couple of persistent options that you can set for the `props` script
 ### Boot stage
 It's possible to move the execution of the boot script from the default system.prop file to either post-fs-data or late_start service. If there are any kind of issues during boot or that props don't set properly, try changing the boot stage to either post-fs-data or late_start service instead. Just keep in mind that this might cause other issues like the fingerprint not setting properly (if set during late_start service) or that post-fs-data will be interupted by having too many props causing the script to run too slow.
 
-Note: post-fs-data runs earlier than system.prop and late_start service runs after, right at the end of the boot process.
+It is also possible to set individual props, like fingerprint, security patch date and custom props individualy. There'll be an option under the corresponding menu.
+
+Note: post-fs-data runs earlier than system.prop and late_start service runs after, right at the end of the boot process. Having to many props set in post-fs-data may have an adverse effect on the boot process. Using the default system.prop file or late_start service is prefered if possible.
 
 ### Script colours
 This option will disable or enable colours for the `props` script.
@@ -295,7 +299,7 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 
 ### Known issues
 - MagiskHide Props Config v2.7.2 and earlier versions won't work on Magisk v18.1-d73127b1(18006) or later, due to internal changes in Magisk.
-- Xiaomi devices (MIUI) sometimes have issues passing the ctsProfile check, particularly China releases. Try using [ShellHide](https://forum.xda-developers.com/apps/magisk/magisk-shellhide-t3855616) by @JayminSuthar together with this module. They might work in conjunction to get the device to pass SafetyNet. This should only be necessary on Magisk releases up to v18.1, due to later versions of Magisk having an updated and improved MagiskHide.
+- Xiaomi devices (MIUI) sometimes have issues passing the ctsProfile check on Magisk releases up to v18.1, particularly China ROMs. Try updating to a newer Magisk version, since MagiskHide has been greatly improved since v18.1.
 - If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and with Magisk v17.2 the resetprop tool was updated for this change.
 
 ### An option is marked as "disabled"
@@ -358,7 +362,13 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Changelog
-### v3.5.0
+### v3.5.1  
+- Fix a few bugs causing props not setting properly at boot in some cases when using the system.prop boot stage.
+- Moved ro.build.version.security_patch to late_start service by default, so as not to cause issues for devices with Keymaster 4 (possible source of bootloops). Thank you @Nebrassy.
+- Added an option to change security patch date boot stage under "Edit device fingerprint" boot stages.
+- Added a new fingerprint for the Xiaomi Redmi Note7 and an updated one for Motorola Moto G6 Play. Fingerprints list updated to v50.
+
+### v3.5.0  
 - Added ro.build.version.sdk to the device simulation props (see the documentation for details).
 - Updated editing the device fingerprint feature so that fingerprints for different Android versions can be added to the fingerprints list and the user can pick the desired one when applying a new fingerprint (see the documentation for details). Several fingerprints have been updated with dual fingerprints.
 - Updated and optimised when props are set during boot. Uses Magisk's system.prop function by default, rather than post-fs-data, to avoid putting a strain on the system during boot. At what boot stage props are set can of course be completely configured by the user (see the documentation for details).
@@ -589,7 +599,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v49  
+### List v50  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus Zenfone Max M1 (8.0.0)
@@ -646,7 +656,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
 - Motorola Moto G5S (7.1.1)
-- Motorola Moto G6 Play (8.0.0)
+- Motorola Moto G6 Play (8.0.0 & 9)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
 - Nextbook Ares 8A (6.0.1)
@@ -750,6 +760,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 - Xiaomi Redmi Note 5 Pro (8.1.0)
 - Xiaomi Redmi Note 5A Lite (7.1.2)
 - Xiaomi Redmi Note 6 Pro (8.1.0)
+- Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
 - ZTE Blade (6.0.1)

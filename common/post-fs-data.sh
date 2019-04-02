@@ -5,6 +5,7 @@
 # Licence: MIT
 
 MODPATH=${0%/*}
+BOOTSTAGE="post"
 
 # Load functions
 . $MODPATH/util_functions.sh
@@ -15,6 +16,7 @@ COREPATH=$(dirname "$IMGPATH")
 
 # Start logging
 log_start
+bb_check
 
 # Clears out the script check file
 rm -f $RUNFILE
@@ -67,18 +69,20 @@ fi
 
 # Get default values
 log_handler "Checking device default values."
-curr_values
+#curr_values
 # Get the current original values saved in propsconf_late
-log_handler "Loading currently saved values."
-. $LATEFILE
+#log_handler "Loading currently saved values."
+#. $LATEFILE
 
 # Save default file values in propsconf_late
 for ITEM in $VALPROPSLIST; do
 	TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 	ORIGPROP="ORIG${TMPPROP}"
-	ORIGTMP="$(eval "echo \$$ORIGPROP")"
+	#ORIGTMP="$(eval "echo \$$ORIGPROP")"
+	ORIGTMP="$(get_file_value $LATEFILE "${ORIGPROP}=")"
 	CURRPROP="CURR${TMPPROP}"
-	CURRTMP="$(eval "echo \$$CURRPROP")"
+	#CURRTMP="$(eval "echo \$$CURRPROP")"
+	CURRTMP="$(resetprop $ITEM)"
 	replace_fn $ORIGPROP "\"$ORIGTMP\"" "\"$CURRTMP\"" $LATEFILE
 done
 log_handler "Default values saved to $LATEFILE."
@@ -90,13 +94,13 @@ for V in $PROPSLIST; do
 	log_handler "Checking ${V}=${FILEVALUE}"
 	safe_props $V $FILEVALUE
 	if [ "$SAFE" == 0 ]; then
-		log_handler "Prop $V set to triggering value in prop file."
+		echo "Prop $V set to triggering value in prop file." >> $LOGFILE 2>&1
 		replace_fn FILESAFE 1 0 $LATEFILE
 	else
 		if [ -z "$FILEVALUE" ]; then
-			log_handler "Could not retrieve value for prop $V."
+			echo "Could not retrieve value for prop $V." >> $LOGFILE 2>&1
 		elif [ "$SAFE" == 1 ]; then
-			log_handler "Prop $V set to \"safe\" value in prop file."
+			echo "Prop $V set to \"safe\" value in prop file." >> $LOGFILE 2>&1
 		fi
 	fi
 done
@@ -107,12 +111,16 @@ done
 config_file
 
 # Edits prop values if set for post-fs-data
-echo -e "\n--------------------" >> $LOGFILE 2>&1
+echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 log_handler "Editing prop values in post-fs-data mode."
 if [ "$OPTIONBOOT" == 1 ]; then
 	# ---Setting/Changing fingerprint---
 	if [ "$PRINTSTAGE" == 0 ]; then
 		print_edit
+	fi
+	# ---Setting/Changing security patch date---
+	if [ "$PATCHSTAGE" == 0 ]; then
+		patch_edit
 	fi
 	# ---Setting device simulation props---
 	if [ "$SIMSTAGE" == 0 ]; then
@@ -125,6 +133,10 @@ fi
 if [ "$OPTIONBOOT" != 1 ] && [ "$PRINTSTAGE" == 1 ]; then
 	print_edit
 fi
+# Edit security patch date if set for post-fs-data
+if [ "$OPTIONBOOT" != 1 ] && [ "$PATCHSTAGE" == 1 ]; then
+	patch_edit
+fi
 # Edit simulation props if set for post-fs-data
 if [ "$OPTIONBOOT" != 1 ] && [ "$SIMSTAGE" == 1 ]; then
 	dev_sim_edit
@@ -133,7 +145,7 @@ fi
 custom_edit "CUSTOMPROPSPOST"
 # Deleting props
 prop_del
-echo -e "\n--------------------" >> $LOGFILE 2>&1
+echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 
 # Edits build.prop
 if [ "$FILESAFE" == 0 ]; then

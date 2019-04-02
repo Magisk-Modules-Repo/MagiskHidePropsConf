@@ -10,7 +10,7 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=24
+SCRIPTV=25
 SETTRANSF=2
 NOTTRANSF=""
 
@@ -45,6 +45,7 @@ DELEDIT=0
 
 # Boot stages
 PRINTSTAGE=0
+PATCHSTAGE=2
 SIMSTAGE=0
 
 # Script settings

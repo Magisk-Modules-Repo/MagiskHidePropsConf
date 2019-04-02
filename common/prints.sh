@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=49
+PRINTSV=50
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -64,8 +64,8 @@ Motorola Moto E5 Plus (8.0.0)=motorola/hannah_sprint/hannah:8.0.0/OCPS27.91-32-4
 Motorola Moto G4 (7.0)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys
 Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
 Motorola Moto G5 Plus (7.0)=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
-Motorola Moto G5S (7.1.1 & 8.1.0)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys
-Motorola Moto G6 Play (8.0.0)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys
+Motorola Moto G5S (7.1.1)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys
+Motorola Moto G6 Play (8.0.0 & 9)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys;motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys__2019-01-01
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
 Nextbook Ares 8A (6.0.1)=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
@@ -165,10 +165,11 @@ Xiaomi Redmi Note 2 (5.0.2)=Xiaomi/hermes/hermes:5.0.2/LRX22G/V9.2.4.0.LHMMIEK:u
 Xiaomi Redmi Note 3 Pro (6.0.1)=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL:user/release-keys
 Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
 Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.2.1.0.NCFMIEK:user/release-keys
-Xiaomi Redmi Note 5/5 Plus (7.1.2)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys
+Xiaomi Redmi Note 5/5 Plus (7.1.2)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys;
 Xiaomi Redmi Note 5 Pro (8.1.0)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01
 Xiaomi Redmi Note 5A Lite (7.1.2)=xiaomi/ugglite/ugglite:7.1.2/N2G47H/V9.1.2.0.NDFMIEI:user/release-keys
 Xiaomi Redmi Note 6 Pro (8.1.0)=xiaomi/tulip/tulip:8.1.0/OPM1.171019.011/V10.0.5.0.OEKMIFH:user/release-keys__2018-10-01
+Xiaomi Redmi Note 7 (9)=xiaomi/lavender/lavender:9/PKQ1.180904.001/V10.2.7.0.PFGINXM:user/release-keys__2019-02-05
 Xiaomi Redmi Y1 (7.1.2)=xiaomi/ugg/ugg:7.1.2/N2G47H/V9.6.2.0.NDKMIFD:user/release-keys__2018-07-01
 ZTE Axon 7 (7.1.1 & 8.0.0)=ZTE/P996A01_N/ailsa_ii:7.1.1/NMF26V/20171211.005949:user/release-keys;ZTE/P996A01_O/ailsa_ii:8.0.0/OPR1.170623.032/20180815.171922:user/release-keys__2018-07-01
 ZTE Blade (6.0.1)=ZTE/P809A50_MY_MAX/P809A50:6.0.1/MMB29M/20161017.095504:user/release-keys

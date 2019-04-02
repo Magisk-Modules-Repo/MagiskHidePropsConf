@@ -62,6 +62,7 @@ if [ "$INSTFN" ]; then
 	CUSTOMEDIT
 	DELEDIT
 	PRINTSTAGE
+	PATCHSTAGE
 	SIMSTAGE
 	OPTIONBOOT
 	OPTIONCOLOUR
@@ -306,6 +307,16 @@ module_v_ctrl() {
 	VERSIONCMP=$(echo $VERSIONTMP | sed 's|v||g' | sed 's|-.*||' | sed 's|\.||g')
 }
 
+# Check for Busybox
+bb_check() {
+	if [ "$BBPATH" ]; then
+		log_handler "Using $($BBPATH | head -1)."
+		echo "$BBPATH" >> $LOGFILE 2>&1
+	else
+		log_handler "No Busybox found."
+	fi
+}
+
 # Find prop type
 get_prop_type() {
 	if [ "$1" == "ro.vendor.build.fingerprint" ]; then
@@ -504,12 +515,14 @@ after_change() {
 		all_values
 		# Update the system.prop file
 		system_prop
-		# Ask to reboot
-		reboot_fn "$1" "$2"
+		if [ "$4" != "noreboot" ]; then
+			# Ask to reboot
+			reboot_fn "$1" "$2"
+		fi
 	fi
 }
 
-# Run after changing props/settings with configuration file
+# Run after editing prop files
 after_change_propfile() {
 	# Update the reboot variable
 	reboot_chk
@@ -599,12 +612,7 @@ reset_fn() {
 	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
 
-	if [ "$1" != "post" ]; then
-		# Update the reboot variable
-		reboot_chk
-		# Update all prop value variables
-		all_values
-	fi
+	after_change "$1" "$2"
 }
 
 # Checks for configuration file
@@ -697,6 +705,18 @@ config_file() {
 				fi
 				replace_fn PRINTSTAGE $PRINTSTAGE $OPTLCHNG $LATEFILE
 				log_handler "Fingerprint boot stage is ${TMPTXT}."
+				if [ "$CONFPATCHBOOT" == "default" ]; then
+					OPTLCHNG=0
+					TMPTXT="default"
+				elif [ "$CONFPATCHBOOT" == "post" ]; then
+					OPTLCHNG=1
+					TMPTXT="post-fs-data"
+				elif [ "$CONFPATCHBOOT" == "late" ]; then
+					OPTLCHNG=2
+					TMPTXT="late_start service"
+				fi
+				replace_fn PATCHSTAGE $PATCHSTAGE $OPTLCHNG $LATEFILE
+				log_handler "Security patch boot stage is ${TMPTXT}."
 			fi
 			if [ "$DEVSIM" == 1 ]; then
 				if [ "$CONFSIMBOOT" == "default" ]; then
@@ -832,9 +852,32 @@ system_prop() {
 		log_handler "Creating system.prop file."
 		touch $MODPATH/system.prop >> $LOGFILE 2>&1
 		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" >> $MODPATH/system.prop
-		print_edit "$MODPATH/system.prop"
-		dev_sim_edit "$MODPATH/system.prop"
-		custom_edit "CUSTOMPROPS" "$MODPATH/system.prop"
+		if [ "$PRINTSTAGE" == 0 ]; then
+			print_edit "$MODPATH/system.prop"
+		fi
+		if [ "$PATCHSTAGE" == 0 ]; then
+			patch_edit "$MODPATH/system.prop"
+		fi
+		if [ "$SIMSTAGE" == 0 ]; then
+			dev_sim_edit "$MODPATH/system.prop"
+		fi
+		if [ "CUSTOMPROPS" ]; then
+			custom_edit "CUSTOMPROPS" "$MODPATH/system.prop"
+		fi
+		# Check system.prop content
+		system_prop_cont
+	fi
+}
+
+# system.prop content
+system_prop_cont() {
+	if [ -f "$MODPATH/system.prop" ]; then
+		log_handler "system.prop contents:"
+		echo "----------------------------------------" >> $LOGFILE 2>&1
+		cat $MODPATH/system.prop >> $LOGFILE 2>&1
+		echo "----------------------------------------" >> $LOGFILE 2>&1
+	else
+		log_handler "No system.prop file present."
 	fi
 }
 
@@ -1096,42 +1139,17 @@ print_edit() {
 		for ITEM in $PRINTPROPS; do
 			log_handler "Changing/writing $ITEM."
 			if [ "$1" ]; then
-				if [ "$PRINTSTAGE" == 0 ]; then
-					log_handler "${ITEM}=${PRINTCHNG}"
-					echo "${ITEM}=${PRINTCHNG}" >> $1
-				fi
+				echo "${ITEM}=${PRINTCHNG}" >> $1
 			else
 				resetprop -nv $ITEM $PRINTCHNG >> $LOGFILE 2>&1
 			fi
 		done
-		# Edit security patch date if included
-		if [ "$PRINTVEND" != 1 ]; then
-			SECPATCH="$(get_sec_patch $MODULEFINGERPRINT)"
-			case "$MODULEFINGERPRINT" in
-				*__*)
-					if [ "$SECPATCH" ]; then
-						log_handler "Updating security patch date to match fingerprint used."
-						if [ "$1" ]; then
-							if [ "$PRINTSTAGE" == 0 ]; then
-								log_handler "ro.build.version.security_patch=${SECPATCH}"
-								echo "ro.build.version.security_patch=${SECPATCH}" >> $1
-							fi
-						else
-							resetprop -nv ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
-						fi
-					fi
-				;;
-			esac
-		fi
 		# Edit device description
 		if [ "$DESCRIPTIONSET" == 1 ]; then
 			if [ "$SIMDESCRIPTION" ]; then
 				log_handler "Changing/writing ro.build.description."
 				if [ "$1" ]; then
-					if [ "$PRINTSTAGE" == 0 ]; then
-						log_handler "ro.build.description=${SIMDESCRIPTION}"
-						echo "ro.build.description=${SIMDESCRIPTION}" >> $1
-					fi
+					echo "ro.build.description=${SIMDESCRIPTION}" >> $1
 				else
 					resetprop -nv ro.build.description "$SIMDESCRIPTION" >> $LOGFILE 2>&1
 				fi
@@ -1139,6 +1157,25 @@ print_edit() {
 		else
 			log_handler "Changing/writing ro.build.description is disabled."
 		fi
+	fi
+}
+
+# Edit security patch date if included
+patch_edit() {
+	if [ "$PRINTVEND" != 1 ]; then
+		case "$MODULEFINGERPRINT" in
+			*__*)
+				SECPATCH="$(get_sec_patch $MODULEFINGERPRINT)"
+				if [ "$SECPATCH" ]; then
+					log_handler "Updating security patch date to match fingerprint used."
+					if [ "$1" ]; then
+						echo "ro.build.version.security_patch=${SECPATCH}" >> $1
+					else
+						resetprop -nv ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
+					fi
+				fi
+			;;
+		esac
 	fi
 }
 
@@ -1320,7 +1357,9 @@ change_print() {
 
 	NEWFINGERPRINT=""
 
-	if [ "$DEVSIM" == 1 ]; then
+	if [ "$DEVSIM" == 0 ]; then
+		after_change "$1" "$3" "$4" "noreboot"
+	else
 		after_change "$1" "$3" "$4"
 	fi
 }
@@ -1355,7 +1394,9 @@ change_print_vendor() {
 	# Set device simulation variables
 	print_parts "$ORIGVENDPRINT"
 
-	if [ "$DEVSIM" == 1 ]; then
+	if [ "$DEVSIM" == 0 ]; then
+		after_change "$1" "$3" "$4" "noreboot"
+	else
 		after_change "$1" "$3"
 	fi
 }
@@ -1417,10 +1458,7 @@ dev_sim_edit() {
 				if [ "$TMPENB" == 1 ] && [ "$TMPVALUE" ]; then
 					log_handler "Changing/writing $ITEM."
 					if [ "$1" ]; then
-						if [ "$SIMSTAGE" == 0 ]; then
-							log_handler "${ITEM}=${TMPVALUE}"
-							echo "${ITEM}=${TMPVALUE}" >> $1
-						fi
+						echo "${ITEM}=${TMPVALUE}" >> $1
 					else
 						resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1
 					fi
@@ -1725,9 +1763,8 @@ custom_edit() {
 			log_handler "Writing custom props."
 			for ITEM in $TMPLST; do			
 				log_handler "Changing/writing $(get_eq_left "$ITEM")."
-				TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
-				if [ "$1" == "CUSTOMPROPS" ] && [ "$2" ]; then
-					log_handler "$(get_eq_left "$ITEM")=${TMPITEM}"
+				TMPITEM=$(echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
+				if [ "$2" ]; then
 					echo "$(get_eq_left "$ITEM")=${TMPITEM}" >> $2
 				else
 					resetprop -nv $(get_eq_left "$ITEM") "$TMPITEM" >> $LOGFILE 2>&1
@@ -1890,17 +1927,19 @@ collect_logs() {
 				*) BPNAME=""
 				;;
 			esac
-			cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE 2>&1
+			if [ "$ITEM" != "$CACHELOC/propsconf.log" ]; then
+				cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE 2>&1
+			fi
 		else
 			case "$ITEM" in
-				*/cache)
+				*cache)
 					if [ "$CACHELOC" == "/cache" ]; then
 						CACHELOCTMP=/data/cache
 					else
 						CACHELOCTMP=/cache
 					fi
 					ITEMTPM=$(echo $ITEM | sed 's|$CACHELOC|$CACHELOCTMP|')
-					if [ -f "$ITEMTPM" ]; then
+					if [ -f "$a" ]; then
 						cp -af $ITEMTPM $TMPLOGLOC >> $LOGFILE 2>&1
 					else
 						log_handler "$ITEM not available."
@@ -1914,6 +1953,9 @@ collect_logs() {
 
 	# Saving the current prop values
 	resetprop > $TMPLOGLOC/props.txt
+	
+	# Saving the log file
+	cp -af $CACHELOC/propsconf.log $TMPLOGLOC >> $LOGFILE 2>&1
 
 	# Package the files
 	cd $CACHELOC
@@ -1953,4 +1995,7 @@ collect_logs() {
 }
 
 # Log print
-log_handler "Functions loaded."
+if [ "$BOOTSTAGE" != "post" ]; then
+	log_handler "Functions loaded."
+	bb_check
+fi

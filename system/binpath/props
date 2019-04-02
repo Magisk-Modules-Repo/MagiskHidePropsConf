@@ -182,13 +182,6 @@ menu_change_fingerprint() {
 	INPUT2=""
 	while true
 	do
-		if [ "$PRINTSTAGE" == 0 ]; then
-			STAGETXT=" ${C}(default)${N}"
-		elif [ "$PRINTSTAGE" == 1 ]; then
-			STAGETXT=" ${C}(post-fs-data)${N}"
-		elif [ "$PRINTSTAGE" == 2 ]; then
-			STAGETXT=" ${C}(late_start service)${N}"
-		fi
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
@@ -205,6 +198,20 @@ menu_change_fingerprint() {
 					PRINTMODULETXT=" (by this module)"
 				else
 					PRINTMODULETXT=""
+				fi
+				if [ "$PRINTSTAGE" == 0 ]; then
+					PRINTSTAGETXT="default"
+				elif [ "$PRINTSTAGE" == 1 ]; then
+					PRINTSTAGETXT="post-fs-data"
+				elif [ "$PRINTSTAGE" == 2 ]; then
+					PRINTSTAGETXT="late_start service"
+				fi
+				if [ "$PATCHSTAGE" == 0 ]; then
+					PATCHSTAGETXT="default"
+				elif [ "$PATCHSTAGE" == 1 ]; then
+					PATCHSTAGETXT="post-fs-data"
+				elif [ "$PATCHSTAGE" == 2 ]; then
+					PATCHSTAGETXT="late_start service"
 				fi
 				if [ "$2" ]; then
 					echo "Currently set to${PRINTMODULETXT}:"
@@ -241,7 +248,7 @@ menu_change_fingerprint() {
 				if [ "$OPTIONWEB" == 0 ]; then
 					echo "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
 				fi
-				echo "${G}s${N} - Boot stage$STAGETXT."
+				echo "${G}s${N} - Boot stages (${C}${PRINTSTAGETXT}/${PATCHSTAGETXT}${N})."
 				echo "${G}b${N} - Go back."
 				echo ""
 				if [ "$PRINTCHK" == 1 ]; then
@@ -431,13 +438,15 @@ menu_pick_print_sub() {
 				if [ "$ITEMCOUNT" == "$INPUT4" ]; then
 					case "$ITEM" in
 						*\;*)
-							menu_pick_print_version "$1" $(get_eq_left "$ITEM") $(get_eq_right "$ITEM")
+							IFS=$SAVEIFS
+							menu_pick_print_version "$1" "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")"
 							INPUT2=""
 							INPUT3=""
 							break
 						;;
 						*)
-							menu_new_print "$1" $(get_eq_right "$ITEM")
+							IFS=$SAVEIFS
+							menu_new_print "$1" "$(get_eq_right "$ITEM")"
 							INPUT2=""
 							INPUT3=""
 							break
@@ -461,7 +470,6 @@ menu_pick_print_sub() {
 # Fifth menu level - pick Android version
 menu_pick_print_version() {
 	INPUT5=""
-	IFS=$SAVEIFS
 	ANDROIDV="$(get_print_versions "$2")"
 	while true
 	do
@@ -566,15 +574,18 @@ menu_devsim_activate() {
 			echo ""
 			echo "Reboot for changes to take effect."
 			echo ""
-			echo "Do you want to reboot now (y/n)?"
+			echo "${G}Do you want to reboot now (y/n)?${N}"
 			echo ""
 			echo "You have just chosen a new device"
 			echo "fingerprint. Enter ${G}d${N} to"
 			echo "activate basic device simulation."
 			echo "See the module documentation for"
 			echo "details about this feature."
-			echo "Note: this is not needed for"
-			echo "passing SafetyNet's CTS profile."
+			echo ""
+			echo "Note: device simulation is not needed"
+			echo "for passing SafetyNet's CTS profile"
+			echo "and may even cause issues. Don't enable"
+			echo "unless you actually need it."
 			echo ""
 			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}d${N} or ${G}e${N}(xit): "
 			read -r INPUT7
@@ -598,7 +609,12 @@ menu_devsim_activate() {
 				INPUT4=""
 				INPUT5=""
 				INPUT6=""
-				after_change "$1"
+				# Update the reboot variable
+				reboot_chk
+				# Load all values
+				all_values
+				# Update the system.prop file
+				system_prop
 				break
 			;;
 			e|E) exit_fn
@@ -733,70 +749,43 @@ menu_bootstage_print() {
 	do
 		if [ -z "$INPUT3" ]; then
 			if [ "$PRINTSTAGE" == 0 ]; then
-				CURRTXT="default"
-				TMPTXT="${C}post-fs-data${N} or ${C}late_start sevice${N}"
-				CHOICETXT="${G}p${N}(ost), ${G}l${N}(ate)"
+				PRINTSTAGETXT=" ${C}(default)${N}"
 			elif [ "$PRINTSTAGE" == 1 ]; then
-				CURRTXT="post-fs-data"
-				TMPTXT="${C}default${N} or ${C}late_start service${N}"
-				CHOICETXT="${G}d${N}(efault), ${G}l${N}(ate)"
+				PRINTSTAGETXT=" ${C}(post-fs-data)${N}"
 			elif [ "$PRINTSTAGE" == 2 ]; then
-				CURRTXT="late_start service"
-				TMPTXT="${C}default${N} or ${C}post-fs-data${N}"
-				CHOICETXT="${G}d${N}(efault), ${G}p${N}(post)"
+				PRINTSTAGETXT=" ${C}(late_start service)${N}"
+			fi
+			if [ "$PATCHSTAGE" == 0 ]; then
+				PATCHSTAGETXT=" ${C}(default)${N}"
+			elif [ "$PATCHSTAGE" == 1 ]; then
+				PATCHSTAGETXT=" ${C}(post-fs-data)${N}"
+			elif [ "$PATCHSTAGE" == 2 ]; then
+				PATCHSTAGETXT=" ${C}(late_start service)${N}"
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Current boot stage is ${G}$CURRTXT${N}."
+			echo "Change boot stage for the device fingerprint"
+			echo "or security patch date props."
 			echo ""
-			echo "Do you want to change it to"
-			echo "$TMPTXT?"
+			echo "Pick an option below."
 			echo ""
-			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			echo "${G}1${N} - Device fingerprint$PRINTSTAGETXT."
+			echo "${G}2${N} - Security patch date$PATCHSTAGETXT."
+			echo "${G}b${N} - Go back"
+			echo ""
+			echo -n "Enter '${G}e${N}' to exit: "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			d|D)
-				if [ "$PRINTSTAGE" != 0 ]; then
-					OPTNEW=0
-					log_handler "Boot stage changed to default."
-					replace_fn PRINTSTAGE $PRINTSTAGE $OPTNEW $LATEFILE
-					# Load module values
-					. $LATEFILE
-					INPUT2=""
-					reboot_fn "$1"
-					break
-				else
-					invalid_input 1 3
-				fi
+			1)
+				menu_bootstage_print_set "$1" "print"
+				INPUT2=""
+				break
 			;;
-			p|P)
-				if [ "$PRINTSTAGE" != 1 ]; then
-					OPTNEW=1
-					log_handler "Boot stage changed to post-fs-data."
-					replace_fn PRINTSTAGE $PRINTSTAGE $OPTNEW $LATEFILE
-					# Load module values
-					. $LATEFILE
-					INPUT2=""
-					reboot_fn "$1"
-					break
-				else
-					invalid_input 1 3
-				fi
-			;;
-			l|L)
-				if [ "$PRINTSTAGE" != 2 ]; then
-					OPTNEW=2
-					log_handler "Boot stage changed to late_start service."
-					replace_fn PRINTSTAGE $PRINTSTAGE $OPTNEW $LATEFILE
-					# Load module values
-					. $LATEFILE
-					INPUT2=""
-					reboot_fn "$1"
-					break
-				else
-					invalid_input 1 3
-				fi
+			2)
+				menu_bootstage_print_set "$1" "patch"
+				INPUT2=""
+				break
 			;;
 			b|B)
 				INPUT2=""
@@ -805,6 +794,100 @@ menu_bootstage_print() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 1 3
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - Set boot stage
+menu_bootstage_print_set() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			if [ "$2" == "print" ]; then
+				PROPTXT="fingerprint"
+				TMPSTAGE=$PRINTSTAGE
+				CHNGSTAGE="PRINTSTAGE"
+			elif [ "$2" == "patch" ]; then
+				PROPTXT="security patch date"
+				TMPSTAGE=$PATCHSTAGE
+				CHNGSTAGE="PATCHSTAGE"
+			fi
+			if [ "$TMPSTAGE" == 0 ]; then
+				CURRTXT="default"
+				TMPTXT="${C}post-fs-data${N} or ${C}late_start sevice${N}"
+				CHOICETXT="${G}p${N}(ost), ${G}l${N}(ate)"
+			elif [ "$TMPSTAGE" == 1 ]; then
+				CURRTXT="post-fs-data"
+				TMPTXT="${C}default${N} or ${C}late_start service${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}l${N}(ate)"
+			elif [ "$TMPSTAGE" == 2 ]; then
+				CURRTXT="late_start service"
+				TMPTXT="${C}default${N} or ${C}post-fs-data${N}"
+				CHOICETXT="${G}d${N}(efault), ${G}p${N}(post)"
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Current boot stage for $PROPTXT is"
+			echo "${G}$CURRTXT${N}."
+			echo ""
+			echo "Do you want to change it to"
+			echo "$TMPTXT?"
+			echo ""
+			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			d|D)
+				if [ "$TMPSTAGE" != 0 ]; then
+					OPTNEW=0
+					log_handler "Boot stage for $PROPTXT changed to default."
+					replace_fn $CHNGSTAGE $TMPSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT3=""
+					after_change "$1"
+					break
+				else
+					invalid_input 1 4
+				fi
+			;;
+			p|P)
+				if [ "$TMPSTAGE" != 1 ]; then
+					OPTNEW=1
+					log_handler "Boot stage for $PROPTXT changed to post-fs-data."
+					replace_fn $CHNGSTAGE $TMPSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT3=""
+					after_change "$1"
+					break
+				else
+					invalid_input 1 4
+				fi
+			;;
+			l|L)
+				if [ "$TMPSTAGE" != 2 ]; then
+					OPTNEW=2
+					log_handler "Boot stage for $PROPTXT changed to late_start service."
+					replace_fn $CHNGSTAGE $TMPSTAGE $OPTNEW $LATEFILE
+					# Load module values
+					. $LATEFILE
+					INPUT3=""
+					after_change "$1"
+					break
+				else
+					invalid_input 1 4
+				fi
+			;;
+			b|B)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 1 4
 			;;
 		esac
 	done
@@ -848,11 +931,11 @@ menu_dev_sim() {
 			SDKTXT=$DISABLE
 		fi
 		if [ "$SIMSTAGE" == 0 ]; then
-			STAGETXT=" ${G}(default)${N}"
+			STAGETXT=" ${C}(default)${N}"
 		elif [ "$SIMSTAGE" == 1 ]; then
-			STAGETXT=" ${G}(post-fs-data)${N}"
+			STAGETXT=" ${C}(post-fs-data)${N}"
 		elif [ "$SIMSTAGE" == 2 ]; then
-			STAGETXT=" ${G}(late_start service)${N}"
+			STAGETXT=" ${C}(late_start service)${N}"
 		fi
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
@@ -872,7 +955,9 @@ menu_dev_sim() {
 			echo "fingerprint."
 			echo ""
 			echo "Note that this is not necessary to pass"
-			echo "SafetyNet's CTS profile check."
+			echo "SafetyNet's CTS profile check and may"
+			echo "cause issues. Only enable if you really"
+			echo "need it."
 			echo ""
 			echo "Pick an option below."
 			echo ""
@@ -1070,7 +1155,7 @@ menu_bootstage_sim() {
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
-					reboot_fn "$1"
+					after_change "$1"
 					break
 				else
 					invalid_input 1 3
@@ -1084,7 +1169,7 @@ menu_bootstage_sim() {
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
-					reboot_fn "$1"
+					after_change "$1"
 					break
 				else
 					invalid_input 1 3
@@ -1098,7 +1183,7 @@ menu_bootstage_sim() {
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
-					reboot_fn "$1"
+					after_change "$1"
 					break
 				else
 					invalid_input 1 3
@@ -1450,7 +1535,7 @@ menu_custom_props() {
 		if [ -z "$INPUT2" ]; then
 			ITEMCOUNT=0
 			if [ "$OPTIONBOOT" == 0 ]; then
-				DEFSTAGETXT=" (default)"
+				DEFSTAGETXT=" (system.prop)"
 			elif [ "$OPTIONBOOT" == 1 ]; then
 				DEFSTAGETXT=" (post-fs-data)"
 			elif [ "$OPTIONBOOT" == 2 ]; then
@@ -1566,13 +1651,13 @@ menu_custom_props() {
 menu_edit_custprop() {
 	INPUT3=""
 	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
-		STAGETXT=" ${G}(default)${N}"
+		STAGETXT=" ${C}(system.prop)${N}"
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
-		STAGETXT=" ${G}(both)${N}"
+		STAGETXT=" ${C}(both)${N}"
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
-		STAGETXT=" ${G}(post-fs-data)${N}"
+		STAGETXT=" ${C}(post-fs-data)${N}"
 	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
-		STAGETXT=" ${G}(late_start service)${N}"
+		STAGETXT=" ${C}(late_start service)${N}"
 	else
 		TMPBSTAGE=""
 	fi
@@ -1607,7 +1692,7 @@ menu_edit_custprop() {
 				echo "${G}r${N} - Reset prop"
 			else
 				echo "${R}Not yet set by this module. Please reboot to set.${N}"
-				if [ "$OPTIONBOOT" == 1 ] || [ "$STAGETXT" == " ${G}(post-fs-data)${N}" ]; then
+				if [ "$OPTIONBOOT" == 1 ] || [ "$STAGETXT" == " ${C}(post-fs-data)${N}" ]; then
 					echo ""
 					echo "This might be caused by the prop being set to early."
 					echo "If the above state does not change after a reboot,"
@@ -2307,7 +2392,7 @@ menu_options() {
 		PRINTSCHKTXT=""
 		if [ -z "$INPUT2" ]; then
 			if [ "$OPTIONBOOT" == 0 ]; then
-				BOOTTXT="default"
+				BOOTTXT="system.prop"
 			elif [ "$OPTIONBOOT" == 1 ]; then
 				BOOTTXT="post-fs-data"
 			elif [ "$OPTIONBOOT" == 2 ]; then
@@ -2384,15 +2469,15 @@ menu_options_bootstage() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			if [ "$2" == "default" ]; then
+			if [ "$2" == "system.prop" ]; then
 				TMPTXT="${C}post-fs-data${N} or ${C}late_start sevice${N}"
 				CHOICETXT="${G}p${N}(ost), ${G}l${N}(ate)"
 			elif [ "$2" == "post-fs-data" ]; then
-				TMPTXT="${C}default${N} or ${C}late_start service${N}"
-				CHOICETXT="${G}d${N}(efault), ${G}l${N}(ate)"
+				TMPTXT="${C}system.prop${N} or ${C}late_start service${N}"
+				CHOICETXT="${G}s${N}(ystem.prop), ${G}l${N}(ate)"
 			elif [ "$2" == "late_start service" ]; then
-				TMPTXT="${C}default${N} or ${C}post-fs-data${N}"
-				CHOICETXT="${G}d${N}(efault), ${G}p${N}(post)"
+				TMPTXT="${C}system.prop${N} or ${C}post-fs-data${N}"
+				CHOICETXT="${G}s${N}(ystem.prop), ${G}p${N}(post)"
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
@@ -2405,15 +2490,15 @@ menu_options_bootstage() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			d|D)
+			s|S)
 				if [ "$OPTIONBOOT" != 0 ]; then
 					OPTNEW=0
-					log_handler "Boot stage changed to default."
+					log_handler "Boot stage changed to system.prop."
 					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
-					reboot_fn "$1"
+					after_change "$1"
 					break
 				else
 					invalid_input 1 3
@@ -2427,7 +2512,7 @@ menu_options_bootstage() {
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
-					reboot_fn "$1"
+					after_change "$1"
 					break
 				else
 					invalid_input 1 3
@@ -2441,7 +2526,7 @@ menu_options_bootstage() {
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
-					reboot_fn "$1"
+					after_change "$1"
 					break
 				else
 					invalid_input 1 3
@@ -2720,8 +2805,7 @@ reset_everything() {
 		case "$INPUT2" in
 			y|Y)	
 				log_handler "Resetting all module settings$LOGTXT."
-				reset_fn
-				reboot_fn "$1" "$2"
+				reset_fn "$1" "$2"
 				INPUT=""
 				break
 			;;

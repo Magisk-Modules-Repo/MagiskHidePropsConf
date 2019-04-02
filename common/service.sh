@@ -5,6 +5,7 @@
 # Licence: MIT
 
 MODPATH=${0%/*}
+BOOTSTAGE="late"
 
 # Load functions
 . $MODPATH/util_functions.sh
@@ -18,12 +19,16 @@ fi
 log_script_chk "Running service.sh module script."
 
 # Edits prop values if set for late_start service
-echo -e "\n--------------------" >> $LOGFILE 2>&1
+echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 log_handler "Editing prop values in late_start service mode."
 if [ "$OPTIONBOOT" == 2 ]; then
 	# ---Setting/Changing fingerprint---				
 	if [ "$PRINTSTAGE" == 0 ]; then
 		print_edit
+	fi
+	# ---Setting/Changing security patch date---
+	if [ "$PATCHSTAGE" == 0 ]; then
+		patch_edit
 	fi
 	# ---Setting device simulation props---
 	if [ "$SIMSTAGE" == 0 ]; then
@@ -35,6 +40,10 @@ fi
 # Edit fingerprint if set for late_start service
 if [ "$OPTIONBOOT" != 2 ] && [ "$PRINTSTAGE" == 2 ]; then
 	print_edit
+fi
+# Edit security patch date if set for late_start service
+if [ "$OPTIONBOOT" != 2 ] && [ "$PATCHSTAGE" == 2 ]; then
+	patch_edit
 fi
 # Edit simulation props if set for late_start service
 if [ "$OPTIONBOOT" != 2 ] && [ "$SIMSTAGE" == 2 ]; then
@@ -55,7 +64,7 @@ if [ "$PROPEDIT" == 1 ]; then
 		fi
 	done
 fi
-echo -e "\n--------------------" >> $LOGFILE 2>&1
+echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 
 # ---Edits default.prop---
 if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then
@@ -70,5 +79,7 @@ fi
 # Get currently saved values
 log_handler "Checking current values."
 curr_values
+# Check system.prop content
+system_prop_cont
 
 log_script_chk "service.sh module script finished.\n\n=================="
