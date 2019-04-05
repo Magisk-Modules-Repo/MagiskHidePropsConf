@@ -11,8 +11,7 @@ BOOTSTAGE="post"
 . $MODPATH/util_functions.sh
 
 # Variables
-IMGPATH=$(dirname "$MODPATH")
-COREPATH=$(dirname "$IMGPATH")
+MODULESPATH=$(dirname "$MODPATH")
 
 # Start logging
 log_start
@@ -44,16 +43,13 @@ if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	fi	
 	log_handler "$RSTTXT late_start service boot script (${LATEFILE})."
 	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
-	chmod -v 755 $LATEFILE >> $LOGFILE 2>&1
-	placeholder_update $LATEFILE COREPATH CORE_PLACEHOLDER "$COREPATH"
-	placeholder_update $LATEFILE CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 fi
 
 # Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
 PRINTMODULE=false
 for USNF in $USNFLIST; do
-	if [ -d "$IMGPATH/$USNF" ]; then
-		NAME=$(get_file_value $IMGPATH/$USNF/module.prop "name=")
+	if [ -d "$MODULESPATH/$USNF" ]; then
+		NAME=$(get_file_value $MODULESPATH/$USNF/module.prop "name=")
 		log_handler "'$NAME' installed (modifies the device fingerprint)."
 		PRINTMODULE=true
 	fi
@@ -69,19 +65,13 @@ fi
 
 # Get default values
 log_handler "Checking device default values."
-#curr_values
-# Get the current original values saved in propsconf_late
-#log_handler "Loading currently saved values."
-#. $LATEFILE
 
 # Save default file values in propsconf_late
 for ITEM in $VALPROPSLIST; do
 	TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 	ORIGPROP="ORIG${TMPPROP}"
-	#ORIGTMP="$(eval "echo \$$ORIGPROP")"
 	ORIGTMP="$(get_file_value $LATEFILE "${ORIGPROP}=")"
 	CURRPROP="CURR${TMPPROP}"
-	#CURRTMP="$(eval "echo \$$CURRPROP")"
 	CURRTMP="$(resetprop $ITEM)"
 	replace_fn $ORIGPROP "\"$ORIGTMP\"" "\"$CURRTMP\"" $LATEFILE
 done
@@ -153,10 +143,10 @@ if [ "$FILESAFE" == 0 ]; then
 	# Checks if any other modules are using a local copy of build.prop
 	BUILDMODULE=false
 	MODID=$(get_file_value $MODPATH/module.prop "id=")
-	for D in $(ls $IMGPATH); do
+	for D in $(ls $MODULESPATH); do
 		if [ $D != "$MODID" ]; then
-			if [ -f "$IMGPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
-				NAME=$(get_file_value $IMGPATH/$D/module.prop "name=")
+			if [ -f "$MODULESPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
+				NAME=$(get_file_value $MODULESPATH/$D/module.prop "name=")
 				log_handler "Conflicting build.prop editing in module '$NAME'."
 				BUILDMODULE=true
 			fi

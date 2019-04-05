@@ -63,8 +63,8 @@ Keep reading below to find out more details about the different parts of the mod
 
 
 ## Prerequisites
-- Magisk v17+.
-- Busybox, preferably @osm0sis'
+- Magisk v19+.
+- Busybox, preferably @osm0sis' (installable from the Magisk Manager Downloads).
 
 
 ## Installation
@@ -77,6 +77,8 @@ The current release is always attached to the OP of the [module support thread](
 After installing the module and rebooting, run the command `props` in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options. If you use Termux, you'll have to call su before running the command.
 
 You can also run the command with options. Use -h for details.
+
+If you want further details as to what this module does and can do, keep reading. To get an overview of what is available, take a look at the index above. If experiencing issues, take a look at the part about [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc), and don't forget to provide [logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs) when asking for help.
 
 
 ## Spoofing device's fingerprint to pass the ctsProfile check
@@ -176,7 +178,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v50_**
+**_Current fingerprints list version - v51_**
 
 
 ## Please add support for device X
@@ -359,9 +361,17 @@ Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules
 
 Releases up until v2.4.0 are compatible with Magisk v15 to v16.7.  
 Releases from v2.4.1 are compatible with Magisk v17+.
+Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Changelog
+### v4.0.0  
+- Updated to the new module template. Otherwise the same as v3.5.2, apart from some installation cleanup.
+- New (Samsung Galaxy A6 Plus and Tab S3, Xiaomi Mi Note 3) and updated (Essential PH-1, Google Pixel and Pixel XL 1-3 and Pixel C, OnePlus 5T and Xiaomi Mi A2 and Pocophone F1) fingerprints added. List at v51.
+
+### v3.5.2  
+- Fixed a bug where automatic update of the applied fingerprint during installation would cause the installation to fail.
+
 ### v3.5.1  
 - Fix a few bugs causing props not setting properly at boot in some cases when using the system.prop boot stage.
 - Moved ro.build.version.security_patch to late_start service by default, so as not to cause issues for devices with Keymaster 4 (possible source of bootloops). Thank you @Nebrassy.
@@ -599,7 +609,7 @@ Releases from v2.4.1 are compatible with Magisk v17+.
 
 
 ## Current fingerprints list
-### List v50  
+### List v51  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus Zenfone Max M1 (8.0.0)

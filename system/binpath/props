@@ -24,9 +24,8 @@ echo ""
 # ================ Paths and variables ================
 # =====================================================
 
-COREPATHPH=CORE_PLACEHOLDER
-IMGPATH=$COREPATH/img
-MODPATH=$IMGPATH/MagiskHidePropsConf
+ADBPATHPH=ADB_PLACEHOLDER
+MODPATH=$ADBPATH/modules/MagiskHidePropsConf
 LATEFILEPH=LATE_PLACEHOLDER
 
 # Development testing set to false

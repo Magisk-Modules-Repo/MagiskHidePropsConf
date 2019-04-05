@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 # MagiskHide Props Config
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
@@ -10,16 +8,9 @@
 # In that case, feel free to delete it.
 
 # Script version
-SCRIPTV=25
+SCRIPTV=26
 SETTRANSF=2
 NOTTRANSF=""
-
-# Paths
-COREPATHPH=CORE_PLACEHOLDER
-IMGPATH=$COREPATH/img
-MODPATH=$IMGPATH/MagiskHidePropsConf
-CACHELOCPH=CACHE_PLACEHOLDER
-LATELOGFILE=$CACHELOC/propsconf_latefile.log
 
 # Fingerprint
 FINGERPRINTENB=1
@@ -134,34 +125,3 @@ SETTYPE=false
 SETTAGS=false
 SETSELINUX=false
 SETFINGERPRINT=false
-
-rm -f $LATELOGFILE
-
-# Function to clean up some files after the module has been uninstalled
-cleanup() {
-	echo "Cleaning up files in $CACHELOC." >> $LATELOGFILE 2>&1
-	for ITEM in $CACHEFILES; do
-		if [ -f "$CACHELOC/$ITEM" ]; then
-			echo "Deleting ${ITEM}." >> $LATELOGFILE 2>&1
-			rm -f $CACHELOC/$ITEM
-		fi
-	done
-	# Suicide.
-	echo "Removing script." >> $LATELOGFILE 2>&1
-	rm -f $0
-}
-
-# Checks if the module is installed. Deletes itself if it isn't.
-if [ -d "$MODPATH" ]; then
-	# Checks if the module is set for removal
-	if [ -f "$MODPATH/remove" ]; then
-		echo "Module set for removal." >> $LATELOGFILE 2>&1
-		# Cleanup
-		cleanup
-	fi
-else
-	echo "$MODPATH not found." >> $LATELOGFILE 2>&1
-	echo "Module no longer installed." >> $LATELOGFILE 2>&1
-	# Cleanup
-	cleanup
-fi
