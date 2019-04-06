@@ -366,7 +366,8 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 ## Changelog
 ### v4.0.0  
-- Updated to the new module template. Otherwise the same as v3.5.2, apart from some installation cleanup.
+- Updated to the new module template. Otherwise the same as v3.5.2, apart from some code cleanup.
+- Due to some of the code cleanup and the new template, this release is only compatible with Magisk v19+. Users not updating to Magisk v19+ can use module v3.5.2.
 - New (Samsung Galaxy A6 Plus and Tab S3, Xiaomi Mi Note 3) and updated (Essential PH-1, Google Pixel and Pixel XL 1-3 and Pixel C, OnePlus 5T and Xiaomi Mi A2 and Pocophone F1) fingerprints added. List at v51.
 
 ### v3.5.2  
