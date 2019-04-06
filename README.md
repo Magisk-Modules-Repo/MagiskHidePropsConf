@@ -196,7 +196,7 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Device simulation
-**_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it!_**
+**_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it, !_**
 
 If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that are set are (currently):
 - ro.product.brand
@@ -330,6 +330,8 @@ In case of issues, if you've set a prop value that doesn't work on your device c
 Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and reboot.
 
 It is possible to use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
+
+A common reason for issues booting the device with the module active is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
 
 ### The Play Store is "uncertified"
 If your device's Play Store reports that the device is "uncertified", this is usually fixed by making sure that you pass SafetyNet and then clearing data for the Play Store (and possibly rebooting). More details in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Device_uncertified_in_Play_storeNetflix_and_other_apps_wont_install_or_doesnt_show_up).
