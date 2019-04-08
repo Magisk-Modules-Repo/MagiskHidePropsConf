@@ -179,7 +179,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v51_**
+**_Current fingerprints list version - v52_**
 
 
 ## Please add support for device X
@@ -368,6 +368,10 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Changelog
+### v4.0.1  
+- Fixed a bug where the automatic fingerprints update function would always revert to the oldest print available for the set device.
+- Added two new devices to the fingerprints list, Oppo Neo 7 and Xiaomi Mi 9. List updated to v52.
+
 ### v4.0.0  
 - Updated to the new module template. Otherwise the same as v3.5.2, apart from some code cleanup.
 - Due to some of the code cleanup and the new template, this release is only compatible with Magisk v19+. Users not updating to Magisk v19+ can use module v3.5.2.
@@ -613,7 +617,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Current fingerprints list
-### List v51  
+### List v52  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus Zenfone Max M1 (8.0.0)
@@ -685,6 +689,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - OnePlus 5T (8.1.0 & 9)
 - OnePlus 6 (8.1.0 & 9)
 - OnePlus 6T (9)
+- Oppo Neo 7 (5.1)
 - Razer Phone (8.1.0)
 - Razer Phone 2 (8.1.0)
 - Samsung Galaxy A5 2015 (6.0.1)
@@ -753,6 +758,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - Xiaomi Mi 5S Plus (6.0.1 & 7.0)
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi 8 (8.1.0 & 9)
+- Xiaomi Mi 9 (9)
 - Xiaomi Mi A1 (8.0.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9)
 - Xiaomi Mi A2 Lite (9)

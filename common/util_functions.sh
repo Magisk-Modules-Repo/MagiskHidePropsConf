@@ -356,20 +356,7 @@ get_print_versions() {
 
 # Get Android version with 3 digits for input
 get_android_version() {
-	VERTMP=$(echo $1 | sed 's|.||g')
-	if [ "${#VERTMP}" -lt 3 ]; then
-		until [ "${#VERTMP}" == 3 ]
-		do
-			VERTMP="$(echo ${VERTMP}0)"
-		done
-	fi
-	echo $VERTMP
-}
-
-# Get Android version with 3 digits for current fingerprint
-get_android_version_print() {
-	print_parts $1 "var"
-	VERTMP=$(echo $VARRELEASE | sed 's|.||g')
+	VERTMP=$(echo $1 | sed 's|\.||g')
 	if [ "${#VERTMP}" -lt 3 ]; then
 		until [ "${#VERTMP}" == 3 ]
 		do
@@ -1044,7 +1031,7 @@ post_check() {
 devsim_update() {
 	if [ "$MODULEFINGERPRINT" ]; then
 		log_handler "Updating device simulation variables."
-		print_parts $MODULEFINGERPRINT "var"
+		print_parts "$MODULEFINGERPRINT" "var"
 		for ITEM in $PROPSETTINGSLIST; do
 			case $ITEM in
 				SIM*)
@@ -1202,43 +1189,46 @@ print_files() {
 }
 
 device_print_update() {
+	log_handler "$1"
 	if [ "$OPTIONUPDATE" == 1 ]; then
 		if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ] && [ "$MODULEFINGERPRINT" ]; then
 			TMPDEV="${SIMBRAND}/${SIMNAME}/${SIMDEVICE}"
+			SAVEIFS=$IFS
+			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				case $ITEM in
 					*$TMPDEV*)
-						TMPPRINT=$ITEM
+						IFS=$SAVEIFS
+						case $ITEM in
+							*\;*)
+								ITEMCOUNT=1
+								ITEMFOUND=0
+								TMPVPRINT="$(get_print_versions "$(get_eq_left "$ITEM")")"
+								TMPVCURR="$(get_android_version $SIMRELEASE)"
+								for V in $TMPVPRINT; do
+									if [ "$(get_android_version $V)" == "$TMPVCURR" ]; then
+										ITEMFOUND=1
+										break
+									fi
+									ITEMCOUNT=$(($ITEMCOUNT+1))
+								done
+								if [ "$ITEMFOUND" == 1 ]; then
+									TMPPRINT="$(get_eq_right "$ITEM" | cut -f $ITEMCOUNT -d ';')"
+								else
+									TMPPRINT=""
+								fi
+							;;
+							*) TMPPRINT="$(get_eq_right "$ITEM")"
+							;;
+						esac
 						break
 					;;
 				esac
 			done
-			case $TMPPRINT in
-				*\;*)
-					ITEMCOUNT=1
-					ITEMFOUND=0
-					TMPVPRINT="$(get_print_versions "$TMPPRINT")"
-					TMPVCURR="$(get_android_version_print $MODULEFINGERPRINT)"
-					for ITEM in $TMPVPRINT; do
-						if [ "$(get_android_version $ITEM)" == "$TMPVCURR" ]; then
-							ITEMFOUND=1
-							break
-						fi
-						ITEMCOUNT=$(($ITEMCOUNT+1))
-					done
-					if [ "$ITEMFOUND" == 1 ]; then
-						TMPPRINT="$(get_eq_right $TMPPRINT | cut -f $ITEMCOUNT -d ';')"
-					else
-						TMPPRINT=""
-					fi
-				;;
-				*) TMPPRINT="$(get_eq_right $TMPPRINT)"
-				;;
-			esac
+			IFS=$SAVEIFS
 			if [ "$TMPDEV" ] && [ "$TMPPRINT" ]; then
-				log_handler "Checking for updated fingerprint ($TMPDEV)."
+				log_handler "Checking for updated fingerprint ($TMPDEV).\nCurrent - $MODULEFINGERPRINT\nUpdate - $TMPPRINT"
 				if [ "$MODULEFINGERPRINT" != "$TMPPRINT" ]; then
-					log_handler "$1"
 					change_print "$1" "$TMPPRINT" "update"
 					replace_fn PRINTCHK 0 1 $LATEFILE
 					# Load module values
@@ -1246,6 +1236,8 @@ device_print_update() {
 				else
 					log_handler "No update available."
 				fi
+			else
+				log_handler "Can't check for update."
 			fi
 		fi
 	fi
