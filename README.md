@@ -47,6 +47,7 @@ Keep reading below to find out more details about the different parts of the mod
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
+  - [Requires Magisk v19+](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#requires-magisk-v19)
   - [An option is marked as "disabled"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#an-option-is-marked-as-disabled)
   - [I can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-ctsprofile-check)
   - [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)
@@ -305,6 +306,9 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 - MagiskHide Props Config v2.7.2 and earlier versions won't work on Magisk v18.1-d73127b1(18006) or later, due to internal changes in Magisk.
 - Xiaomi devices (MIUI) sometimes have issues passing the ctsProfile check on Magisk releases up to v18.1, particularly China ROMs. Try updating to a newer Magisk version, since MagiskHide has been greatly improved since v18.1.
 - If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and with Magisk v17.2 the resetprop tool was updated for this change.
+
+### Requires Magisk v19+
+If the module won't install, with the message that Magisk v19+ is required, but you have Magisk v19+ installed, that means that your Magisk installation is broken. It's likely that you did not update properly (always update directly from the Manager) from a previous Magisk version and core parts of Magisk are still from the old install. The solution is to do a reinstallation by using "Direct install" in the Magisk Manager. If you for some reason can't do a direct install you're likely going to have to uninstall Magisk and start over.
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
