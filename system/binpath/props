@@ -27,6 +27,7 @@ echo ""
 ADBPATHPH=ADB_PLACEHOLDER
 MODPATH=$ADBPATH/modules/MagiskHidePropsConf
 LATEFILEPH=LATE_PLACEHOLDER
+BOOTSTAGE="props"
 
 # Development testing set to false
 DEVTESTING=false
@@ -537,9 +538,6 @@ menu_new_print() {
 		case "$INPUT6" in
 			y|Y)
 				change_print "$1" "$2"
-				if [ "$DEVSIM" == 0 ]; then
-					menu_devsim_activate "$1"
-				fi
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
@@ -556,69 +554,6 @@ menu_new_print() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 3 6
-			;;
-		esac
-	done
-}
-
-# Seventh menu level - activate device simulation
-menu_devsim_activate() {
-	INPUT7=""
-	while true
-	do
-		if [ -z "$INPUT7" ]; then
-			menu_header "${C}$1${N}"
-			echo ""
-			echo "The device fingerprint has been updated."
-			echo ""
-			echo "Reboot for changes to take effect."
-			echo ""
-			echo "${G}Do you want to reboot now (y/n)?${N}"
-			echo ""
-			echo "You have just chosen a new device"
-			echo "fingerprint. Enter ${G}d${N} to"
-			echo "activate basic device simulation."
-			echo "See the module documentation for"
-			echo "details about this feature."
-			echo ""
-			echo "Note: device simulation is not needed"
-			echo "for passing SafetyNet's CTS profile"
-			echo "and may even cause issues. Don't enable"
-			echo "unless you actually need it."
-			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}d${N} or ${G}e${N}(xit): "
-			read -r INPUT7
-		fi
-		case "$INPUT7" in
-			d|D)
-				INPUT2=""
-				INPUT3=""
-				INPUT4=""
-				INPUT5=""
-				INPUT6=""
-				change_dev_sim "Device simulation"
-				break
-			;;
-			y|Y)
-				force_reboot
-			;;
-			n|N)
-				INPUT2=""
-				INPUT3=""
-				INPUT4=""
-				INPUT5=""
-				INPUT6=""
-				# Update the reboot variable
-				reboot_chk
-				# Load all values
-				all_values
-				# Update the system.prop file
-				system_prop
-				break
-			;;
-			e|E) exit_fn
-			;;
-			*)	invalid_input 5 7
 			;;
 		esac
 	done
@@ -691,9 +626,6 @@ menu_vendor_print() {
 		case "$INPUT3" in
 			y|Y)
 				change_print_vendor "$1" "$TMPVAL"
-				if [ "$DEVSIM" == 0 ] && [ "$TMPVAL" == 1 ]; then
-					menu_devsim_activate "$1"
-				fi
 				INPUT2=""
 				break
 			;;
@@ -948,15 +880,15 @@ menu_dev_sim() {
 				INPUT=""
 				break
 			fi
-			echo "This setting will do basic device"
+			echo "These settings will do basic device"
 			echo "simulation by setting certain props"
 			echo "based on the currently set device"
 			echo "fingerprint."
 			echo ""
-			echo "Note that this is not necessary to pass"
-			echo "SafetyNet's CTS profile check and may"
-			echo "cause issues. Only enable if you really"
-			echo "need it."
+			echo "Note that this feature is not"
+			echo "necessary to pass SafetyNet's CTS"
+			echo "profile check and may cause issues."
+			echo "${R}Only enable this if you really need it.${N}"
 			echo ""
 			echo "Pick an option below."
 			echo ""
@@ -1664,14 +1596,14 @@ menu_edit_custprop() {
 	do
 		if [ -z "$INPUT3" ]; then
 			for ITEM in $CUSTOMPROPSLIST; do
-				TMPITEM=$( echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
+				TMPITEM=$(echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
 				if [ "$(get_eq_left "$ITEM")" == "$1" ]; then
 					if [ "$TMPITEM" == "$(resetprop $1)" ]; then
 						PROPNOTSET=0
-						SETPROPVALUE="$TMPITEM"
 					else
 						PROPNOTSET=1
 					fi
+					SETPROPVALUE="$TMPITEM"
 					break
 				fi
 			done
@@ -1687,36 +1619,45 @@ menu_edit_custprop() {
 				echo "Enter a new value or select"
 				echo "from the options below."
 				echo ""
-				echo "${G}s${N} - Prop boot stage$STAGETXT"
-				echo "${G}r${N} - Reset prop"
 			else
 				echo "${R}Not yet set by this module. Please reboot to set.${N}"
-				if [ "$OPTIONBOOT" == 1 ] || [ "$STAGETXT" == " ${C}(post-fs-data)${N}" ]; then
+				if [ "$OPTIONBOOT" == 1 ] || [ "$STAGETXT" == " ${C}(post-fs-data)${N}" ] || [ "$STAGETXT" == " ${C}(system.prop)${N}" ]; then
 					echo ""
-					echo "This might be caused by the prop being set to early."
-					echo "If the above state does not change after a reboot,"
-					echo "try changing the boot stage when the prop is set"
-					echo "to default, late_start service or both."
+					echo "This might be caused by the prop being set"
+					echo "too early. If the above state does not change"
+					echo "after a reboot, try changing the boot stage"
+					echo "when the prop is set to ${G}late_start service${N}."
 				fi
 				echo ""
-				echo "${G}r${N} - Reboot"
+				echo "Do you want to reboot now (${G}y/n${N})?"
+				echo ""
 			fi
+			echo "${G}s${N} - Prop boot stage$STAGETXT"
+#			if [ "$STAGETXT" == "late_start service" ] || [ "$STAGETXT" == "both" ]; then
+#				echo "${G}d${N} - Delay timer"
+#			fi
+			echo "${G}r${N} - Reset prop"
 			echo "${G}b${N} - Go back."
 			echo ""
 			echo -n "Enter '${G}e${N}' to exit: "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			s|S)
-				menu_bootstage_custprop "$1"
+			y|Y) force_reboot
 			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			s|S)
+				menu_bootstage_custprop "$1" "$SETPROPVALUE"
+			;;
+#			d|D)
+#				menu_delay_custprop "$1"
+#			;;
 			r|R)
-				if [ "$PROPNOTSET" == 0 ]; then
-					menu_reset_custprop "$1" "$SETPROPVALUE"
-					break
-				else
-					reboot_fn "Reboot device" "reboot"
-				fi
+				menu_reset_custprop "$1" "$SETPROPVALUE"
+				break
 			;;
 			b|B)
 				INPUT2=""
@@ -1889,34 +1830,32 @@ menu_set_new_custprop() {
 # Fourth menu level - Custom prop boot stage
 menu_bootstage_custprop() {
 	INPUT4=""
+	PLEND=" is"
+	DEFAULTTXT=""
+	POSTTXT=""
+	LATETXT=""
+	BOTHTXT=""
+	OPTTYPE1="default"
+	OPTTYPE2="post"
+	OPTTYPE3="late"
+	OPTTYPE4="both"
 	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
 		TMPBSTAGE="default"
-		PLEND=" is"
 		DEFAULTTXT="${G} (current)${N}"
-		POSTTXT=""
-		LATETXT=""
-		BOTHTXT=""
+		INTOPT=1
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
 		TMPBSTAGE="both"
 		PLEND="s are"
-		DEFAULTTXT=""
-		POSTTXT=""
-		LATETXT=""
 		BOTHTXT="${G} (current)${N}"
+		INTOPT=2
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
 		TMPBSTAGE="post-fs-data"
-		PLEND=" is"
-		DEFAULTTXT=""
 		POSTTXT="${G} (current)${N}"
-		LATETXT=""
-		BOTHTXT=""
+		INTOPT=3
 	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
 		TMPBSTAGE="late_start service"
-		PLEND=" is"
-		DEFAULTTXT=""
-		POSTTXT=""
 		LATETXT="${G} (current)${N}"
-		BOTHTXT=""
+		INTOPT=4
 	else
 		TMPBSTAGE=""
 	fi
@@ -1944,42 +1883,13 @@ menu_bootstage_custprop() {
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
-			1)
-				if [ "$DEFAULTTXT" ]; then
+			1|2|3|4)
+				if [ "$INTOPT" == "$INPUT4" ]; then
 					INPUT4=""
 					active_option
 				else
-					set_custprop "$1" "$(resetprop $1)" "default"
-					INPUT3=""
-					break
-				fi
-			;;
-			2)
-				if [ "$POSTTXT" ]; then
-					INPUT4=""
-					active_option
-				else
-					set_custprop "$1" "$(resetprop $1)" "post"
-					INPUT3=""
-					break
-				fi
-			;;
-			3)
-				if [ "$LATETXT" ]; then
-					INPUT4=""
-					active_option
-				else
-					set_custprop "$1" "$(resetprop $1)" "late"
-					INPUT3=""
-					break
-				fi
-			;;
-			4)
-				if [ "$BOTHTXT" ]; then
-					INPUT4=""
-					active_option
-				else
-					set_custprop "$1" "$(resetprop $1)" "both"
+					OPTTYPE="OPTTYPE${INPUT4}"
+					set_custprop "$1" "$2" "$(eval "echo \$$OPTTYPE")"
 					INPUT3=""
 					break
 				fi

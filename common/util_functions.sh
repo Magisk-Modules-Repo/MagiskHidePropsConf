@@ -84,6 +84,7 @@ if [ "$INSTFN" ]; then
 	CUSTOMPROPS
 	CUSTOMPROPSPOST
 	CUSTOMPROPSLATE
+	CUSTOMPROPSDELAY
 	DELETEPROPS
 	"
 else
@@ -114,9 +115,10 @@ SYSTEMFILE=$MODPATH/system.prop
 POSTCHKFILE=$CACHELOC/propsconf_postchk
 RUNFILE=$MODPATH/script_check
 RESETFILE=$CACHELOC/reset_mhpc
-MAGISKLOC=/data/adb/magisk
 # Make sure that the terminal app used actually can see resetprop
-alias resetprop="$MAGISKLOC/magisk resetprop"
+if [ "$BOOTSTAGE" == "props" ]; then
+	alias resetprop="$ADBPATH/magisk/magisk resetprop"
+fi
 # Finding installed Busybox
 if [ -d "$MODULESPATH/busybox-ndk" ]; then
 	BBPATH=$(find $MODULESPATH/busybox-ndk -name 'busybox')
@@ -399,8 +401,8 @@ format_file() {
 # Reboot the device
 force_reboot() {
 	echo ""
-	echo "${C}Rebooting...${C}"
-	log_print "Rebooting."
+	echo "${C}Rebooting...${N}"
+	log_handler "Rebooting."
 	setprop sys.powerctl reboot
 	sleep 15
 	log_handler "Rebooting failed."
@@ -971,13 +973,15 @@ build_prop_check() {
 	for D in $(ls $MODULESPATH); do
 		if [ "$D" != "$MODID" ]; then
 			if [ -f "$MODULESPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
-				NAME=$(get_file_value $MODULESPATH/$D/module.prop "name=")
-				ui_print "!"
-				log_print "! Another module editing build.prop detected!"
-				log_print "! Module - '$NAME'!"
-				log_print "! Modification of build.prop disabled!"
-				ui_print "!"
-				sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE
+				if [ ! -f "$MODULESPATH/$D/disable" ]; then
+					NAME=$(get_file_value $MODULESPATH/$D/module.prop "name=")
+					ui_print "!"
+					log_print "! Another module editing build.prop detected!"
+					log_print "! Module - '$NAME'!"
+					log_print "! Modification of build.prop disabled!"
+					ui_print "!"
+					sed -i 's/BUILDPROPENB=1/BUILDPROPENB=0/' $UPDATELATEFILE
+				fi
 			fi
 		fi
 	done
@@ -988,13 +992,15 @@ usnf_check() {
 	log_print "- Checking for fingerprint conflicts"
 	for USNF in $USNFLIST; do
 		if [ -d "$MODULESPATH/$USNF" ]; then
-			NAME=$(get_file_value $MODULESPATH/$USNF/module.prop "name=")
-			ui_print "!"
-			log_print "! Module editing fingerprint detected!"
-			log_print "! Module - '$NAME'!"
-			log_print "! Fingerprint modification disabled!"
-			ui_print "!"
-			sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
+			if [ ! -f "$MODULESPATH/$USNF/disable" ]; then
+				NAME=$(get_file_value $MODULESPATH/$USNF/module.prop "name=")
+				ui_print "!"
+				log_print "! Module editing fingerprint detected!"
+				log_print "! Module - '$NAME'!"
+				log_print "! Fingerprint modification disabled!"
+				ui_print "!"
+				sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
+			fi
 		fi
 	done
 }
@@ -1339,11 +1345,7 @@ change_print() {
 
 	NEWFINGERPRINT=""
 
-	if [ "$DEVSIM" == 0 ]; then
-		after_change "$1" "$3" "noreboot"
-	else
-		after_change "$1" "$3"
-	fi
+	after_change "$1" "$3"
 }
 
 # Use vendor fingerprint
@@ -1376,11 +1378,7 @@ change_print_vendor() {
 	# Set device simulation variables
 	print_parts "$ORIGVENDPRINT"
 
-	if [ "$DEVSIM" == 0 ]; then
-		after_change "$1" "$3" "noreboot"
-	else
-		after_change "$1" "$3"
-	fi
+	after_change "$1" "$3"
 }
 
 # Save props values from fingerprint parts
@@ -1756,11 +1754,25 @@ custom_edit() {
 	fi
 }
 
+# Find custom props module set value
+custprop_value() {
+	TMPLST="$CUSTOMPROPSLIST"
+	if [ "$TMPLST" ]; then
+		for ITEM in $TMPLST; do
+			case "$ITEM" in
+				*$1*)
+					echo $(get_eq_right "$ITEM" | sed 's|_sp_| |g')
+				;;
+			esac
+		done
+	fi
+}
+
 # Set custom prop value
 set_custprop() {
 	if [ "$2" ]; then
 		# Reset the prop
-		reset_custprop "$1" "$(resetprop $1)" "bootstage"
+		reset_custprop "$1" "$2" "bootstage"
 		# Set the prop
 		PROPSBOOTSTAGE="CUSTOMPROPS"
 		PROPSTXT="default"
@@ -1784,7 +1796,7 @@ set_custprop() {
 					TMPCUSTPROPS=$(echo "$CURRCUSTPROPS" | sed "s|${1}=${TMPORIG}|${1}=${TMPVALUE}|")
 				;;
 				*)
-					TMPCUSTPROPS=$(echo "$CURRCUSTPROPS  ${1}=${TMPVALUE}" | sed 's|^[ \t]*||')
+					TMPCUSTPROPS=$(echo "$CURRCUSTPROPS ${1}=${TMPVALUE}" | sed 's|^[ \t]*||')
 				;;
 			esac
 			SORTCUSTPROPS=$(echo $(printf '%s\n' $TMPCUSTPROPS | sort -u))
@@ -1793,6 +1805,31 @@ set_custprop() {
 			replace_fn $ITEM "\"$CURRCUSTPROPS\"" "\"$SORTCUSTPROPS\"" $LATEFILE
 			replace_fn CUSTOMEDIT 0 1 $LATEFILE
 			DLIMTMP=$(($DLIMTMP + 1))
+
+#			if [ "$ITEM" == "CUSTOMPROPSLATE" ] && [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
+#				case "$CURRCUSTPROPS" in
+#					*$1*) #Do nothing when the prop already exists
+#					;;
+#					*)
+#						CUSTOMPROPSLATE=$(get_file_value $LATEFILE "${ITEM}=")
+#						CNTLITEM=1
+#						FNDLITEM=0
+#						for LITEM in $CUSTOMPROPSLATE
+#							case "$CUSTOMPROPSLATE" in
+#								*$1*)
+#									$FNDLITEM=1
+#									break
+#								;;
+#							esac
+#							CNTLITEM=$(($CNTLITEM + 1))
+#						done
+#						if [ "$FNDLITEM" == 1 ]; then
+#							CUSTOMPROPSDELAY=$(get_file_value $LATEFILE "CUSTOMPROPSDELAY=")
+#							replace_fn CUSTOMPROPSDELAY "$CUSTOMPROPSDELAY" "$(echo "$CUSTOMPROPSDELAY" | cut -f 1-$CNTLITEM -d ';');0;$(echo "$CUSTOMPROPSDELAY" | cut -f $(($CNTLITEM + 1))- -d ';')" $LATEFILE
+#						fi
+#					;;
+#				esac
+#			fi
 		done
 
 		after_change "$1" "$4"
@@ -1819,7 +1856,7 @@ reset_custprop() {
 
 	for ITEM in $PROPSBOOTSTAGE; do
 		CURRCUSTPROPS=$(get_file_value $LATEFILE "${ITEM}=")
-		TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${TMPVALUE}||" | tr -s " " | sed 's|^[ \t]*||')
+		TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${TMPVALUE}||" | tr -s " " | sed 's|^[ \t]*||;s|[ \t]*$||')
 		# Updating custom props string
 		replace_fn $ITEM "\"$CURRCUSTPROPS\"" "\"$TMPCUSTPROPS\"" $LATEFILE
 	done

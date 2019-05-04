@@ -49,8 +49,8 @@ print_modname() {
 	# Check Magisk version
 	if [ $MAGISK_VER_CODE -lt 19000 ]; then
 		ui_print ""
+		log_print "! Detected Magisk build $MAGISK_VER_CODE!"
 		log_print "! Magisk version not supported!"
-		log_handler "Magisk build $MAGISK_VER_CODE."
 		abort "! Please install Magisk v19+!"
 	fi
 }

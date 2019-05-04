@@ -181,7 +181,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v52_**
+**_Current fingerprints list version - v53_**
 
 
 ## Please add support for device X
@@ -201,7 +201,7 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 ## Device simulation
 **_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it, !_**
 
-If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that are set are (currently):
+If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that can be set are (currently):
 - ro.product.brand
 - ro.product.name
 - ro.product.device
@@ -308,7 +308,7 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 - If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and with Magisk v17.2 the resetprop tool was updated for this change.
 
 ### Requires Magisk v19+
-If the module won't install, with the message that Magisk v19+ is required, but you have Magisk v19+ installed, that means that your Magisk installation is broken. It's likely that you did not update properly (always update directly from the Manager) from a previous Magisk version and core parts of Magisk are still from the old install. The solution is to do a reinstallation by using "Direct install" in the Magisk Manager. If you for some reason can't do a direct install you're likely going to have to uninstall Magisk and start over.
+If the module won't install, with the message that Magisk v19+ is required, but you have Magisk v19+ installed, that means that your Magisk installation is broken. It's likely that you did not update properly (always update directly from the Manager) from a previous Magisk version (or something along those lines) and core parts of Magisk are still from an old install. The solution is to do a reinstallation by using "Direct install" in the Magisk Manager. If you for some reason can't do a direct install you're likely going to have to uninstall Magisk and start over.
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
@@ -325,7 +325,7 @@ Also see ["Props don't seem to set properly"](https://github.com/Magisk-Modules-
 This module can usually only really help with the ctsProfile check, by spoofing the device fingerprint. If you can't pass basicIntegrity, there's probably something else going on with your device, but there is a possibility that changing the device fingerprint can make this pass as well. If you can't get things working, see ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) above.
 
 ### Props don't seem to set properly
-If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the boot stage at which the props are being set, or change the boot stage for that particular prop. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) or ["Custom prop values"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) above.
+If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the boot stage at which the props are being set, or change the boot stage for that particular prop, to late_start service. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) or ["Custom prop values"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) above. This might happen because the particular prop you're trying to set get assigned it's value late in the boot process and by setting the boot stage for the prop to the last one available (late_start service) you optimise the chances of the module setting the prop after the system.
 
 ### My device's Android security patch date changed
 For some devices it is necessary to also change the security patch date to match the fingerprint. This is automatically done by the module when using a fingerprint from a build after March 16 2018. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and load back the original date.
@@ -337,7 +337,7 @@ Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and re
 
 It is possible to use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
-A common reason for issues booting the device with the module active is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
+A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
 
 ### The Play Store is "uncertified"
 If your device's Play Store reports that the device is "uncertified", this is usually fixed by making sure that you pass SafetyNet and then clearing data for the Play Store (and possibly rebooting). More details in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Device_uncertified_in_Play_storeNetflix_and_other_apps_wont_install_or_doesnt_show_up).
@@ -373,6 +373,14 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Changelog
+### v4.0.2  
+- Removed prompt to enable device simulation after changing device fingerprint. It has too much of a chance of causing issues and is not necessary for passing the CTS profile check.
+- The check for conflicting modules that do similar edits to MagiskHide Props Config now takes into account if the conflicting module is disabled.
+- Made sure that custom props can be edited for boot stage or reset, even when not set yet.
+- I was gonna add a chemistry joke, but all the good ones Argon.
+- Various small fixes and optimisations.
+- New fingerprints for LG V20 (several variants) and Lenovo K6 Note, and updated for LG G5 and G6 (several variants), Motorola Moto G5S, Oppo Neo7 (several variants) and Samsung Galaxy S7 Edge. Fingerprints list updated to v53.
+
 ### v4.0.1  
 - Fixed a bug where the automatic fingerprints update function would always revert to the oldest print available for the set device.
 - Added two new devices to the fingerprints list, Oppo Neo 7 and Xiaomi Mi 9. List updated to v52.
@@ -622,7 +630,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Current fingerprints list
-### List v52  
+### List v53  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus Zenfone Max M1 (8.0.0)
@@ -664,11 +672,18 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - Huawei P9 Plus (7.0)
 - Huawei P20 (9)
 - Huawei P20 Pro (8.1.0 & 9)
+- Lenovo K6 Note (7.0)
 - LeEco Le Pro3 (6.0.1)
 - LG G2 BS980 (5.0.2)
 - LG G4 H812 (6.0)
 - LG G5 H850 (8.0.0)
-- LG G6 H870 (7.0)
+- LG G5 H830 (8.0.0)
+- LG G5 RS988 (7.0)
+- LG G6 H870 (7.0 & 8.0.0)
+- LG G6 H872 (8.0.0)
+- LG V20 H918 (8.0.0)
+- LG V20 H910 (8.0.0)
+- LG V20 VS995 (8.0.0)
 - LG V30 H930 (8.0.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
@@ -678,7 +693,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - Motorola Moto G4 (7.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
-- Motorola Moto G5S (7.1.1)
+- Motorola Moto G5S (7.1.1 & 8.1.0)
 - Motorola Moto G6 Play (8.0.0 & 9)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
@@ -694,7 +709,8 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - OnePlus 5T (8.1.0 & 9)
 - OnePlus 6 (8.1.0 & 9)
 - OnePlus 6T (9)
-- Oppo Neo 7 (5.1)
+- OPPO Neo 7 A33w (5.1)
+- OPPO Neo 7 A1603 (5.1)
 - Razer Phone (8.1.0)
 - Razer Phone 2 (8.1.0)
 - Samsung Galaxy A5 2015 (6.0.1)

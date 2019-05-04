@@ -39,9 +39,9 @@ if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 		rm -f $RESETFILE
 	else
 		RSTTXT="Restoring"
-		log_handler "late_start service boot script not found."
+		log_handler "The module settings file could not be found."
 	fi	
-	log_handler "$RSTTXT late_start service boot script (${LATEFILE})."
+	log_handler "$RSTTXT module settings file (${LATEFILE})."
 	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 fi
 
@@ -49,9 +49,11 @@ fi
 PRINTMODULE=false
 for USNF in $USNFLIST; do
 	if [ -d "$MODULESPATH/$USNF" ]; then
-		NAME=$(get_file_value $MODULESPATH/$USNF/module.prop "name=")
-		log_handler "'$NAME' installed (modifies the device fingerprint)."
-		PRINTMODULE=true
+		if [ ! -f "$MODULESPATH/$USNF/disable" ]; then
+			NAME=$(get_file_value $MODULESPATH/$USNF/module.prop "name=")
+			log_handler "Magisk module '$NAME' installed (modifies the device fingerprint)."
+			PRINTMODULE=true
+		fi
 	fi
 done
 if [ "$PRINTMODULE" == "true" ]; then
@@ -146,9 +148,11 @@ if [ "$FILESAFE" == 0 ]; then
 	for D in $(ls $MODULESPATH); do
 		if [ $D != "$MODID" ]; then
 			if [ -f "$MODULESPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
-				NAME=$(get_file_value $MODULESPATH/$D/module.prop "name=")
-				log_handler "Conflicting build.prop editing in module '$NAME'."
-				BUILDMODULE=true
+				if [ ! -f "$MODULESPATH/$D/disable" ]; then
+					NAME=$(get_file_value $MODULESPATH/$D/module.prop "name=")
+					log_handler "Conflicting build.prop editing in module '$NAME'."
+					BUILDMODULE=true
+				fi
 			fi
 		fi
 	done

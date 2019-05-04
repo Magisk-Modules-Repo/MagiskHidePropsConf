@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=52
+PRINTSV=53
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -50,11 +50,18 @@ Huawei P9 Lite (7.0)=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/rele
 Huawei P9 Plus (7.0)=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
 Huawei P20 (9)=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
 Huawei P20 Pro (8.1.0 & 9)=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys;HUAWEI/CLT-L09/HWCLT:9/HUAWEICLT-L09/203C432R1:user/release-keys__2019-02-01
+Lenovo K6 Note (7.0)=Lenovo/karatep/K53a48:7.0/NRD90N/K53_S228_171114_ROW:user/release-keys
 LeEco Le Pro3 (6.0.1)=LeEco/ZL1_NA/le_zl1:6.0.1/WEXNAOP5802101261S/letv01261206:user/release-keys
 LG G2 BS980 (5.0.2)=lge/g2_vzw/g2:5.0.2/LRX22G/15046001715f9:user/release-keys
 LG G4 H812 (6.0)=lge/p1_rgs_ca/p1:6.0/MRA58K/1601215569825:user/release-keys
-LG G5 H850 (8.0.0)=lge/h1_global_com/h1:8.0.0/OPR1.170623.032/182532053d3a3:user/release-keys__2018-09-01
-LG G6 H870 (7.0)=lge/lucye_global_com/lucye:7.0/NRD90U/171732341982c:user/release-keys
+LG G5 H850 (8.0.0)=lge/h1_global_com/h1:8.0.0/OPR1.170623.032/190380127377a:user/release-keys__2018-12-01
+LG G5 H830 (8.0.0)=lge/h1_tmo_us/h1:8.0.0/OPR1.170623.032/182251913485f:user/release-keys__2018-08-01
+LG G5 RS988 (7.0)=lge/h1_lra_us/h1:7.0/NRD90U/1707917149a1b:user/release-keys
+LG G6 H870 (7.0 & 8.0.0)=lge/lucye_global_com/lucye:7.0/NRD90U/171732341982c:user/release-keys;lge/lucye_global_com/lucye:8.0.0/OPR1.170623.032/183301757502c:user/release-keys__2018-11-01
+LG G6 H872 (8.0.0)=lge/lucye_tmo_us/lucye:8.0.0/OPR1.170623.032/183621644ce05:user/release-keys__2019_01-01
+LG V20 H918 (8.0.0)=lge/elsa_tmo_us/elsa:8.0.0/OPR1.170623.032/1831917495b33:user/release-keys__2018-11-01
+LG V20 H910 (8.0.0)=lge/elsa_att_us/elsa:8.0.0/OPR1.170623.032/181871124f959:user/release-keys__2018-06-01
+LG V20 VS995 (8.0.0)=lge/elsa_vzw/elsa:8.0.0/OPR1.170623.032/183141449275f:user/release-keys__2018-10-01
 LG V30 H930 (8.0.0)=lge/joan_global_com/joan:8.0.0/OPR1.170623.026/181381736b4e9:user/release-keys__2018-11-05
 Motorola Moto C Plus (7.0)=motorola/panell_21_d/panell_d:7.0/NRD90M.03.040/040:user/release-keys
 Motorola Moto E4 (7.1.1)=motorola/sperry_sprint/sperry:7.1.1/NCQ26.69-64/68:user/release-keys
@@ -64,7 +71,7 @@ Motorola Moto E5 Plus (8.0.0)=motorola/hannah_sprint/hannah:8.0.0/OCPS27.91-32-4
 Motorola Moto G4 (7.0)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys
 Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
 Motorola Moto G5 Plus (7.0)=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
-Motorola Moto G5S (7.1.1)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys
+Motorola Moto G5S (7.1.1 & 8.1.0)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys;motorola/montana/montana:8.1.0/OPPS28.65-37-2-2/22d20:user/release-keys__2018-10-01
 Motorola Moto G6 Play (8.0.0 & 9)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys;motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys__2019-01-01
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
@@ -80,7 +87,8 @@ OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512
 OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1903112032:user/release-keys__2019-03-01
 OnePlus 6 (8.1.0 & 9)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
 OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1901231231:user/release-keys__2019-01-01
-Oppo Neo7 (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1440568801:user/release-keys
+OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
+OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
 Razer Phone 2 (8.1.0)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05
 Samsung Galaxy A5 2015 (6.0.1)=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CPH3:user/release-keys
@@ -107,7 +115,7 @@ Samsung Galaxy S5 (6.0.1)=samsung/k3gxx/k3g:6.0.1/MMB29K/G900HXXU1CPF2:user/rele
 Samsung Galaxy S6 (7.0)=samsung/zerofltexx/zeroflte:7.0/NRD90M/G920FXXS5EQL1:user/release-keys
 Samsung Galaxy S6 Edge (7.0)=samsung/zeroltexx/zerolte:7.0/NRD90M/G925FXXS5EQL1:user/release-keys
 Samsung Galaxy S7 (8.0.0)=samsung/heroltexx/herolte:8.0.0/R16NW/G930FXXU2ERD5:user/release-keys
-Samsung Galaxy S7 Edge (8.0.0)=samsung/hero2ltexx/hero2lte:8.0.0/R16NW/G935FXXU3ESA3:user/release-keys__2019-01-01
+Samsung Galaxy S7 Edge (8.0.0)=samsung/hero2ltexx/hero2lte:8.0.0/R16NW/G935FXXS4ESC3:user/release-keys__2019-03-01
 Samsung Galaxy S8 (8.0.0)=samsung/dreamltexx/dreamlte:8.0.0/R16NW/G950FXXU1CRC7:user/release-keys
 Samsung Galaxy S8 Plus (8.0.0)=samsung/dream2ltexx/dream2lte:8.0.0/R16NW/G955FXXU1CRC7:user/release-keys
 Samsung Galaxy S9 (8.0.0)=samsung/starltexx/starlte:8.0.0/R16NW/G960FXXU1ARCC:user/release-keys
