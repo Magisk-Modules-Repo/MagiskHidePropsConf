@@ -373,6 +373,10 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Changelog
+### v4.0.3  
+- Tiny bugfix release. A couple of messed up variables restored to their full glory.
+- Updated fingerprint for the Xiaomi Redmi Note 5/5 Plus. List at v55.
+
 ### v4.0.2  
 - Removed prompt to enable device simulation after changing device fingerprint. It has too much of a chance of causing issues and is not necessary for passing the CTS profile check.
 - The check for conflicting modules that do similar edits to MagiskHide Props Config now takes into account if the conflicting module is disabled.

@@ -295,6 +295,7 @@ menu_header() {
 # Get module version
 module_v_ctrl() {
 	VERSIONCMP=$(echo $MODVERSION | sed 's|v||g' | sed 's|\.||g')
+	VERSIONTMP=$(echo $(get_file_value $MODPATH/module.prop "version="))
 }
 
 # Check for Busybox
@@ -833,7 +834,7 @@ system_prop() {
 		if [ "$SIMSTAGE" == 0 ]; then
 			dev_sim_edit "$MODPATH/system.prop"
 		fi
-		if [ "CUSTOMPROPS" ]; then
+		if [ "$CUSTOMPROPS" ]; then
 			custom_edit "CUSTOMPROPS" "$MODPATH/system.prop"
 		fi
 		# Check system.prop content
