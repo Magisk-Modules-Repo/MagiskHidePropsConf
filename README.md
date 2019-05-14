@@ -14,10 +14,11 @@ Keep reading below to find out more details about the different parts of the mod
 
 
 ## Documentation index
-
+##### Installation and usage
 - [Prerequisites](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prerequisites)
 - [Installation](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#installation)
 - [Usage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#usage)
+##### Passing SafetyNet's CTS Profile
 - [Spoofing device's fingerprint to pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#spoofing-devices-fingerprint-to-pass-the-ctsprofile-check)
   - [Use vendor fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#use-vendor-fingerprint-for-treble-gsi-roms)
   - [Matching the Android security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date)
@@ -32,11 +33,16 @@ Keep reading below to find out more details about the different parts of the mod
 - [Current fingerprints list version](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#current-fingerprints-list-version)
 - [Please add support for device X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-add-support-for-device-x)
 - [Please update fingerprint X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-update-fingerprint-x)
+##### Device simulation
 - [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation)
+##### Improved root hiding
 - [Improved root hiding - Editing build.prop and default.prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#improved-root-hiding---editing-buildprop-and-defaultprop)
+##### MagiskHide props
 - [Set/reset MagiskHide Sensitive props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setreset-magiskhide-sensitive-props)
+##### Custom props
 - [Change/set custom prop values](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values)
 - [Removing prop values](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#removing-prop-values)
+##### Settings, etc
 - [Prop script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prop-script-settings)
   - [Boot stage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#boot-stage)
   - [Script colours](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours)
@@ -44,6 +50,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [Automatic fingerprint update](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#automatic-fingerprint-update)
 - [Configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file)
   - [Setting up the module on a clean Magisk/ROM flash](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setting-up-the-module-on-a-clean-magiskrom-flash)
+##### Issues and logs
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
@@ -57,6 +64,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [The Play Store is "uncertified"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-play-store-is-uncertified)
 - [Logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs)
   - [Collecting logs manually](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#collecting-logs-manually)
+##### Miscellaneous
 - [Donations](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#donations)
 - [Source](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#source)
 - [Credits](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#credits)
