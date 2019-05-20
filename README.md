@@ -339,13 +339,13 @@ If it seems like props you're trying to set with the module don't get set proper
 For some devices it is necessary to also change the security patch date to match the fingerprint. This is automatically done by the module when using a fingerprint from a build after March 16 2018. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and load back the original date.
 
 ### Device issues because of the module
+A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
+
 In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
 
 Place a file named `reset_mhpc` in /cache (or /data/cache on A/B devices) and reboot.
 
 It is possible to use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
-
-A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
 
 ### The Play Store is "uncertified"
 If your device's Play Store reports that the device is "uncertified", this is usually fixed by making sure that you pass SafetyNet and then clearing data for the Play Store (and possibly rebooting). More details in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Device_uncertified_in_Play_storeNetflix_and_other_apps_wont_install_or_doesnt_show_up).
