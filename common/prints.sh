@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=55
+PRINTSV=56
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -28,6 +28,7 @@ Google Nexus 7 2013 LTE (6.0.1)=google/razorg/deb:6.0.1/MOB30X/3036618:user/rele
 Google Nexus 9 WiFi (7.1.1)=google/volantis/flounder:7.1.1/N9F27M/4333998:user/release-keys
 Google Nexus 9 LTE (7.1.1)=google/volantisg/flounder_lte:7.1.1/N4F27P/4333386:user/release-keys
 Google Nexus 10 (5.1.1)=google/mantaray/manta:5.1.1/LMY49J/2640980:user/release-keys
+Google Nexus Player (6.0.1)=google/fugu/fugu:6.0.1/MMB29U/2495654:user/release-keys
 Google Pixel (8.1.0 & 9)=google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/sailfish/sailfish:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
 Google Pixel XL (8.1.0 & 9)=google/marlin/marlin:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/marlin/marlin:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
 Google Pixel 2 (8.1.0 & 9)=google/walleye/walleye:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/walleye/walleye:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
@@ -81,8 +82,8 @@ Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
-OnePlus 3 (8.0.0)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01
-OnePlus 3T (8.0.0)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01
+OnePlus 3 (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01;OnePlus/OnePlus3/OnePlus3:9/PKQ1.181203.001/1905102347:user/release-keys__2019-04-01
+OnePlus 3T (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1905102346:user/release-keys__2019-04-01
 OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1812102249:user/release-keys__2018-12-01
 OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1904191514:user/release-keys__2019-04-01
 OnePlus 6 (8.1.0 & 9)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
