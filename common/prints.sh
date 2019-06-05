@@ -132,6 +132,7 @@ Sony Xperia X Compact (8.0.0)=Sony/F5321/F5321:8.0.0/34.4.A.2.118/1631208121:use
 Sony Xperia X Dual (8.0.0)=Sony/F5122/F5122:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
 Sony Xperia X Performance (8.0.0)=Sony/F8131/F8131:8.0.0/41.3.A.2.99/1455830589:user/release-keys
 Sony Xperia X Performance Dual (8.0.0)=Sony/F8132/F8132:8.0.0/41.3.A.2.99/1455830589:user/release-keys
+Sony Xperia XA2 Dual (8.0.0)=Sony/H4113/H4113:8.0.0/50.1.A.13.123/2558067933:user/release-keys
 Sony Xperia XZ (8.0.0)=Sony/F8331/F8331:8.0.0/41.3.A.2.99/1455830589:user/release-keys
 Sony Xperia XZ Dual (8.0.0)=Sony/F8332/F8332:8.0.0/41.3.A.2.99/1455830589:user/release-keys
 Sony Xperia XZ Premium (8.0.0)=Sony/G8141/G8141:8.0.0/47.1.A.12.179/1909673090:user/release-keys
