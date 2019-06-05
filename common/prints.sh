@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=56
+PRINTSV=57
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -14,8 +14,9 @@ Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.
 Asus Zenfone Max M1 (8.0.0)=asus/WW_X00PD/ASUS_X00P_4:8.0.0/OPR1.170623.032/15.00.1811.91:user/release-keys__2018-11-05
 Asus Zenfone Max Pro M1 (8.1.0)=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.1902.340-20190216:user/release-keys__2019-02-01 
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
+BLU R1 HD 2018 (7.0)=BLU/BLU_S1/S0320WW:7.0/NRD90M/1514191903:user/release-keys
 Elephone U Pro (8.0.0)=Elephone/U_Pro/U_Pro:8.0.0/Elephone_U_Pro_20180917/09172123:user/release-keys__2018-09-05
-Essential PH-1 (9)=essential/mata/mata:9/PQ1A.190105.058/496:user/release-keys__2019-05-05
+Essential PH-1 (9)=essential/mata/mata:9/PQ1A.190105.077/515:user/release-keys__2019-06-05
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
 Google Nexus 5X (8.1.0)=google/bullhead/bullhead:8.1.0/OPM7.181205.001/5080180:user/release-keys__2018-12-05
@@ -29,13 +30,15 @@ Google Nexus 9 WiFi (7.1.1)=google/volantis/flounder:7.1.1/N9F27M/4333998:user/r
 Google Nexus 9 LTE (7.1.1)=google/volantisg/flounder_lte:7.1.1/N4F27P/4333386:user/release-keys
 Google Nexus 10 (5.1.1)=google/mantaray/manta:5.1.1/LMY49J/2640980:user/release-keys
 Google Nexus Player (6.0.1)=google/fugu/fugu:6.0.1/MMB29U/2495654:user/release-keys
-Google Pixel (8.1.0 & 9)=google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/sailfish/sailfish:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
-Google Pixel XL (8.1.0 & 9)=google/marlin/marlin:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/marlin/marlin:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
-Google Pixel 2 (8.1.0 & 9)=google/walleye/walleye:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/walleye/walleye:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
-Google Pixel 2 XL (8.1.0 & 9)=google/taimen/taimen:8.1.0/OPM4.171019.016.B1/4720843:user/release-keys;google/taimen/taimen:9/PQ3A.190505.001/5373320:user/release-keys__2019-05-05
-Google Pixel 3 (9)=google/blueline/blueline:9/PQ3A.190505.002/5450365:user/release-keys__2019-05-05
-Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PQ3A.190505.002/5450365:user/release-keys__2019-05-05
-Google Pixel C (8.1.0)=google/ryu/dragon:8.1.0/OPM8.190505.001/5373745:user/release-keys__2019-05-05
+Google Pixel (8.1.0 & 9)=google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/sailfish/sailfish:9/PQ3A.190605.003/5524043:user/release-keys__2019-06-05
+Google Pixel XL (8.1.0 & 9)=google/marlin/marlin:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/marlin/marlin:9/PQ3A.190605.003/5524043:user/release-keys__2019-06-05
+Google Pixel 2 (8.1.0 & 9)=google/walleye/walleye:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/walleye/walleye:9/PQ3A.190605.003/5524043:user/release-keys__2019-06-05
+Google Pixel 2 XL (8.1.0 & 9)=google/taimen/taimen:8.1.0/OPM4.171019.016.B1/4720843:user/release-keys;google/taimen/taimen:9/PQ3A.190605.003/5524043:user/release-keys__2019-06-05
+Google Pixel 3 (9)=google/blueline/blueline:9/PQ3A.190605.003/5524043:user/release-keys__2019-06-05
+Google Pixel 3 XL (9)=google/crosshatch/crosshatch:9/PQ3A.190605.003/5524043:user/release-keys__2019-06-05
+Google Pixel 3a (9)=google/sargo/sargo:9/PQ3B.190605.006/5560048:user/release-keys__2019-06-05
+Google Pixel 3a XL (9)=google/bonito/bonito:9/PQ3B.190605.006/5560048:user/release-keys__2019-06-05
+Google Pixel C (8.1.0)=google/ryu/dragon:8.1.0/OPM8.190605.003/5524042:user/release-keys__2019-06-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
 HTC U12 Plus (8.0.0)=htc/imeuhl_00617/htc_imeuhl:8.0.0/OPR1.170623.032/1041457.3:user/release-keys__2018-06-01
@@ -88,6 +91,7 @@ OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512
 OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1904191514:user/release-keys__2019-04-01
 OnePlus 6 (8.1.0 & 9)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
 OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1901231231:user/release-keys__2019-01-01
+OnePlus 7 Pro (9)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1905251651:user/release-keys__2019-04-01
 OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
@@ -159,7 +163,7 @@ Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.5.4.0.NAGMIFD:user/r
 Xiaomi Mi 5S Plus (6.0.1 & 7.0)=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys;Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
 Xiaomi Mi 8 (8.1.0 & 9)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01
-Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.17.0.PFAEUXM:user/release-keys__2019-03-01
+Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.24.0.PFAEUXM:user/release-keys__2019-04-01
 Xiaomi Mi A1 (8.0.0 & 9)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys_2019-01-05
 Xiaomi Mi A2 (8.1.0 & 9)=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.16.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.7.0.PDIMIXM:user/release-keys__2019-03-05
 Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
