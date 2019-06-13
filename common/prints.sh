@@ -4,13 +4,14 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=57
+PRINTSV=58
 PRINTSTRANSF=350
 
 # Certified fingerprints
 PRINTSLIST="
 Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys
+Asus Zenfone 6 (9.0)=asus/WW_I01WD/ASUS_I01WD:9/PPR2.181005.003/16.1210.1904.115-0:user/release-keys__2019-04-01
 Asus Zenfone Max M1 (8.0.0)=asus/WW_X00PD/ASUS_X00P_4:8.0.0/OPR1.170623.032/15.00.1811.91:user/release-keys__2018-11-05
 Asus Zenfone Max Pro M1 (8.1.0)=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.1902.340-20190216:user/release-keys__2019-02-01 
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
@@ -65,8 +66,11 @@ LG G6 H870 (7.0 & 8.0.0)=lge/lucye_global_com/lucye:7.0/NRD90U/171732341982c:use
 LG G6 H872 (8.0.0)=lge/lucye_tmo_us/lucye:8.0.0/OPR1.170623.032/183621644ce05:user/release-keys__2019_01-01
 LG V20 H918 (8.0.0)=lge/elsa_tmo_us/elsa:8.0.0/OPR1.170623.032/1831917495b33:user/release-keys__2018-11-01
 LG V20 H910 (8.0.0)=lge/elsa_att_us/elsa:8.0.0/OPR1.170623.032/181871124f959:user/release-keys__2018-06-01
+LG V20 LS997 (7.0)=lge/elsa_spr_us/elsa:8.0.0/OPR1.170623.032/1819814314eb7:user/release-keys__2018-07-01
+LG V20 US996 (8.0.0)=lge/elsa_nao_us/elsa:8.0.0/OPR1.170623.032/183241436cd40:user/release-keys__2018-11-01
 LG V20 VS995 (8.0.0)=lge/elsa_vzw/elsa:8.0.0/OPR1.170623.032/183141449275f:user/release-keys__2018-10-01
 LG V30 H930 (8.0.0)=lge/joan_global_com/joan:8.0.0/OPR1.170623.026/181381736b4e9:user/release-keys__2018-11-05
+Mecool KM8 (8.0.0 & 9)=MECOOL/KM8/KM8:8.0.0/OPR6.170623.013/V0412.201806271453:user/release-keys__2018-05-05;MECOOL/KM8/KM8:9/PI/20190315:user/release-keys__2019-02-05
 Motorola Moto C Plus (7.0)=motorola/panell_21_d/panell_d:7.0/NRD90M.03.040/040:user/release-keys
 Motorola Moto E4 (7.1.1)=motorola/sperry_sprint/sperry:7.1.1/NCQ26.69-64/68:user/release-keys
 Motorola Moto E4 Plus (7.1.1)=motorola/nicklaus_fn/nicklaus_fn:7.1.1/NMA26.42-156/183:user/release-keys
@@ -80,7 +84,7 @@ Motorola Moto G6 Play (8.0.0 & 9)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
 Nextbook Ares 8A (6.0.1)=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
-Nokia 7 Plus (9)=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_22C:user/release-keys__2018-09-01
+Nokia 7 Plus (9)=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_53B:user/release-keys__2019-05-01
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
@@ -163,7 +167,7 @@ Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.5.4.0.NAGMIFD:user/r
 Xiaomi Mi 5S Plus (6.0.1 & 7.0)=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys;Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
 Xiaomi Mi 8 (8.1.0 & 9)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01
-Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.24.0.PFAEUXM:user/release-keys__2019-04-01
+Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.26.0.PFAEUXM:user/release-keys__2019-04-01
 Xiaomi Mi A1 (8.0.0 & 9)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys_2019-01-05
 Xiaomi Mi A2 (8.1.0 & 9)=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.16.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.7.0.PDIMIXM:user/release-keys__2019-03-05
 Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
@@ -182,12 +186,13 @@ Xiaomi Redmi 3S/X Prime (6.0.1)=Xiaomi/land/land:6.0.1/MMB29M/V9.5.1.0.MALMIFA:u
 Xiaomi Redmi 4 Prime (6.0.1)=Xiaomi/markw/markw:6.0.1/MMB29M/V9.5.3.0.MBEMIFA:user/release-keys
 Xiaomi Redmi 4X (6.0.1)=Xiaomi/santoni/santoni:6.0.1/MMB29M/V8.5.4.0.MAMCNED:user/release-keys
 Xiaomi Redmi 5A (7.1.2)=Xiaomi/riva/riva:7.1.2/N2G47H/V9.1.8.0.NCKMIEI:user/release-keys
+Xiaomi Redmi Go (8.1.0)=Xiaomi/tiare/tiare:8.1.0/OPM1.171019.026/V10.2.6.0.OCLMIXM:user/release-keys__2019-01-01
 Xiaomi Redmi Note 2 (5.0.2)=Xiaomi/hermes/hermes:5.0.2/LRX22G/V9.2.4.0.LHMMIEK:user/release-keys
 Xiaomi Redmi Note 3 Pro (6.0.1)=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL:user/release-keys
 Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
 Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.2.1.0.NCFMIEK:user/release-keys
 Xiaomi Redmi Note 5/5 Plus (7.1.2 & 8.1.0)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys;xiaomi/vince/vince:8.1.0/OPM1.171019.019/V10.2.1.0.OEGMIXM:user/release-keys__2019-03-01
-Xiaomi Redmi Note 5 Pro (8.1.0)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01
+Xiaomi Redmi Note 5 Pro (8.1.0 & 9)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01;xiaomi/whyred/whyred:9/PKQ1.180904.001/V10.3.1.0.PEIMIXM:user/release-keys__2019-05-05
 Xiaomi Redmi Note 5A Lite (7.1.2)=xiaomi/ugglite/ugglite:7.1.2/N2G47H/V9.1.2.0.NDFMIEI:user/release-keys
 Xiaomi Redmi Note 6 Pro (8.1.0)=xiaomi/tulip/tulip:8.1.0/OPM1.171019.011/V10.0.5.0.OEKMIFH:user/release-keys__2018-10-01
 Xiaomi Redmi Note 7 (9)=xiaomi/lavender/lavender:9/PKQ1.180904.001/V10.2.7.0.PFGINXM:user/release-keys__2019-02-05
