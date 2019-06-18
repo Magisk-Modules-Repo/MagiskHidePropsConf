@@ -311,9 +311,7 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
 ### Known issues
-- MagiskHide Props Config v2.7.2 and earlier versions won't work on Magisk v18.1-d73127b1(18006) or later, due to internal changes in Magisk.
-- Xiaomi devices (MIUI) sometimes have issues passing the ctsProfile check on Magisk releases up to v18.1, particularly China ROMs. Try updating to a newer Magisk version, since MagiskHide has been greatly improved since v18.1.
-- If you're on Android Pie you will have to use Magisk v17.2+. Any version prior to that will not be able to change the required prop values. This is because of a change in Android Pie, and with Magisk v17.2 the resetprop tool was updated for this change.
+- EdXposed sometimes causes Magisk's boot process to fail, resulting in the module boot scripts (mainly service.sh) not running as they should. Until this has been fixed with EdXposed, the only solution is to disable it.
 
 ### Requires Magisk v19+
 If the module won't install, with the message that Magisk v19+ is required, but you have Magisk v19+ installed, that means that your Magisk installation is broken. It's likely that you did not update properly (always update directly from the Manager) from a previous Magisk version (or something along those lines) and core parts of Magisk are still from an old install. The solution is to do a reinstallation by using "Direct install" in the Magisk Manager. If you for some reason can't do a direct install you're likely going to have to uninstall Magisk and start over.
