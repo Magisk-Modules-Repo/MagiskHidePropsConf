@@ -189,7 +189,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v59_**
+**_Current fingerprints list version - v60_**
 
 
 ## Please add support for device X
@@ -642,7 +642,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 
 
 ## Current fingerprints list
-### List v59  
+### List v60  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 4 Max (7.1.1)
 - Asus Zenfone 6 (9.0)
@@ -688,6 +688,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - Huawei P9 Lite (7.0)
 - Huawei P9 Plus (7.0)
 - Huawei P20 (9)
+- Huawei P20 Lite (8.0.0 & 9)
 - Huawei P20 Pro (8.1.0 & 9)
 - Lenovo K6 Note (7.0)
 - LeEco Le Pro3 (6.0.1)
@@ -710,11 +711,13 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - Motorola Moto E4 Plus (7.1.1)
 - Motorola Moto E5 Play (8.0.0)
 - Motorola Moto E5 Plus (8.0.0)
-- Motorola Moto G4 (7.0)
+- Motorola Moto G4 (7.0 & 8.1.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
 - Motorola Moto G5S (7.1.1 & 8.1.0)
+- Motorola Moto G6 (9)
 - Motorola Moto G6 Play (8.0.0 & 9)
+- Motorola Moto G6 Plus (9)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
 - Nextbook Ares 8A (6.0.1)
@@ -770,6 +773,7 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 - Sony Xperia X Dual (8.0.0)
 - Sony Xperia X Performance (8.0.0)
 - Sony Xperia X Performance Dual (8.0.0)
+- Sony Xperia XA2 Dual (8.0.0)
 - Sony Xperia XZ (8.0.0)
 - Sony Xperia XZ Dual (8.0.0)
 - Sony Xperia XZ Premium (8.0.0)
