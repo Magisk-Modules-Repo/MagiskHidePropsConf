@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=60
+PRINTSV=61
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -171,7 +171,7 @@ Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.5.4.0.NAGMIFD:user/r
 Xiaomi Mi 5S Plus (6.0.1 & 7.0)=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys;Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
 Xiaomi Mi 8 (8.1.0 & 9)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01
-Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.26.0.PFAEUXM:user/release-keys__2019-04-01
+Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi A1 (8.0.0 & 9)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys__2019-01-05
 Xiaomi Mi A2 (8.1.0 & 9)=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.16.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.7.0.PDIMIXM:user/release-keys__2019-03-05
 Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
@@ -191,6 +191,7 @@ Xiaomi Redmi 4 Prime (6.0.1)=Xiaomi/markw/markw:6.0.1/MMB29M/V9.5.3.0.MBEMIFA:us
 Xiaomi Redmi 4X (6.0.1)=Xiaomi/santoni/santoni:6.0.1/MMB29M/V8.5.4.0.MAMCNED:user/release-keys
 Xiaomi Redmi 5A (7.1.2)=Xiaomi/riva/riva:7.1.2/N2G47H/V9.1.8.0.NCKMIEI:user/release-keys
 Xiaomi Redmi Go (8.1.0)=Xiaomi/tiare/tiare:8.1.0/OPM1.171019.026/V10.2.6.0.OCLMIXM:user/release-keys__2019-01-01
+Xiaomi Redmi K20 Pro (9)=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01
 Xiaomi Redmi Note 2 (5.0.2)=Xiaomi/hermes/hermes:5.0.2/LRX22G/V9.2.4.0.LHMMIEK:user/release-keys
 Xiaomi Redmi Note 3 Pro (6.0.1)=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL:user/release-keys
 Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
