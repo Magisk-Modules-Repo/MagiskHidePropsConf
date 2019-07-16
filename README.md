@@ -4,7 +4,7 @@
 
 [Support Thread @ XDA](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228)
 
-If you find  useful, please don't hesitate to [support the work involved](https://www.paypal.me/didgeridoohan).
+If you find the module useful, please don't hesitate to [support the work involved](https://www.paypal.me/didgeridoohan).
 
 ## What's this?
 This module is a very complicated way of doing something very simple. Complicated for me, that is... The aim is to make it easy for you, the user. The module changes prop values using the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop), something that is very easy to do with a [Magisk boot script](https://github.com/topjohnwu/Magisk/blob/master/docs/details.md#magisk-booting-process) and some simple commands. This is very useful for a lot of things, among others to help pass the SafetyNet CTS Profile check on custom and uncertified ROMs. And of course for any normal modification of your device that is done by altering build.prop or similar files.
