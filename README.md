@@ -2,8 +2,9 @@
 ## By Didgeridoohan @ XDA Developers
 
 
-[Support Thread @ XDA](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228)
+[Support Thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228)<a href="https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228"><img src="https://img.shields.io/badge/-XDA-orange.svg"></a>  
 
+<a href="https://www.paypal.me/didgeridoohan"><img src="https://img.shields.io/badge/-PayPal-blue.svg"></a>  
 If you find the module useful, please don't hesitate to [support the work involved](https://www.paypal.me/didgeridoohan).
 
 ## What's this?
