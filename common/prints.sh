@@ -4,13 +4,14 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=62
+PRINTSV=63
 PRINTSTRANSF=350
 
 # Certified fingerprints
 PRINTSLIST="
 Asus Zenfone 2 Laser (6.0.1)=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus Zenfone 4 Max (7.1.1)=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys
+Asus ZenFone 5Z (9)=asus/WW_Z01RD/ASUS_Z01R_1:9/PPR1.180610.009/WW_90.11.162.72_20190531:user/release-keys__2019-05-01
 Asus Zenfone 6 (9.0)=asus/WW_I01WD/ASUS_I01WD:9/PPR2.181005.003/16.1210.1906.156-0:user/release-keys__2019-06-01
 Asus Zenfone Max M1 (8.0.0)=asus/WW_X00PD/ASUS_X00P_4:8.0.0/OPR1.170623.032/15.00.1907.103:user/release-keys__2019-07-05
 Asus Zenfone Max Pro M1 (8.1.0)=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.1902.340-20190216:user/release-keys__2019-02-01 
@@ -67,7 +68,8 @@ LG G6 H870 (7.0 & 8.0.0)=lge/lucye_global_com/lucye:7.0/NRD90U/171732341982c:use
 LG G6 H872 (8.0.0)=lge/lucye_tmo_us/lucye:8.0.0/OPR1.170623.032/183621644ce05:user/release-keys__2019_01-01
 LG V20 H918 (8.0.0)=lge/elsa_tmo_us/elsa:8.0.0/OPR1.170623.032/1831917495b33:user/release-keys__2018-11-01
 LG V20 H910 (8.0.0)=lge/elsa_att_us/elsa:8.0.0/OPR1.170623.032/181871124f959:user/release-keys__2018-06-01
-LG V20 LS997 (7.0)=lge/elsa_spr_us/elsa:8.0.0/OPR1.170623.032/1819814314eb7:user/release-keys__2018-07-01
+LG V20 H990DS (7.0)=lge/elsa_global_com/elsa:7.0/NRD90M/1801800193678:user/release-keys
+LG V20 LS997 (8.0.0)=lge/elsa_spr_us/elsa:8.0.0/OPR1.170623.032/1819814314eb7:user/release-keys__2018-07-01
 LG V20 US996 (8.0.0)=lge/elsa_nao_us/elsa:8.0.0/OPR1.170623.032/183241436cd40:user/release-keys__2018-11-01
 LG V20 VS995 (8.0.0)=lge/elsa_vzw/elsa:8.0.0/OPR1.170623.032/183141449275f:user/release-keys__2018-10-01
 LG V30 H930 (8.0.0)=lge/joan_global_com/joan:8.0.0/OPR1.170623.026/181381736b4e9:user/release-keys__2018-11-05
@@ -92,14 +94,17 @@ Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
-OnePlus 3 (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01;OnePlus/OnePlus3/OnePlus3:9/PKQ1.181203.001/1905102347:user/release-keys__2019-04-01
-OnePlus 3T (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1905102346:user/release-keys__2019-04-01
-OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1812102249:user/release-keys__2018-12-01
-OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1907181439:user/release-keys__2019-06-01
-OnePlus 6 (8.1.0 & 9)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1809150000:user/release-keys__2018-09-05
-OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1901231231:user/release-keys__2019-01-01
-OnePlus 7 Pro (9)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01
-OnePlus 7 Pro NR (9)=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1907280803:user/release-keys__2019-06-01
+OnePlus 3 (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01;OnePlus/OnePlus3/OnePlus3:9/PKQ1.181203.001/1907311932:user/release-keys__2019-08-01
+OnePlus 3T (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1907311932:user/release-keys__2019-08-01
+OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1907311824:user/release-keys__2019-08-01
+OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1907311828:user/release-keys__2019-08-01
+OnePlus 6 (8.1.0 & 9)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01
+OnePlus 6T (9)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01
+OnePlus 7 GM1901/GM1905 (9)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
+OnePlus 7 GM1903 (9)=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
+OnePlus 7 Pro GM1911/GM1917 (9)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01
+OnePlus 7 Pro GM1913 (9)=OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01
+OnePlus 7 Pro NR GM1920 (9)=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1907280803:user/release-keys__2019-06-01
 OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
