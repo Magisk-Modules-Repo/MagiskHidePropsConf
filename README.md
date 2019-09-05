@@ -86,7 +86,7 @@ The current release is always attached to the OP of the [module support thread](
 
 
 ## Usage
-After installing the module and rebooting, run the command `props` in a terminal emulator (you can find a one on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options. If you use Termux, you'll have to call su before running the command.
+After installing the module and rebooting, run the command `props` in terminal (you can find a terminal emulator on [F-Droid](https://f-droid.org/) or in the [Play Store](https://play.google.com/store/apps)), and follow the instructions to set your desired options. If you use Termux, you'll have to call su before running the command.
 
 You can also run the command with options. Use -h for details.
 
