@@ -9,7 +9,7 @@
 # =================================================================
 
 # Required module version (or newer). Do not edit this value!
-CONFTRANSF=351
+CONFTRANSF=500
 
 # Device fingerprint
 CONFFINGERPRINT=""
@@ -19,18 +19,16 @@ CONFPATCHBOOT=late
 
 # Device simulation
 CONFDEVSIM=false
-CONFBRAND=true
-CONFNAME=true
-CONFDEVICE=true
-CONFRELEASE=true
-CONFID=true
-CONFINCREMENTAL=true
+CONFBRAND=false
+CONFNAME=false
+CONFDEVICE=false
+CONFRELEASE=false
+CONFID=false
+CONFINCREMENTAL=false
 CONFDESCRIPTION=true
-CONFSDK=true
+CONFDISPLAY=false
+CONFSDK=false
 CONFSIMBOOT=default
-
-# Edit prop files
-CONFPROPFILES=false
 
 # MagiskHide sensitive props
 CONFDEBUGGABLE=""
@@ -104,8 +102,8 @@ CONFUPDATE=true
 # Keymaster 4 (bootloops). If the prop doesn't seem to set properly, try changing the stage.
 
 # CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
-# CONFID, CONFINCREMENTAL, CONFDESCRIPTION and CONFSDK are used to set a number
-# of props to simulate a certain deviced based on the fingerprint used.
+# CONFID, CONFINCREMENTAL, CONFDESCRIPTION, CONFDISPLAY and CONFSDK are used to
+# set a number of props to simulate a certain deviced based on the fingerprint used.
 # CONFDESCRIPTION will automatically be applied if a fingerprint is set
 # by the module, but the other props will only be set if CONFDEVSIM is
 # set to true, and the default setting for all props are that they will be
@@ -116,9 +114,6 @@ CONFUPDATE=true
 # If the setting is changed to "post" or "late", the props will be set during either
 # post-fs-data or late_start service mode. This is useful if props don't seem to set
 # propely or the module's boot script seems to be causing issues during boot.
-
-# CONFPROPFILES should be set to "true" if you want to mask the file
-# values in build.prop and default.prop. For better root hiding.
 
 # The MagiskHide prop variables can be set as follows:
 # CONFDEBUGGABLE - 0 or 1 (set to "0" by MagiskHide - sensitive value is "1")

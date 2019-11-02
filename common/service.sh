@@ -18,6 +18,11 @@ fi
 
 log_script_chk "Running service.sh module script."
 
+# Retrieving default values from props file
+log_handler "Saving device default values."
+default_save
+log_handler "Default values saved to $LATEFILE."
+
 # Edits prop values if set for late_start service
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 log_handler "Editing prop values in late_start service mode."
@@ -65,16 +70,6 @@ if [ "$PROPEDIT" == 1 ]; then
 	done
 fi
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
-
-# ---Edits default.prop---
-if [ "$DEFAULTEDIT" == 1 ] && [ "$FILESAFE" == 0 ]; then
-	log_handler "Editing default.prop."
-	mount -wo remount rootfs /
-	change_prop_file "default"
-	mount -ro remount rootfs /
-else
-	log_handler "Default.prop editing disabled."
-fi
 
 # Get currently saved values
 log_handler "Checking current values."

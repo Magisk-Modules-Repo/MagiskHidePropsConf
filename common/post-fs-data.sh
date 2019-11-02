@@ -10,9 +10,6 @@ BOOTSTAGE="post"
 # Load functions
 . $MODPATH/util_functions.sh
 
-# Variables
-MODULESPATH=$(dirname "$MODPATH")
-
 # Start logging
 log_start
 bb_check
@@ -33,16 +30,26 @@ if [ "$PRINTCHK" == 1 ]; then
 fi
 
 # Check for the boot script and restore backup if deleted, or if the resetfile is present
+RESETFILE=""
+for ITEM in $RESETFILELST; do
+	if [ -f "$ITEM" ]; then
+		RESETFILE="$ITEM"
+		break
+	fi
+done
 if [ ! -f "$LATEFILE" ] || [ -f "$RESETFILE" ]; then
 	if [ -f "$RESETFILE" ]; then
 		RSTTXT="Resetting"
-		rm -f $RESETFILE
+		for ITEM in $RESETFILELST; do
+			rm -f $ITEM
+		done
 	else
 		RSTTXT="Restoring"
 		log_handler "The module settings file could not be found."
 	fi	
 	log_handler "$RSTTXT module settings file (${LATEFILE})."
 	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
+	rm -f $MODPATH/system.prop >> $LOGFILE 2>&1
 fi
 
 # Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
@@ -65,38 +72,12 @@ else
 	replace_fn PRINTMODULE 1 0 $LATEFILE
 fi
 
-# Get default values
-log_handler "Checking device default values."
+# Save default values
+log_handler "Saving device prop values."
+resetprop > $MHPCPATH/defaultprops
+log_handler "Prop values saved to $MHPCPATH/defaultprops."
 
-# Save default file values in propsconf_late
-for ITEM in $VALPROPSLIST; do
-	TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
-	ORIGPROP="ORIG${TMPPROP}"
-	ORIGTMP="$(get_file_value $LATEFILE "${ORIGPROP}=")"
-	CURRPROP="CURR${TMPPROP}"
-	CURRTMP="$(resetprop $ITEM)"
-	replace_fn $ORIGPROP "\"$ORIGTMP\"" "\"$CURRTMP\"" $LATEFILE
-done
-log_handler "Default values saved to $LATEFILE."
-
-# Check if default file values are safe
-replace_fn FILESAFE 0 1 $LATEFILE
-for V in $PROPSLIST; do
-	FILEVALUE=$(resetprop $V)
-	log_handler "Checking ${V}=${FILEVALUE}"
-	safe_props $V $FILEVALUE
-	if [ "$SAFE" == 0 ]; then
-		echo "Prop $V set to triggering value in prop file." >> $LOGFILE 2>&1
-		replace_fn FILESAFE 1 0 $LATEFILE
-	else
-		if [ -z "$FILEVALUE" ]; then
-			echo "Could not retrieve value for prop $V." >> $LOGFILE 2>&1
-		elif [ "$SAFE" == 1 ]; then
-			echo "Prop $V set to \"safe\" value in prop file." >> $LOGFILE 2>&1
-		fi
-	fi
-done
-# Loading the new values
+# Loading module settings
 . $LATEFILE
 
 # Checks for configuration file
@@ -138,54 +119,6 @@ custom_edit "CUSTOMPROPSPOST"
 # Deleting props
 prop_del
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
-
-# Edits build.prop
-if [ "$FILESAFE" == 0 ]; then
-	log_handler "Checking for conflicting build.prop modules."
-	# Checks if any other modules are using a local copy of build.prop
-	BUILDMODULE=false
-	MODID=$(get_file_value $MODPATH/module.prop "id=")
-	for D in $(ls $MODULESPATH); do
-		if [ $D != "$MODID" ]; then
-			if [ -f "$MODULESPATH/$D/system/build.prop" ] || [ "$D" == "safetypatcher" ]; then
-				if [ ! -f "$MODULESPATH/$D/disable" ]; then
-					NAME=$(get_file_value $MODULESPATH/$D/module.prop "name=")
-					log_handler "Conflicting build.prop editing in module '$NAME'."
-					BUILDMODULE=true
-				fi
-			fi
-		fi
-	done
-	if [ "$BUILDMODULE" == "true" ]; then
-		replace_fn BUILDPROPENB 1 0 $LATEFILE
-	else
-		replace_fn BUILDPROPENB 0 1 $LATEFILE
-	fi
-
-	# Copies the stock build.prop to the module. Only if set in propsconf_late.
-	if [ "$BUILDPROPENB" == 1 ] && [ "$BUILDEDIT" == 1 ]; then
-		log_handler "Stock build.prop copied to module."
-		cp -af $MIRRORLOC/build.prop $MODPATH/system/build.prop >> $LOGFILE 2>&1
-		
-		# Edits the module copy of build.prop
-		log_handler "Editing build.prop."
-		# ro.build props
-		change_prop_file "build"
-		# Fingerprint
-		if [ "$MODULEFINGERPRINT" ] && [ "$SETFINGERPRINT" == "true" ] && [ "$FINGERPRINTENB" == 1 ]; then
-			PRINTSTMP="$(grep "$ORIGFINGERPRINT" $MIRRORLOC/build.prop)"
-			for ITEM in $PRINTSTMP; do
-				replace_fn $(get_eq_left "$ITEM") $(get_eq_right "$ITEM") $(echo $MODULEFINGERPRINT | sed 's|\_\_.*||') $MODPATH/system/build.prop && log_handler "$(get_eq_left "$ITEM")=$(echo $MODULEFINGERPRINT | sed 's|\_\_.*||')"
-			done
-		fi
-	else
-		rm -f $MODPATH/system/build.prop
-		log_handler "Build.prop editing disabled."
-	fi
-else
-	rm -f $MODPATH/system/build.prop
-	log_handler "Prop file editing disabled. All values ok."
-fi
 
 log_script_chk "post-fs-data.sh module script finished.\n\n===================="
 
