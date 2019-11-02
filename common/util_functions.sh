@@ -17,9 +17,6 @@ MODULESPATH=$ADBPATH/modules
 MHPCPATH=$ADBPATH/mhpc
 if [ "$INSTFN" ]; then
 	# Installation (config.sh)
-	if [ ! -d "$MHPCPATH" ]; then
-		mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
-	fi
 	MODVERSION=$(echo $(get_file_value $TMPDIR/module.prop "version=") | sed 's|-.*||')	
 	POSTPATH=$ADBPATH/post-fs-data.d
 	SERVICEPATH=$ADBPATH/service.d
