@@ -379,6 +379,12 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.0.1  
+- Fixed issue with settings being cleared when updating from earlier module versions. Sorry if anyone got all their custom props removed...
+- Fixed issue with creating a custom prints list.
+- Fixed issue with saving Magisk log.
+- Added fingerprint for Xiaomi Note 7 Pro. Fingerprints list updated to v65.
+
 ### v5.0.0  
 - Updated possible locations for both the configuration and reset files (can now be placed in the root of internal storage, in /data or in /cache).
 - Updated device simulation so that all props now are disabled by default. Should hopefully make a few less careless users experience issues caused by the feature. NOTE! All simulation prop values will be disabled with this update. If you did have basic simulation enabled prior to the update, you have to manually enable it again.

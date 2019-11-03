@@ -44,10 +44,10 @@ print_modname() {
 	# Load functions and variables
 	INSTFN=true
 	. $TMPDIR/util_functions.sh
-	
+
 	# Create install directory
 	mkdir -pv $MHPCPATH
-	
+
 	# Start module installation log
 	log_start
 	# Check Magisk version

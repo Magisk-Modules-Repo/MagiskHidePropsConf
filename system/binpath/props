@@ -1882,7 +1882,7 @@ menu_set_custprop() {
 			echo "Do you want to continue?"
 			echo ""
 			echo "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}e${N}(xit)"
-			echo -n " or an option from above: "
+			echo -n "or an option from above: "
 			read -r INPUT5
 		fi
 		case "$INPUT5" in

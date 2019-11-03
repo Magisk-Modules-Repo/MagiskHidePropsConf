@@ -38,9 +38,6 @@ if [ "$INSTFN" ]; then
 	$CACHELOC/propsconf_last.log
 	"
 	LOGFILE=$MHPCPATH/propsconf_install.log
-	UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
-	UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
-	NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
 	SETTINGSLIST="
 	FINGERPRINTENB
 	PRINTMODULE
@@ -108,8 +105,8 @@ else
 	TMPLOGLOC=$MHPCPATH/propslogs
 	TMPLOGLIST="
 	$MHPCPATH/defaultprops
-	$MHPCPATH/magisk.log
-	$MHPCPATH/magisk.log.bak
+	$CACHELOC/magisk.log
+	$CACHELOC/magisk.log.bak
 	$MHPCPATH/propsconf*
 	$MIRRORPATH/system/build.prop
 	$MIRRORPATH/vendor/build.prop
@@ -140,7 +137,7 @@ PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Prop
 PRINTSDEV="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/prints.sh"
 PRINTFILES=$MODPATH/printfiles
 CSTMPRINTS=/sdcard/printslist
-CSTMFILE=$PRINTFILES/custom.sh
+CSTMFILE=$PRINTFILES/Custom.sh
 
 # Known modules that edit device fingerprint
 USNFLIST="
@@ -882,6 +879,9 @@ system_prop_cont() {
 # ======================== Installation functions ========================
 # Places various module scripts in their proper places
 script_placement() {
+	UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
+	UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
+	NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
 	if [ -f "$LATEFILE" ] && [ -d "$MODULESPATH/MagiskHidePropsConf" ]; then
 		FILEV=$(get_file_value $LATEFILE "SCRIPTV=")
 		FILETRANSF=$(get_file_value $LATEFILE "SETTRANSF=")
@@ -907,7 +907,7 @@ script_placement() {
 			if [ "$FILEV" == 0 ]; then
 				log_print "- Placing settings script"
 			# Updated script with a required clearing of settings
-			elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ -z "$NOTTRANSF" ]; then
+			elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ ! "$NOTTRANSF" ]; then
 				log_handler "Current transfer version - ${FILETRANSF}"
 				log_handler "Update transfer version - ${UPDATETRANSF}"
 				log_handler "No settings set to not transfer"
@@ -1027,7 +1027,7 @@ bin_check() {
 	mv -f $MODPATH/system/binpath $MODPATH/system/$BIN >> $LOGFILE 2>&1
 }
 
-# Check for late_start service boot script in post-fs-data.d, in case someone's moved it, delete the old propsconf_post boot script if present and remove a few old log files from /cache
+# Function for removing screwed up and old files.
 files_check() {
 	if [ -f "$POSTLATEFILE" ]; then
 		log_handler "Removing late_start service boot script from post-fs-data.d."
@@ -1043,6 +1043,10 @@ files_check() {
 			rm -f $ITEM
 		fi
 	done
+	if [ -f "" ]; then
+		log_handler "Removing broken custom.sh file."
+		$PRINTFILES/custom.sh
+	fi
 }
 
 # Update the device simulation variables if a fingerprint is set
