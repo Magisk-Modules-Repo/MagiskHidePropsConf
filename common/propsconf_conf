@@ -9,7 +9,7 @@
 # =================================================================
 
 # Required module version (or newer). Do not edit this value!
-CONFTRANSF=500
+CONFTRANSF=510
 
 # Device fingerprint
 CONFFINGERPRINT=""
@@ -52,6 +52,7 @@ CONFBOOT=default
 CONFCOLOUR=true
 CONFWEB=true
 CONFUPDATE=true
+CONFBACK=false
 
 # =================================================================
 # ========================== Instructions =========================
@@ -96,9 +97,9 @@ CONFUPDATE=true
 # propely or the module's boot script seems to be causing issues during boot.
 #
 # CONFPATCHBOOT is by default set to using late_start service boot stage for setting 
-# ro.build.version.security_patch. If the setting is changed to "default" or "late",
-# the prop will be set during either the default or late_start service stage. The
-# late_start service boot stage is used as to not cause issues for devices with 
+# ro.build.version.security_patch. If the setting is changed to "default" or "post",
+# the prop will be set during either the default or post-fs-data stage. The
+# late_start service boot stage is used by default as to not cause issues for devices with 
 # Keymaster 4 (bootloops). If the prop doesn't seem to set properly, try changing the stage.
 
 # CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
@@ -165,5 +166,7 @@ CONFUPDATE=true
 # post-fs-data or  late_start service mode. This is useful if props don't seem to set
 # propely or the module's boot script seems to be causing issues during boot.
 #
-# CONFCOLOUR, CONFWEB and CONFUPDATE are the options for scrit colours, automatic fingerprints
-# list update and automatic update of the set fingerprint. See the module documentation for more details. Set to "true" or "false".
+# CONFCOLOUR, CONFWEB, CONFUPDATE and CONFBACK are the options for scrit colours,
+# automatic fingerprints list update, automatic update of the set fingerprint and
+# background execution of the post-fs-data.sh boot script.
+# See the module documentation for more details. Set to "true" or "false".

@@ -36,10 +36,10 @@ set_permissions() {
 ##########################################################################################
 
 print_modname() {
-	ui_print "*******************************"
-	ui_print "MagiskHide Props Config $(grep "version=" $TMPDIR/module.prop | sed 's|.*=||' | sed 's|-.*||')"
-	ui_print "    By Didgeridoohan @XDA"
-	ui_print "*******************************"
+	ui_print "  *******************************"
+	ui_print "  MagiskHide Props Config $(grep "version=" $TMPDIR/module.prop | sed 's|.*=||' | sed 's|-.*||')"
+	ui_print "      By Didgeridoohan @XDA"
+	ui_print "  *******************************"
 
 	# Load functions and variables
 	INSTFN=true
@@ -49,7 +49,12 @@ print_modname() {
 	mkdir -pv $MHPCPATH
 
 	# Start module installation log
-	log_start
+	echo "***************************************************" > $LOGFILE 2>&1
+	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
+	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
+	echo "***************************************************" >> $LOGFILE 2>&1
+	log_handler "Starting module installation script"
+		
 	# Check Magisk version
 	if [ $MAGISK_VER_CODE -lt 19000 ]; then
 		ui_print ""

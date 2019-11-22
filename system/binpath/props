@@ -81,7 +81,7 @@ if [ -z "$BBPATH" ]; then
 	menu_header "${C}No Busybox found${N}"
 	echo ""
 	echo "You don't seem to have Busybox installed"
-	echo "to your system. Please install it, since"
+	echo "on your device. Please install it, since"
 	echo "it is required to ensure proper"
 	echo "functionality of the scripts."
 	echo ""
@@ -366,23 +366,28 @@ menu_pick_print() {
 				break
 			fi
 		fi
-		if [ "$INPUT3" -ge 1 ] && [ "$INPUT3" -lt "$ITEMCOUNT" ]; then
-			ITEMCOUNT=1
-			for ITEM in $OEMLIST; do
-				if [ "$ITEMCOUNT" == "$INPUT3" ]; then
-					menu_pick_print_sub "$HEADERPRINTV" "$ITEM"
-					break
+		case "$INPUT3" in
+			b|B)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$INPUT3" -ge 1 -a "$INPUT3" -lt "$ITEMCOUNT" ]; then
+					ITEMCOUNT=1
+					for ITEM in $OEMLIST; do
+						if [ "$ITEMCOUNT" == "$INPUT3" ]; then
+							menu_pick_print_sub "$HEADERPRINTV" "$ITEM"
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				else
+					invalid_input 1 3
 				fi
-				ITEMCOUNT=$(($ITEMCOUNT+1))
-			done
-		elif [ "$INPUT3" == "b" ] || [ "$INPUT3" == "B" ]; then
-			INPUT2=""
-			break
-		elif [ "$INPUT3" == "e" ] || [ "$INPUT3" == "E" ]; then
-			exit_fn
-		else
-			invalid_input 1 3
-		fi
+			;;
+		esac
 	done
 }
 
@@ -433,40 +438,45 @@ menu_pick_print_sub() {
 			echo -n "Enter your desired option: "
 			read -r INPUT4
 		fi
-		if [ "$INPUT4" -ge 1 ] && [ "$INPUT4" -lt "$ITEMCOUNT" ]; then
-			ITEMCOUNT=1
-			SAVEIFS=$IFS
-			IFS=$(echo -en "\n\b")
-			for ITEM in $PRINTSLIST; do
-				if [ "$ITEMCOUNT" == "$INPUT4" ]; then
-					case "$ITEM" in
-						*\;*)
-							IFS=$SAVEIFS
-							menu_pick_print_version "$1" "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")"
-							INPUT2=""
-							INPUT3=""
-							break
-						;;
-						*)
-							IFS=$SAVEIFS
-							menu_new_print "$1" "$(get_eq_right "$ITEM")"
-							INPUT2=""
-							INPUT3=""
-							break
-						;;
-					esac
+		case "$INPUT4" in
+			b|B)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$INPUT4" -ge 1 -a "$INPUT4" -lt "$ITEMCOUNT" ]; then
+					ITEMCOUNT=1
+					SAVEIFS=$IFS
+					IFS=$(echo -en "\n\b")
+					for ITEM in $PRINTSLIST; do
+						if [ "$ITEMCOUNT" == "$INPUT4" ]; then
+							case "$ITEM" in
+								*\;*)
+									IFS=$SAVEIFS
+									menu_pick_print_version "$1" "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")"
+									INPUT2=""
+									INPUT3=""
+									break
+								;;
+								*)
+									IFS=$SAVEIFS
+									menu_new_print "$1" "$(get_eq_right "$ITEM")"
+									INPUT2=""
+									INPUT3=""
+									break
+								;;
+							esac
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+					IFS=$SAVEIFS
+				else
+					invalid_input 1 4
 				fi
-				ITEMCOUNT=$(($ITEMCOUNT+1))
-			done
-			IFS=$SAVEIFS
-		elif [ "$INPUT4" == "b" ] || [ "$INPUT4" == "B" ]; then
-			INPUT3=""
-			break
-		elif [ "$INPUT4" == "e" ] || [ "$INPUT4" == "E" ]; then
-			exit_fn
-		else
-			invalid_input 1 4
-		fi
+			;;
+		esac
 	done
 }
 
@@ -496,34 +506,38 @@ menu_pick_print_version() {
 			echo -n "Enter your desired option: "
 			read -r INPUT5
 		fi
-		if [ "$INPUT5" -ge 1 ] && [ "$INPUT5" -lt "$ITEMCOUNT" ]; then
-			ITEMCOUNT=1
-			for ITEM in $ANDROIDV; do
-				if [ "$ITEMCOUNT" == "$INPUT5" ]; then
-					TMPPRINT="$(echo $3 | cut -f $ITEMCOUNT -d ';')"
-					menu_new_print "$1" "$TMPPRINT"
-					INPUT2=""
-					INPUT3=""
-					INPUT4=""
-					break
+		case "$INPUT5" in
+			b|B)
+				INPUT4=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$INPUT5" -ge 1 -a "$INPUT5" -lt "$ITEMCOUNT" ]; then
+					ITEMCOUNT=1
+					for ITEM in $ANDROIDV; do
+						if [ "$ITEMCOUNT" == "$INPUT5" ]; then
+							TMPPRINT="$(echo $3 | cut -f $ITEMCOUNT -d ';')"
+							menu_new_print "$1" "$TMPPRINT"
+							INPUT2=""
+							INPUT3=""
+							INPUT4=""
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				else
+					invalid_input 1 5
 				fi
-				ITEMCOUNT=$(($ITEMCOUNT+1))
-			done
-		elif [ "$INPUT5" == "b" ] || [ "$INPUT5" == "B" ]; then
-			INPUT4=""
-			break
-		elif [ "$INPUT5" == "e" ] || [ "$INPUT5" == "E" ]; then
-			exit_fn
-		else
-			invalid_input 1 5
-		fi
+			;;
+		esac
 	done
 }
 
 # Sixth menu level - confirm fingerprint
 menu_new_print() {
 	INPUT6=""
-	PRINTDISP="$(get_print_display $2)"
 	while true
 	do
 		if [ -z "$INPUT6" ]; then
@@ -532,7 +546,7 @@ menu_new_print() {
 			echo "You are about to use the following as your device's fingerprint."
 			echo ""
 			get_device_used "$2"
-			echo "${V}$PRINTDISP${N}"
+			echo "${V}$(get_print_display $2)${N}"
 			echo ""
 			echo "Make sure that it is correct before continuing."
 			echo "Do you want to continue?"
@@ -1436,50 +1450,60 @@ menu_custom_props() {
 				echo -n "Enter your desired option: "
 				read -r INPUT2
 			fi
-			if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					ITEMCOUNT=1
-					for ITEM in $CUSTOMPROPSLIST; do
-						if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-							menu_edit_custprop "$(get_eq_left "$ITEM")"
-							break
+			case "$INPUT2" in
+				y|Y)
+					if [ "$CTRLSET" == 1 ]; then
+						invalid_input 1 2
+					elif [ "$CTRLSET" == 0 ]; then
+						replace_fn CUSTOMEDIT 0 1 $LATEFILE
+						INPUT=""
+						break
+					fi
+				;;
+				n|N)
+					if [ "$CTRLSET" == 1 ]; then
+						menu_new_custprop "New custom prop"
+					elif [ "$CTRLSET" == 0 ]; then
+						INPUT=""
+						break
+					fi
+				;;
+				r|R)
+					if [ "$CTRLSET" == 1 ]; then
+						menu_reset_all_custprop "Reset all custom props"
+					elif [ "$CTRLSET" == 0 ]; then
+						menu_reset_all_custprop "Reset all custom props"
+					fi
+				;;
+				b|B)
+					if [ "$CTRLSET" == 1 ]; then
+						INPUT=""
+						break
+					elif [ "$CTRLSET" == 0 ]; then
+						invalid_input 4 2
+					fi
+				;;
+				e|E) exit_fn
+				;;
+				*)
+					if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] && [ "$CTRLSET" == 1 ]; then
+						ITEMCOUNT=1
+						for ITEM in $CUSTOMPROPSLIST; do
+							if [ "$ITEMCOUNT" == "$INPUT2" ]; then
+								menu_edit_custprop "$(get_eq_left "$ITEM")"
+								break
+							fi
+							ITEMCOUNT=$(($ITEMCOUNT+1))
+						done
+					else
+						if [ "$CTRLSET" == 1 ]; then
+							invalid_input 1 2
+						elif [ "$CTRLSET" == 0 ]; then
+							invalid_input 4 2
 						fi
-						ITEMCOUNT=$(($ITEMCOUNT+1))
-					done
-				elif [ "$CTRLSET" == 0 ]; then
-					replace_fn CUSTOMEDIT 0 1 $LATEFILE
-					INPUT=""
-					break
-				fi
-			elif [ "$INPUT2" == "n" ] || [ "$INPUT2" == "N" ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					menu_new_custprop "New custom prop"
-				elif [ "$CTRLSET" == 0 ]; then
-					INPUT=""
-					break
-				fi
-			elif [ "$INPUT2" == "r" ] || [ "$INPUT2" == "R" ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					menu_reset_all_custprop "Reset all custom props"
-				elif [ "$CTRLSET" == 0 ]; then
-					menu_reset_all_custprop "Reset all custom props"
-				fi
-			elif [ "$INPUT2" == "b" ] || [ "$INPUT2" == "B" ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					INPUT=""
-					break
-				elif [ "$CTRLSET" == 0 ]; then
-					invalid_input 4 2
-				fi
-			elif [ "$INPUT2" == "e" ] || [ "$INPUT2" == "E" ]; then
-				exit_fn
-			else
-				if [ "$CTRLSET" == 1 ]; then
-					invalid_input 1 2
-				elif [ "$CTRLSET" == 0 ]; then
-					invalid_input 4 2
-				fi
-			fi
+					fi
+				;;
+			esac
 		fi
 	done
 }
@@ -1868,6 +1892,7 @@ menu_set_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will set ${C}$1${N} to:"
+			echo ""
 			echo "${C}$2${N}"
 			echo ""
 			echo "Pick an option below to change"
@@ -2009,50 +2034,60 @@ menu_delete_props() {
 				echo -n "Enter your desired option: "
 				read -r INPUT2
 			fi
-			if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] || [ "$INPUT2" == "y" -a "@CTRLSET" == 0 ] || [ "$INPUT2" == "Y" -a "@CTRLSET" == 0 ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					ITEMCOUNT=1
-					for ITEM in $DELETEPROPS; do
-						if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-							menu_reset_delprop "$ITEM"
-							break
+			case "$INPUT2" in
+				y|Y)
+					if [ "$CTRLSET" == 1 ]; then
+						invalid_input 1 2
+					elif [ "$CTRLSET" == 0 ]; then
+						replace_fn DELEDIT 0 1 $LATEFILE
+						INPUT=""
+						break
+					fi
+				;;
+				n|N)
+					if [ "$CTRLSET" == 1 ]; then
+						menu_new_delprop "New prop"
+					elif [ "$CTRLSET" == 0 ]; then
+						INPUT=""
+						break
+					fi
+				;;
+				r|R)
+					if [ "$CTRLSET" == 1 ]; then
+						menu_reset_all_delprop "Reset all props"
+					elif [ "$CTRLSET" == 0 ]; then
+						menu_reset_all_delprop "Reset all props"
+					fi
+				;;
+				b|B)
+					if [ "$CTRLSET" == 1 ]; then
+						INPUT=""
+						break
+					elif [ "$CTRLSET" == 0 ]; then
+						invalid_input 4 2
+					fi
+				;;
+				e|E) exit_fn
+				;;
+				*)
+					if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] && [ "$CTRLSET" == 1 ]; then
+						ITEMCOUNT=1
+						for ITEM in $DELETEPROPS; do
+							if [ "$ITEMCOUNT" == "$INPUT2" ]; then
+								menu_reset_delprop "$ITEM"
+								break
+							fi
+							ITEMCOUNT=$(($ITEMCOUNT+1))
+						done
+					else
+						if [ "$CTRLSET" == 1 ]; then
+							invalid_input 1 2
+						elif [ "$CTRLSET" == 0 ]; then
+							invalid_input 4 2
 						fi
-						ITEMCOUNT=$(($ITEMCOUNT+1))
-					done
-				elif [ "$CTRLSET" == 0 ]; then
-					replace_fn DELEDIT 0 1 $LATEFILE
-					INPUT=""
-					break
-				fi
-			elif [ "$INPUT2" == "n" ] || [ "$INPUT2" == "N" ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					menu_new_delprop "New prop"
-				elif [ "$CTRLSET" == 0 ]; then
-					INPUT=""
-					break
-				fi
-			elif [ "$INPUT2" == "r" ] || [ "$INPUT2" == "R" ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					menu_reset_all_delprop "Reset all props"
-				elif [ "$CTRLSET" == 0 ]; then
-					menu_reset_all_delprop "Reset all props"
-				fi
-			elif [ "$INPUT2" == "b" ] || [ "$INPUT2" == "B" ]; then
-				if [ "$CTRLSET" == 1 ]; then
-					INPUT=""
-					break
-				elif [ "$CTRLSET" == 0 ]; then
-					invalid_input 4 2
-				fi
-			elif [ "$INPUT2" == "e" ] || [ "$INPUT2" == "E" ]; then
-				exit_fn
-			else
-				if [ "$CTRLSET" == 1 ]; then
-					invalid_input 1 2
-				elif [ "$CTRLSET" == 0 ]; then
-					invalid_input 4 2
-				fi
-			fi
+					fi
+				;;
+			esac
 		fi
 	done
 }
@@ -2244,12 +2279,20 @@ menu_options() {
 				UPDATECHKTXT="disabled"
 				CU=${R}
 			fi
+			if [ "$OPTIONBACK" == 1 ]; then
+				BACKCHKTXT="enabled"
+				CB=${G}
+			else
+				BACKCHKTXT="disabled"
+				CB=${R}
+			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
 			echo "${G}1${N} - Boot stage (currently ${C}${BOOTTXT}${N})"
 			echo "${G}2${N} - Script colours (currently ${CC}${COLOURTXT}${N})"
 			echo "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
 			echo "${G}4${N} - Automatic fingerprints update (currently ${CU}${UPDATECHKTXT}${N})"
+			echo "${G}5${N} - Background boot script (currently ${CB}${BACKCHKTXT}${N})"
 			echo "${G}r${N} - Reset all settings"
 			if [ "$2" != "s" ]; then
 				echo "${G}b${N} - Go back to main menu"
@@ -2265,11 +2308,13 @@ menu_options() {
 		case "$INPUT2" in
 			1)	menu_options_bootstage "Boot stage" "$BOOTTXT"
 			;;
-			2)	menu_options_colour "Script colours" "$COLOURTXT"
+			2)	menu_option_chng "Script colours" "$COLOURTXT" "Script colours are" "OPTIONCOLOUR"
 			;;
-			3)	menu_options_printschk "Fingerprints list check" "$PRINTSCHKTXT"
+			3)	menu_option_chng "Fingerprints list check" "$PRINTSCHKTXT" "Automatic updating of the fingerprints\nlist is" "OPTIONWEB"
 			;;
-			4)	menu_options_updatechk "Automatic fingerprints update" "$UPDATECHKTXT"
+			4)	menu_option_chng "Automatic fingerprints update" "$UPDATECHKTXT" "Automatic updating of the applied\nfingerprint is" "OPTIONUPDATE"
+			;;
+			5)	menu_option_chng "Background boot script" "$BACKCHKTXT" "Background boot script execution\nis" "OPTIONBACK"
 			;;
 			r|R)	menu_options_reset "Reset all settings"
 			;;
@@ -2370,8 +2415,8 @@ menu_options_bootstage() {
 	done
 }
 
-# Third menu level - Options, colour
-menu_options_colour() {
+# Third menu level - Options, general function
+menu_option_chng() {
 	INPUT3=""
 	while true
 	do
@@ -2380,60 +2425,18 @@ menu_options_colour() {
 				TMPTXT="disable"
 				OPTCURR=1
 				OPTNEW=0
+				EXECCURR="background"
+				EXECNEW="regular"
 			else
 				TMPTXT="enable"
 				OPTCURR=0
 				OPTNEW=1
+				EXECCURR="regular"
+				EXECNEW="background"
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Script colours are currently ${G}$2${N}d."
-			echo ""
-			echo "Do you want to ${C}$TMPTXT${N} them?"
-			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
-			read -r INPUT3
-		fi
-		case "$INPUT3" in
-			y|Y)
-				log_handler "The script colour option was ${TMPTXT}d."
-				replace_fn OPTIONCOLOUR $OPTCURR $OPTNEW $LATEFILE
-				# Load module values
-				. $LATEFILE
-				INPUT2=""
-				break
-			;;
-			n|N)
-				INPUT2=""
-				break
-			;;
-			e|E) exit_fn
-			;;
-			*)	invalid_input 3 3
-			;;
-		esac
-	done
-}
-
-# Third menu level - Options, prints list check
-menu_options_printschk() {
-	INPUT3=""
-	while true
-	do
-		if [ -z "$INPUT3" ]; then
-			if [ "$2" == "enabled" ]; then
-				TMPTXT="disable"
-				OPTCURR=1
-				OPTNEW=0
-			else
-				TMPTXT="enable"
-				OPTCURR=0
-				OPTNEW=1
-			fi
-			menu_header "${C}$1${N}"
-			echo ""
-			echo "Automatic updating of the fingerprints"
-			echo "list is currently ${G}$2${N}."
+			echo "$3 currently ${G}$2${N}."
 			echo ""
 			echo "Do you want to ${C}$TMPTXT${N} it?"
 			echo ""
@@ -2442,54 +2445,11 @@ menu_options_printschk() {
 		fi
 		case "$INPUT3" in
 			y|Y)
-				log_handler "The script prints list check option was ${TMPTXT}d."
-				replace_fn OPTIONWEB $OPTCURR $OPTNEW $LATEFILE
-				# Load module values
-				. $LATEFILE
-				INPUT2=""
-				break
-			;;
-			n|N)
-				INPUT2=""
-				break
-			;;
-			e|E) exit_fn
-			;;
-			*)	invalid_input 3 3
-			;;
-		esac
-	done
-}
-
-# Third menu level - Options, prints list check
-menu_options_updatechk() {
-	INPUT3=""
-	while true
-	do
-		if [ -z "$INPUT3" ]; then
-			if [ "$2" == "enabled" ]; then
-				TMPTXT="disable"
-				OPTCURR=1
-				OPTNEW=0
-			else
-				TMPTXT="enable"
-				OPTCURR=0
-				OPTNEW=1
-			fi
-			menu_header "${C}$1${N}"
-			echo ""
-			echo "Automatic updating of the applied"
-			echo "fingerprint is currently ${G}$2${N}."
-			echo ""
-			echo "Do you want to ${C}$TMPTXT${N} it?"
-			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
-			read -r INPUT3
-		fi
-		case "$INPUT3" in
-			y|Y)
-				log_handler "The script prints list check option was ${TMPTXT}d."
-				replace_fn OPTIONUPDATE $OPTCURR $OPTNEW $LATEFILE
+				log_handler "$1 was ${TMPTXT}d."
+				replace_fn $4 $OPTCURR $OPTNEW $LATEFILE
+				if [ "$4" == "OPTIONBACK" ]; then
+					sed -i -e "s|^{|\#anch${OPTCURR}|;s|^\#anch${OPTNEW}|{|;s|$EXECCURR|$EXECNEW|" $MODPATH/post-fs-data.sh
+				fi
 				# Load module values
 				. $LATEFILE
 				INPUT2=""
@@ -2692,9 +2652,9 @@ elif [ "$ISSUECHK" == 0 ] && [ "$LATECHECK" == 0 ]; then
 	ISSUETXT="The service.sh module script does not\n appear to have run during boot.\n\n This means the module won't work.\n\n Please reboot your device and see if\n it does run."
 fi
 
-if [ "$ISSUECHK" == 1 ]; then
+if [ "$ISSUECHK" == 1 ] && [ "$1" != "-s" ]; then
 	collect_logs "issue"
-	reboot_fn "${ISSUETXT}\n\n Note that a common cause for this\n issue is having EdXposed installed.\ If you have, please try diabling\n that first.\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for details.${N}" "reset-script"
+	reboot_fn "${ISSUETXT}\n\n Things to try:\n Disable EdXposed.\n Change boot stage settings or background\n execution for the boot script\n (run the props\n command with the -s option).\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for further details.${N}" "reset-script"
 fi
 
 # ====================================================
@@ -2711,7 +2671,7 @@ case "$1" in
 		echo "Usage: props [options]..."
 		echo ""
 		echo "Options:"
-		echo "	-d		Update to fingerprints test list."
+		echo "  -d		Update to fingerprints test list."
 		echo "  -f		Update fingerprints list."
 		echo "  -l		Save module logs and info."
 		echo "  -h		Show this message."
@@ -2719,7 +2679,7 @@ case "$1" in
 		echo "  -nw		Run without fingerprint startup check."
 		echo "  -r		Reset all options/settings."
 		echo "  -s		Open script settings menu."
-		echo "	-t		Activate test mode."
+		echo "  -t		Activate test mode."
 		echo ""
 		echo "See the module readme or the"
 		echo "support thread @ XDA for details."
@@ -2734,7 +2694,7 @@ case "$1" in
 		download_prints "Dev"
 	;;
 	*f*) # Update fingerprints list
-		download_prints
+		download_prints "f"
 	;;
 	*l*) # Save logs
 		menu_logs "Collect logs" "l"
@@ -2803,7 +2763,7 @@ do
 			fi
 			if [ "$FINGERPRINTENB" == 0 ] || [ "$PRINTEDIT" == 0 ]; then
 				DEVTXT=$DISABLED
-			elif [ "$DEVSIM" == 1 ] && [ "$BRANDSET" == 1 ] || [ "$NAMESET" == 1 ] || [ "$DEVICESET" == 1 ] [ "$RELEASESET" == 1 ] || [ "$IDSET" == 1 ] || [ "$INCREMENTALSET" == 1 ] || [ "$SDKSET" == 1 ] || [ "$DISPLAYSET" == 1 ]; then
+			elif [ "$DEVSIM" == 1 ] && [ "$BRANDSET" == 1 ] || [ "$NAMESET" == 1 ] || [ "$DEVICESET" == 1 ] || [ "$RELEASESET" == 1 ] || [ "$IDSET" == 1 ] || [ "$INCREMENTALSET" == 1 ] || [ "$SDKSET" == 1 ] || [ "$DISPLAYSET" == 1 ]; then
 				DEVTXT=$ACTIVE
 			fi
 			if [ "$PROPEDIT" == 1 ]; then

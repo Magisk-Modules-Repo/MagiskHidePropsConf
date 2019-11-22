@@ -8,6 +8,7 @@
 # together with a few module files in /cache.
 
 MODPATH=${0%/*}
+BOOTSTAGE="post"
 
 # Load functions
 . $MODPATH/util_functions.sh

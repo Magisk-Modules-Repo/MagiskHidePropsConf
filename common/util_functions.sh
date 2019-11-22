@@ -15,22 +15,22 @@ get_file_value() {
 ADBPATH=/data/adb
 MODULESPATH=$ADBPATH/modules
 MHPCPATH=$ADBPATH/mhpc
+LATEFILE=$MHPCPATH/propsconf_late
+MIRRORLOC=/sbin/.magisk/mirror/system
+VENDLOC=/sbin/.magisk/mirror/vendor
+if [ -z $SLOT ]; then
+	CACHELOC=/cache
+else
+	CACHELOC=/data/cache
+fi
 if [ "$INSTFN" ]; then
 	# Installation (config.sh)
-	MODVERSION=$(echo $(get_file_value $TMPDIR/module.prop "version=") | sed 's|-.*||')	
+	MODVERSION=$(echo $(get_file_value $TMPDIR/module.prop "version=") | sed 's|-.*||')
 	POSTPATH=$ADBPATH/post-fs-data.d
 	SERVICEPATH=$ADBPATH/service.d
-	LATEFILE=$MHPCPATH/propsconf_late
 	POSTFILE=$POSTPATH/propsconf_post
 	POSTLATEFILE=$POSTPATH/propsconf_late
 	UPDATELATEFILE=$TMPDIR/propsconf_late
-	MIRRORLOC=/sbin/.magisk/mirror/system
-	VENDLOC=/sbin/.magisk/mirror/vendor
-	if [ -z $SLOT ]; then
-		CACHELOC=/cache
-	else
-		CACHELOC=/data/cache
-	fi
 	CACHERM="
 	$CACHELOC/propsconf_postfile.log
 	$CACHELOC/propsconf.log
@@ -56,6 +56,7 @@ if [ "$INSTFN" ]; then
 	OPTIONCOLOUR
 	OPTIONWEB
 	OPTIONUPDATE
+	OPTIONBACK
 	BRANDSET
 	NAMESET
 	DEVICESET
@@ -92,11 +93,6 @@ if [ "$INSTFN" ]; then
 else
 	# Placeholder variables
 	MODVERSIONPH=VER_PLACEHOLDER
-	MHPCPATHPH=MHPCPATH_PLACEHOLDER
-	LATEFILEPH=LATE_PLACEHOLDER
-	MIRRORLOCPH=MIRROR_PLACEHOLDER
-	VENDLOCPH=VEND_PLACEHOLDER
-	CACHELOCPH=CACHE_PLACEHOLDER
 	BINPH=BIN_PLACEHOLDER
 
 	# Log variables
@@ -118,18 +114,13 @@ COREPATH=/sbin/.magisk
 MIRRORPATH=$COREPATH/mirror
 SYSTEMFILE=$MODPATH/system.prop
 POSTCHKFILE=$MHPCPATH/propsconf_postchk
-RUNFILE=$MODPATH/script_check
+RUNFILE=$MHPCPATH/script_check
 # Make sure that the terminal app used actually can see resetprop
 if [ "$BOOTSTAGE" == "props" ]; then
 	alias resetprop="$ADBPATH/magisk/magisk resetprop"
 fi
 alias reboot="/system/bin/reboot"
-# Finding installed Busybox
-if [ -d "$MODULESPATH/busybox-ndk" ]; then
-	BBPATH=$(find $MODULESPATH/busybox-ndk -name 'busybox')
-else
-	BBPATH=$(which busybox)
-fi
+
 # Fingerprint variables
 PRINTSLOC=$MODPATH/prints.sh
 PRINTSTMP=$MHPCPATH/prints.sh
@@ -157,13 +148,6 @@ CONFFILELST="
 /data/media/0/propsconf_conf
 /data/propsconf_conf
 $CACHELOC/propsconf_conf
-"
-
-# Reset file locations
-RESETFILELST="
-/data/media/0/reset_mhpc
-/data/reset_mhpc
-$CACHELOC/reset_mhpc
 "
 
 # MagiskHide props
@@ -232,6 +216,22 @@ APILVL="
 8.0=26
 8.1=27
 9=28
+10=29
+"
+
+# List of aliases to set from Busybox
+ALIASLIST="
+cat
+cp
+cut
+grep
+id
+mv
+printf
+sed
+sort
+tar
+tr
 "
 
 # Values props list
@@ -242,32 +242,18 @@ if [ -z "$INSTFN" ]; then
 	. $LATEFILE
 fi
 
+# Add log divider
+if [ "$BOOTSTAGE" != "post" ]; then
+	echo "" >> $LOGFILE
+	echo "==============================" >> $LOGFILE
+fi
+
 # ======================== General functions ========================
 # Log functions
 log_handler() {
 	if [ "$(id -u)" == 0 ] ; then
 		echo "" >> $LOGFILE 2>&1
 		echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - $1" >> $LOGFILE 2>&1
-	fi
-}
-# Saves the previous log (if available) and creates a new one
-log_start() {
-	if [ -f "$LOGFILE" ]; then
-		if [ "$INSTFN" ]; then
-			rm -f $LOGFILE
-		else
-			mv -f $LOGFILE $LASTLOGFILE
-		fi
-	fi
-	touch $LOGFILE
-	echo "***************************************************" >> $LOGFILE 2>&1
-	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
-	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
-	echo "***************************************************" >> $LOGFILE 2>&1
-	if [ "$INSTFN" ]; then
-		log_handler "Starting module installation script"
-	else
-		log_script_chk "Log start."
 	fi
 }
 log_print() {
@@ -282,6 +268,25 @@ log_script_chk() {
 	log_handler "$1"
 	echo -e "$(date +"%m-%d-%Y %H:%M:%S") - $1" >> $RUNFILE 2>&1
 }
+
+# Finding and setting up installed Busybox
+if [ ! "$INSTFN" ] && [ "$BOOTSTAGE" != "post" -a "$BOOTSTAGE" != "late" ]; then
+	log_handler "Setting up Busybox."
+	if [ -d "$MODULESPATH/busybox-ndk" ]; then
+		BBPATH=$(find $MODULESPATH/busybox-ndk -name 'busybox')
+	else
+		BBPATH=$(which busybox)
+	fi
+	if [ "$BBPATH" ]; then
+		log_handler "Using $($BBPATH | head -1)."
+		echo "$BBPATH" >> $LOGFILE 2>&1
+		for ITEM in $ALIASLIST; do
+			alias $ITEM="$BBPATH $ITEM"
+		done
+	else
+		log_handler "No Busybox found."
+	fi
+fi
 
 #Divider
 DIVIDER="${Y}=====================================${N}"
@@ -309,16 +314,6 @@ menu_header() {
 module_v_ctrl() {
 	VERSIONCMP=$(echo $MODVERSION | sed 's|v||g' | sed 's|\.||g')
 	VERSIONTMP=$(echo $(get_file_value $MODPATH/module.prop "version="))
-}
-
-# Check for Busybox
-bb_check() {
-	if [ "$BBPATH" ]; then
-		log_handler "Using $($BBPATH | head -1)."
-		echo "$BBPATH" >> $LOGFILE 2>&1
-	else
-		log_handler "No Busybox found."
-	fi
 }
 
 # Find prop type
@@ -419,7 +414,7 @@ force_reboot() {
 	echo ""
 	echo "${C}Rebooting...${N}"
 	log_handler "Rebooting."
-	/system/bin/svc power reboot "" >> $LOGFILE 2>&1 || /system/bin/reboot "" >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
+	[ "$(resetprop sys.boot_completed)" == 1 ] && /system/bin/svc power reboot "" >> $LOGFILE 2>&1 || /system/bin/reboot "" >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
 	sleep 15
 	log_handler "Rebooting failed."
 	echo ""
@@ -431,16 +426,20 @@ force_reboot() {
 
 # Updates placeholders
 placeholder_update() {
-	FILEVALUE=$(get_file_value $1 "${2}PH=")
 	log_handler "Checking for ${3} in ${1}."
-	if [ "$FILEVALUE" ]; then
-		case $FILEVALUE in
-			*PLACEHOLDER*)	replace_fn $2 $3 $4 $1 "placeholder"
-							log_handler "Placeholder ${3} updated to ${4} in ${1}."
-			;;
-		esac
+	if [ -f "$1" ]; then
+		FILEVALUE=$(get_file_value "$1" "${2}PH=")
+		if [ "$FILEVALUE" ]; then
+			case $FILEVALUE in
+				*PLACEHOLDER*)	replace_fn $2 $3 $4 $1 "placeholder"
+								log_handler "Placeholder ${3} updated to ${4} in ${1}."
+				;;
+			esac
+		else
+			log_handler "No placeholder to update for ${2} in ${1}."
+		fi
 	else
-		log_handler "No placeholder to update for ${2} in ${1}."
+		log_handler "$1 does not exist."
 	fi
 }
 
@@ -517,32 +516,16 @@ after_change() {
 		. $LATEFILE
 	else
 		# Update the reboot variable
-		reboot_chk
+		replace_fn REBOOTCHK 0 1 $LATEFILE
 		# Load all values
 		all_values
 		# Update the system.prop file
 		system_prop
-		if [ "$3" != "noreboot" ] && [ -z "$INSTFN" ]; then
+		if [ "$3" != "noreboot" ] && [ ! "$INSTFN" ]; then
 			# Ask to reboot
 			reboot_fn "$1" "$2"
 		fi
 	fi
-}
-
-# Run after editing prop files
-after_change_propfile() {
-	# Update the reboot variable
-	reboot_chk
-	# Load all values
-	INPUT=""
-	all_values
-	# Ask to reboot
-	reboot_fn "$1" "$2"
-}
-
-# Check if module needs a reboot
-reboot_chk() {
-	replace_fn REBOOTCHK 0 1 $LATEFILE
 }
 
 # Reboot function
@@ -578,8 +561,7 @@ reboot_fn() {
 			read -r INPUT5
 		fi
 		case "$INPUT5" in
-			y|Y)
-				force_reboot
+			y|Y) force_reboot
 			;;
 			n|N)
 				if [ "$2" == "p" ] || [ "$2" == "r" ] || [ "$2" == "reset-script" ]; then
@@ -600,7 +582,7 @@ reboot_fn() {
 					exit_fn
 				fi
 			;;
-			*)	invalid_input $INV1 5
+			*) invalid_input $INV1 5
 			;;
 		esac
 	done
@@ -830,6 +812,9 @@ config_file() {
 			rm -f $ITEM
 		done
 		log_handler "Configuration file import complete."
+		if [ "$BOOTSTAGE" == "late" ]; then
+			force_reboot
+		fi
 	else
 		log_handler "No configuration file."
 	fi
@@ -842,11 +827,9 @@ test_connection() {
 
 # system.prop creation
 system_prop() {
-	rm -f $MODPATH/system.prop
 	if [ "$OPTIONBOOT" == 0 ]; then
 		log_handler "Creating system.prop file."
-		touch $MODPATH/system.prop >> $LOGFILE 2>&1
-		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" >> $MODPATH/system.prop
+		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" > $MODPATH/system.prop
 		if [ "$PRINTSTAGE" == 0 ]; then
 			print_edit "$MODPATH/system.prop"
 		fi
@@ -899,6 +882,7 @@ script_placement() {
 	log_print "- Installing scripts"
 	cp -af $TMPDIR/util_functions.sh $MODPATH/util_functions.sh >> $LOGFILE 2>&1
 	cp -af $TMPDIR/prints.sh $MODPATH/prints.sh >> $LOGFILE 2>&1
+	cp -af $TMPDIR/post-fs-data_back $MODPATH/post-fs-data_back >> $LOGFILE 2>&1
 	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $LOGFILE 2>&1
 	if [ "$FILEV" ]; then
 		# New script
@@ -939,6 +923,9 @@ script_placement() {
 						if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
 							log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
 							sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
+							if [ "$ITEM" == "OPTIONBACK" -a "$SNEW" == 1 ]; then
+								sed -i -e "s|^{|\#anch0}|;s|^\#anch1|{|;s|regular|background|" $TMPDIR/post-fs-data.sh
+							fi
 						fi
 					fi
 				done
@@ -1043,9 +1030,9 @@ files_check() {
 			rm -f $ITEM
 		fi
 	done
-	if [ -f "" ]; then
+	if [ -f "$PRINTFILES/custom.sh" ]; then
 		log_handler "Removing broken custom.sh file."
-		$PRINTFILES/custom.sh
+		rm -f $PRINTFILES/custom.sh
 	fi
 }
 
@@ -1085,11 +1072,11 @@ script_install() {
 	files_check
 	script_placement
 	log_print "- Updating placeholders"
+	placeholder_update $TMPDIR/post-fs-data.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $TMPDIR/post-fs-data.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
+	placeholder_update $MODPATH/post-fs-data_back MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $MODPATH/post-fs-data_back LATEFILE LATE_PLACEHOLDER "$LATEFILE"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
-	placeholder_update $MODPATH/util_functions.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
-	placeholder_update $MODPATH/util_functions.sh MIRRORLOC MIRROR_PLACEHOLDER "$MIRRORLOC"
-	placeholder_update $MODPATH/util_functions.sh VENDLOC VEND_PLACEHOLDER "$VENDLOC"
-	placeholder_update $MODPATH/util_functions.sh CACHELOC CACHE_PLACEHOLDER "$CACHELOC"
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/system/$BIN/props ADBPATH ADB_PLACEHOLDER "$ADBPATH"
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEFILE"
@@ -1289,7 +1276,7 @@ download_prints() {
 		if [ -s "$PRINTSTMP" ]; then
 			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
 			if [ "$LISTVERSION" ]; then
-				if [ "$LISTVERSION" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+				if [ "$LISTVERSION" == "Dev" ] || [ "$1" == "f" -a "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
 					module_v_ctrl
 					if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le $VERSIONCMP ]; then
 						mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
@@ -1702,31 +1689,6 @@ set_custprop() {
 			replace_fn $ITEM "\"$CURRCUSTPROPS\"" "\"$SORTCUSTPROPS\"" $LATEFILE
 			replace_fn CUSTOMEDIT 0 1 $LATEFILE
 			DLIMTMP=$(($DLIMTMP + 1))
-
-#			if [ "$ITEM" == "CUSTOMPROPSLATE" ] && [ "$(get_file_value $LATEFILE "CUSTOMEDIT=")" == 1 ]; then
-#				case "$CURRCUSTPROPS" in
-#					*$1*) #Do nothing when the prop already exists
-#					;;
-#					*)
-#						CUSTOMPROPSLATE=$(get_file_value $LATEFILE "${ITEM}=")
-#						CNTLITEM=1
-#						FNDLITEM=0
-#						for LITEM in $CUSTOMPROPSLATE
-#							case "$CUSTOMPROPSLATE" in
-#								*$1*)
-#									$FNDLITEM=1
-#									break
-#								;;
-#							esac
-#							CNTLITEM=$(($CNTLITEM + 1))
-#						done
-#						if [ "$FNDLITEM" == 1 ]; then
-#							CUSTOMPROPSDELAY=$(get_file_value $LATEFILE "CUSTOMPROPSDELAY=")
-#							replace_fn CUSTOMPROPSDELAY "$CUSTOMPROPSDELAY" "$(echo "$CUSTOMPROPSDELAY" | cut -f 1-$CNTLITEM -d ';');0;$(echo "$CUSTOMPROPSDELAY" | cut -f $(($CNTLITEM + 1))- -d ';')" $LATEFILE
-#						fi
-#					;;
-#				esac
-#			fi
 		done
 
 		after_change "$1" "$4"
@@ -1852,7 +1814,8 @@ collect_logs() {
 	done
 
 	# Saving the current prop values
-	resetprop > $TMPLOGLOC/props.txt
+	resetprop > $TMPLOGLOC/currentprops
+	sed -i -e "s|\]\:\ \[|=|g;s|^\[||g;s|\]$||g" $TMPLOGLOC/currentprops
 
 	# Saving the log file
 	cp -af $MHPCPATH/propsconf.log $TMPLOGLOC >> $LOGFILE 2>&1
@@ -1863,7 +1826,7 @@ collect_logs() {
 
 	# Copy package to internal storage
 	mv -f $MHPCPATH/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE 2>&1
-	
+
 	# Remove temporary directory
 	rm -rf $TMPLOGLOC >> $LOGFILE 2>&1
 
@@ -1877,8 +1840,11 @@ collect_logs() {
 		echo ""
 		echo "The packaged file has been saved to the"
 		echo "root of your device's internal storage."
+		echo "If it did not, please see the documentation"
+		echo "for details on how to collect the logs"
+		echo "manually."
 		echo ""
-		echo "Attach the file to a post in the support"
+		echo "Attach the file(s) to a post in the support"
 		echo "thread @ XDA, with a detailed description"
 		echo "of your issue."
 		echo ""
@@ -1897,5 +1863,4 @@ collect_logs() {
 # Log print
 if [ "$BOOTSTAGE" != "post" ]; then
 	log_handler "Functions loaded."
-	bb_check
 fi
