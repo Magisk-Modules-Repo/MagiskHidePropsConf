@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=66
+PRINTSV=67
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -96,6 +96,8 @@ Nokia 6.1 Plus (9)=Nokia/Dragon_00WW/DRG_sprout:9/PPR1.180610.011/00WW_3_54J:use
 Nokia 7 Plus (9)=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_53B:user/release-keys__2019-05-01
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
+Nvidia Shield TV 2017 (8.0.0)=NVIDIA/darcy/darcy:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05
+Nvidia Shield TV Pro (8.0.0)=NVIDIA/foster_e_hdd/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05
 OnePlus One (6.0.1)=oneplus/bacon/A0001:6.0.1/MMB29X/ZNH0EAS2JK:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
@@ -217,7 +219,7 @@ Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMID
 Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.2.1.0.NCFMIEK:user/release-keys
 Xiaomi Redmi Note 4 Mediatek (6.0)=Xiaomi/nikel/nikel:6.0/MRA58K/V9.2.2.0.MBFMIEK:user/release-keys
 Xiaomi Redmi Note 5/5 Plus (7.1.2 & 8.1.0)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys;xiaomi/vince/vince:8.1.0/OPM1.171019.019/V10.2.1.0.OEGMIXM:user/release-keys__2019-03-01
-Xiaomi Redmi Note 5 Pro (8.1.0 & 9)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01;xiaomi/whyred/whyred:9/PKQ1.180904.001/V10.3.2.0.PEIMIXM:user/release-keys__2019-08-05
+Xiaomi Redmi Note 5 Pro (8.1.0 & 9)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01;xiaomi/whyred/whyred:9/PKQ1.180904.001/V11.0.3.0.PEIMIXM:user/release-keys__2019-11-05
 Xiaomi Redmi Note 5A Lite (7.1.2)=xiaomi/ugglite/ugglite:7.1.2/N2G47H/V9.1.2.0.NDFMIEI:user/release-keys
 Xiaomi Redmi Note 6 Pro (8.1.0)=xiaomi/tulip/tulip:8.1.0/OPM1.171019.011/V10.0.5.0.OEKMIFH:user/release-keys__2018-10-01
 Xiaomi Redmi Note 7 (9)=xiaomi/lavender/lavender:9/PKQ1.180904.001/V10.3.12.0.PFGMIXM:user/release-keys__2019-08-05
