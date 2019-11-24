@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=67
+PRINTSV=68
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -92,7 +92,7 @@ Motorola Moto G6 Plus (9)=motorola/evert_amx_n/evert_n:9/PPWS29.116-16-6/5cbfe:u
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
 Nextbook Ares 8A (6.0.1)=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
-Nokia 6.1 Plus (9)=Nokia/Dragon_00WW/DRG_sprout:9/PPR1.180610.011/00WW_3_54J:user/release-keys__2019-08-01
+Nokia 6.1 Plus (9 & 10)=Nokia/Dragon_00WW/DRG_sprout:9/PPR1.180610.011/00WW_3_54J:user/release-keys__2019-08-01;Nokia/Dragon_00WW/DRG_sprout:10/QKQ1.190828.002/00WW_4_070:user/release-keys__2019-10-01
 Nokia 7 Plus (9)=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_53B:user/release-keys__2019-05-01
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
