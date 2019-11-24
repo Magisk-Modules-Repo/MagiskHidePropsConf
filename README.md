@@ -420,8 +420,8 @@ And of course, everyone that provides fingerprints for me to add to the list. Th
 Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases).
 
 Releases up until v2.4.0 are compatible with Magisk v15 to v16.7.  
-Releases from v2.4.1 are compatible with Magisk v17+.
-Releases from v4.0.0 are compatible with Magisk v19+.
+Releases from v2.4.1 are compatible with Magisk v17+.  
+Releases from v4.0.0 are compatible with Magisk v19+.  
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
