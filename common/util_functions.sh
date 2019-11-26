@@ -882,7 +882,6 @@ script_placement() {
 	log_print "- Installing scripts"
 	cp -af $TMPDIR/util_functions.sh $MODPATH/util_functions.sh >> $LOGFILE 2>&1
 	cp -af $TMPDIR/prints.sh $MODPATH/prints.sh >> $LOGFILE 2>&1
-	cp -af $TMPDIR/post-fs-data_back $MODPATH/post-fs-data_back >> $LOGFILE 2>&1
 	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $LOGFILE 2>&1
 	if [ "$FILEV" ]; then
 		# New script
@@ -1074,8 +1073,6 @@ script_install() {
 	log_print "- Updating placeholders"
 	placeholder_update $TMPDIR/post-fs-data.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
 	placeholder_update $TMPDIR/post-fs-data.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
-	placeholder_update $MODPATH/post-fs-data_back MODVERSION VER_PLACEHOLDER "$MODVERSION"
-	placeholder_update $MODPATH/post-fs-data_back LATEFILE LATE_PLACEHOLDER "$LATEFILE"
 	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
 	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/system/$BIN/props ADBPATH ADB_PLACEHOLDER "$ADBPATH"

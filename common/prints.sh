@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=68
+PRINTSV=69
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -96,8 +96,8 @@ Nokia 6.1 Plus (9 & 10)=Nokia/Dragon_00WW/DRG_sprout:9/PPR1.180610.011/00WW_3_54
 Nokia 7 Plus (9)=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_53B:user/release-keys__2019-05-01
 Nvidia Shield K1 (7.0)=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield Tablet (7.0)=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
-Nvidia Shield TV 2017 (8.0.0)=NVIDIA/darcy/darcy:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05
-Nvidia Shield TV Pro (8.0.0)=NVIDIA/foster_e_hdd/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05
+Nvidia Shield TV 2017 (8.0.0 & 9)=NVIDIA/darcy/darcy:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/darcy/darcy:9/PPR1.180610.011/4086637_1604.6430:user/release-keys__2019-07-05
+Nvidia Shield TV Pro (8.0.0 & 9)=NVIDIA/foster_e_hdd/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e_hdd/foster:9/PPR1.180610.011/4086637_1604.6430:user/release-keys__2019-07-05
 OnePlus One (6.0.1)=oneplus/bacon/A0001:6.0.1/MMB29X/ZNH0EAS2JK:user/release-keys
 OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
@@ -148,8 +148,10 @@ Samsung Galaxy S9 (8.0.0)=samsung/starltexx/starlte:8.0.0/R16NW/G960FXXU1ARCC:us
 Samsung Galaxy S9 Plus (8.0.0)=samsung/star2ltexx/star2lte:8.0.0/R16NW/G965FXXU1ARCC:user/release-keys
 Samsung Galaxy S10 Plus (9)=samsung/beyond2qlteue/beyond2q:9/PPR1.180610.011/G975U1UEU1ASD3:user/release-keys__2019-03-01
 Samsung Galaxy Tab 2 7.0 (4.2.2)=samsung/espresso10wifixx/espresso10wifi:4.2.2/JDQ39/P5110XXDML1:user/release-keys
-Samsung Galaxt Tab A WiFi (9)=samsung/gta2xlwifixx/gta2xlwifi:9/PPR1.180610.011/T590XXU3BSJ1:user/release-keys__2019-10-01
-Samsung Galaxy Tab S3 (LTE SM-T825) (8.0.0)=samsung/gts3lltexx/gts3llte:8.0.0/R16NW/T825XXU2BRL2:user/release-keys__2018-12-01
+Samsung Galaxt Tab A WiFi SM-T590 (9)=samsung/gta2xlwifixx/gta2xlwifi:9/PPR1.180610.011/T590XXU3BSJ1:user/release-keys__2019-10-01
+Samsung Galaxt Tab A LTE SM-T595 (9)=samsung/gta2xlltexx/gta2xllte:9/PPR1.180610.011/T595XXU3BSF3:user/release-keys__2019-06-01
+Samsung Galaxt Tab A LTE SM-T597 (9)=samsung/gta2xlltespr/gta2xlltespr:9/PPR1.180610.011/T597PVPU2BSH7:user/release-keys__2019-08-01
+Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)=samsung/gts3lltexx/gts3llte:8.0.0/R16NW/T825XXU2BRL2:user/release-keys__2018-12-01
 Sony Xperia X (8.0.0)=Sony/F5121/F5121:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
 Sony Xperia X Compact (8.0.0)=Sony/F5321/F5321:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
 Sony Xperia X Dual (8.0.0)=Sony/F5122/F5122:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
@@ -224,6 +226,7 @@ Xiaomi Redmi Note 5A Lite (7.1.2)=xiaomi/ugglite/ugglite:7.1.2/N2G47H/V9.1.2.0.N
 Xiaomi Redmi Note 6 Pro (8.1.0)=xiaomi/tulip/tulip:8.1.0/OPM1.171019.011/V10.0.5.0.OEKMIFH:user/release-keys__2018-10-01
 Xiaomi Redmi Note 7 (9)=xiaomi/lavender/lavender:9/PKQ1.180904.001/V10.3.12.0.PFGMIXM:user/release-keys__2019-08-05
 Xiaomi Redmi Note 7 Pro (9)=xiaomi/violet/violet:9/PKQ1.181203.001/V10.3.13.0.PFHINXM:user/release-keys__2019-08-01
+Xiaomi Redmi Note 8T (9)=xiaomi/willow_eea/willow:9/PKQ1.190616.001/V10.3.5.0.PCXEUXM:user/release-keys__2019-10-01
 Xiaomi Redmi Y1 (7.1.2)=xiaomi/ugg/ugg:7.1.2/N2G47H/V9.6.2.0.NDKMIFD:user/release-keys__2018-07-01
 ZTE Axon 7 (7.1.1 & 8.0.0)=ZTE/P996A01_N/ailsa_ii:7.1.1/NMF26V/20171211.005949:user/release-keys;ZTE/P996A01_O/ailsa_ii:8.0.0/OPR1.170623.032/20180815.171922:user/release-keys__2018-07-01
 ZTE Blade (6.0.1)=ZTE/P809A50_MY_MAX/P809A50:6.0.1/MMB29M/20161017.095504:user/release-keys

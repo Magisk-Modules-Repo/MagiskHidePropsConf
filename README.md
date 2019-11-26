@@ -214,7 +214,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v68_**
+**_Current fingerprints list version - v69_**
 
 
 ## Please add support for device X
@@ -716,7 +716,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v68  
+### List v69  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 3 Max (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max (7.1.1)
@@ -856,8 +856,10 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy S9 Plus (8.0.0)
 - Samsung Galaxy S10 Plus (9)
 - Samsung Galaxy Tab 2 7.0 (4.2.2)
-- Samsung Galaxt Tab A WiFi (9)
-- Samsung Galaxy Tab S3 (LTE SM-T825) (8.0.0)
+- Samsung Galaxt Tab A WiFi SM-T590 (9)
+- Samsung Galaxt Tab A LTE SM-T595 (9)
+- Samsung Galaxt Tab A LTE SM-T597 (9)
+- Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
 - Sony Xperia X (8.0.0)
 - Sony Xperia X Compact (8.0.0)
 - Sony Xperia X Dual (8.0.0)
@@ -932,6 +934,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi Note 6 Pro (8.1.0)
 - Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Note 7 Pro (9)
+- Xiaomi Redmi Note 8T (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
 - ZTE Blade (6.0.1)
