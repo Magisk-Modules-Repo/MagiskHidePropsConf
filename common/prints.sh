@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=69
+PRINTSV=70
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -117,6 +117,7 @@ OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
 Razer Phone 2 (8.1.0)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05
+Samsung Galaxy A3 2015 (6.0.1)=samsung/a3ultexx/a3ulte:6.0.1/MMB29M/A300FUXXU1CRF1:user/release-keys
 Samsung Galaxy A5 2015 (6.0.1)=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CPH3:user/release-keys
 Samsung Galaxy A5 2017 (8.0.0)=samsung/a5y17ltexx/a5y17lte:8.0.0/R16NW/A520FXXUCCSK1:user/release-keys__2019-11-01
 Samsung Galaxy A6 Plus (9)=samsung/a6pltedx/a6plte:9/PPR1.180610.011/A605GDXU3BSC6:user/release-keys__2019-03-01
@@ -218,7 +219,7 @@ Xiaomi Redmi K20 Pro/Mi 9T Pro (9 & 10)=Xiaomi/raphael/raphael:9/PKQ1.181121.001
 Xiaomi Redmi Note 2 (5.0.2)=Xiaomi/hermes/hermes:5.0.2/LRX22G/V9.2.4.0.LHMMIEK:user/release-keys
 Xiaomi Redmi Note 3 Pro (6.0.1)=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL:user/release-keys
 Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
-Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.2.1.0.NCFMIEK:user/release-keys
+Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.6.1.0.NCFMIFD:user/release-keys
 Xiaomi Redmi Note 4 Mediatek (6.0)=Xiaomi/nikel/nikel:6.0/MRA58K/V9.2.2.0.MBFMIEK:user/release-keys
 Xiaomi Redmi Note 5/5 Plus (7.1.2 & 8.1.0)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys;xiaomi/vince/vince:8.1.0/OPM1.171019.019/V10.2.1.0.OEGMIXM:user/release-keys__2019-03-01
 Xiaomi Redmi Note 5 Pro (8.1.0 & 9)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01;xiaomi/whyred/whyred:9/PKQ1.180904.001/V11.0.3.0.PEIMIXM:user/release-keys__2019-11-05
