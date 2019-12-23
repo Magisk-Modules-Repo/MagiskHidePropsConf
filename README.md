@@ -214,7 +214,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v70_**
+**_Current fingerprints list version - v71_**
 
 
 ## Please add support for device X
@@ -716,7 +716,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v70  
+### List v71  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 3 Max (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max (7.1.1)
@@ -828,6 +828,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy A3 2015 (6.0.1)
 - Samsung Galaxy A5 2015 (6.0.1)
 - Samsung Galaxy A5 2017 (8.0.0)
+- Samsung Galaxy A51 (10)
 - Samsung Galaxy A6 Plus (9)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
@@ -838,6 +839,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy J5 Prime (7.0)
 - Samsung Galaxy J7 2017 (8.1.0)
 - Samsung Galaxy J7 Prime (6.0.1)
+- Samsung Galaxy M20 (10)
 - Samsung Galaxy Note 3 (5.0)
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
@@ -855,7 +857,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy S8 Plus (8.0.0)
 - Samsung Galaxy S9 (8.0.0)
 - Samsung Galaxy S9 Plus (8.0.0)
-- Samsung Galaxy S10 Plus (9)
+- Samsung Galaxy S10 Plus SM-G975F (10)
+- Samsung Galaxy S10 Plus SM-G975U (9)
 - Samsung Galaxy Tab 2 7.0 (4.2.2)
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
@@ -935,6 +938,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi Note 6 Pro (8.1.0)
 - Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Note 7 Pro (9)
+- Xiaomi Redmi Note 8 Pro (9)
 - Xiaomi Redmi Note 8T (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
