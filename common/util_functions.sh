@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
 # Finding file values
@@ -30,7 +30,7 @@ if [ "$INSTFN" ]; then
 	SERVICEPATH=$ADBPATH/service.d
 	POSTFILE=$POSTPATH/propsconf_post
 	POSTLATEFILE=$POSTPATH/propsconf_late
-	UPDATELATEFILE=$TMPDIR/propsconf_late
+	UPDATELATEFILE=$MODPATH/common/propsconf_late
 	CACHERM="
 	$CACHELOC/propsconf_postfile.log
 	$CACHELOC/propsconf.log
@@ -122,7 +122,7 @@ fi
 alias reboot="/system/bin/reboot"
 
 # Fingerprint variables
-PRINTSLOC=$MODPATH/prints.sh
+PRINTSLOC=$MODPATH/common/prints.sh
 PRINTSTMP=$MHPCPATH/prints.sh
 PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
 PRINTSDEV="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/prints.sh"
@@ -172,7 +172,9 @@ ro.build.selinux=0
 PRINTPROPS="
 ro.build.fingerprint
 ro.bootimage.build.fingerprint
+ro.system.build.fingerprint
 ro.vendor.build.fingerprint
+ro.odm.build.fingerprint
 "
 
 # Print parts
@@ -349,7 +351,7 @@ get_first() {
 
 # Get the device for current fingerprint
 get_device_used() {
-	PRINTTMP=$(cat $MODPATH/prints.sh | grep "$1")
+	PRINTTMP=$(cat $MODPATH/common/prints.sh | grep "$1")
 	if [ "$PRINTTMP" ]; then
 		echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N}"
 		echo ""
@@ -590,7 +592,7 @@ reboot_fn() {
 
 # Reset module
 reset_fn() {
-	cp -af $MODPATH/propsconf_late $LATEFILE >> $LOGFILE 2>&1
+	cp -af $MODPATH/common/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
@@ -829,7 +831,7 @@ test_connection() {
 system_prop() {
 	if [ "$OPTIONBOOT" == 0 ]; then
 		log_handler "Creating system.prop file."
-		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" > $MODPATH/system.prop
+		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" > $MODPATH/system.prop
 		if [ "$PRINTSTAGE" == 0 ]; then
 			print_edit "$MODPATH/system.prop"
 		fi
@@ -860,8 +862,8 @@ system_prop_cont() {
 }
 
 # ======================== Installation functions ========================
-# Places various module scripts in their proper places
-script_placement() {
+# Places and updates the settings file
+settings_placement() {
 	UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 	UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
 	NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
@@ -879,29 +881,26 @@ script_placement() {
 		FILETRANSF=$UPDATETRANSF
 		LATEFILETMP="$LATEFILE"
 	fi
-	log_print "- Installing scripts"
-	cp -af $TMPDIR/util_functions.sh $MODPATH/util_functions.sh >> $LOGFILE 2>&1
-	cp -af $TMPDIR/prints.sh $MODPATH/prints.sh >> $LOGFILE 2>&1
-	cp -af $UPDATELATEFILE $MODPATH/propsconf_late >> $LOGFILE 2>&1
+	log_print "- Installing settings file"
 	if [ "$FILEV" ]; then
-		# New script
+		# New file
 		if [ "$UPDATEV" -gt "$FILEV" ]; then
 			# Fresh install
 			if [ "$FILEV" == 0 ]; then
-				log_print "- Placing settings script"
-			# Updated script with a required clearing of settings
+				log_print "- Placing settings file"
+			# Updated file with a required clearing of settings
 			elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ ! "$NOTTRANSF" ]; then
 				log_handler "Current transfer version - ${FILETRANSF}"
 				log_handler "Update transfer version - ${UPDATETRANSF}"
 				log_handler "No settings set to not transfer"
-				log_print "- Script updated and settings cleared"
-			# Updated script
+				log_print "- File updated and settings cleared"
+			# Updated file
 			else
-				log_print "- Script updated"
-				log_print "- Transferring settings from old script"
+				log_print "- File updated"
+				log_print "- Transferring settings from old file"
 				# Prop settings
 				for ITEM in $SETTINGSLIST; do
-					# Checking if a script update requires some options not to transfer
+					# Checking if a file update requires some options not to transfer
 					case "$NOTTRANSF" in
 						*$ITEM*)
 							if [ "$UPDATETRANSF" -gt "$FILETRANSF" ]; then
@@ -923,7 +922,7 @@ script_placement() {
 							log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
 							sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
 							if [ "$ITEM" == "OPTIONBACK" -a "$SNEW" == 1 ]; then
-								sed -i -e "s|^{|\#anch0}|;s|^\#anch1|{|;s|regular|background|" $TMPDIR/post-fs-data.sh
+								sed -i -e "s|^{|\#anch0}|;s|^\#anch1|{|;s|regular|background|" $MODPATH/post-fs-data.sh
 							fi
 						fi
 					fi
@@ -953,25 +952,24 @@ script_placement() {
 					fi
 				done
 			fi
-			log_handler "Setting up late_start settings script."
+			log_handler "Setting up settings file."
 			if [ ! -d "$MHPCPATH" ]; then
 				mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
 			fi
 			cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
-		# Downgraded script (flashed old module version)
+		# Downgraded file (flashed old module version)
 		elif [ "$UPDATEV" -lt "$FILEV" ]; then
-			log_print "- Settings cleared (script downgraded)"
+			log_print "- Settings cleared (file downgraded)"
 			if [ ! -d "$MHPCPATH" ]; then
 				mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
 			fi
 			cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
-		# No update of script
+		# No update of file
 		else
 			log_print "- Module settings preserved"
 		fi
 	else
-		log_print "- Placing settings script"
-		log_handler "Setting up late_start settings script."
+		log_print "- Placing settings file"
 		if [ ! -d "$MHPCPATH" ]; then
 			mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
 		fi
@@ -1069,12 +1067,12 @@ script_install() {
 	usnf_check
 	bin_check
 	files_check
-	script_placement
+	settings_placement
 	log_print "- Updating placeholders"
-	placeholder_update $TMPDIR/post-fs-data.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
-	placeholder_update $TMPDIR/post-fs-data.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
-	placeholder_update $MODPATH/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
-	placeholder_update $MODPATH/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
+	placeholder_update $MODPATH/post-fs-data.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $MODPATH/post-fs-data.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
+	placeholder_update $MODPATH/common/util_functions.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
+	placeholder_update $MODPATH/common/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/system/$BIN/props ADBPATH ADB_PLACEHOLDER "$ADBPATH"
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEFILE"
 	load_settings
@@ -1119,6 +1117,7 @@ print_edit() {
 		else
 			PRINTCHNG="$(echo $MODULEFINGERPRINT | sed 's|\_\_.*||')"
 		fi
+		# Changing props
 		for ITEM in $PRINTPROPS; do
 			if [ "$(resetprop $ITEM)" ]; then
 				log_handler "Changing/writing $ITEM."
@@ -1176,7 +1175,7 @@ print_files() {
 	rm -rf $MODPATH/printfiles >> $LOGFILE 2>&1
 	mkdir -pv $MODPATH/printfiles >> $LOGFILE 2>&1
 	# Loading prints
-	. $MODPATH/prints.sh
+	. $MODPATH/common/prints.sh
 	# Saving manufacturers
 	log_handler "Saving manufacturers."
 	SAVEIFS=$IFS
@@ -1191,7 +1190,7 @@ print_files() {
 	log_handler "Creating files."
 	for OEM in $OEMLIST; do
 		echo -e "PRINTSLIST=\"" >> $MODPATH/printfiles/${OEM}\.sh
-		grep $OEM >> $MODPATH/printfiles/${OEM}\.sh $MODPATH/prints.sh
+		grep $OEM >> $MODPATH/printfiles/${OEM}\.sh $MODPATH/common/prints.sh
 		echo -e "\"" >> $MODPATH/printfiles/${OEM}\.sh
 	done
 	# Check for updated fingerprint

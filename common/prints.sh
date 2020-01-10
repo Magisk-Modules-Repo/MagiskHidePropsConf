@@ -1,10 +1,10 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=71
+PRINTSV=72
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -19,7 +19,7 @@ Asus Zenfone Max Pro M1 (8.1.0)=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.190
 Asus ZenPad S 8.0 (6.0.1)=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
 BLU R1 HD 2018 (7.0)=BLU/BLU_S1/S0320WW:7.0/NRD90M/1514191903:user/release-keys
 Elephone U Pro (8.0.0)=Elephone/U_Pro/U_Pro:8.0.0/Elephone_U_Pro_20180917/09172123:user/release-keys__2018-09-05
-Essential PH-1 (9 & 10)=essential/mata/mata:9/PQ1A.190105.112/550:user/release-keys__2019-08-05;essential/mata/mata:10/QP1A.191005.014/478:user/release-keys__2019-11-05
+Essential PH-1 (9 & 10)=essential/mata/mata:9/PQ1A.190105.112/550:user/release-keys__2019-08-05;essential/mata/mata:10/QQ1A.200105.007/515:user/release-keys__2020-01-05
 Fairphone 2 (6.0.1)=Fairphone/FP2/FP2:6.0.1/FP2-gms-17.09.3/FP2-gms-17.09.3:user/release-keys
 Google Nexus 4 (5.1.1)=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1)=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys
@@ -36,14 +36,14 @@ Google Nexus 10 (5.1.1)=google/mantaray/manta:5.1.1/LMY49J/2640980:user/release-
 Google Nexus Player (6.0.1)=google/fugu/fugu:6.0.1/MMB29U/2495654:user/release-keys
 Google Pixel (8.1.0 & 9 & 10)=google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/sailfish/sailfish:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
 Google Pixel XL (8.1.0 & 9 & 10)=google/marlin/marlin:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/marlin/marlin:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
-Google Pixel 2 (8.1.0 & 9 & 10)=google/walleye/walleye:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ1A.191205.008/5974827:user/release-keys__2019-12-05
-Google Pixel 2 XL (8.1.0 & 9 & 10)=google/taimen/taimen:8.1.0/OPM4.171019.016.B1/4720843:user/release-keys;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ1A.191205.008/5974827:user/release-keys__2019-12-05
-Google Pixel 3 (9 & 10)=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ1A.191205.008/5974827:user/release-keys__2019-12-05
-Google Pixel 3 XL (9 & 10)=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ1A.191205.008/5974827:user/release-keys__2019-12-05
-Google Pixel 3a (9 & 10)=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ1A.191205.011/6009058:user/release-keys__2019-12-05
-Google Pixel 3a XL (9 & 10)=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ1A.191205.011/6009058:user/release-keys__2019-12-05
-Google Pixel 4 (10)=google/flame/flame:10/QQ1B.191205.012.A1/6015823:user/release-keys__2019-12-05
-Google Pixel 4 XL (10)=google/coral/coral:10/QQ1B.191205.012.A1/6015823:user/release-keys__2019-12-05
+Google Pixel 2 (8.1.0 & 9 & 10)=google/walleye/walleye:8.1.0/OPM2.171019.029/4657601:user/release-keys;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ1A.200105.002/6031801:user/release-keys__2020-01-01
+Google Pixel 2 XL (8.1.0 & 9 & 10)=google/taimen/taimen:8.1.0/OPM4.171019.016.B1/4720843:user/release-keys;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ1A.200105.002/6031801:user/release-keys__2020-01-01
+Google Pixel 3 (9 & 10)=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ1A.200105.002/6031801:user/release-keys__2020-01-01
+Google Pixel 3 XL (9 & 10)=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ1A.200105.002/6031801:user/release-keys__2020-01-01
+Google Pixel 3a (9 & 10)=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ1A.200105.002/6031801:user/release-keys__2020-01-01
+Google Pixel 3a XL (9 & 10)=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ1A.200105.002/6031801:user/release-keys__2020-01-01
+Google Pixel 4 (10)=google/flame/flame:10/QQ1B.200105.004/6031802:user/release-keys__2020-01-01
+Google Pixel 4 XL (10)=google/coral/coral:10/QQ1B.200105.004/6031802:user/release-keys__2020-01-01
 Google Pixel C (8.1.0)=google/ryu/dragon:8.1.0/OPM8.190605.005/5749003:user/release-keys__2019-06-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
@@ -103,10 +103,10 @@ OnePlus 2 (6.0.1)=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release
 OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
 OnePlus 3 (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01;OnePlus/OnePlus3/OnePlus3:9/PKQ1.181203.001/1911042107:user/release-keys__2019-10-01
 OnePlus 3T (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1911042108:user/release-keys__2019-10-01
-OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1910081949:user/release-keys__2019-10-01
-OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1910081948:user/release-keys__2019-10-01
+OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
+OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
 OnePlus 6 (8.1.0 & 9 & 10)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/1911142022:user/release-keys__2019-10-01
-OnePlus 6T (9 & 10)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/1911142147:user/release-keys__2019-10-01
+OnePlus 6T (9 & 10)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/1912142009:user/release-keys__2019-11-01
 OnePlus 7 GM1901/GM1905 (9)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
 OnePlus 7 GM1903 (9)=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
 OnePlus 7 Pro GM1911/GM1917 (9 & 10)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/1910071200:user/release-keys__2019-09-05
@@ -136,6 +136,7 @@ Samsung Galaxy Note 3 (5.0)=samsung/hltezh/hlte:5.0/LRX21V/N9005ZSUGPJ2:user/rel
 Samsung Galaxy Note 4 (6.0.1)=samsung/trltexx/trlte:6.0.1/MMB29M/N910FXXS1DQH9:user/release-keys
 Samsung Galaxy Note 5 (7.0)=samsung/nobleltejv/noblelte:7.0/NRD90M/N920CXXU3CQH6:user/release-keys
 Samsung Galaxy Note 8 (8.0.0)=samsung/greatltexx/greatlte:8.0.0/R16NW/N950FXXU3CRC1:user/release-keys
+Samsung Galaxy Note 10 Plus (10)=samsung/d2sxx/d2s:10/QP1A.190711.020/N975FXXU1BSL7:user/release-keys__2019-12-01
 Samsung Galaxy Note 10.1 2014 (5.1.1)=samsung/lt03wifixx/lt03wifi:5.1.1/LMY47X/P600XXUDOJ3:user/release-keys
 Samsung Galaxy S3 Neo (4.4.4)=samsung/s3ve3gdd/s3ve3gdd:4.4.4/KTU84P/I9300IDDUBQE2:user/release-keys
 Samsung Galaxy S4 (5.0.1)=samsung/jfltexx/jflte:5.0.1/LRX22C/I9505XXUHPF4:user/release-keys
@@ -196,7 +197,8 @@ Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:us
 Xiaomi Mi 8 (8.1.0 & 9)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01
 Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi 9 Lite (9)=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
-Xiaomi Mi 9T (9)=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01
+Xiaomi Mi 9T European (9 & 10)=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01;Xiaomi/davinci_eea/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJEUXM:user/release-keys__2019-12-01
+Xiaomi Mi 9T Global (10)=Xiaomi/davinci/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJMIXM:user/release-keys__2019-12-01
 Xiaomi Mi A1 (8.0.0 & 9)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys__2019-01-05
 Xiaomi Mi A2 (8.1.0 & 9)=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.16.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.14.0.PDIMIXM:user/release-keys__2019-09-05
 Xiaomi Mi A2 Lite (9)=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
@@ -204,7 +206,7 @@ Xiaomi Mi A3 (9)=Xiaomi/laurel_sprout/laurel_sprout:9/PKQ1.190416.001/V10.3.6.0.
 Xiaomi Mi Max (6.0.1)=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.MBDMIDL:user/release-keys
 Xiaomi Mi Max 2 (7.1.1)=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
 Xiaomi Mi Max 3 (9)=Xiaomi/nitrogen/nitrogen:9/PKQ1.181007.001/V10.3.1.0.PEDMIXM:user/release-keys__2019-03-01
-Xiaomi Mi Mix 2 (8.0.0)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V10.2.2.0.ODEMIXM:user/release-keys__2018-12-01
+Xiaomi Mi Mix 2 (8.0.0 & 9)=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V10.2.2.0.ODEMIXM:user/release-keys__2018-12-01;Xiaomi/chiron/chiron:9/PKQ1.190118.001/V11.0.3.0.PDEMIXM:user/release-keys__2019-09-01
 Xiaomi Mi Mix 2S (8.0.0 & 9)=Xiaomi/polaris/polaris:8.0.0/OPR1.170623.032/V9.5.19.0.ODGMIFA:user/release-keys;Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.3.3.0.PDGMIXM:user/release-keys__2019-05-01
 Xiaomi Mi Mix 3 (9)=Xiaomi/perseus/perseus:9/PKQ1.180729.001/V10.3.1.0.PEEMIXM:user/release-keys__2019-03-01
 Xiaomi Mi Note 2 (7.0 & 8.0.0)=Xiaomi/scorpio/scorpio:7.0/NRD90M/V9.2.1.0.NADMIEK:user/release-keys;Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
@@ -222,7 +224,7 @@ Xiaomi Redmi K20 Pro/Mi 9T Pro (9 & 10)=Xiaomi/raphael/raphael:9/PKQ1.181121.001
 Xiaomi Redmi Note 2 (5.0.2)=Xiaomi/hermes/hermes:5.0.2/LRX22G/V9.2.4.0.LHMMIEK:user/release-keys
 Xiaomi Redmi Note 3 Pro (6.0.1)=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL:user/release-keys
 Xiaomi Redmi Note 3 Pro SE (6.0.1)=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
-Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V9.6.1.0.NCFMIFD:user/release-keys
+Xiaomi Redmi Note 4/4X (7.0)=xiaomi/mido/mido:7.0/NRD90M/V11.0.2.0.NCFMIXM:user/release-keys__2018-12-01
 Xiaomi Redmi Note 4 Mediatek (6.0)=Xiaomi/nikel/nikel:6.0/MRA58K/V9.2.2.0.MBFMIEK:user/release-keys
 Xiaomi Redmi Note 5/5 Plus (7.1.2 & 8.1.0)=xiaomi/vince/vince:7.1.2/N2G47H/V9.5.4.0.NEGMIFA:user/release-keys;xiaomi/vince/vince:8.1.0/OPM1.171019.019/V10.2.1.0.OEGMIXM:user/release-keys__2019-03-01
 Xiaomi Redmi Note 5 Pro (8.1.0 & 9)=xiaomi/whyred/whyred:8.1.0/OPM1.171019.011/V10.0.6.0.OEIMIFH:user/release-keys__2018-11-01;xiaomi/whyred/whyred:9/PKQ1.180904.001/V11.0.3.0.PEIMIXM:user/release-keys__2019-11-05

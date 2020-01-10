@@ -214,7 +214,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v71_**
+**_Current fingerprints list version - 72_**
 
 
 ## Please add support for device X
@@ -314,7 +314,7 @@ Whenever there is an update to the fingerprints list and if you have a fingerpri
 By default, parts of the module post-fs-data boot script is executed in the background, but the parts that don't might still cause issues on some devices. If there are issues with the boot scripts not running during boot, try enabling this option to execute the script entirely in the background. Keep in mind that this might cause other issues, so only enable if necessary.
 
 ## Configuration file
-You can use a configuration file to set your desired options, rather than running the `props` command. This is particularly useful if you have a large amount of custom props you want to set. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf) or extract it from the module zip ('propsconf_conf' in the common folder), fill in the desired options (follow the instructions in the file), place it in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. You can also use the configuration file when first installing the module. Just place the file in the root of your internal storage (or one of the other previously mentioned locations) before flashing the module and the installation script will set everything up.
+You can use a configuration file to set your desired options, rather than running the `props` command. This is particularly useful if you have a large amount of custom props you want to set. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf), extract it from the module zip (in the /common folder) or copy it from the module directory under /data/adb (in the /common folder), fill in the desired options (follow the instructions in the file), place it in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. You can also use the configuration file when first installing the module. Just place the file in the root of your internal storage (or one of the other previously mentioned locations) before flashing the module and the installation script will set everything up.
 
 **NOTE!** If a configuration file is used during boot there will be a reboot during the late_start service boot mode, to load the newly set up values.
 
@@ -425,6 +425,11 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.1.1  
+- Updated the module to conform with the current module installation setup.
+- Minor updates.
+- Added fingerprint for Samsung Galaxy Note 10 Plus and Xiaomi Mi 9T (Global version). Updated fingerprints for Essential PH-1, Google Pixel 2-4 (all variants), Oneplus 5, 5T and 6T, Xiaomi Mi 9T (European version), Mi Mix 2 and Redmi Note 4/4x. Fingerprints list updated to v72.
+
 ### v5.1.0  
 - Fixed issue caused by some devices toybox commands not working as expected.
 - Cleaned up the post-fs-data script to remove unnecessary strain from the boot process. Moved as much as possible to the late_start service boot script instead. Among other things, this means that there will be a reboot late in the boot process when using the configuration file during boot (see the documentation for details).
@@ -716,7 +721,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v71  
+### List v72  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 3 Max (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max (7.1.1)
@@ -844,6 +849,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy Note 4 (6.0.1)
 - Samsung Galaxy Note 5 (7.0)
 - Samsung Galaxy Note 8 (8.0.0)
+- Samsung Galaxy Note 10 Plus (10)
 - Samsung Galaxy Note 10.1 2014 (5.1.1)
 - Samsung Galaxy S3 Neo (4.4.4)
 - Samsung Galaxy S4 (5.0.1)
@@ -904,7 +910,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 8 (8.1.0 & 9)
 - Xiaomi Mi 9 (9)
 - Xiaomi Mi 9 Lite (9)
-- Xiaomi Mi 9T (9)
+- Xiaomi Mi 9T European (9 & 10)
+- Xiaomi Mi 9T Global (10)
 - Xiaomi Mi A1 (8.0.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9)
 - Xiaomi Mi A2 Lite (9)
@@ -912,7 +919,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi Max (6.0.1)
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Max 3 (9)
-- Xiaomi Mi Mix 2 (8.0.0)
+- Xiaomi Mi Mix 2 (8.0.0 & 9)
 - Xiaomi Mi Mix 2S (8.0.0 & 9)
 - Xiaomi Mi Mix 3 (9)
 - Xiaomi Mi Note 2 (7.0 & 8.0.0)
@@ -948,7 +955,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## MIT Licence
 
-*Copyright (c) 2018-2019 Didgeridoohan*
+*Copyright (c) 2018-2020 Didgeridoohan*
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

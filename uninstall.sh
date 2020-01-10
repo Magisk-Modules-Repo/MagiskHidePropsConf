@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2019 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
 # Uninstalls the module settings file and directory in Magisk's secure directory
@@ -11,7 +11,7 @@ MODPATH=${0%/*}
 BOOTSTAGE="post"
 
 # Load functions
-. $MODPATH/util_functions.sh
+. $MODPATH/common/util_functions.sh
 
 rm -rf "$MHPCPATH"
 
