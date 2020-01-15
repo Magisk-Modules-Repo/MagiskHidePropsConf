@@ -398,7 +398,7 @@ The logs will also automatically be saved to the root of the device's internal s
 If there are issues with other apps or your system as a result of using this module, a logcat/recovery log/etc showing the issue will most likely be necessary. Take a look in my [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHelp) for guidance on that.
 
 ### Collecting logs manually
-If you can't run the `props` script for some reason, the logs are also stored in /data/adb/mhpc. The Magisk log and any files starting with "propsconf" would be useful for troubleshooting (if you don't, or can't, use the "Collect logs" option mentioned above). Providing the output from terminal might also be useful.
+If you can't run the `props` script for some reason, the logs are also stored in /data/adb/mhpc. The Magisk log (stored in /cache or saved from the Magisk Manager) and any files starting with "propsconf" would be useful for troubleshooting (if you don't, or can't, use the "Collect logs" option mentioned above). Providing the output from terminal might also be useful.
 
 
 ## Donations
@@ -420,7 +420,7 @@ And of course, everyone that provides fingerprints for me to add to the list. Th
 Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases).
 
 Releases up until v2.4.0 are compatible with Magisk v15 to v16.7.  
-Releases from v2.4.1 are compatible with Magisk v17+.  
+Releases from v2.4.1 are compatible with Magisk v17 to v18.1.  
 Releases from v4.0.0 are compatible with Magisk v19+.  
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
