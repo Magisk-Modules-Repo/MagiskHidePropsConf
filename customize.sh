@@ -9,12 +9,14 @@ INSTFN=true
 . $MODPATH/common/util_functions.sh
 
 # Print module info
-ui_print "$pounds"
+ui_print ""
+ui_print "************************"
 ui_print " Installing $MODVERSION "
-ui_print " By Didgeridoohan "
-ui_print "$pounds"
+ui_print " By Didgeridoohan @ XDA "
+ui_print "************************"
+ui_print ""
 
-# Create install directory
+# Create module directory
 mkdir -pv $MHPCPATH
 
 # Start module installation log
@@ -27,4 +29,8 @@ log_handler "Starting module installation script"
 # Module script installation
 script_install
 
+# Permission
 set_perm $MODPATH/system/$BIN/props 0 0 0755
+
+# Remove unused files
+rm -f $MODPATH/LICENSE

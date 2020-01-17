@@ -145,9 +145,9 @@ VR_Patch
 
 # Configuration file locations
 CONFFILELST="
-/data/media/0/propsconf_conf
-/data/propsconf_conf
-$CACHELOC/propsconf_conf
+/data
+$CACHELOC
+/data/media/0
 "
 
 # MagiskHide props
@@ -373,8 +373,7 @@ get_print_versions() {
 get_android_version() {
 	VERTMP=$(echo $1 | sed 's|\.||g')
 	if [ "${#VERTMP}" -lt 3 ]; then
-		until [ "${#VERTMP}" == 3 ]
-		do
+		until [ "${#VERTMP}" == 3 ]; do
 			VERTMP="$(echo ${VERTMP}0)"
 		done
 	fi
@@ -605,9 +604,20 @@ config_file() {
 	log_handler "Checking for configuration file."
 	CONFFILE=""
 	for ITEM in $CONFFILELST; do
-		if [ -s "$ITEM" ]; then
-			CONFFILE="$ITEM"
+		if [ -s "$ITEM/propsconf_conf" ]; then
+			CONFFILE="$ITEM/propsconf_conf"
 			break
+		fi
+		if [ "$ITEM" == "/data/media/0" ]; then
+			until [ -e "$ITEM/testfbe" ]; do
+			   sleep 1
+			   touch $ITEM/testfbe
+			done
+			rm -f $ITEM/testfbe
+			if [ -s "$ITEM/propsconf_conf" ]; then
+				CONFFILE="$ITEM/propsconf_conf"
+				break
+			fi
 		fi
 	done
 
@@ -644,9 +654,7 @@ config_file() {
 					fi
 				else
 					if [ "$PROPTYPE" == "ro.build.fingerprint" ]; then
-						if [ "$FINGERPRINTENB" == 1 ]; then
-							reset_print "$PROPTYPE" "file"
-						fi
+						reset_print "$PROPTYPE" "file"
 					else
 						reset_prop "$PROPTYPE" "file"
 					fi
@@ -811,7 +819,7 @@ config_file() {
 		# Deletes the configuration file
 		log_handler "Deleting configuration file."
 		for ITEM in $CONFFILELST; do
-			rm -f $ITEM
+			rm -f $ITEM/propsconf_conf
 		done
 		log_handler "Configuration file import complete."
 		if [ "$BOOTSTAGE" == "late" ]; then
@@ -1085,8 +1093,8 @@ script_install() {
 	# Checks for configuration file
 	CONFFILE=""
 	for ITEM in $CONFFILELST; do
-		if [ -s "$ITEM" ]; then
-			CONFFILE="$ITEM"
+		if [ -s "$ITEM/propsconf_conf" ]; then
+			CONFFILE="$ITEM/propsconf_conf"
 			break
 		fi
 	done

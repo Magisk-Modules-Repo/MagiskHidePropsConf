@@ -28,20 +28,26 @@ default_save
 log_handler "Default values saved to $LATEFILE."
 
 # Checks for the Universal SafetyNet Fix module and similar modules editing the device fingerprint
-PRINTMODULE=false
+TMPUSNF=false
 for USNF in $USNFLIST; do
 	if [ -d "$MODULESPATH/$USNF" ]; then
 		if [ ! -f "$MODULESPATH/$USNF/disable" ]; then
 			NAME=$(get_file_value $MODULESPATH/$USNF/module.prop "name=")
 			log_handler "Magisk module '$NAME' installed (modifies the device fingerprint)."
-			PRINTMODULE=true
+			TMPUSNF=true
 		fi
 	fi
 done
-if [ "$PRINTMODULE" == "true" ]; then
+if [ "$TMPUSNF" == "true" ]; then
 	replace_fn FINGERPRINTENB 1 0 $LATEFILE
 	replace_fn PRINTMODULE 0 1 $LATEFILE
 	log_handler "Fingerprint modification disabled."
+	# Reset current fingerprint if set
+	if [ "$MODULEFINGERPRINT" ]; then
+		log_handler "Resetting current fingerprint."
+		reset_print
+		force_reboot
+	fi
 else
 	replace_fn FINGERPRINTENB 0 1 $LATEFILE
 	replace_fn PRINTMODULE 1 0 $LATEFILE

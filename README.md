@@ -62,6 +62,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [I can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-ctsprofile-check)
   - [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)
   - [Props don't seem to set properly](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly)
+  - [My build.prop doesn't change after setting a custom prop or removing a prop value](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-setting-a-custom-prop-or-removing-a-prop-value)
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
@@ -214,7 +215,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - 72_**
+**_Current fingerprints list version - v73_**
 
 
 ## Please add support for device X
@@ -271,25 +272,8 @@ When setting a custom prop you can also pick in what boot stage it should be set
 
 Note: post-fs-data runs earlier than late_start service.
 
-### My build.prop doesn't change after setting a custom prop
-Magisk doesn't alter the build.prop file when changing a custom prop value, it simply loads the new value instead of the one in build.prop. If you want to check if the new value has been loaded you can see this by selecting the prop in the "Add/edit custom props" menu of the `props` script.
-
-You can also use the `getprop` command in a terminal emulator to check the set value. Example:
-```
-getprop ro.build.fingerprint
-```
-
-
 ## Removing prop values
 If you would like to delete a certain prop value from your system, that can be done with the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop). With this module you can easily set that up by adding whatever prop you want removed to the "Delete props" list. Be very careful when using this option, since removing the wrong prop may cause isses with your device. See ["Device issues because of the module"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#device-issues-because-of-the-module) below if this happens.
-
-### My build.prop doesn't change after removing a prop value
-Magisk doesn't alter the build.prop file when removing a prop value, it simply prevents the prop to load instead of removing it from build.prop. If you want to check if the prop has been removed use the `getprop` command in a terminal emulator to check. Example:
-```
-getprop ro.build.fingerprint
-```
-If the prop has been removed, the command should return nothing.
-
 
 ## Prop script settings
 There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option (use -h for details).
@@ -370,6 +354,13 @@ If it seems like props you're trying to set with the module don't get set proper
 
 This may also be caused by the post-fs-data.sh script being set to run in the background because of the execution taking to long. Try disabling this option in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prop-script-settings) and see if that changes anything.
 
+### My build.prop doesn't change after setting a custom prop or removing a prop value
+Magisk doesn't alter the build.prop file when changing or removing a prop value, it simply loads a new value or prevents the prop to load instead of adding or removing it from build.prop. If you want to check if the prop has been changed use the `getprop` command in a terminal emulator to check. Example:
+```
+getprop ro.build.fingerprint
+```
+If the prop has been removed, the command should return nothing.
+
 ### My device's Android security patch date changed
 For some fingerprints it is necessary to also change the security patch date to match the fingerprint used (the actual patch won't change, just the displayed date). This is automatically done by the module when using a fingerprint from a build after March 16 2018. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and load back the original date, but keep in mind that this may result in the fingerprint not working and SafetyNet will fail.
 
@@ -425,6 +416,11 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.1.2  
+- Reset current fingerprint if disabling fingerprint modification because of a conflicting module.
+- Fixed using the configuration file in /sdcard during boot on FBE encrypted devices.
+- Added fingerprint for Huawei P20 (L09 single SIM), Motorola Moto G7 Power, Samsung Galaxy Core Prime and Xiaomi Mi 9 SE. Updated fingerprint for OnePlus 7 Pro NR and Razer Phone 2. List updated to v73.
+
 ### v5.1.1  
 - Updated the module to conform with the current module installation setup.
 - Minor updates.
@@ -721,7 +717,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v72  
+### List v73  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 3 Max (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max (7.1.1)
@@ -772,6 +768,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Huawei P9 Lite (7.0)
 - Huawei P9 Plus (7.0)
 - Huawei P20 (9)
+- Huawei P20 Dual SIM (9)
 - Huawei P20 Lite (8.0.0 & 9)
 - Huawei P20 Pro (8.1.0 & 9)
 - Lenovo K6 Note (7.0)
@@ -802,6 +799,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Motorola Moto G6 (9)
 - Motorola Moto G6 Play (8.0.0 & 9)
 - Motorola Moto G6 Plus (9)
+- Motorola Moto G7 Power (9)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
 - Nextbook Ares 8A (6.0.1)
@@ -809,8 +807,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Nokia 7 Plus (9)
 - Nvidia Shield K1 (7.0)
 - Nvidia Shield Tablet (7.0)
-- Nvidia Shield TV 2017 (8.0.0)
-- Nvidia Shield TV Pro (8.0.0)
+- Nvidia Shield TV 2017 (8.0.0 & 9)
+- Nvidia Shield TV Pro (8.0.0 & 9)
 - OnePlus One (6.0.1)
 - OnePlus 2 (6.0.1)
 - OnePlus X (6.0.1)
@@ -829,13 +827,14 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - Razer Phone (8.1.0)
-- Razer Phone 2 (8.1.0)
+- Razer Phone 2 (8.1.0 & 9)
 - Samsung Galaxy A3 2015 (6.0.1)
 - Samsung Galaxy A5 2015 (6.0.1)
 - Samsung Galaxy A5 2017 (8.0.0)
 - Samsung Galaxy A51 (10)
 - Samsung Galaxy A6 Plus (9)
 - Samsung Galaxy A8 Plus (7.1.1)
+- Samsung Galaxy Core Prime (5.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
 - Samsung Galaxy J2 (5.1.1)
 - Samsung Galaxy J3 (5.1.1)
@@ -910,6 +909,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 8 (8.1.0 & 9)
 - Xiaomi Mi 9 (9)
 - Xiaomi Mi 9 Lite (9)
+- Xiaomi Mi 9 SE (9)
 - Xiaomi Mi 9T European (9 & 10)
 - Xiaomi Mi 9T Global (10)
 - Xiaomi Mi A1 (8.0.0 & 9)
@@ -933,7 +933,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi 5A (7.1.2 & 8.1.0)
 - Xiaomi Redmi Go (8.1.0)
-- Xiaomi Redmi K20 Pro (9 & 10)
+- Xiaomi Redmi K20 Pro/Mi 9T Pro (9 & 10)
 - Xiaomi Redmi Note 2 (5.0.2)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE (6.0.1)

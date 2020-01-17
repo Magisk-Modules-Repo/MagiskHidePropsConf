@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=72
+PRINTSV=73
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -58,7 +58,8 @@ Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/401(C432):user
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P9 Lite (7.0)=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/release-keys__2018-06-01
 Huawei P9 Plus (7.0)=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
-Huawei P20 (9)=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
+Huawei P20 (9)=HUAWEI/EML-L09/HWEML:9/HUAWEIEML-L09/9.1.0.345C109:user/release-keys__2019-10-06
+Huawei P20 Dual SIM (9)=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
 Huawei P20 Lite (8.0.0 & 9)=HUAWEI/ANE-LX1/HWANE:8.0.0/HUAWEIANE-LX1/180(C432):user/release-keys__2019-04-05;HUAWEI/ANE-LX1/HWANE:9/HUAWEIANE-L21/132C432R1:user/release-keys__2019-05-05
 Huawei P20 Pro (8.1.0 & 9)=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys;HUAWEI/CLT-L09/HWCLT:9/HUAWEICLT-L09/203C432R1:user/release-keys__2019-02-01
 Lenovo K6 Note (7.0)=Lenovo/karatep/K53a48:7.0/NRD90N/K53_S228_171114_ROW:user/release-keys
@@ -89,6 +90,7 @@ Motorola Moto G5S (7.1.1 & 8.1.0)=motorola/montana/montana:7.1.1/NPPS26.102-49-8
 Motorola Moto G6 (9)=motorola/ali/ali:9/PPS29.55-34/0c5d:user/release-keys__2019-02-01
 Motorola Moto G6 Play (8.0.0 & 9)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys;motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys__2019-01-01
 Motorola Moto G6 Plus (9)=motorola/evert_amx_n/evert_n:9/PPWS29.116-16-6/5cbfe:user/release-keys__2019-05-01
+Motorola Moto G7 Power (9)=motorola/ocean/ocean:9/PPOS29.114-134-7/d9234:user/release-keys__2019-12-01
 Motorola Moto X4 (8.0.0)=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0)=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
 Nextbook Ares 8A (6.0.1)=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
@@ -111,18 +113,19 @@ OnePlus 7 GM1901/GM1905 (9)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/19072807
 OnePlus 7 GM1903 (9)=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
 OnePlus 7 Pro GM1911/GM1917 (9 & 10)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/1910071200:user/release-keys__2019-09-05
 OnePlus 7 Pro GM1913 (9)=OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01
-OnePlus 7 Pro NR GM1920 (9)=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1909251702:user/release-keys__2019-10-01
+OnePlus 7 Pro NR GM1920 (9)=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1912171007:user/release-keys__2019-12-01
 OnePlus 7T (10)=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/1909250940:user/release-keys__2019-09-05
 OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
-Razer Phone 2 (8.1.0)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05
+Razer Phone 2 (8.1.0 & 9)=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05;razer/cheryl2/aura:9/P-MR2-RC001-RZR-190914/3123:user/release-keys__2019-09-05
 Samsung Galaxy A3 2015 (6.0.1)=samsung/a3ultexx/a3ulte:6.0.1/MMB29M/A300FUXXU1CRF1:user/release-keys
 Samsung Galaxy A5 2015 (6.0.1)=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CPH3:user/release-keys
 Samsung Galaxy A5 2017 (8.0.0)=samsung/a5y17ltexx/a5y17lte:8.0.0/R16NW/A520FXXUCCSK1:user/release-keys__2019-11-01
 Samsung Galaxy A51 (10)=samsung/a51nsxx/a51:10/QP1A.190711.020/A515FXXU1ASKJ:user/release-keys__2019-12-01
 Samsung Galaxy A6 Plus (9)=samsung/a6pltedx/a6plte:9/PPR1.180610.011/A605GDXU3BSC6:user/release-keys__2019-03-01
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
+Samsung Galaxy Core Prime (5.1.1)=samsung/coreprimeveltexx/coreprimevelte:5.1.1/LMY48B/G361FXXU1APB1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
 Samsung Galaxy J2 (5.1.1)=samsung/j23gdd/j23g:5.1.1/LMY48B/J200HXXU0AQK2:user/release-keys
 Samsung Galaxy J3 (5.1.1)=samsung/j3xnltexx/j3xnlte:5.1.1/LMY47V/J320FNXXU0ARB1:user/release-keys
@@ -197,6 +200,7 @@ Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:us
 Xiaomi Mi 8 (8.1.0 & 9)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01
 Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi 9 Lite (9)=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
+Xiaomi Mi 9 SE (9)=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9T European (9 & 10)=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01;Xiaomi/davinci_eea/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJEUXM:user/release-keys__2019-12-01
 Xiaomi Mi 9T Global (10)=Xiaomi/davinci/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJMIXM:user/release-keys__2019-12-01
 Xiaomi Mi A1 (8.0.0 & 9)=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys__2019-01-05
