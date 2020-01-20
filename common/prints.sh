@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=73
+PRINTSV=74
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -53,6 +53,7 @@ Huawei Honor 8X (8.1.0)=HONOR/JSN-L21RU/HWJSN-H:8.1.0/HONORJSN-L21/101(C10):user
 Huawei Honor 9 (8.0.0 & 9)=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys;HONOR/STF-L09/HWSTF:9/HUAWEISTF-L09/157C432R1:user/release-keys__2019-02-01
 Huawei Mate 10 (8.0.0)=HUAWEI/ALP-L29/HWALP:8.0.0/HUAWEIALP-L29S/143(C636):user/release-keys__2018-10-01
 Huawei Mate 10 Pro (8.0.0)=HUAWEI/BLA-L29/HWBLA:8.0.0/HUAWEIBLA-L29S/137(C432):user/release-keys
+Huawei Mate 20 Lite (9)=HUAWEI/SNE-LX1EEA/HWSNE:9/HUAWEISNE-L01/245EEAC782:user/release-keys__2019-09-01
 Huawei Mate 20 Pro (9)=HUAWEI/LYA-L29/HWLYA:9/HUAWEILYA-L29/320C432:user/release-keys__2019-08-01
 Huawei P8 Lite (8.0.0)=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWEIPRA-LX1/401(C432):user/release-keys__2019-01-01
 Huawei P9 (7.0)=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
@@ -87,6 +88,7 @@ Motorola Moto G4 (7.0 & 8.1.0)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user
 Motorola Moto G5 (7.0)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
 Motorola Moto G5 Plus (7.0)=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
 Motorola Moto G5S (7.1.1 & 8.1.0)=motorola/montana/montana:7.1.1/NPPS26.102-49-8/6:user/release-keys;motorola/montana/montana:8.1.0/OPPS28.65-37-7-11/7f8a6:user/release-keys__2019-08-01
+Motorola Moto G5S Plus (8.1.0)=motorola/sanders_n/sanders_n:8.1.0/OPS28.65-36-14/63857:user/release-keys__2019-08-01
 Motorola Moto G6 (9)=motorola/ali/ali:9/PPS29.55-34/0c5d:user/release-keys__2019-02-01
 Motorola Moto G6 Play (8.0.0 & 9)=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys;motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys__2019-01-01
 Motorola Moto G6 Plus (9)=motorola/evert_amx_n/evert_n:9/PPWS29.116-16-6/5cbfe:user/release-keys__2019-05-01
@@ -106,15 +108,22 @@ OnePlus X (6.0.1)=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-key
 OnePlus 3 (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01;OnePlus/OnePlus3/OnePlus3:9/PKQ1.181203.001/1911042107:user/release-keys__2019-10-01
 OnePlus 3T (8.0.0 & 9)=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1911042108:user/release-keys__2019-10-01
 OnePlus 5 (8.1.0 & 9)=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
-OnePlus 5T (8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
-OnePlus 6 (8.1.0 & 9 & 10)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/1911142022:user/release-keys__2019-10-01
+OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:7.1.1/NMF26X/12152312:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.0.0/OPR1.170623.032/02040656:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
+OnePlus 6 (8.1.0 & 9 & 10)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/1912142009:user/release-keys__2019-11-01
 OnePlus 6T (9 & 10)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/1912142009:user/release-keys__2019-11-01
-OnePlus 7 GM1901/GM1905 (9)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
-OnePlus 7 GM1903 (9)=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01
-OnePlus 7 Pro GM1911/GM1917 (9 & 10)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/1910071200:user/release-keys__2019-09-05
-OnePlus 7 Pro GM1913 (9)=OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01
+OnePlus 6T T-Mobile (9)=OnePlus/OnePlus6TSingle/OnePlus6TSingle:9/PKQ1.180716.001/1810291147:user/release-keys__2018-11-01
+OnePlus 7 GM1901/GM1905 (9 & 10)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/1912141900:user/release-keys__2019-11-01
+OnePlus 7 GM1903 (9 & 10)=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7_EEA/OnePlus7:10/QKQ1.190716.003/1912061900:user/release-keys__2019-11-01
+OnePlus 7 Pro GM1911/GM1917 (9 & 10)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/1912141900:user/release-keys__2019-11-01
+OnePlus 7 Pro GM1913 (9 & 10)=OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:10/QKQ1.190716.003/1912061900:user/release-keys__2019-11-01
+OnePlus 7 Pro GM1915 (9)=OnePlus/OnePlus7ProTMO/OnePlus7ProTMO:9/PKQ1.190110.001/1905021004:user/release-keys__2019-03-01
 OnePlus 7 Pro NR GM1920 (9)=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1912171007:user/release-keys__2019-12-01
-OnePlus 7T (10)=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/1909250940:user/release-keys__2019-09-05
+OnePlus 7 Pro NR Spr GM1925 (9)=OnePlus/OP7ProNRSpr/OP7ProNRSpr:9/PKQ1.190223.001/1908201041:user/release-keys__2019-08-01
+OnePlus 7T HD1901/HD1905 (10)=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/1912060025:user/release-keys__2019-11-01
+OnePlus 7T HD1903 (10)=OnePlus/OnePlus7T_EEA/OnePlus7T:10/QKQ1.190716.003/1912060025:user/release-keys__2019-11-01
+OnePlus 7T Pro HD1911/HD1917 (10)=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/1912060020:user/release-keys__2019-11-01
+OnePlus 7T Pro HD1913 (10)=OnePlus/OnePlus7TPro_EEA/OnePlus7TPro:10/QKQ1.190716.003/1912060020:user/release-keys__2019-11-01
+OnePlus 7T Pro NR HD1925 (10)=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2001101147:user/release-keys__2019-12-01
 OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
@@ -124,6 +133,7 @@ Samsung Galaxy A5 2015 (6.0.1)=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CP
 Samsung Galaxy A5 2017 (8.0.0)=samsung/a5y17ltexx/a5y17lte:8.0.0/R16NW/A520FXXUCCSK1:user/release-keys__2019-11-01
 Samsung Galaxy A51 (10)=samsung/a51nsxx/a51:10/QP1A.190711.020/A515FXXU1ASKJ:user/release-keys__2019-12-01
 Samsung Galaxy A6 Plus (9)=samsung/a6pltedx/a6plte:9/PPR1.180610.011/A605GDXU3BSC6:user/release-keys__2019-03-01
+Samsung Galaxy A7 (8.0.0)=samsung/a7y17ltexx/a7y17lte:8.0.0/R16NW/A720FXXU9CSK3:user/release-keys__2019-12-01
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Core Prime (5.1.1)=samsung/coreprimeveltexx/coreprimevelte:5.1.1/LMY48B/G361FXXU1APB1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys

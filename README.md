@@ -215,7 +215,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v73_**
+**_Current fingerprints list version - v74_**
 
 
 ## Please add support for device X
@@ -717,7 +717,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v73  
+### List v74  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 3 Max (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max (7.1.1)
@@ -762,6 +762,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Huawei Honor 9 (8.0.0 & 9)
 - Huawei Mate 10 (8.0.0)
 - Huawei Mate 10 Pro (8.0.0)
+- Huawei Mate 20 Lite (9)
 - Huawei Mate 20 Pro (9)
 - Huawei P8 Lite (8.0.0)
 - Huawei P9 (7.0)
@@ -796,6 +797,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
 - Motorola Moto G5S (7.1.1 & 8.1.0)
+- Motorola Moto G5S Plus (8.1.0)
 - Motorola Moto G6 (9)
 - Motorola Moto G6 Play (8.0.0 & 9)
 - Motorola Moto G6 Plus (9)
@@ -815,15 +817,22 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 3 (8.0.0 & 9)
 - OnePlus 3T (8.0.0 & 9)
 - OnePlus 5 (8.1.0 & 9)
-- OnePlus 5T (8.1.0 & 9)
+- OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9)
 - OnePlus 6 (8.1.0 & 9 & 10)
 - OnePlus 6T (9 & 10)
-- OnePlus 7 GM1901/GM1905 (9)
-- OnePlus 7 GM1903 (9)
+- OnePlus 6T T-Mobile (9)
+- OnePlus 7 GM1901/GM1905 (9 & 10)
+- OnePlus 7 GM1903 (9 & 10)
 - OnePlus 7 Pro GM1911/GM1917 (9 & 10)
-- OnePlus 7 Pro GM1913 (9)
+- OnePlus 7 Pro GM1913 (9 & 10)
+- OnePlus 7 Pro GM1915 (9)
 - OnePlus 7 Pro NR GM1920 (9)
-- OnePlus 7T (10)
+- OnePlus 7 Pro NR Spr GM1925 (9)
+- OnePlus 7T HD1901/HD1905 (10)
+- OnePlus 7T HD1903 (10)
+- OnePlus 7T Pro HD1911/HD1917 (10)
+- OnePlus 7T Pro HD1913 (10)
+- OnePlus 7T Pro NR HD1925 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - Razer Phone (8.1.0)
@@ -833,6 +842,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy A5 2017 (8.0.0)
 - Samsung Galaxy A51 (10)
 - Samsung Galaxy A6 Plus (9)
+- Samsung Galaxy A7 (8.0.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Core Prime (5.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
