@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=74
+PRINTSV=75
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -133,7 +133,7 @@ Samsung Galaxy A5 2015 (6.0.1)=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CP
 Samsung Galaxy A5 2017 (8.0.0)=samsung/a5y17ltexx/a5y17lte:8.0.0/R16NW/A520FXXUCCSK1:user/release-keys__2019-11-01
 Samsung Galaxy A51 (10)=samsung/a51nsxx/a51:10/QP1A.190711.020/A515FXXU1ASKJ:user/release-keys__2019-12-01
 Samsung Galaxy A6 Plus (9)=samsung/a6pltedx/a6plte:9/PPR1.180610.011/A605GDXU3BSC6:user/release-keys__2019-03-01
-Samsung Galaxy A7 (8.0.0)=samsung/a7y17ltexx/a7y17lte:8.0.0/R16NW/A720FXXU9CSK3:user/release-keys__2019-12-01
+Samsung Galaxy A7 2017 (8.0.0)=samsung/a7y17ltexx/a7y17lte:8.0.0/R16NW/A720FXXU9CSK3:user/release-keys__2019-12-01
 Samsung Galaxy A8 Plus (7.1.1)=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy Core Prime (5.1.1)=samsung/coreprimeveltexx/coreprimevelte:5.1.1/LMY48B/G361FXXU1APB1:user/release-keys
 Samsung Galaxy Grand Prime (5.0.2)=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
@@ -208,7 +208,7 @@ Xiaomi Mi 5S (7.0)=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.5.4.0.NAGMIFD:user/r
 Xiaomi Mi 5S Plus (6.0.1 & 7.0)=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys;Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 (8.0.0)=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys
 Xiaomi Mi 8 (8.1.0 & 9)=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01
-Xiaomi Mi 9 (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
+Xiaomi Mi 9 European (9)=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi 9 Lite (9)=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9 SE (9)=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9T European (9 & 10)=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01;Xiaomi/davinci_eea/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJEUXM:user/release-keys__2019-12-01
@@ -225,8 +225,9 @@ Xiaomi Mi Mix 2S (8.0.0 & 9)=Xiaomi/polaris/polaris:8.0.0/OPR1.170623.032/V9.5.1
 Xiaomi Mi Mix 3 (9)=Xiaomi/perseus/perseus:9/PKQ1.180729.001/V10.3.1.0.PEEMIXM:user/release-keys__2019-03-01
 Xiaomi Mi Note 2 (7.0 & 8.0.0)=Xiaomi/scorpio/scorpio:7.0/NRD90M/V9.2.1.0.NADMIEK:user/release-keys;Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
 Xiaomi Mi Note 3 (8.1.0)=Xiaomi/jason/jason:8.1.0/OPM1.171019.019/V10.2.2.0.OCHMIXM:user/release-keys__2018-12-01
+Xiaomi Mi Note 10 European (9)=Xiaomi/tucana_eea/tucana:9/PKQ1.190302.001/V11.0.11.0.PFDEUXM:user/release-keys__2019-11-01
 Xiaomi Mi Pad 4 (8.1.0)=Xiaomi/clover/clover:8.1.0/OPM1.171019.019/V10.1.1.0.ODJCNFI:user/release-keys__2018-10-01
-Xiaomi Pocophone F1 (9)=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V11.0.5.0.PEJMIXM:user/release-keys__2019-10-01
+Xiaomi Pocophone F1 (9 & 10)=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V11.0.5.0.PEJMIXM:user/release-keys__2019-10-01;Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V11.0.4.0.QEJMIXM:user/release-keys__2020-01-01
 Xiaomi Redmi 3/3 Pro (5.1.1)=Xiaomi/ido/ido:5.1.1/LMY47V/V9.6.2.0.LAIMIFD:user/release-keys
 Xiaomi Redmi 3S/X Prime (6.0.1)=Xiaomi/land/land:6.0.1/MMB29M/V9.5.1.0.MALMIFA:user/release-keys
 Xiaomi Redmi 4 Prime (6.0.1)=Xiaomi/markw/markw:6.0.1/MMB29M/V9.5.3.0.MBEMIFA:user/release-keys
@@ -247,7 +248,7 @@ Xiaomi Redmi Note 6 Pro (8.1.0)=xiaomi/tulip/tulip:8.1.0/OPM1.171019.011/V10.0.5
 Xiaomi Redmi Note 7 (9)=xiaomi/lavender/lavender:9/PKQ1.180904.001/V10.3.12.0.PFGMIXM:user/release-keys__2019-08-05
 Xiaomi Redmi Note 7 Pro (9)=xiaomi/violet/violet:9/PKQ1.181203.001/V10.3.13.0.PFHINXM:user/release-keys__2019-08-01
 Xiaomi Redmi Note 8 Pro (9)=Redmi/begoniain/begoniain:9/PPR1.180610.011/V10.4.4.0.PGGINXM:user/release-keys__2019-09-01
-Xiaomi Redmi Note 8T (9)=xiaomi/willow_eea/willow:9/PKQ1.190616.001/V10.3.5.0.PCXEUXM:user/release-keys__2019-10-01
+Xiaomi Redmi Note 8T European (9)=xiaomi/willow_eea/willow:9/PKQ1.190616.001/V10.3.5.0.PCXEUXM:user/release-keys__2019-10-01
 Xiaomi Redmi Y1 (7.1.2)=xiaomi/ugg/ugg:7.1.2/N2G47H/V9.6.2.0.NDKMIFD:user/release-keys__2018-07-01
 ZTE Axon 7 (7.1.1 & 8.0.0)=ZTE/P996A01_N/ailsa_ii:7.1.1/NMF26V/20171211.005949:user/release-keys;ZTE/P996A01_O/ailsa_ii:8.0.0/OPR1.170623.032/20180815.171922:user/release-keys__2018-07-01
 ZTE Blade (6.0.1)=ZTE/P809A50_MY_MAX/P809A50:6.0.1/MMB29M/20161017.095504:user/release-keys

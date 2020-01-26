@@ -215,7 +215,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v74_**
+**_Current fingerprints list version - v75_**
 
 
 ## Please add support for device X
@@ -717,7 +717,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v74  
+### List v75  
 - Asus Zenfone 2 Laser (6.0.1)
 - Asus Zenfone 3 Max (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max (7.1.1)
@@ -842,7 +842,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy A5 2017 (8.0.0)
 - Samsung Galaxy A51 (10)
 - Samsung Galaxy A6 Plus (9)
-- Samsung Galaxy A7 (8.0.0)
+- Samsung Galaxy A7 2017 (8.0.0)
 - Samsung Galaxy A8 Plus (7.1.1)
 - Samsung Galaxy Core Prime (5.1.1)
 - Samsung Galaxy Grand Prime (5.0.2)
@@ -917,7 +917,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 5S Plus (6.0.1 & 7.0)
 - Xiaomi Mi 6 (8.0.0)
 - Xiaomi Mi 8 (8.1.0 & 9)
-- Xiaomi Mi 9 (9)
+- Xiaomi Mi 9 European (9)
 - Xiaomi Mi 9 Lite (9)
 - Xiaomi Mi 9 SE (9)
 - Xiaomi Mi 9T European (9 & 10)
@@ -934,8 +934,9 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi Mix 3 (9)
 - Xiaomi Mi Note 2 (7.0 & 8.0.0)
 - Xiaomi Mi Note 3 (8.1.0)
+- Xiaomi Mi Note 10 European (9)
 - Xiaomi Mi Pad 4 (8.1.0)
-- Xiaomi Pocophone F1 (9)
+- Xiaomi Pocophone F1 (9 & 10)
 - Xiaomi Redmi 3/3 Pro (5.1.1)
 - Xiaomi Redmi 3S/X Prime (6.0.1)
 - Xiaomi Redmi 4 Prime (6.0.1)
@@ -956,7 +957,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Note 7 Pro (9)
 - Xiaomi Redmi Note 8 Pro (9)
-- Xiaomi Redmi Note 8T (9)
+- Xiaomi Redmi Note 8T European (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
 - ZTE Blade (6.0.1)

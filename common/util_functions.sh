@@ -98,6 +98,8 @@ else
 	# Log variables
 	LOGFILE=$MHPCPATH/propsconf.log
 	LASTLOGFILE=$MHPCPATH/propsconf_last.log
+	VLOGFILE=$MHPCPATH/propsconf_verbose.log
+	VLASTLOGFILE=$MHPCPATH/propsconf_verbose_last.log
 	TMPLOGLOC=$MHPCPATH/propslogs
 	TMPLOGLIST="
 	$MHPCPATH/defaultprops
@@ -234,6 +236,7 @@ sed
 sort
 tar
 tr
+wget
 "
 
 # Values props list

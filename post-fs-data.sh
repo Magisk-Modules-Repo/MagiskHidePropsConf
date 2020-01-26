@@ -14,6 +14,8 @@
 	MHPCPATH=$ADBPATH/mhpc
 	LOGFILE=$MHPCPATH/propsconf.log
 	LASTLOGFILE=$MHPCPATH/propsconf_last.log
+	VLOGFILE=$MHPCPATH/propsconf_boot_verbose.log
+	VLASTLOGFILE=$MHPCPATH/propsconf_boot_verbose_last.log
 	RUNFILE=$MHPCPATH/script_check
 
 	# Placeholder variables
@@ -24,6 +26,10 @@
 	if [ -f "$LOGFILE" ]; then
 		mv -f $LOGFILE $LASTLOGFILE
 	fi
+	if [ -f "$VLOGFILE" ]; then
+		mv -f $VLOGFILE $VLASTLOGFILE
+	fi
+	set -x > $VLOGFILE 2>&1
 	echo "***************************************************" > $LOGFILE 2>&1
 	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
 	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1

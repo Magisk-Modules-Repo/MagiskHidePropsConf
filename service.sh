@@ -10,6 +10,9 @@ BOOTSTAGE="late"
 # Load functions
 . $MODPATH/common/util_functions.sh
 
+VLOGFILE=$MHPCPATH/propsconf_boot_verbose.log
+set -x >> $VLOGFILE 2>&1
+
 TMP_WAIT=0
 until [ ! -f "$POSTCHKFILE" ] || [ "$TMP_WAIT" == 10 ]; do
 	sleep 1
