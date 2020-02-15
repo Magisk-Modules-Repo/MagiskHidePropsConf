@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=76
+PRINTSV=77
 PRINTSTRANSF=350
 
 # Certified fingerprints
@@ -119,18 +119,18 @@ OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9)=OnePlus/OnePlus5T/OnePlus5T:7.1.1/NMF26X/
 OnePlus 6 (8.1.0 & 9 & 10)=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/2001151848:user/release-keys__2019-12-01
 OnePlus 6T (9 & 10)=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/2001151848:user/release-keys__2019-12-01
 OnePlus 6T T-Mobile (9)=OnePlus/OnePlus6TSingle/OnePlus6TSingle:9/PKQ1.180716.001/1810291147:user/release-keys__2018-11-01
-OnePlus 7 GM1901/GM1905 (9 & 10)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/1912141900:user/release-keys__2019-11-01
+OnePlus 7 GM1901/GM1905 (9 & 10)=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
 OnePlus 7 GM1903 (9 & 10)=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7_EEA/OnePlus7:10/QKQ1.190716.003/1912061900:user/release-keys__2019-11-01
-OnePlus 7 Pro GM1911/GM1917 (9 & 10)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/1912141900:user/release-keys__2019-11-01
+OnePlus 7 Pro GM1911/GM1917 (9 & 10)=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
 OnePlus 7 Pro GM1913 (9 & 10)=OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:10/QKQ1.190716.003/1912061900:user/release-keys__2019-11-01
 OnePlus 7 Pro GM1915 (9)=OnePlus/OnePlus7ProTMO/OnePlus7ProTMO:9/PKQ1.190110.001/1905021004:user/release-keys__2019-03-01
 OnePlus 7 Pro NR GM1920 (9)=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1912171007:user/release-keys__2019-12-01
 OnePlus 7 Pro NR Spr GM1925 (9)=OnePlus/OP7ProNRSpr/OP7ProNRSpr:9/PKQ1.190223.001/1908201041:user/release-keys__2019-08-01
 OnePlus 7T HD1901/HD1905 (10)=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/1912060025:user/release-keys__2019-11-01
 OnePlus 7T HD1903 (10)=OnePlus/OnePlus7T_EEA/OnePlus7T:10/QKQ1.190716.003/1912060025:user/release-keys__2019-11-01
-OnePlus 7T Pro HD1911/HD1917 (10)=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/1912060020:user/release-keys__2019-11-01
-OnePlus 7T Pro HD1913 (10)=OnePlus/OnePlus7TPro_EEA/OnePlus7TPro:10/QKQ1.190716.003/1912060020:user/release-keys__2019-11-01
-OnePlus 7T Pro NR HD1925 (10)=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2001101147:user/release-keys__2019-12-01
+OnePlus 7T Pro HD1911/HD1917 (10)=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/2002022020:user/release-keys__2020-01-01
+OnePlus 7T Pro HD1913 (10)=OnePlus/OnePlus7TPro_EEA/OnePlus7TPro:10/QKQ1.190716.003/2002022020:user/release-keys__2020-01-01
+OnePlus 7T Pro NR HD1925 (10)=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2002051152:user/release-keys__2019-12-01
 OPPO Neo 7 A33w (5.1)=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1)=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0)=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
@@ -233,6 +233,7 @@ Xiaomi Mi Mix 3 (9)=Xiaomi/perseus/perseus:9/PKQ1.180729.001/V10.3.1.0.PEEMIXM:u
 Xiaomi Mi Note 2 (7.0 & 8.0.0)=Xiaomi/scorpio/scorpio:7.0/NRD90M/V9.2.1.0.NADMIEK:user/release-keys;Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
 Xiaomi Mi Note 3 (8.1.0)=Xiaomi/jason/jason:8.1.0/OPM1.171019.019/V10.2.2.0.OCHMIXM:user/release-keys__2018-12-01
 Xiaomi Mi Note 10 European (9)=Xiaomi/tucana_eea/tucana:9/PKQ1.190302.001/V11.0.11.0.PFDEUXM:user/release-keys__2019-11-01
+Xiaomi Mi Pad (4.4.4)=Xiaomi/mocha/mocha:4.4.4/KTU84P/V7.5.2.0.KXFMIDE:user/release-keys
 Xiaomi Mi Pad 4 (8.1.0)=Xiaomi/clover/clover:8.1.0/OPM1.171019.019/V10.1.1.0.ODJCNFI:user/release-keys__2018-10-01
 Xiaomi Pocophone F1 (9 & 10)=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V11.0.5.0.PEJMIXM:user/release-keys__2019-10-01;Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V11.0.4.0.QEJMIXM:user/release-keys__2020-01-01
 Xiaomi Redmi 3/3 Pro (5.1.1)=Xiaomi/ido/ido:5.1.1/LMY47V/V9.6.2.0.LAIMIFD:user/release-keys
