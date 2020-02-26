@@ -241,6 +241,7 @@ APILVL="
 
 # List of aliases to set from Busybox
 ALIASLIST="
+awk
 cat
 cp
 cut
@@ -1245,7 +1246,7 @@ print_files() {
 	log_handler "Creating files."
 	for OEM in $OEMLIST; do
 		echo -e "PRINTSLIST=\"" >> $MODPATH/printfiles/${OEM}\.sh
-		grep $OEM >> $MODPATH/printfiles/${OEM}\.sh $MODPATH/common/prints.sh
+		awk "/^$OEM/" $MODPATH/common/prints.sh >> $MODPATH/printfiles/${OEM}\.sh
 		echo -e "\"" >> $MODPATH/printfiles/${OEM}\.sh
 	done
 	# Check for updated fingerprint
