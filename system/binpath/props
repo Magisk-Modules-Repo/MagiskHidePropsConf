@@ -78,7 +78,7 @@ esac
 if [ -f "$VLOGFILE" ]; then
 		mv -f $VLOGFILE $VLASTLOGFILE
 	fi
-set -x > $VLOGFILE 2>&1
+set -x 2>$VLOGFILE
 
 log_handler "Running props script."
 
@@ -147,6 +147,8 @@ invalid_input() {
 		5) INPMSG="Only enter '${G}d${N}', '${G}y${N}', '${G}n${N}' or '${G}e${N}'."
 		;;
 		6) INPMSG="Enter a fingerprint or pick from the options, one at a time."
+		;;
+		7) INPMSG="Only pick numbers, separated by a comma."
 		;;
 	esac
 
@@ -432,7 +434,7 @@ menu_pick_print_sub() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$(get_first $ITEM)" == "$2" ] || [ "$2" == "Custom" ]; then
-					echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+					echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
 			done
@@ -460,7 +462,7 @@ menu_pick_print_sub() {
 							case "$ITEM" in
 								*\;*)
 									IFS=$SAVEIFS
-									menu_pick_print_version "$1" "$(get_eq_left "$ITEM")" "$(get_eq_right "$ITEM")"
+									menu_pick_print_version "$1" "$(get_device "$ITEM")" "$(get_eq_right "$ITEM")"
 									INPUT2=""
 									INPUT3=""
 									break
@@ -797,6 +799,7 @@ menu_bootstage_print_set() {
 		case "$INPUT4" in
 			d|D)
 				if [ "$TMPSTAGE" != 0 ]; then
+					before_change
 					OPTNEW=0
 					log_handler "Boot stage for $PROPTXT changed to default."
 					replace_fn $CHNGSTAGE $TMPSTAGE $OPTNEW $LATEFILE
@@ -811,6 +814,7 @@ menu_bootstage_print_set() {
 			;;
 			p|P)
 				if [ "$TMPSTAGE" != 1 ]; then
+					before_change
 					OPTNEW=1
 					log_handler "Boot stage for $PROPTXT changed to post-fs-data."
 					replace_fn $CHNGSTAGE $TMPSTAGE $OPTNEW $LATEFILE
@@ -825,6 +829,7 @@ menu_bootstage_print_set() {
 			;;
 			l|L)
 				if [ "$TMPSTAGE" != 2 ]; then
+					before_change
 					OPTNEW=2
 					log_handler "Boot stage for $PROPTXT changed to late_start service."
 					replace_fn $CHNGSTAGE $TMPSTAGE $OPTNEW $LATEFILE
@@ -861,6 +866,8 @@ menu_dev_sim() {
 		DESCRIPTIONTXT=""
 		DISPTXT=""
 		SDKTXT=""
+		MANUFACTURERTXT=""
+		MODELTXT=""
 		if [ "$DEVSIM" == 1 ]; then
 			DEVSIMTXT=$ENABLE
 		else
@@ -892,6 +899,21 @@ menu_dev_sim() {
 		else
 			SDKTXT=$DISABLE
 		fi
+		if [ "$MANUFACTURERSET" == 1 ]; then
+			MANUFACTURERTXT=$ENABLE
+		else
+			MANUFACTURERTXT=$DISABLE
+		fi
+		if [ "$MODELSET" == 1 ]; then
+			MODELTXT=$ENABLE
+		else
+			MODELTXT=$DISABLE
+		fi
+		if [ "$PARTPROPSSET" == 1 ]; then
+			PARTPROPSTXT=$ENABLE
+		else
+			PARTPROPSTXT=$DISABLE
+		fi
 		if [ "$SIMSTAGE" == 0 ]; then
 			STAGETXT=" ${C}(default)${N}"
 		elif [ "$SIMSTAGE" == 1 ]; then
@@ -916,30 +938,40 @@ menu_dev_sim() {
 			echo "based on the currently set device"
 			echo "fingerprint."
 			echo ""
-			echo "Note that this feature is not"
-			echo "necessary to pass SafetyNet's CTS"
-			echo "profile check and may cause issues."
 			echo "${R}Only enable this if you really need it"
 			echo "and be careful about which props you"
 			echo "enable.${N}"
 			echo ""
 			echo "Pick an option below."
 			echo ""
-			echo "${G}s${N} - Device simulation${DEVSIMTXT}"
+			echo "${G} s${N} - Device simulation${DEVSIMTXT}"
 			if [ "$DEVSIM" == 1 ]; then
-				echo "${G}1${N} - ro.product.brand${BRANDTXT}"
-				echo "${G}2${N} - ro.product.name${NAMETXT}"
-				echo "${G}3${N} - ro.product.device${DEVICETXT}"
-				echo "${G}4${N} - ro.build.version.release${RELEASETXT}"
-				echo "${G}5${N} - ro.build.id${IDTXT}"
-				echo "${G}6${N} - ro.build.version.incremental${INCREMENTALTXT}"
-				echo "${G}7${N} - ro.build.version.sdk${SDKTXT}"
-				echo "${G}8${N} - ro.build.display.id${DISPTXT}"
+				echo "${G} 1${N} - ro.product.brand${BRANDTXT}"
+				echo "${G} 2${N} - ro.product.name${NAMETXT}"
+				echo "${G} 3${N} - ro.product.device${DEVICETXT}"
+				echo "${G} 4${N} - ro.build.version.release${RELEASETXT}"
+				echo "${G} 5${N} - ro.build.id${IDTXT}"
+				echo "${G} 6${N} - ro.build.version.incremental${INCREMENTALTXT}"
+				echo "${G} 7${N} - ro.build.version.sdk${SDKTXT}"
+				echo "${G} 8${N} - ro.build.display.id${DISPTXT}"
+				if [ "$SIMMANUFACTURER" ] && [ "$SIMMODEL" ]; then
+					echo "${G} 9${N} - ro.product.manufacturer${MANUFACTURERTXT}"
+					echo "${G}10${N} - ro.product.model${MODELTXT}"
+					MANMODEN=true
+				else
+					MANMODEN=false
+				fi
+				echo "${G} a${N} - Enable/disable all props"
 			fi
-			echo "${G}d${N} - ro.build.description${DESCRIPTIONTXT}"
-			echo "${G}t${N} - Boot stage$STAGETXT."
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo "${G} d${N} - ro.build.description${DESCRIPTIONTXT}"
+			echo "${G} p${N} - Use partition props$PARTPROPSTXT"
+			echo "${G} t${N} - Boot stage$STAGETXT"
+			echo "${G} b${N} - Go back"
+			echo "${G} e${N} - Exit"
+			echo ""
+			echo "Pick several options at once by"
+			echo "separating inputs with a comma."
+			echo "Example: 1,5,6"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -950,14 +982,50 @@ menu_dev_sim() {
 		case "$INPUT2" in
 			s|S) menu_dev_sim_enable "$1"
 			;;
-			1|2|3|4|5|6|7|8|d|D)
-				if [ "$DEVSIM" == 1 ] || [ "$INPUT2" == "d" -o "$INPUT2" == "D" ]; then
-					menu_dev_sim_prop "$1" "$INPUT2"
-				else
-					invalid_input 1 2
-				fi
+			*\,*|1|2|3|4|5|6|7|8|9|10|a|A|d|D)
+				case "$INPUT2" in
+					*\,*)
+						NUMCHECK="$(echo $(echo $INPUT2 | sed 's|\,||g') | tr -d [0-9])"
+						case "$INPUT2" in
+							*1*|*2*|*3*|*4*|*5*|*6*|*7*|*8*|*a*|*A*|*d*|*D*)
+								if [ -z "$NUMCHECK" ]; then
+									menu_dev_sim_prop "$1" "$INPUT2"
+								else
+									invalid_input 7 2
+								fi
+							;;
+							*9*|*10*)
+								if [ "$MANMODEN" == "false" ]; then
+									invalid_input 1 2
+								else
+									if [ -z "$NUMCHECK" ]; then
+										menu_dev_sim_prop "$1" "$INPUT2"
+									else
+										invalid_input 7 2
+									fi
+								fi
+							;;
+							*)
+								invalid_input 1 2
+							;;
+						esac
+					;;
+					*)
+						if [ "$DEVSIM" == 1 ] || [ "$INPUT2" == "d" -o "$INPUT2" == "D" ]; then
+							if [ "$MANMODEN" == "false" ] && [ "$INPUT2" == 9 -o "$INPUT2" == 10 ]; then
+								invalid_input 1 2
+							else
+								menu_dev_sim_prop "$1" "$INPUT2"
+							fi
+						else
+							invalid_input 1 2
+						fi
+					;;
+				esac
 			;;
 			t|T) menu_bootstage_sim "$1"
+			;;
+			p|P) menu_partprops_sim "$1" "$PARTPROPSSET"
 			;;
 			b|B)
 				INPUT=""
@@ -1023,7 +1091,13 @@ menu_dev_sim_prop() {
 	INPUT3=""
 	while true
 	do
+		TMPTXT=""
+		TMPPARTS=$PRINTPARTS$ADNSIMPROPS1$ADNSIMPROPS2
+		TMPITEMS=""
+		CNT=1
 		case "$2" in
+			*\,*) TMPTXT="Multi"
+			;;
 			1) TMPTXT="ro.build.brand"
 			;;
 			2) TMPTXT="ro.build.name"
@@ -1040,36 +1114,162 @@ menu_dev_sim_prop() {
 			;;
 			8) TMPTXT="ro.build.display.id"
 			;;
+			9) TMPTXT="ro.product.manufacturer"
+			;;
+			10) TMPTXT="ro.product.model"
+			;;
+			a|A) TMPTXT="All"
+			;;
 			d|D) TMPTXT="ro.build.description"
 			;;
 		esac
-		TMPPROP=$(get_prop_type $TMPTXT | tr '[:lower:]' '[:upper:]')
-		if [ "$(get_file_value $LATEFILE "${TMPPROP}SET=")" == 0 ]; then
-			STATETXT="${G}enable${N}"
-			CURRTXT="${R}disabled${N}"
-			TMPVAL=1
+		if [ "$TMPTXT" == "Multi" ] || [ "$TMPTXT" == "All" ]; then
+			TMPLST=$(echo $2 | sed 's|\,| |g')
+			for ITEM in $TMPPARTS; do
+				for INT in $TMPLST; do
+					if [ "$INT" == "$CNT" ]; then
+						if [ "$TMPITEMS" ]; then
+							TMPITEMS="$TMPITEMS $ITEM"
+						else
+							TMPITEMS="$ITEM"
+						fi
+					fi
+				done
+				CNT=$(($CNT+1))
+			done
+			if [ "$TMPTXT" == "All" ]; then
+				TYPETXT="all"
+				if [ "$MANMODEN" == "true" ]; then
+					TMPINPUT="$TMPPARTS"
+				else
+					TMPINPUT=$PRINTPARTS$ADNSIMPROPS1
+				fi
+			else
+				TYPETXT="the following"
+				TMPINPUT="$TMPITEMS"
+			fi
+			if [ -z "$INPUT3" ]; then
+				menu_header "${C}$1${N}"
+				echo ""
+				echo "Do you want to ${G}enable${N} or ${R}disable${N}"
+				echo "$TYPETXT simulation props?"
+				echo ""
+				if [ "$TMPTXT" == "Multi" ]; then
+					echo "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
+					echo ""
+				fi
+				echo "${R}Warning!${N} Some of these props"
+				echo "may cause issues with your device."
+				echo ""
+				echo "See the module readme or the"
+				echo "support thread @ XDA for details."
+				echo ""
+				echo "${G}1${N} - Enable"
+				echo "${G}2${N} - Disable"
+				echo "${G}b${N} - Go back"
+				echo "${G}e${N} - Exit"
+				echo ""
+				echo -n "Enter your desired option: "
+				read -r INPUT3
+				case "$INPUT3" in
+					1|2)
+						before_change
+						if [ "$INPUT3" == 1 ]; then
+							TMPVAL=1
+						else
+							TMPVAL=0
+						fi
+						for ITEM in $TMPINPUT; do
+							change_sim_prop "Device simulation" "$ITEM" "$TMPVAL" "none"
+						done
+						INPUT2=""
+						after_change "$1"
+						break
+					;;
+					b|B)
+						INPUT2=""
+						break
+					;;
+					e|E) exit_fn
+					;;
+					*)	invalid_input 1 3
+					;;
+				esac
+			fi
 		else
-			STATETXT="${R}disable${N}"
-			CURRTXT="${G}enabled${N}"
-			TMPVAL=0
+			TMPPROP=$(get_prop_type $TMPTXT | tr '[:lower:]' '[:upper:]')
+			if [ "$(get_file_value $LATEFILE "${TMPPROP}SET=")" == 0 ]; then
+				STATETXT="${G}enable${N}"
+				CURRTXT="${R}disabled${N}"
+				TMPVAL=1
+			else
+				STATETXT="${R}disable${N}"
+				CURRTXT="${G}enabled${N}"
+				TMPVAL=0
+			fi
+			if [ -z "$INPUT3" ]; then
+				menu_header "${C}$1${N}"
+				echo ""
+				echo "Do you want to $STATETXT simulating"
+				echo "${C}${TMPTXT}${N}?"
+				echo "It is currently $CURRTXT."
+				echo ""
+				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+				read -r INPUT3
+				case "$INPUT3" in
+					y|Y)
+						if [ "$TMPPROP" == "DESCRIPTION" ]; then
+							change_sim_descr "$1" "$TMPVAL"
+						else
+							change_sim_prop "$1" "$TMPTXT" "$TMPVAL"
+						fi
+						INPUT2=""
+						break
+					;;
+					n|N)
+						INPUT2=""
+						break
+					;;
+					e|E) exit_fn
+					;;
+					*)	invalid_input 3 3
+					;;
+				esac
+			fi
 		fi
+	done
+}
+
+# Third menu level - Partition props
+menu_partprops_sim() {
+	INPUT3=""
+	while true
+	do
 		if [ -z "$INPUT3" ]; then
+			if [ "$2" == "1" ]; then
+				CURRTXT="enabled"
+				TMPTXT="disable"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				CURRTXT="disabled"
+				TMPTXT="enable"
+				OPTCURR=0
+				OPTNEW=1
+			fi
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Do you want to $STATETXT simulating"
-			echo "${C}${TMPTXT}${N}?"
-			echo "It is currently $CURRTXT."
+			echo "Partition specific props simulation"
+			echo "is currently ${G}$CURRTXT${N}."
+			echo ""
+			echo "Do you want to ${C}$TMPTXT${N} it?"
 			echo ""
 			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
 			y|Y)
-				if [ "$TMPPROP" == "DESCRIPTION" ]; then
-					change_sim_descr "$1" "$TMPVAL"
-				else
-					change_sim_prop "$1" "$TMPTXT" "$TMPVAL"
-				fi
+				change_sim_partprops "$1" "$OPTNEW"
 				INPUT2=""
 				break
 			;;
@@ -1117,6 +1317,7 @@ menu_bootstage_sim() {
 		case "$INPUT3" in
 			d|D)
 				if [ "$SIMSTAGE" != 0 ]; then
+					before_change
 					OPTNEW=0
 					log_handler "Boot stage changed to default."
 					replace_fn SIMSTAGE $SIMSTAGE $OPTNEW $LATEFILE
@@ -1131,6 +1332,7 @@ menu_bootstage_sim() {
 			;;
 			p|P)
 				if [ "$SIMSTAGE" != 1 ]; then
+					before_change
 					OPTNEW=1
 					log_handler "Boot stage changed to post-fs-data."
 					replace_fn SIMSTAGE $SIMSTAGE $OPTNEW $LATEFILE
@@ -1145,6 +1347,7 @@ menu_bootstage_sim() {
 			;;
 			l|L)
 				if [ "$SIMSTAGE" != 2 ]; then
+					before_change
 					OPTNEW=2
 					log_handler "Boot stage changed to late_start service."
 					replace_fn SIMSTAGE $SIMSTAGE $OPTNEW $LATEFILE
@@ -1191,7 +1394,7 @@ menu_magiskhide_props() {
 			if [ "$RETYPE" == "true" ]; then
 				TYPETXT=$ACTIVE
 			fi
-			if [ "RETAGS" == "true" ]; then
+			if [ "$RETAGS" == "true" ]; then
 				TAGSTXT=$ACTIVE
 			fi
 			if [ "$RESELINUX" == "true" ]; then
@@ -1206,11 +1409,18 @@ menu_magiskhide_props() {
 			echo "${G}3${N} - ro.build.type${TYPETXT}"
 			echo "${G}4${N} - ro.build.tags${TAGSTXT}"
 			echo "${G}5${N} - ro.build.selinux${SELINUXTXT}"
+			if [ "$PROPCOUNT" -lt 5 ]; then
+				echo "${G}a${N} - Change all props"
+			fi
 			if [ "$PROPCOUNT" -gt 1 ]; then
 				echo "${G}r${N} - Reset all props"
 			fi
 			echo "${G}b${N} - Go back to main menu"
 			echo "${G}e${N} - Exit"
+			echo ""
+			echo "Pick several options at once by"
+			echo "separating inputs with a comma."
+			echo "Example: 1,5,6"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -1219,17 +1429,31 @@ menu_magiskhide_props() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			1)	menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE		
+			*\,*)
+				if [ -z "$(echo $(echo $INPUT2 | sed 's|\,||g') | tr -d [0-9])" ]; then
+					menu_change_prop "Change multiple props" $INPUT2
+				else
+					invalid_input 7 2
+				fi
 			;;
-			2)	menu_change_prop "ro.secure" $CURRSECURE $ORIGSECURE $MODULESECURE
+			1) menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE		
 			;;
-			3)	menu_change_prop "ro.build.type" $CURRTYPE $ORIGTYPE $MODULETYPE
+			2) menu_change_prop "ro.secure" $CURRSECURE $ORIGSECURE $MODULESECURE
 			;;
-			4)	menu_change_prop "ro.build.tags" $CURRTAGS $ORIGTAGS $MODULETAGS
+			3) menu_change_prop "ro.build.type" $CURRTYPE $ORIGTYPE $MODULETYPE
 			;;
-			5)	menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
+			4) menu_change_prop "ro.build.tags" $CURRTAGS $ORIGTAGS $MODULETAGS
 			;;
-			r|R)	
+			5) menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
+			;;
+			a|A)
+				if [ "$PROPCOUNT" -lt 5 ]; then
+					menu_change_prop "Change all props"
+				else
+					invalid_input 1 2
+				fi
+			;;
+			r|R)
 				if [ "$PROPCOUNT" -gt 1 ]; then
 					menu_reset_prop_all "Reset all props"
 				else
@@ -1254,46 +1478,83 @@ menu_change_prop() {
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
-			PROP=$(get_prop_type "$1")
-			REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
 			menu_header "${C}$1${N}"
 			echo ""
-			# Checks if the prop exists
-			if [ "$2" ]; then
-				if [ "$4" ] && [ "$(get_file_value $LATEFILE "${REPROP}=")" == "true" ]; then
-					PROPMODULETXT=", by this module"
-					BACKTXT=" back"
-				else
-					PROPMODULETXT=""
-					BACKTXT=""
-				fi
-				echo "Currently set to ${C}$2${N}${PROPMODULETXT}."				
-				if [ "$2" != "$3" ]; then
-					echo "The original value is ${C}$3${N}."
-				fi
+			if [ "$1" == "Change multiple props" ]; then
+				TMPITEMS=""
+				CNT=1
+				TMPLST=$(echo $2 | sed 's|\,| |g')
+				for ITEM in $PROPSLIST; do
+					for INT in $TMPLST; do
+						if [ "$INT" == "$CNT" ]; then
+							if [ "$TMPITEMS" ]; then
+								TMPITEMS="$TMPITEMS $ITEM"
+							else
+								TMPITEMS="$ITEM"
+							fi
+						fi
+					done
+					CNT=$(($CNT+1))
+				done
+				echo "Do you want to change the"
+				echo "following props:"
 				echo ""
-				safe_props "$1" $2
-				change_to "$1" $2
-				if [ "$SAFE" == 1 ]; then
-					echo "You currently have the safe value set."
-					echo "Are you sure you want to change it$BACKTXT to ${C}$CHANGE${N}?"
-				else
-					echo "Do you want to change it${BACKTXT} to ${C}$CHANGE${N}?"
-				fi
-				echo ""
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
-				read -r INPUT3
+				echo "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
+			elif [ "$1" == "Change all props" ]; then
+				echo "Do you want to change all"
+				echo "MagiskHide sensitive props?"
+				TMPITEMS=$PROPSLIST
 			else
-				INPUT3="n"
-				echo "This prop doesn't currently exist on your system."
-				echo ""
-				echo "Nothing to do... Returning to main menu."
-				sleep 3
+				PROP=$(get_prop_type "$1")
+				REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
+				# Checks if the prop exists
+				if [ "$2" ]; then
+					if [ "$4" ] && [ "$(get_file_value $LATEFILE "${REPROP}=")" == "true" ]; then
+						PROPMODULETXT=", by this module"
+						BACKTXT=" back"
+					else
+						PROPMODULETXT=""
+						BACKTXT=""
+					fi
+					echo "Currently set to ${C}$2${N}${PROPMODULETXT}."				
+					if [ "$2" != "$3" ]; then
+						echo "The original value is ${C}$3${N}."
+					fi
+					echo ""
+					safe_props "$1" $2
+					change_to "$1" $2
+					if [ "$SAFE" == 1 ]; then
+						echo "You currently have the safe value set."
+						echo "Are you sure you want to change it$BACKTXT to ${C}$CHANGE${N}?"
+					else
+						echo "Do you want to change it${BACKTXT} to ${C}$CHANGE${N}?"
+					fi
+				else
+					echo "This prop doesn't currently exist on your system."
+					echo ""
+					echo "Nothing to do... Returning to main menu."
+					sleep 3
+					INPUT2=""
+					break
+				fi
 			fi
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
 		fi
 		case "$INPUT3" in
 			y|Y)
-				if [ "$PROPMODULETXT" ]; then
+				if [ "$1" == "Change multiple props" ] || [ "$1" == "Change all props" ]; then
+					for ITEM in $TMPITEMS; do
+						PROP=$(get_prop_type "$ITEM")
+						CURRPROP=$(echo "CURR${PROP}" | tr '[:lower:]' '[:upper:]')
+						TMPVAL="$(eval "echo \$$CURRPROP")"
+						change_to "$ITEM" $TMPVAL
+						change_prop "$ITEM" $CHANGE "none"
+						. $LATEFILE
+					done
+					after_change "$1"
+				elif [ "$PROPMODULETXT" ]; then
 					menu_reset_prop "Reset $1" "$1"
 				else
 					change_prop "$1" $CHANGE
@@ -1416,7 +1677,7 @@ menu_custom_props() {
 					if [ "$CUSTOMPROPS" ]; then
 						echo "${C}Default boot stage${G}${DEFSTAGETXT}${N}"
 						for ITEM in $CUSTOMPROPS; do
-							echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+							echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
 							ITEMCOUNT=$(($ITEMCOUNT+1))
 						done
 					fi
@@ -1424,7 +1685,7 @@ menu_custom_props() {
 						echo ""
 						echo "${C}post-fs-data boot stage${N}"
 						for ITEM in $CUSTOMPROPSPOST; do
-							echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+							echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
 							ITEMCOUNT=$(($ITEMCOUNT+1))
 						done
 					fi
@@ -1432,7 +1693,7 @@ menu_custom_props() {
 						echo ""
 						echo "${C}late_start service boot stage${N}"
 						for ITEM in $CUSTOMPROPSLATE; do
-							echo "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
+							echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
 							ITEMCOUNT=$(($ITEMCOUNT+1))
 						done
 					fi
@@ -1495,7 +1756,7 @@ menu_custom_props() {
 						ITEMCOUNT=1
 						for ITEM in $CUSTOMPROPSLIST; do
 							if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-								menu_edit_custprop "$(get_eq_left "$ITEM")"
+								menu_edit_custprop "$(get_device "$ITEM")"
 								break
 							fi
 							ITEMCOUNT=$(($ITEMCOUNT+1))
@@ -2298,6 +2559,7 @@ menu_options() {
 			echo "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
 			echo "${G}4${N} - Automatic fingerprints update (currently ${CU}${UPDATECHKTXT}${N})"
 			echo "${G}5${N} - Background boot script (currently ${CB}${BACKCHKTXT}${N})"
+			echo "${G}x${N} - Export settings"
 			echo "${G}r${N} - Reset all settings"
 			if [ "$2" != "s" ]; then
 				echo "${G}b${N} - Go back to main menu"
@@ -2311,17 +2573,19 @@ menu_options() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			1)	menu_options_bootstage "Boot stage" "$BOOTTXT"
+			1) menu_options_bootstage "Boot stage" "$BOOTTXT"
 			;;
-			2)	menu_option_chng "Script colours" "$COLOURTXT" "Script colours are" "OPTIONCOLOUR"
+			2) menu_option_chng "Script colours" "$COLOURTXT" "Script colours are" "OPTIONCOLOUR"
 			;;
-			3)	menu_option_chng "Fingerprints list check" "$PRINTSCHKTXT" "Automatic updating of the fingerprints\nlist is" "OPTIONWEB"
+			3) menu_option_chng "Fingerprints list check" "$PRINTSCHKTXT" "Automatic updating of the fingerprints\nlist is" "OPTIONWEB"
 			;;
-			4)	menu_option_chng "Automatic fingerprints update" "$UPDATECHKTXT" "Automatic updating of the applied\nfingerprint is" "OPTIONUPDATE"
+			4) menu_option_chng "Automatic fingerprints update" "$UPDATECHKTXT" "Automatic updating of the applied\nfingerprint is" "OPTIONUPDATE"
 			;;
-			5)	menu_option_chng "Background boot script" "$BACKCHKTXT" "Background boot script execution\nis" "OPTIONBACK"
+			5) menu_option_chng "Background boot script" "$BACKCHKTXT" "Background boot script execution\nis" "OPTIONBACK"
 			;;
-			r|R)	menu_options_reset "Reset all settings"
+			x|X) menu_option_export "Export settings"
+			;;
+			r|R) menu_options_reset "Reset all settings"
 			;;
 			b|B)
 				if [ "$2" == "s" ]; then
@@ -2368,6 +2632,7 @@ menu_options_bootstage() {
 		case "$INPUT3" in
 			s|S)
 				if [ "$OPTIONBOOT" != 0 ]; then
+					before_change
 					OPTNEW=0
 					log_handler "Boot stage changed to system.prop."
 					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
@@ -2382,6 +2647,7 @@ menu_options_bootstage() {
 			;;
 			p|P)
 				if [ "$OPTIONBOOT" != 1 ]; then
+					before_change
 					OPTNEW=1
 					log_handler "Boot stage changed to post-fs-data."
 					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
@@ -2396,6 +2662,7 @@ menu_options_bootstage() {
 			;;
 			l|L)
 				if [ "$OPTIONBOOT" != 2 ]; then
+					before_change
 					OPTNEW=2
 					log_handler "Boot stage changed to late_start service."
 					replace_fn OPTIONBOOT $OPTIONBOOT $OPTNEW $LATEFILE
@@ -2472,6 +2739,40 @@ menu_option_chng() {
 	done
 }
 
+# Third menu level - Export all settings to a module configuration file
+menu_option_export() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "This will will export all settings"
+			echo "to a module configuration file."
+			echo ""
+			echo "Do you want to continue?"
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				export_settings $1
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 3
+			;;
+		esac
+	done
+}
+
 # Third menu level - Options, reset all options
 menu_options_reset() {
 	INPUT3=""
@@ -2494,6 +2795,8 @@ menu_options_reset() {
 				replace_fn OPTIONBOOT $OPTIONBOOT 0 $LATEFILE
 				replace_fn OPTIONCOLOUR $OPTIONCOLOUR 1 $LATEFILE
 				replace_fn OPTIONWEB $OPTIONWEB 1 $LATEFILE
+				replace_fn OPTIONUPDATE $OPTIONUPDATE 1 $LATEFILE
+				replace_fn OPTIONBACK $OPTIONBACK 0 $LATEFILE
 				# Load module values
 				. $LATEFILE
 				INPUT2=""

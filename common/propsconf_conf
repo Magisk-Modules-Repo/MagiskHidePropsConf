@@ -9,7 +9,7 @@
 # =================================================================
 
 # Required module version (or newer). Do not edit this value!
-CONFTRANSF=510
+CONFTRANSF=520
 
 # Device fingerprint
 CONFFINGERPRINT=""
@@ -25,9 +25,12 @@ CONFDEVICE=false
 CONFRELEASE=false
 CONFID=false
 CONFINCREMENTAL=false
-CONFDESCRIPTION=true
 CONFDISPLAY=false
 CONFSDK=false
+CONFMANUFACTURER=false
+CONFMODEL=false
+CONFDESCRIPTION=true
+CONFPARTPROPS=true
 CONFSIMBOOT=default
 
 # MagiskHide sensitive props
@@ -103,13 +106,15 @@ CONFBACK=false
 # Keymaster 4 (bootloops). If the prop doesn't seem to set properly, try changing the stage.
 
 # CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
-# CONFID, CONFINCREMENTAL, CONFDESCRIPTION, CONFDISPLAY and CONFSDK are used to
-# set a number of props to simulate a certain deviced based on the fingerprint used.
+# CONFID, CONFINCREMENTAL, CONFDESCRIPTION, CONFDISPLAY, CONFSDK, CONFMANUFACTURER and CONFMODEL
+# are used to set a number of props to simulate a certain deviced based on the fingerprint used.
 # CONFDESCRIPTION will automatically be applied if a fingerprint is set
 # by the module, but the other props will only be set if CONFDEVSIM is
 # set to true, and the default setting for all props are that they will be
 # set by the module. If you want to change this, change "true" to "false"
 # for the applicable variables.
+#
+# CONFPARTPROPS is used to enable or disable using partition specific version of the simulation props.
 #
 # CONFSIMBOOT is by default set to using the module default boot stage for setting props.
 # If the setting is changed to "post" or "late", the props will be set during either

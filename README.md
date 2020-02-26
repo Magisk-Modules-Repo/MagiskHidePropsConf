@@ -29,6 +29,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint)
     - [The getprop method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-getprop-method)
     - [The stock ROM/firmware/factory image method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-stock-romfirmwarefactory-image-method)
+	- [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
     - [The firmware.mobi method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method)
   - [Custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#custom-fingerprints-list)
   - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
@@ -50,12 +51,14 @@ Keep reading below to find out more details about the different parts of the mod
   - [Fingerprints list check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#fingerprints-list-check)
   - [Automatic fingerprint update](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#automatic-fingerprint-update)
   - [Background boot script](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#background-boot-script)
+  - [Export settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#export-settings)
 - [Configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file)
   - [Setting up the module on a clean Magisk/ROM flash](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setting-up-the-module-on-a-clean-magiskrom-flash)
 ##### Issues and logs
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
+  - [props not found](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-not-found)
   - [The boot scripts did not run](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-boot-scripts-did-not-run)
   - [Requires Magisk v19+](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#requires-magisk-v19)
   - [An option is marked as "disabled"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#an-option-is-marked-as-disabled)
@@ -66,6 +69,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
+  - [The screen goes black momentarily at boot](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-screen-goes-black-momentarily-at-boot)
   - [The Play Store is "uncertified"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-play-store-is-uncertified)
 - [Logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs)
   - [Collecting logs manually](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#collecting-logs-manually)
@@ -121,7 +125,7 @@ This might be because your device simply hasn't been certified or that the ROM y
 
 To fix this, you can use a known working device fingerprint (`ro.build.fingerprint`), one that has been certified by Google, usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
-NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. You can use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error (although it's a much better option to find the actual date from the ROM/firmware/factory image in question). The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
+**NOTE:** If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. You can use the [Custom prop](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error (although it's a much better option to find the actual date from the ROM/firmware/factory image in question). The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
 
 There are a bunch of tested certified fingerprints available in the module, just in case you can't get a hold of one for your device. For some devices there are several fingerprints available, for different Android versions. When picking a fingerprint you will also have to pick which version you need.
 
@@ -133,13 +137,14 @@ If you are using a Treble GSI ROM you can enable the [Use vendor fingerprint](ht
 When using a Treble GSI ROM with a stock vendor partition, it is possible to use the vendor fingerprint to make the device pass the CTS profile check. Enabling this option will make the module scripts pull the vendor fingerprint on each boot and use this to spoof the device fingerprint. This in turn means you will only have to enable this option once and even if you update your vendor partition the fingerprint used will always be the latest one.
 
 ### Matching the Android security patch date
-For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). Use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
+For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). If you're setting a fingeprint without using the internal fingerprints list, use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
 
 ### Can I use any fingerprint?
 It's usually possible to use any fingerprint that's certified for your device. It doesn't have to match, either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter (most of the time, there might of course be exceptions).
 
 ### How do I submit a fingerprint?
 If you have a device fingerprint that you want to submit to the module, just post it in the [Support Thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) together with device details and the [matching security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#matching-the-android-security-patch-date).
+To make sure that the [device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature works properly with the print you submit, please also include the values for `ro.product.manufacturer` and `ro.product.model` (use the getprop command or the [AndroidDumps](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method) or [firmware.mobi](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method) methods outlined below).
 Also see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint) below.
 
 ### Finding a certified fingerprint
@@ -174,6 +179,9 @@ Once you have the file downloaded, there are several different ways that the fin
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
 - Etc... Experiment, the fingerprint will be in there somewhere. 
 
+#### The AndroidDumps method
+AndroidDumps is a great resource for finding props for different devices. [Check it out on GitHub](https://github.com/AndroidDumps).
+
 #### The firmware.mobi method
 Sometimes you can also find up to date and certified fingerprints at [firmware.mobi](https://desktop.firmware.mobi/).
 
@@ -181,9 +189,10 @@ Sometimes you can also find up to date and certified fingerprints at [firmware.m
 You can add your own fingerprint to the list by placing a file, named `printslist` (no file extension), in the root of your internal storage with the fingerprints. It needs to be formated as follows: `device name=fingerprint`. The fingerprints added to this list will be found under the `Custom` category in the fingerprints menu. If you create the printslist file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Notepad).
 Here's an example:
 ```
-Google Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
+Google Nexus 6 (7.1.1):Motorola:Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
-NOTE: If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding two underscores directly followd by the date at the end of the fingerprint (`__2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error. The dates are always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
+**NOTE 1:** If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding two underscores directly followed by the date at the end of the fingerprint (`__2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error (quite tedious). The dates are usually always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
+**NOTE 2:** If you want the [device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature of the module to work properly with the prints from the custom list you will also have to include the manufacturer and module in the list. This is done by adding the values for these two props right before the equal sign (=) that separates the device name from the fingerprint. Separate the device name and android versions and the two values with colons (:). See the example above.
 
 
 ### I still can't pass the ctsProfile check
@@ -202,11 +211,12 @@ If you're using a custom ROM, the chances of it being [perceived as uncertified 
 
 Magisk, and this module, can help with that.
 
-Before setting up your device, install Magisk, this module and use the configuration file described below to pass the ctsProfile check. This should make your device be perceived as certified by Google and you can log into your Google account and use your device without having to whitelist it. Check [here](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/common/prints.sh) for usable fingerprints (only use the part to the right of the equal sign).
+Before setting up your device, install Magisk, this module and use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described below to pass the ctsProfile check. This should make your device be perceived as certified by Google and you can log into your Google account and use your device without having to whitelist it. Check [here](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/common/prints.sh) for usable fingerprints (only use the part to the right of the equal sign).
 
 If you're having issues getting your device certified, take a look in the Magisk troubleshooting guide linked below.
 
 In case you can't get the Play Store to report your device as "certified", see ["Issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#issues-support-etc) below.
+
 
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) for info.
@@ -215,7 +225,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v77_**
+**_Current fingerprints list version - v78_**
 
 
 ## Please add support for device X
@@ -233,7 +243,7 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Device simulation
-**_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it, !_**
+**_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it!_**
 
 If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that can be set are (currently):
 - ro.product.brand
@@ -244,10 +254,15 @@ If you want to simulate a specific device (to get access to device specific apps
 - ro.build.version.incremental
 - ro.build.display.id
 - ro.build.version.sdk
+- ro.product.manufacturer
+- ro.product.model
 
-By default all props are set when this option is activated, but it is possible to deactivate and activate each prop individually.
+By default all props are disabled when this option is activated, but it is possible to activate or deactivate each prop individually or all of them at once. It is also possible to activate several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma.
+Example: If I would like to activate ro.product.name, ro.product.device and ro.product.model I would enter __"2,3,10"__.
 
-Whenever a fingerprint is set by the module, the `ro.build.description` prop will be set automatically independently from if the general device simulation option is enabled or not.
+There are also several partition specific variations of some of the used props (system, vendor, product, odm). If these are available they will also be set to the simulation prop value. This can be disabled in the option settings.
+
+Whenever a fingerprint is set by the module, the `ro.build.description` prop will be set automatically independently from if the general device simulation option is enabled or not. It can of course also be disabled.
 
 
 ## Set/reset MagiskHide Sensitive props
@@ -259,6 +274,11 @@ By default, if MagiskHide detects certain sensitive prop values they will be cha
 - ro.build.selinux (set to "0" by MagiskHide - sensitive value is "1")
 
 If, for some reason, you need one or more of these to be kept as their original value (one example would be resetting ro.build.type to userdebug since some ROMs need this to work properly), you can reset to the original value with this module. Keep in mind that this might trigger some apps looking for these prop values as a sign of your device being rooted.
+
+It is possible to change or reset each prop individually or all of them at once. It is also possible to change several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma.
+Example: If I would like to change ro.debuggable, ro.secure and ro.build.selinux I would enter __"1,2,5"__.
+
+**NOTE:** When activating this feature the screen will go black momentarily at the end of the boot cycle. This is caused by the module doing a soft reboot to reload the prop values properly.
 
 
 ## Change/set custom prop values
@@ -272,8 +292,10 @@ When setting a custom prop you can also pick in what boot stage it should be set
 
 Note: post-fs-data runs earlier than late_start service.
 
+
 ## Removing prop values
 If you would like to delete a certain prop value from your system, that can be done with the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop). With this module you can easily set that up by adding whatever prop you want removed to the "Delete props" list. Be very careful when using this option, since removing the wrong prop may cause isses with your device. See ["Device issues because of the module"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#device-issues-because-of-the-module) below if this happens.
+
 
 ## Prop script settings
 There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option (use -h for details).
@@ -297,10 +319,14 @@ Whenever there is an update to the fingerprints list and if you have a fingerpri
 ### Backround boot script
 By default, parts of the module post-fs-data boot script is executed in the background, but the parts that don't might still cause issues on some devices. If there are issues with the boot scripts not running during boot, try enabling this option to execute the script entirely in the background. Keep in mind that this might cause other issues, so only enable if necessary.
 
+### Export settings
+If you have a lot of different props set it can be handy to have a [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) (see below) tucked away for future installs of the module. With this feature you can export the current module settings to a [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) for future use. The file will be saved on your internal storage, in the /mhpc directory.
+
+
 ## Configuration file
 You can use a configuration file to set your desired options, rather than running the `props` command. This is particularly useful if you have a large amount of custom props you want to set. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf), extract it from the module zip (in the /common folder) or copy it from the module directory under /data/adb (in the /common folder), fill in the desired options (follow the instructions in the file), place it in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. You can also use the configuration file when first installing the module. Just place the file in the root of your internal storage (or one of the other previously mentioned locations) before flashing the module and the installation script will set everything up.
 
-**NOTE!** If a configuration file is used during boot there will be a reboot during the late_start service boot mode, to load the newly set up values.
+**NOTE!** If a configuration file is used during boot there will be a reboot during the late_start service boot mode, to load the newly set up values. This can cause issues for devices that have to boot through recovery for Magisk to be active (A-only SAR devices), so a manual reboot after the automatic one will be necessary (or just use the configuration file at install instead).
 
 If you edit the configuration file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Windows Notepad).
 
@@ -309,7 +335,7 @@ Using the configuration file can also be done directly at the first install (thr
 **NOTE!** Upon detecting the file, the module installation/boot script will load the configured values into the module and then delete the the configuration file, so keep a copy somewhere if you want to use the same settings later.
 
 ### Setting up the module on a clean Magisk/ROM flash
-After having made a clean ROM flash, the configuration file can be used to set the module up as you want without even having to boot first. First flash the ROM and Magisk. After that you can place the configuration file (see above) with your desired settings (fingerprint, custom props, etc) in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and then install the module. This will set the module up just as you want it without having to do anything else. It is also possible to place the configuration file after having installed the module and rebooting. This will set everything up during boot, but it is possible that this won't work an all device/ROM combinations. If you experience issues, let the ROM boot once before setting everything up.
+After having made a clean ROM flash, the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) can be used to set the module up as you want without even having to boot first. First flash the ROM and Magisk. After that you can place the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) (see above) with your desired settings (fingerprint, custom props, etc) in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and then install the module. This will set the module up just as you want it without having to do anything else. It is also possible to place the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) after having installed the module and rebooting. This will set everything up during boot, but it is possible that this won't work an all device/ROM combinations. If you experience issues, let the ROM boot once before setting everything up.
 
 
 ## Miscellaneous MagiskHide issues
@@ -323,6 +349,12 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 
 ### Known issues
 - EdXposed sometimes causes Magisk's boot process to fail, resulting in the module boot scripts (mainly service.sh) not running as they should. Until this has been fixed with EdXposed, there are a couple of ways to work around this. Use the [Configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) to set everything up during installation, or disable EdXposed before setting the module up and enable it again after the module works as you want it. Just make sure to use the default settings for boot stages.
+
+### props not found
+There are two common reasons why you would get an error saying "not found" when running the `props` command in a terminal emulator.
+
+If you're using Termux you first have to run `su`, then it will work.
+If you're not using Termux it is likely that you have enabled the Magisk Core Only Mode in the Manager settings. Disable it, reboot and try again.
 
 ### The boot scripts did not run
 Sometimes there are issues with the boot scripts and as a result the `props` command won't work. A common cause for this is having EdXposed installed (see above). Always try rebooting to see if things start working, but if they don't, make sure to share the logs (that have been saved automatically to your internal storage) in the module [support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228).
@@ -378,6 +410,9 @@ If your device does not have access to /sdcard, /data or /cache through recovery
 
 The reset file can be use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
+### The screen goes black momentarily at boot
+This is caused by the [MagiskHide Sensitive props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setreset-magiskhide-sensitive-props) function of the module doing a soft reboot at the end of the boot cycle. This is necessary to reaload the prop values properly.
+
 ### The Play Store is "uncertified"
 If your device's Play Store reports that the device is "uncertified", this is usually fixed by making sure that you pass SafetyNet and then clearing data for the Play Store (and possibly rebooting). More details in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Device_uncertified_in_Play_storeNetflix_and_other_apps_wont_install_or_doesnt_show_up).
 
@@ -389,7 +424,7 @@ The logs will also automatically be saved to the root of the device's internal s
 If there are issues with other apps or your system as a result of using this module, a logcat/recovery log/etc showing the issue will most likely be necessary. Take a look in my [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHelp) for guidance on that.
 
 ### Collecting logs manually
-If you can't run the `props` script for some reason, the module logs are stored in /data/adb/mhpc. All files in that directory would be useful. The Magisk log (retrieved from /cache or saved from the Magisk Manager) and magisk.log.bak would also help with troubleshooting. Providing the output from terminal might also be useful.
+If you can't run the `props` script for some reason, the module logs are stored in /data/adb/mhpc and all files in that directory would be useful for troubleshooting. The Magisk log (retrieved from /cache or saved from the Magisk Manager) and magisk.log.bak would also help. Providing the output from terminal might be useful as well.
 
 
 ## Donations
@@ -416,6 +451,18 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.2.0  
+- Added ro.product.manufacturer and ro.product.model to simulation props.
+- Added an option to also use partition specific versions of simulation props (see the documentation for details).
+- Fixed basic device simulation so that it now only sets props that are already found on the device.
+- Fixed changing MagiskHide sensitive props in late_start service boot stage (see the documentation for details).
+- Updated simulation props editing so that several props can be activated at once (see the documentation for details).
+- Updated MagiskHide sensitive prop editing so that several props can be activated at once (see the documentation for details).
+- Added a new feature to export current module settings to a configuratino file (see the documentation for details).
+- Updated the documentation and added AndroidDumps as a resource for finding certified fingerprints (see the documentation for details).
+- Various under the hood changes and improvements.
+- Added fingerprint for Samsung Galaxy Note 9 and Xiaomi Mi Box S. Updated fingerprints for HTC U12 Plus, Nokia 6.1 Plus and several variants of OnePlus 7, 7 Pro and 7T. List updated to v78.
+
 ### v5.1.2  
 - Reset current fingerprint if disabling fingerprint modification because of a conflicting module.
 - Fixed using the configuration file in /sdcard during boot on FBE encrypted devices.
@@ -717,16 +764,16 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v77  
-- Asus Zenfone 2 Laser (6.0.1)
-- Asus Zenfone 3 Max (7.1.1 & 8.1.0)
-- Asus Zenfone 4 Max (7.1.1)
-- Asus ZenFone 5Z (9)
-- Asus Zenfone 6 (9)
-- Asus Zenfone Max M1 (8.0.0)
-- Asus Zenfone Max Pro M1 (8.1.0)
-- Asus ZenPad S 8.0 (6.0.1)
-- BLU R1 HD 2018 (7.0)
+### List v78  
+- Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
+- Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
+- Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
+- Asus ZenFone 5Z ASUS_Z01RD (9)
+- Asus Zenfone 6 ASUS_I01WD (9)
+- Asus Zenfone Max M1 ASUS_X00PD (8.0.0)
+- Asus Zenfone Max Pro M1 ASUS_X00TD (8.1.0)
+- Asus ZenPad S 8.0 P01MA (6.0.1)
+- BLU S1 (7.0)
 - Elephone U Pro (8.0.0)
 - Essential PH-1 (9 & 10)
 - Fairphone 2 (6.0.1)
@@ -756,32 +803,32 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Google Pixel C (8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
-- HTC U12 Plus (8.0.0)
-- Huawei Honor 6X (8.0.0)
-- Huawei Honor 8X (8.1.0)
-- Huawei Honor 9 (8.0.0 & 9)
-- Huawei Mate 10 (8.0.0)
-- Huawei Mate 10 Pro (8.0.0)
-- Huawei Mate 20 Lite (9)
-- Huawei Mate 20 Pro (9)
-- Huawei P8 Lite (8.0.0)
-- Huawei P9 (7.0)
-- Huawei P9 Lite (7.0)
-- Huawei P9 Plus (7.0)
-- Huawei P20 (9)
-- Huawei P20 Dual SIM (9)
-- Huawei P20 Lite (8.0.0 & 9)
-- Huawei P20 Pro (8.1.0 & 9)
+- HTC U12 Plus (8.0.0 & 9)
+- Huawei Honor 6X BLN-AL10 (8.0.0)
+- Huawei Honor 8X JSN-L21 (8.1.0)
+- Huawei Honor 9 STF-L09 (8.0.0 & 9)
+- Huawei Mate 10 ALP-L29 (8.0.0)
+- Huawei Mate 10 Pro BLA-L29 (8.0.0)
+- Huawei Mate 20 Lite SNE-LX1 (9)
+- Huawei Mate 20 Pro LYA-L29 (9)
+- Huawei P8 Lite PRA-LX1 (8.0.0)
+- Huawei P9 EVA-L09 (7.0)
+- Huawei P9 Lite VNS-L31 (7.0)
+- Huawei P9 Plus VIE-L09 (7.0)
+- Huawei P20 EML-L09 (9)
+- Huawei P20 Dual SIM EML-L29 (9)
+- Huawei P20 Lite ANE-LX1 (8.0.0 & 9)
+- Huawei P20 Pro CLT-L29 (8.1.0 & 9)
 - Lenovo K6 Note (7.0)
 - LeEco Le Pro3 (6.0.1)
-- LG G2 BS980 (5.0.2)
+- LG G2 VS980 (5.0.2)
 - LG G4 H812 (6.0)
-- LG G5 H850 (8.0.0)
 - LG G5 H830 (8.0.0)
+- LG G5 H850 (8.0.0)
 - LG G5 RS988 (7.0)
 - LG G6 H870 (7.0 & 8.0.0)
-- LG V20 H918 (8.0.0)
 - LG V20 H910 (8.0.0)
+- LG V20 H918 (8.0.0)
 - LG V20 H990DS (7.0)
 - LG V20 LS997 (8.0.0)
 - LG V20 US996 (8.0.0)
@@ -828,96 +875,102 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 6 (8.1.0 & 9 & 10)
 - OnePlus 6T (9 & 10)
 - OnePlus 6T T-Mobile (9)
-- OnePlus 7 GM1901/GM1905 (9 & 10)
+- OnePlus 7 GM1901 (9 & 10)
 - OnePlus 7 GM1903 (9 & 10)
-- OnePlus 7 Pro GM1911/GM1917 (9 & 10)
+- OnePlus 7 GM1905 (9 & 10)
+- OnePlus 7 Pro GM1911 (9 & 10)
 - OnePlus 7 Pro GM1913 (9 & 10)
 - OnePlus 7 Pro GM1915 (9)
+- OnePlus 7 Pro GM1917 (9 & 10)
 - OnePlus 7 Pro NR GM1920 (9)
 - OnePlus 7 Pro NR Spr GM1925 (9)
-- OnePlus 7T HD1901/HD1905 (10)
+- OnePlus 7T HD1901 (10)
 - OnePlus 7T HD1903 (10)
-- OnePlus 7T Pro HD1911/HD1917 (10)
+- OnePlus 7T HD1905 (10)
+- OnePlus 7T Pro HD1911 (10)
 - OnePlus 7T Pro HD1913 (10)
+- OnePlus 7T Pro HD1917 (10)
 - OnePlus 7T Pro NR HD1925 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - Razer Phone (8.1.0)
 - Razer Phone 2 (8.1.0 & 9)
-- Samsung Galaxy A3 2015 (6.0.1)
-- Samsung Galaxy A5 2015 (6.0.1)
-- Samsung Galaxy A5 2017 (8.0.0)
-- Samsung Galaxy A51 (10)
-- Samsung Galaxy A6 Plus (9)
-- Samsung Galaxy A7 2017 (8.0.0)
-- Samsung Galaxy A8 Plus (7.1.1)
-- Samsung Galaxy Core Prime (5.1.1)
-- Samsung Galaxy Grand Prime (5.0.2)
-- Samsung Galaxy J2 (5.1.1)
-- Samsung Galaxy J3 (5.1.1)
-- Samsung Galaxy J5 2015 (6.0.1)
-- Samsung Galaxy J5 2016 (7.1.1)
-- Samsung Galaxy J5 Prime (7.0)
-- Samsung Galaxy J7 2017 (8.1.0)
-- Samsung Galaxy J7 Prime (6.0.1)
-- Samsung Galaxy M20 (10)
-- Samsung Galaxy Note 3 (5.0)
-- Samsung Galaxy Note 4 (6.0.1)
-- Samsung Galaxy Note 5 (7.0)
-- Samsung Galaxy Note 8 (8.0.0)
-- Samsung Galaxy Note 10 Plus (10)
-- Samsung Galaxy Note 10.1 2014 (5.1.1)
-- Samsung Galaxy S3 Neo (4.4.4)
-- Samsung Galaxy S4 (5.0.1)
-- Samsung Galaxy S4 Active (5.0.1)
-- Samsung Galaxy S5 (6.0.1)
-- Samsung Galaxy S6 (7.0)
-- Samsung Galaxy S6 Edge (7.0)
-- Samsung Galaxy S7 (8.0.0)
-- Samsung Galaxy S7 Edge (8.0.0)
-- Samsung Galaxy S8 (8.0.0)
-- Samsung Galaxy S8 Plus (8.0.0)
-- Samsung Galaxy S9 (8.0.0)
-- Samsung Galaxy S9 Plus (8.0.0)
+- Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
+- Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
+- Samsung Galaxy A5 2017 SM-A520F (8.0.0)
+- Samsung Galaxy A51 SM-A515F (10)
+- Samsung Galaxy A6 Plus SM-A605G (9)
+- Samsung Galaxy A7 2017 SM-A720F (8.0.0)
+- Samsung Galaxy A8 Plus SM-A730F (7.1.1)
+- Samsung Galaxy Core Prime SM-G361F (5.1.1)
+- Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
+- Samsung Galaxy J2 SM-J200H (5.1.1)
+- Samsung Galaxy J3 SM-J320FN (5.1.1)
+- Samsung Galaxy J5 2015 SM-J500FN (6.0.1)
+- Samsung Galaxy J5 2016 SM-J510FN (7.1.1)
+- Samsung Galaxy J5 Prime SM-G570F (7.0)
+- Samsung Galaxy J7 2017 SM-J730F (8.1.0)
+- Samsung Galaxy J7 Prime SM-G610F (6.0.1)
+- Samsung Galaxy M20 SM-M205F (10)
+- Samsung Galaxy Note 3 SM-N9005 (5.0)
+- Samsung Galaxy Note 4 SM-N910F (6.0.1)
+- Samsung Galaxy Note 5 SM-N920C (7.0)
+- Samsung Galaxy Note 8 SM-N950F (8.0.0)
+- Samsung Galaxy Note 9 SM-N960F (10)
+- Samsung Galaxy Note 10 Plus SM-N975F (10)
+- Samsung Galaxy Note 10.1 2014 SM-P600 (5.1.1)
+- Samsung Galaxy S3 Neo GT-I9300I (4.4.4)
+- Samsung Galaxy S4 GT-I9505 (5.0.1)
+- Samsung Galaxy S4 Active GT-I9295 (5.0.1)
+- Samsung Galaxy S5 SM-G900H (6.0.1)
+- Samsung Galaxy S6 SM-G920F (7.0)
+- Samsung Galaxy S6 Edge SM-G925F (7.0)
+- Samsung Galaxy S7 SM-G930F (8.0.0)
+- Samsung Galaxy S7 Edge SM-G935F (8.0.0)
+- Samsung Galaxy S8 SM-G950F (8.0.0)
+- Samsung Galaxy S8 Plus SM-G955F (8.0.0)
+- Samsung Galaxy S9 SM-G960F (8.0.0)
+- Samsung Galaxy S9 Plus SM-G965F (8.0.0)
 - Samsung Galaxy S10 Plus SM-G975F (10)
 - Samsung Galaxy S10 Plus SM-G975U (9)
-- Samsung Galaxy Tab 2 7.0 (4.2.2)
+- Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
 - Samsung Galaxt Tab A LTE SM-T597 (9)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
-- Sony Xperia X (8.0.0)
-- Sony Xperia X Compact (8.0.0)
-- Sony Xperia X Dual (8.0.0)
-- Sony Xperia X Performance (8.0.0)
-- Sony Xperia X Performance Dual (8.0.0)
-- Sony Xperia XA2 Dual (8.0.0)
-- Sony Xperia XZ (8.0.0)
-- Sony Xperia XZ Dual (8.0.0)
-- Sony Xperia XZ Premium (8.0.0)
-- Sony Xperia XZ Premium Dual (8.0.0)
-- Sony Xperia XZ1 (8.0.0)
-- Sony Xperia XZ1 Compact (8.0.0 & 9)
-- Sony Xperia XZ1 Dual (8.0.0)
-- Sony Xperia XZ2 (8.0.0)
-- Sony Xperia XZ2 Compact (8.0.0)
-- Sony Xperia XZ2 Compact Dual (8.0.0)
-- Sony Xperia XZ2 Dual (8.0.0)
-- Sony Xperia Z (5.1.1)
-- Sony Xperia Z1 (5.1.1)
-- Sony Xperia Z2 (6.0.1)
-- Sony Xperia Z3 (6.0.1)
-- Sony Xperia Z3 Compact (6.0.1)
-- Sony Xperia Z3 Tablet Compact (6.0.1)
-- Sony Xperia Z4 Tablet LTE (7.1.1)
-- Sony Xperia Z5 (7.1.1)
-- Sony Xperia Z5 Compact (7.1.1)
-- Sony Xperia Z5 Dual (7.1.1)
-- Sony Xperia Z5 Premium (7.1.1)
-- Sony Xperia Z5 Premium Dual (7.1.1)
+- Sony Xperia X F5121 (8.0.0)
+- Sony Xperia X Compact F5321 (8.0.0)
+- Sony Xperia X Dual F5122 (8.0.0)
+- Sony Xperia X Performance F8131 (8.0.0)
+- Sony Xperia X Performance Dual F8132 (8.0.0)
+- Sony Xperia XA2 Dual H4113 (8.0.0)
+- Sony Xperia XZ F8331 (8.0.0)
+- Sony Xperia XZ Dual F8332 (8.0.0)
+- Sony Xperia XZ Premium G8141 (8.0.0)
+- Sony Xperia XZ Premium Dual G8142 (8.0.0)
+- Sony Xperia XZ1 G8341 (8.0.0)
+- Sony Xperia XZ1 Compact G8441 (8.0.0 & 9)
+- Sony Xperia XZ1 Dual G8342 (8.0.0)
+- Sony Xperia XZ2 H8216 (8.0.0)
+- Sony Xperia XZ2 Compact H8314 (8.0.0)
+- Sony Xperia XZ2 Compact Dual H8324 (8.0.0)
+- Sony Xperia XZ2 Dual H8266 (8.0.0)
+- Sony Xperia Z C6603 (5.1.1)
+- Sony Xperia Z1 C6903 (5.1.1)
+- Sony Xperia Z2 D6503 (6.0.1)
+- Sony Xperia Z3 D6633 (6.0.1)
+- Sony Xperia Z3 Compact D5803 (6.0.1)
+- Sony Xperia Z3 Tablet Compact SGP621 (6.0.1)
+- Sony Xperia Z4 Tablet LTE SGP771 (7.1.1)
+- Sony Xperia Z5 E6603 (7.1.1)
+- Sony Xperia Z5 Compact E5823 (7.1.1)
+- Sony Xperia Z5 Dual E6633 (7.1.1)
+- Sony Xperia Z5 Premium E6853 (7.1.1)
+- Sony Xperia Z5 Premium Dual E6883 (7.1.1)
 - Vodafone Smart Ultra 6 (5.1.1)
 - Walmart Onn 8 (9)
-- Xiaomi Mi 3/4 (6.0.1)
+- Xiaomi Mi 3 (6.0.1)
+- Xiaomi Mi 4 (6.0.1)
 - Xiaomi Mi 4C (7.0)
 - Xiaomi Mi 5/5 Pro (7.0 & 8.0.0)
 - Xiaomi Mi 5S (7.0)
@@ -929,10 +982,12 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 9 SE (9)
 - Xiaomi Mi 9T European (9 & 10)
 - Xiaomi Mi 9T Global (10)
+- Xiaomi Mi 9T Pro (9 & 10)
 - Xiaomi Mi A1 (8.0.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9)
 - Xiaomi Mi A2 Lite (9)
 - Xiaomi Mi A3 (9)
+- Xiaomi Mi Box S (9)
 - Xiaomi Mi Max (6.0.1)
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Max 3 (9)
@@ -947,19 +1002,21 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Pocophone F1 (9 & 10)
 - Xiaomi Redmi 3/3 Pro (5.1.1)
 - Xiaomi Redmi 3S/X Prime (6.0.1)
-- Xiaomi Redmi 4 Prime (6.0.1)
+- Xiaomi Redmi 4 Pro (6.0.1)
 - Xiaomi Redmi 4A (7.1.2)
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi 5A (7.1.2 & 8.1.0)
 - Xiaomi Redmi 8 (9)
 - Xiaomi Redmi Go (8.1.0)
-- Xiaomi Redmi K20 Pro/Mi 9T Pro (9 & 10)
+- Xiaomi Redmi K20 Pro (9 & 10)
 - Xiaomi Redmi Note 2 (5.0.2)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE (6.0.1)
-- Xiaomi Redmi Note 4/4X (7.0)
+- Xiaomi Redmi Note 4 (7.0)
+- Xiaomi Redmi Note 4X (7.0)
 - Xiaomi Redmi Note 4 Mediatek (6.0)
-- Xiaomi Redmi Note 5/5 Plus (7.1.2 & 8.1.0)
+- Xiaomi Redmi Note 5 (7.1.2 & 8.1.0)
+- Xiaomi Redmi Note 5 Plus (7.1.2 & 8.1.0)
 - Xiaomi Redmi Note 5 Pro (8.1.0 & 9)
 - Xiaomi Redmi Note 5A Lite (7.1.2)
 - Xiaomi Redmi Note 6 Pro (8.1.0)

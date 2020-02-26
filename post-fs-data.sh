@@ -29,7 +29,7 @@
 	if [ -f "$VLOGFILE" ]; then
 		mv -f $VLOGFILE $VLASTLOGFILE
 	fi
-	set -x > $VLOGFILE 2>&1
+	set -x 2>$VLOGFILE
 	echo "***************************************************" > $LOGFILE 2>&1
 	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
 	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1

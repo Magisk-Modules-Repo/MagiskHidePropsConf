@@ -66,6 +66,9 @@ if [ "$INSTFN" ]; then
 	DESCRIPTIONSET
 	DISPLAYSET
 	SDKSET
+	MANUFACTURERSET
+	MODELSET
+	PARTPROPSSET
 	REBOOTCHK
 	"
 	PROPSETTINGSLIST="
@@ -84,6 +87,8 @@ if [ "$INSTFN" ]; then
 	SIMDESCRIPTION
 	SIMDISPLAY
 	SIMSDK
+	SIMMANUFACTURER
+	SIMMODEL
 	CUSTOMPROPS
 	CUSTOMPROPSPOST
 	CUSTOMPROPSLATE
@@ -129,8 +134,10 @@ PRINTSTMP=$MHPCPATH/prints.sh
 PRINTSWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/prints.sh"
 PRINTSDEV="https://raw.githubusercontent.com/Didgeridoohan/Playground/master/prints.sh"
 PRINTFILES=$MODPATH/printfiles
-CSTMPRINTS=/sdcard/printslist
+CSTMPRINTS=/data/media/0/printslist
 CSTMFILE=$PRINTFILES/Custom.sh
+EXPORTPATH=/data/media/0/mhpc
+EXPORTFILE=$EXPORTPATH/propsconf_conf
 
 # Known modules that edit device fingerprint
 USNFLIST="
@@ -170,13 +177,17 @@ ro.build.tags=release-keys
 ro.build.selinux=0
 "
 
-# Fingerprint props to change
+# Partitions used for different props
+PARTITIONS="
+system
+vendor
+product
+odm
+"
+
+# Additional fingerprint prop parts
 PRINTPROPS="
-ro.build.fingerprint
-ro.bootimage.build.fingerprint
-ro.system.build.fingerprint
-ro.vendor.build.fingerprint
-ro.odm.build.fingerprint
+bootimage
 "
 
 # Print parts
@@ -202,10 +213,15 @@ ro.build.description
 "
 
 # Additional simulation props
-ADNSIMPROPS="
+ADNSIMPROPS1="
 ro.build.display.id
 ro.build.version.sdk
 "
+ADNSIMPROPS2="
+ro.product.manufacturer
+ro.product.model
+"
+ADNSIMPROPS=$ADNSIMPROPS1$ADNSIMPROPS2
 
 # Android API level
 APILVL="
@@ -236,6 +252,7 @@ sed
 sort
 tar
 tr
+wc
 wget
 "
 
@@ -342,31 +359,6 @@ get_eq_right() {
 	echo $1 | cut -f 2 -d '='
 }
 
-# Get first word in fingerprint string
-get_first() {
-	case $1 in
-		*\ *) echo $1 | sed 's|\ .*||'
-		;;
-		*=*) get_eq_left "$1"
-		;;
-	esac
-}
-
-# Get the device for current fingerprint
-get_device_used() {
-	PRINTTMP=$(cat $MODPATH/common/prints.sh | grep "$1")
-	if [ "$PRINTTMP" ]; then
-		echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N}"
-		echo ""
-	elif [ -s "$CSTMPRINTS" ]; then
-		PRINTTMP=$(cat $CSTMPRINTS | grep "$1")
-		if [ "$PRINTTMP" ]; then
-			echo "${C}$(get_eq_left "$PRINTTMP" | sed "s| (.*||")${N} (from custom list)"
-			echo ""
-		fi
-	fi
-}
-
 # Get the list of print version
 get_print_versions() {
 	echo "$1" | sed 's|.*(||' | sed 's|).*||' | sed 's| \& | |g'
@@ -396,9 +388,9 @@ get_print_display() {
 # Replace file values
 replace_fn() {
 	if [ "$5" == "placeholder" ]; then
-		sed -i "s|${1}PH=${2}|${1}=${3}|" $4
+		sed -i "s|${1}PH=${2}|${1}=${3}|" $4 >> $LOGFILE 2>&1
 	else
-		sed -i "s|${1}=${2}|${1}=${3}|" $4
+		sed -i "s|${1}=${2}|${1}=${3}|" $4 >> $LOGFILE 2>&1
 	fi
 }
 
@@ -513,12 +505,20 @@ all_values() {
 	. $LATEFILE
 }
 
+# Run before updated props/settings
+before_change() {
+	if [ -z "$INSTFN" ]; then
+		echo ""
+		echo "${C}Working. Please wait...${N}"
+	fi
+}
+
 # Run after updated props/settings
 after_change() {
 	if [ "$2" == "file" ]; then
 		# Load module settings
 		. $LATEFILE
-	else
+	elif [ "$2" != "none" ]; then
 		# Update the reboot variable
 		replace_fn REBOOTCHK 0 1 $LATEFILE
 		# Load all values
@@ -594,6 +594,8 @@ reboot_fn() {
 
 # Reset module
 reset_fn() {
+	before_change
+	
 	cp -af $MODPATH/common/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
@@ -685,6 +687,12 @@ config_file() {
 					change_sim_descr "Device simulation" 1 "file"
 				else
 					change_sim_descr "Device simulation" 0 "file"
+				fi
+				# Partition specific props
+				if [ "$CONFPARTPROPS" == "true" ]; then
+					change_sim_partprops "Device simulation" 1 "file"
+				else
+					change_sim_partprops "Device simulation" 0 "file"
 				fi
 			fi
 
@@ -1116,8 +1124,41 @@ script_install() {
 }
 
 # ======================== Fingerprint functions ========================
+# Get full device info from fingerprint string
+get_device() {
+	echo $1 | cut -f 1 -d '=' | sed "s|\:.*$||"
+}
+
+# Get first word in fingerprint string
+get_first() {
+	case $1 in
+		*\ *) echo $1 | sed 's|\ .*||'
+		;;
+		*=*) get_device "$1"
+		;;
+	esac
+}
+
+# Get the device for current fingerprint
+get_device_used() {
+	PRINTTMP=$(cat $MODPATH/common/prints.sh | grep "$1")
+	if [ "$PRINTTMP" ]; then
+		echo "${C}$(get_device "$PRINTTMP" | sed "s| (.*||")${N}"
+		echo ""
+	elif [ -s "$CSTMPRINTS" ]; then
+		PRINTTMP=$(cat $CSTMPRINTS | grep "$1")
+		if [ "$PRINTTMP" ]; then
+			echo "${C}$(get_device "$PRINTTMP" | sed "s| (.*||")${N} (from custom list)"
+			echo ""
+		fi
+	fi
+}
+
 # Set new fingerprint
 print_edit() {
+	if [ "$1" ]; then
+		before_change
+	fi
 	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ]; then
 		log_handler "Changing fingerprint."
 		if [ "$PRINTVEND" == 1 ]; then
@@ -1129,18 +1170,17 @@ print_edit() {
 			PRINTCHNG="$(echo $MODULEFINGERPRINT | sed 's|\_\_.*||')"
 		fi
 		# Changing props
-		for ITEM in $PRINTPROPS; do
-			if [ "$(resetprop $ITEM)" ]; then
-				log_handler "Changing/writing $ITEM."
-				if [ "$1" ]; then
-					echo "${ITEM}=${PRINTCHNG}" >> $1
-				else
-					resetprop -nv $ITEM $PRINTCHNG >> $LOGFILE 2>&1
-				fi
+		if [ "$(resetprop "ro.build.fingerprint")" ]; then
+			log_handler "Changing/writing ro.build.fingerprint."
+			if [ "$1" ]; then
+				echo "ro.build.fingerprint=${PRINTCHNG}" >> $1
 			else
-				log_handler "$ITEM not currently set on device. Skipping."
+				resetprop -nv ro.build.fingerprint $PRINTCHNG >> $LOGFILE 2>&1
 			fi
-		done
+		else
+			log_handler "ro.build.fingerprint not currently set on device. Skipping."
+		fi
+		set_partition_props $1 "ro.build.fingerprint" $PRINTCHNG
 		# Edit device description
 		if [ "$DESCRIPTIONSET" == 1 ]; then
 			if [ "$SIMDESCRIPTION" ]; then
@@ -1159,6 +1199,9 @@ print_edit() {
 
 # Edit security patch date if included
 patch_edit() {
+	if [ "$1" ]; then
+		before_change
+	fi
 	if [ "$PRINTVEND" != 1 ]; then
 		case "$MODULEFINGERPRINT" in
 			*__*)
@@ -1323,6 +1366,8 @@ download_prints() {
 
 # Reset the module fingerprint change
 reset_print() {
+	before_change
+	
 	log_handler "Resetting device fingerprint to default system value."
 
 	# Saves new module valueS
@@ -1342,6 +1387,8 @@ reset_print() {
 
 # Use fingerprint
 change_print() {
+	before_change
+	
 	log_handler "Changing device fingerprint to $2."
 
 	# Saves new module values
@@ -1360,6 +1407,8 @@ change_print() {
 
 # Use vendor fingerprint
 change_print_vendor() {
+	before_change
+	
 	if [ $2 == 1 ]; then
 		STATETXT="Enabling"
 		TMPVAL=0
@@ -1427,15 +1476,64 @@ print_parts() {
 	if [ "$2" != "var" ]; then
 		replace_fn SIMDESCRIPTION "\"$SIMDESCRIPTION\"" "\"$VARDESCRIPTION\"" $LATEFILE
 		replace_fn SIMDISPLAY "\"$SIMDISPLAY\"" "\"$VARDESCRIPTION\"" $LATEFILE
-		replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE
+		replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE		
+		TMPPARTS=$(get_eq_left "$(grep $1 $PRINTSLOC)" | sed 's|.*)\:||')
+		if [ -z "$TMPPARTS" ]; then
+			TMPPARTS=$(get_eq_left "$(grep $1 $CSTMPRINTS)" | sed 's|.*)\:||')
+		fi
+		if [ $(echo $TMPPARTS | grep -o "\:" | wc -l) == 1 ]; then
+			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"\"" $LATEFILE
+			replace_fn SIMMODEL "\"\"" $LATEFILE
+		else
+			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"\"" $LATEFILE
+			replace_fn SIMMODEL "\"$SIMMODEL\"" "\"\"" $LATEFILE
+		fi
 	fi
 	# Load module values
 	. $LATEFILE
 }
 
+set_partition_props() {
+	if [ "$2" == "ro.build.fingerprint" ]; then
+		TMPLST=$PRINTPROPS$PARTITIONS
+	else
+		TMPLST=$PARTITIONS
+	fi
+	for PART in $TMPLST; do
+		CNTP=1
+		while [ $CNTP != 0 ]; do
+			TMPPART="$(echo $2 | cut -f $CNTP -d ".")"
+			if [ "$CNTP" == 1 ]; then
+				TMPPROP="${TMPPART}.${PART}.$(echo "$2" | sed "s|${TMPPART}\.||")"
+			else
+				TMPPROP="$(echo "$2" | sed "s|\.${TMPPART}||").${PART}.${TMPPART}"
+			fi
+			if [ "$(resetprop $TMPPROP)" ]; then
+				log_handler "Changing/writing $TMPPROP."
+				if [ "$1" ]; then
+					echo "${TMPPROP}=${3}" >> $1
+				else
+					resetprop -nv $2 $3 >> $LOGFILE 2>&1
+				fi
+			else
+				log_handler "$TMPPROP not currently set on device. Skipping."
+			fi
+			if [ "$CNTP" == 1 ]; then
+				CNTP=$(echo $2 | grep -o "\." | wc -l)
+				CNTP=$(($CNTP + 1))
+			else
+				CNTP=0
+			fi
+		done
+	done
+}
+
 # ======================== Device simulation functions ========================
 # Edit the simulation props
 dev_sim_edit() {
+	if [ "$1" ]; then
+		before_change
+	fi
 	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ]; then
 		if [ "$DEVSIM" == 1 ]; then
 			log_handler "Editing device simulation props."
@@ -1444,15 +1542,26 @@ dev_sim_edit() {
 				TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 				TMPENB=$(get_file_value $LATEFILE "${TMPPROP}SET=")
 				TMPVALUE=$(get_file_value $LATEFILE "SIM${TMPPROP}=")
-				if [ "$TMPENB" == 1 ] && [ "$TMPVALUE" ]; then
-					log_handler "Changing/writing $ITEM."
-					if [ "$1" ]; then
-						echo "${ITEM}=${TMPVALUE}" >> $1
+				if [ "TMPVALUE" ]; then
+					if [ "$TMPENB" == 1 ] && [ "$TMPVALUE" ]; then
+						if [ "$(resetprop $ITEM)" ]; then
+							log_handler "Changing/writing $ITEM."
+							if [ "$1" ]; then
+								echo "${ITEM}=${TMPVALUE}" >> $1
+							else
+								resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1
+							fi
+						else
+							log_handler "$ITEM not currently set on device. Skipping."
+						fi
+						if [ "$PARTPROPSSET" == 1 ]; then
+							set_partition_props $1 $ITEM $TMPVALUE
+						fi
 					else
-						resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1
+						log_handler "Changing/writing $ITEM is disabled."
 					fi
 				else
-					log_handler "Changing/writing $ITEM is disabled."
+					log_handler "No simulation value set for $ITEM."
 				fi
 			done
 		fi
@@ -1461,6 +1570,8 @@ dev_sim_edit() {
 
 # Enable/disable the option
 change_dev_sim() {
+	before_change
+	
 	if [ $DEVSIM == 0 ]; then
 		STATETXT="Enabling"
 		TMPVAL=1
@@ -1474,11 +1585,22 @@ change_dev_sim() {
 	# Enables or disables the setting
 	replace_fn "DEVSIM" $DEVSIM $TMPVAL $LATEFILE
 
+	# Disables all simulation props
+	if [ $TMPVAL == 0 ]; then
+		TMPPARTS=$PRINTPARTS$ADNSIMPROPS
+		for ITEM in $TMPPARTS; do
+			change_sim_prop "Device simulation" "$ITEM" 0 "none"
+		done
+		system_prop
+	fi
+
 	after_change "$1" "$2"
 }
 
 # Change if prop should be simulated or not
 change_sim_prop() {
+	before_change
+	
 	if [ $3 == 1 ]; then
 		STATETXT="enabled"
 	else
@@ -1497,6 +1619,8 @@ change_sim_prop() {
 
 # Change if description should be simulated or not
 change_sim_descr() {
+	before_change
+	
 	if [ $2 == 1 ]; then
 		STATETXT="enabled"
 	else
@@ -1506,6 +1630,23 @@ change_sim_descr() {
 
 	# Saves new value
 	replace_fn DESCRIPTIONSET $DESCRIPTIONSET $2 $LATEFILE
+
+	after_change "$1" "$3"
+}
+
+# Change if partition specific props should be simulated or not
+change_sim_partprops() {
+	before_change
+	
+	if [ $2 == 1 ]; then
+		STATETXT="enabled"
+	else
+		STATETXT="disabled"
+	fi
+	log_handler "Changing partition specific prop editing to $STATETXT."
+
+	# Saves new value
+	replace_fn PARTPROPSSET $PARTPROPSSET $2 $LATEFILE
 
 	after_change "$1" "$3"
 }
@@ -1547,6 +1688,8 @@ change_to() {
 
 # Reset the module prop change
 reset_prop() {
+	before_change
+
 	# Sets variables
 	PROP=$(get_prop_type $1)
 	MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
@@ -1567,7 +1710,7 @@ reset_prop() {
 			replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
 		fi
 	fi
-	if [ "$PROPCOUNT" == 0 ]; then
+	if [ "$PROPCOUNTP" == 0 ]; then
 		replace_fn PROPEDIT 1 0 $LATEFILE
 	fi
 
@@ -1576,6 +1719,8 @@ reset_prop() {
 
 # Use prop value
 change_prop() {
+	before_change
+	
 	# Sets variables
 	PROP=$(get_prop_type $1)
 	MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
@@ -1601,6 +1746,8 @@ change_prop() {
 
 # Reset all module prop changes
 reset_prop_all() {
+	before_change
+	
 	log_handler "Resetting all props to default values."
 
 	for PROPTYPE in $PROPSLIST; do
@@ -1625,6 +1772,9 @@ reset_prop_all() {
 # ======================== Custom Props functions ========================
 # Set custom props
 custom_edit() {
+	if [ "$2" ]; then
+		before_change
+	fi
 	if [ "$1" ] && [ "$CUSTOMEDIT" == 1 ]; then
 		TMPLST="$(get_file_value $LATEFILE "${1}=")"
 		if [ "$TMPLST" ]; then
@@ -1658,6 +1808,8 @@ custprop_value() {
 
 # Set custom prop value
 set_custprop() {
+	before_change
+	
 	if [ "$2" ]; then
 		# Reset the prop
 		reset_custprop "$1" "$2" "bootstage"
@@ -1704,6 +1856,8 @@ set_custprop() {
 
 # Reset all custom prop values
 reset_all_custprop() {
+	before_change
+	
 	log_handler "Resetting all custom props."
 	# Removing all custom props
 	replace_fn CUSTOMPROPS "\"$CUSTOMPROPS\"" "\"\"" $LATEFILE
@@ -1716,6 +1870,8 @@ reset_all_custprop() {
 
 # Reset custom prop value
 reset_custprop() {
+	before_change
+	
 	log_handler "Resetting custom prop $1."
 	PROPSBOOTSTAGE="CUSTOMPROPS CUSTOMPROPSPOST CUSTOMPROPSLATE"
 	TMPVALUE=$(echo "$2" | sed 's| |_sp_|g')
@@ -1759,6 +1915,8 @@ prop_del() {
 # Set prop to delete
 set_delprop() {
 	if [ "$1" ]; then
+		before_change
+	
 		TMPDELPROPS=$(echo "$DELETEPROPS  ${1}" | sed 's|^[ \t]*||')
 		SORTDELPROPS=$(echo $(printf '%s\n' $TMPDELPROPS | sort -u))
 
@@ -1772,6 +1930,8 @@ set_delprop() {
 
 # Reset all props to delete
 reset_all_delprop() {
+	before_change
+	
 	log_handler "Resetting list of props to delete."
 	# Removing all props to delete
 	replace_fn DELETEPROPS "\"$DELETEPROPS\"" "\"\"" $LATEFILE
@@ -1782,6 +1942,8 @@ reset_all_delprop() {
 
 # Reset prop to delete
 reset_delprop() {
+	before_change
+	
 	log_handler "Resetting prop to delete, $1."
 	TMPDELPROPS=$(echo $DELETEPROPS | sed "s|${1}||" | tr -s " " | sed 's|^[ \t]*||')
 
@@ -1794,6 +1956,63 @@ reset_delprop() {
 	fi
 
 	after_change "Reset prop to delete - $1"
+}
+
+# ======================== Options functions ========================
+# Export all settings to a module configuration file
+export_settings() {
+	before_change
+	log_handler "Exporting module settings."
+	# Load settings
+	. $LATEFILE
+	# Create export directory
+	mkdir -pv $EXPORTPATH
+	# Create file and Delete instructions
+	sed -n '1,59p' $MODPATH/common/propsconf_conf > $EXPORTFILE >> $LOGFILE 2>&1
+	# Export settings
+	replace_fn CONFFINGERPRINT "\"\"" "\"$MODULEFINGERPRINT\"" $EXPORTFILE
+	replace_fn CONFVENDPRINT false $([ $PRINTEDIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFPRINTBOOT default $([ $PRINTSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
+	replace_fn CONFPATCHBOOT late $([ $PRINTSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
+	replace_fn CONFDEVSIM false $([ $DEVSIM == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBRAND false $([ $BRANDSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFNAME false $([ $NAMESET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFDEVICE false $([ $DEVICESET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFRELEASE false $([ $RELEASESET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFID false $([ $IDSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFINCREMENTAL false $([ $INCREMENTALSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFDISPLAY false $([ $DISPLAYSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFSDK false $([ $SDKSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFMANUFACTURER false $([ $MANUFACTURERSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFMODEL false $([ $MODELSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFDESCRIPTION true $([ $DESCRIPTIONSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFPARTPROPS true $([ $PARTPROPSSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFSIMBOOT default $([ $SIMSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
+	replace_fn CONFDEBUGGABLE "\"\"" $MODULEDEBUGGABLE $EXPORTFILE
+	replace_fn CONFSECURE "\"\"" $MODULESECURE $EXPORTFILE
+	replace_fn CONFTYPE "\"\"" $MODULETYPE $EXPORTFILE
+	replace_fn CONFTAGS "\"\"" $MODULETAGS $EXPORTFILE
+	replace_fn CONFSELINUX "\"\"" $MODULESELINUX $EXPORTFILE
+	replace_fn CONFPROPS "\"\"" "\"$CUSTOMPROPS\"" $EXPORTFILE
+	replace_fn CONFPROPSPOST "\"\"" "\"$CUSTOMPROPSPOST\"" $EXPORTFILE
+	replace_fn CONFPROPSLATE "\"\"" "\"$CUSTOMPROPSLATE\"" $EXPORTFILE
+	replace_fn CONFDELPROPS "\"\"" "\"$DELETEPROPS\"" $EXPORTFILE
+	replace_fn CONFBOOT default $([ $OPTIONBOOT == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
+	replace_fn CONFCOLOUR true $([ $OPTIONCOLOUR == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFWEB true $([ $OPTIONWEB == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFUPDATE true $([ $OPTIONUPDATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBACK false $([ $OPTIONBACK == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	log_handler "Export done."
+	# Print info
+	menu_header "${C}$1${N}"
+	echo ""
+	echo "A module configuration file with"
+	echo "your current settings have been"
+	echo "saved to your internal storage,"
+	echo "in the ${C}/mhcp${N} directory."
+	echo ""
+	echo -n "Press enter to continue..."
+	read -r INPUTTMP
 }
 
 # ======================== Log collecting functions ========================

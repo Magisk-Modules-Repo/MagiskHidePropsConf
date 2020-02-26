@@ -11,7 +11,7 @@ BOOTSTAGE="late"
 . $MODPATH/common/util_functions.sh
 
 VLOGFILE=$MHPCPATH/propsconf_boot_verbose.log
-set -x >> $VLOGFILE 2>&1
+set -x 2>>$VLOGFILE
 
 TMP_WAIT=0
 until [ ! -f "$POSTCHKFILE" ] || [ "$TMP_WAIT" == 10 ]; do
@@ -105,6 +105,8 @@ if [ "$PROPEDIT" == 1 ]; then
 			resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
 		fi
 	done
+	stop
+	start
 fi
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 
