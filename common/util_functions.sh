@@ -1966,7 +1966,7 @@ export_settings() {
 	# Load settings
 	. $LATEFILE
 	# Create export directory
-	mkdir -pv $EXPORTPATH
+	mkdir -pv $EXPORTPATH >> $LOGFILE 2>&1
 	# Create file and Delete instructions
 	sed -n '1,59p' $MODPATH/common/propsconf_conf > $EXPORTFILE >> $LOGFILE 2>&1
 	# Export settings
