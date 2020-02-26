@@ -1969,7 +1969,7 @@ export_settings() {
 	# Create export directory
 	mkdir -pv $EXPORTPATH >> $LOGFILE 2>&1
 	# Create file and Delete instructions
-	head -n 59 $MODPATH/common/propsconf_conf > $EXPORTFILE >> $LOGFILE 2>&1
+	head -n 59 $MODPATH/common/propsconf_conf > $EXPORTFILE
 	# Export settings
 	replace_fn CONFFINGERPRINT "\"\"" "\"$MODULEFINGERPRINT\"" $EXPORTFILE
 	replace_fn CONFVENDPRINT false $([ $PRINTEDIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
