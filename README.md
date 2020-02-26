@@ -451,6 +451,9 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.2.1  
+- Quick fix for broken fingerprints list and settings export.
+
 ### v5.2.0  
 - Added ro.product.manufacturer and ro.product.model to simulation props.
 - Added an option to also use partition specific versions of simulation props (see the documentation for details).
