@@ -451,6 +451,9 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.2.2  
+- Another quick fix taking care of a weird copy-pasta error that broke manufacturer and model simulation.
+
 ### v5.2.1  
 - Quick fix for broken fingerprints list and settings export.
 

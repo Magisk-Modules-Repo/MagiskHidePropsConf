@@ -1484,8 +1484,8 @@ print_parts() {
 			TMPPARTS=$(get_eq_left "$(grep $1 $CSTMPRINTS)" | sed 's|.*)\:||')
 		fi
 		if [ $(echo $TMPPARTS | grep -o "\:" | wc -l) == 1 ]; then
-			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"\"" $LATEFILE
-			replace_fn SIMMODEL "\"\"" $LATEFILE
+			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"$(echo $TMPPARTS | cut -f 1 -d ':')\"" $LATEFILE
+			replace_fn SIMMODEL "\"$SIMMODEL\"" "\"$(echo $TMPPARTS | cut -f 2 -d ':')\"" $LATEFILE
 		else
 			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"\"" $LATEFILE
 			replace_fn SIMMODEL "\"$SIMMODEL\"" "\"\"" $LATEFILE
