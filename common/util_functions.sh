@@ -412,7 +412,7 @@ force_reboot() {
 	echo ""
 	echo "${C}Rebooting...${N}"
 	log_handler "Rebooting."
-	[ "$(resetprop sys.boot_completed)" == 1 ] && /system/bin/svc power reboot "" >> $LOGFILE 2>&1 || /system/bin/reboot "" >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
+	[ "$(getprop sys.boot_completed)" == 1 ] && /system/bin/svc power reboot "" >> $LOGFILE 2>&1 || /system/bin/reboot "" >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
 	sleep 15
 	log_handler "Rebooting failed."
 	echo ""
@@ -486,14 +486,14 @@ orig_check() {
 # Load currently set values
 curr_values() {
 	for ITEM in $VALPROPSLIST; do
-		CURRTMP=$(resetprop -v $ITEM) >> $LOGFILE 2>&1
+		CURRTMP=$(getprop $ITEM) >> $LOGFILE 2>&1
 		TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 		eval "CURR${TMPPROP}='$CURRTMP'"
 	done
 	if [ -z "$CURRFINGERPRINT" ]; then
-		CURRFINGERPRINT=$(resetprop -v ro.bootimage.build.fingerprint) >> $LOGFILE 2>&1
+		CURRFINGERPRINT=$(getprop ro.bootimage.build.fingerprint) >> $LOGFILE 2>&1
 		if [ -z "$CURRFINGERPRINT" ]; then
-			CURRFINGERPRINT=$(resetprop -v ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
+			CURRFINGERPRINT=$(getprop ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
 		fi
 	fi
 }
@@ -639,7 +639,7 @@ config_file() {
 			# Check if vendor fingerprint is set
 			if [ "$CONFVENDPRINT" == "true" ]; then
 				log_handler "Using vendor fingerprint"
-				CONFFINGERPRINT=$(resetprop -v ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
+				CONFFINGERPRINT=$(getprop ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
 			fi
 			# Updates prop values (including fingerprint)	
 			PROPSTMPLIST=$PROPSLIST"
@@ -942,6 +942,7 @@ settings_placement() {
 						if [ "$SOLD" ] && [ "$SOLD" != "$SNEW" ]; then
 							log_handler "Setting ${ITEM} from ${SNEW} to ${SOLD}."
 							sed -i "s|${ITEM}=${SNEW}|${ITEM}=${SOLD}|" $UPDATELATEFILE
+							# Change post-fs-data execution between regular and background
 							if [ "$ITEM" == "OPTIONBACK" -a "$SNEW" == 1 ]; then
 								sed -i -e "s|^{|\#anch0}|;s|^\#anch1|{|;s|regular|background|" $MODPATH/post-fs-data.sh
 							fi
@@ -1054,26 +1055,6 @@ files_check() {
 	fi
 }
 
-# Update the device simulation variables if a fingerprint is set
-devsim_update() {
-	if [ "$MODULEFINGERPRINT" ]; then
-		log_handler "Updating device simulation variables."
-		print_parts "$MODULEFINGERPRINT" "var"
-		for ITEM in $PROPSETTINGSLIST; do
-			case $ITEM in
-				SIM*)
-					SUBA="$(get_file_value $LATEFILE "${ITEM}=")"
-					TMPVAR="$(echo $ITEM | sed 's|SIM|VAR|')"
-					TMPPROP="$(eval "echo \$$TMPVAR")"
-					sed -i "s|${ITEM}=\"${SUBA}\"|${ITEM}=\"${TMPPROP}\"|" $LATEFILE
-				;;
-			esac
-		done
-		# Reload module settings
-		load_settings
-	fi
-}
-
 # Load module settings and reapply the MODPATH variable
 load_settings() {
 	log_handler "Loading/reloading module settings."
@@ -1097,7 +1078,6 @@ script_install() {
 	placeholder_update $MODPATH/system/$BIN/props ADBPATH ADB_PLACEHOLDER "$ADBPATH"
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEFILE"
 	load_settings
-	devsim_update
 	print_files
 	ui_print ""
 	ui_print "- Make sure to have Busybox installed."
@@ -1165,14 +1145,14 @@ print_edit() {
 		log_handler "Changing fingerprint."
 		if [ "$PRINTVEND" == 1 ]; then
 			log_handler "Using vendor fingerprint (for Treble GSI ROMs)."
-			PRINTCHNG="$(resetprop ro.vendor.build.fingerprint)"
+			PRINTCHNG="$(getprop ro.vendor.build.fingerprint)"
 			# Set device simulation variables
 			print_parts "$PRINTCHNG"
 		else
 			PRINTCHNG="$(echo $MODULEFINGERPRINT | sed 's|\_\_.*||')"
 		fi
 		# Changing props
-		if [ "$(resetprop "ro.build.fingerprint")" ]; then
+		if [ "$(getprop "ro.build.fingerprint")" ]; then
 			log_handler "Changing/writing ro.build.fingerprint."
 			if [ "$1" ]; then
 				echo "ro.build.fingerprint=${PRINTCHNG}" >> $1
@@ -1456,10 +1436,8 @@ print_parts() {
 			DLIM1=2
 			DLIM2=1
 		fi
-		if [ "$2" != "var" ]; then
-			SUBA=$(get_file_value $LATEFILE "SIM${TMPPROP}=")
-			replace_fn "SIM${TMPPROP}" "\"$SUBA\"" "\"$TMPVALUE\"" $LATEFILE
-		fi
+		SUBA=$(get_file_value $LATEFILE "SIM${TMPPROP}=")
+		replace_fn "SIM${TMPPROP}" "\"$SUBA\"" "\"$TMPVALUE\"" $LATEFILE
 	done
 
 	VARDESCRIPTION=""
@@ -1475,21 +1453,19 @@ print_parts() {
 			esac
 		done
 	fi
-	if [ "$2" != "var" ]; then
-		replace_fn SIMDESCRIPTION "\"$SIMDESCRIPTION\"" "\"$VARDESCRIPTION\"" $LATEFILE
-		replace_fn SIMDISPLAY "\"$SIMDISPLAY\"" "\"$VARDESCRIPTION\"" $LATEFILE
-		replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE		
-		TMPPARTS=$(get_eq_left "$(grep $1 $PRINTSLOC)" | sed 's|.*)\:||')
-		if [ -z "$TMPPARTS" ]; then
-			TMPPARTS=$(get_eq_left "$(grep $1 $CSTMPRINTS)" | sed 's|.*)\:||')
-		fi
-		if [ $(echo $TMPPARTS | grep -o "\:" | wc -l) == 1 ]; then
-			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"$(echo $TMPPARTS | cut -f 1 -d ':')\"" $LATEFILE
-			replace_fn SIMMODEL "\"$SIMMODEL\"" "\"$(echo $TMPPARTS | cut -f 2 -d ':')\"" $LATEFILE
-		else
-			replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"\"" $LATEFILE
-			replace_fn SIMMODEL "\"$SIMMODEL\"" "\"\"" $LATEFILE
-		fi
+	replace_fn SIMDESCRIPTION "\"$SIMDESCRIPTION\"" "\"$VARDESCRIPTION\"" $LATEFILE
+	replace_fn SIMDISPLAY "\"$SIMDISPLAY\"" "\"$VARDESCRIPTION\"" $LATEFILE
+	replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE		
+	TMPPARTS=$(get_eq_left "$(grep $1 $PRINTSLOC)" | sed 's|.*)\:||')
+	if [ -z "$TMPPARTS" ]; then
+		TMPPARTS=$(get_eq_left "$(grep $1 $CSTMPRINTS)" | sed 's|.*)\:||')
+	fi
+	if [ $(echo $TMPPARTS | grep -o "\:" | wc -l) == 1 ]; then
+		replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"$(echo $TMPPARTS | cut -f 1 -d ':')\"" $LATEFILE
+		replace_fn SIMMODEL "\"$SIMMODEL\"" "\"$(echo $TMPPARTS | cut -f 2 -d ':')\"" $LATEFILE
+	else
+		replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"\"" $LATEFILE
+		replace_fn SIMMODEL "\"$SIMMODEL\"" "\"\"" $LATEFILE
 	fi
 	# Load module values
 	. $LATEFILE
@@ -1510,7 +1486,7 @@ set_partition_props() {
 			else
 				TMPPROP="$(echo "$2" | sed "s|\.${TMPPART}||").${PART}.${TMPPART}"
 			fi
-			if [ "$(resetprop $TMPPROP)" ]; then
+			if [ "$(getprop $TMPPROP)" ]; then
 				log_handler "Changing/writing $TMPPROP."
 				if [ "$1" ]; then
 					echo "${TMPPROP}=${3}" >> $1
@@ -1546,7 +1522,7 @@ dev_sim_edit() {
 				TMPVALUE=$(get_file_value $LATEFILE "SIM${TMPPROP}=")
 				if [ "TMPVALUE" ]; then
 					if [ "$TMPENB" == 1 ] && [ "$TMPVALUE" ]; then
-						if [ "$(resetprop $ITEM)" ]; then
+						if [ "$(getprop $ITEM)" ]; then
 							log_handler "Changing/writing $ITEM."
 							if [ "$1" ]; then
 								echo "${ITEM}=${TMPVALUE}" >> $1
@@ -1964,7 +1940,7 @@ reset_delprop() {
 # Export all settings to a module configuration file
 export_settings() {
 	before_change
-	log_handler "Exporting module settings."
+	log_handler "Exporting module settings to $EXPORTFILE."
 	# Load settings
 	. $LATEFILE
 	# Create export directory
@@ -2042,7 +2018,7 @@ collect_logs() {
 	done
 
 	# Saving the current prop values
-	resetprop > $TMPLOGLOC/currentprops
+	getprop > $TMPLOGLOC/currentprops
 	sed -i -e "s|\]\:\ \[|=|g;s|^\[||g;s|\]$||g" $TMPLOGLOC/currentprops
 
 	# Saving the log file

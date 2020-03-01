@@ -1794,7 +1794,7 @@ menu_edit_custprop() {
 			for ITEM in $CUSTOMPROPSLIST; do
 				TMPITEM=$(echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
 				if [ "$(get_eq_left "$ITEM")" == "$1" ]; then
-					if [ "$TMPITEM" == "$(resetprop $1)" ]; then
+					if [ "$TMPITEM" == "$(getprop $1)" ]; then
 						PROPNOTSET=0
 					else
 						PROPNOTSET=1
@@ -1808,7 +1808,7 @@ menu_edit_custprop() {
 			echo "The current value for"
 			echo "${C}'$1'${N} is:"
 			echo ""
-			echo "${C}$(resetprop $1)${N}"
+			echo "${C}$(getprop $1)${N}"
 			if [ "$PROPNOTSET" == 0 ]; then
 				echo "(Set by this module.)"
 				echo ""
@@ -1864,7 +1864,7 @@ menu_edit_custprop() {
 			;;
 			*)
 				if [ "$PROPNOTSET" == 0 ]; then
-					menu_set_custprop "$1" "$INPUT3" "$(resetprop $1)"
+					menu_set_custprop "$1" "$INPUT3" "$(getprop $1)"
 					break
 				else
 					invalid_input 1 3
@@ -1984,7 +1984,7 @@ menu_magiskhide_custprop() {
 # Fourth menu level - Set new custom prop
 menu_set_new_custprop() {
 	INPUT4=""
-	TMPPROP=$(resetprop "$1")
+	TMPPROP=$(getprop "$1")
 	while true
 	do
 		if [ -z "$INPUT4" ]; then
@@ -2461,7 +2461,7 @@ menu_reset_all_delprop() {
 # Fourth menu level - Set new prop to delete
 menu_set_new_delprop() {
 	INPUT4=""
-	TMPPROP=$(resetprop "$1")
+	TMPPROP=$(getprop "$1")
 	while true
 	do
 		if [ -z "$INPUT4" ]; then

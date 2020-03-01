@@ -40,7 +40,7 @@
 	echo -e $STRST > $RUNFILE 2>&1
 
 	# Save default prop values
-	resetprop > $MHPCPATH/defaultprops
+	getprop > $MHPCPATH/defaultprops
 	echo "" >> $LOGFILE 2>&1
 	echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - Saved default values" >> $LOGFILE 2>&1
 

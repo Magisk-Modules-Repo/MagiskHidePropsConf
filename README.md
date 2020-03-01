@@ -225,7 +225,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v78_**
+**_Current fingerprints list version - v79_**
 
 
 ## Please add support for device X
@@ -348,7 +348,7 @@ But first: have you tried turning it off and on again? Toggling MagiskHide off a
 If you have questions, suggestions or are experiencing some kind of issue, visit the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) @ XDA.
 
 ### Known issues
-- EdXposed sometimes causes Magisk's boot process to fail, resulting in the module boot scripts (mainly service.sh) not running as they should. Until this has been fixed with EdXposed, there are a couple of ways to work around this. Use the [Configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) to set everything up during installation, or disable EdXposed before setting the module up and enable it again after the module works as you want it. Just make sure to use the default settings for boot stages.
+For the moment, nothing special (I think). If you've got issues, take a look at the most common problems listed below.
 
 ### props not found
 There are two common reasons why you would get an error saying "not found" when running the `props` command in a terminal emulator.
@@ -451,6 +451,11 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.2.3  
+- Fixed issue with settings transfering between module updates.
+- Use resetprop only to set values and retrieve values with getprop. For whatever reason some devices have issues with resetprop and this might make the module work on those.
+- Updated fingerprints for OnePlus 6, 6T and 7T Pro NR. Fingerprints list updated to v79.
+
 ### v5.2.2  
 - Another quick fix taking care of a weird copy-pasta error that broke manufacturer and model simulation.
 
@@ -770,7 +775,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v78  
+### List v79  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)

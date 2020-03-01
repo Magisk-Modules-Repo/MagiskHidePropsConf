@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=78
+PRINTSV=79
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -116,8 +116,8 @@ OnePlus 3 (8.0.0 & 9):OnePlus:ONEPLUS A3000=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1
 OnePlus 3T (8.0.0 & 9):OnePlus:ONEPLUS A3003=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1911042108:user/release-keys__2019-10-01
 OnePlus 5 (8.1.0 & 9):OnePlus:ONEPLUS A5000=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
 OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9):OnePlus:ONEPLUS A5010=OnePlus/OnePlus5T/OnePlus5T:7.1.1/NMF26X/12152312:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.0.0/OPR1.170623.032/02040656:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
-OnePlus 6 (8.1.0 & 9 & 10):OnePlus:ONEPLUS A6003=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/2001151848:user/release-keys__2019-12-01
-OnePlus 6T (9 & 10):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/2001151848:user/release-keys__2019-12-01
+OnePlus 6 (8.1.0 & 9 & 10):OnePlus:ONEPLUS A6003=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/2002220019:user/release-keys__2020-02-01
+OnePlus 6T (9 & 10):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/2002220019:user/release-keys__2020-02-01
 OnePlus 6T T-Mobile (9):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6TSingle/OnePlus6TSingle:9/PKQ1.180716.001/1810291147:user/release-keys__2018-11-01
 OnePlus 7 GM1901 (9 & 10):OnePlus:GM1901=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
 OnePlus 7 GM1903 (9 & 10):OnePlus:GM1905=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7_EEA/OnePlus7:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
@@ -134,7 +134,7 @@ OnePlus 7T HD1905 (10):OnePlus:HD1905=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716
 OnePlus 7T Pro HD1911 (10):OnePlus:HD1911=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/2002022020:user/release-keys__2020-01-01
 OnePlus 7T Pro HD1913 (10):OnePlus:HD1913=OnePlus/OnePlus7TPro_EEA/OnePlus7TPro:10/QKQ1.190716.003/2002022020:user/release-keys__2020-01-01
 OnePlus 7T Pro HD1917 (10):OnePlus:HD1917=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/2002022020:user/release-keys__2020-01-01
-OnePlus 7T Pro NR HD1925 (10):OnePlus:HD1925=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2002051152:user/release-keys__2019-12-01
+OnePlus 7T Pro NR HD1925 (10):OnePlus:HD1925=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2002150222:user/release-keys__2020-02-01
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 Razer Phone (8.1.0):Razer:Phone=razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05
