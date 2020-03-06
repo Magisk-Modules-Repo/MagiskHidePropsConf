@@ -30,7 +30,8 @@ if [ "$INSTFN" ]; then
 	SERVICEPATH=$ADBPATH/service.d
 	POSTFILE=$POSTPATH/propsconf_post
 	POSTLATEFILE=$POSTPATH/propsconf_late
-	UPDATELATEFILE=$MODPATH/common/propsconf_late
+	UPDATELATEFILE=$MHPCPATH/propsconf_late_update
+	ORIGLATEFILE=$MODPATH/common/propsconf_late
 	CACHERM="
 	$CACHELOC/propsconf_postfile.log
 	$CACHELOC/propsconf.log
@@ -120,7 +121,6 @@ fi
 COREPATH=/sbin/.magisk
 MIRRORPATH=$COREPATH/mirror
 SYSTEMFILE=$MODPATH/system.prop
-POSTCHKFILE=$MHPCPATH/propsconf_postchk
 RUNFILE=$MHPCPATH/script_check
 # Make sure that the terminal app used actually can see resetprop
 if [ "$BOOTSTAGE" == "props" ]; then
@@ -153,7 +153,7 @@ VR_Patch
 "
 
 # Configuration file locations
-CONFFILELST="
+CONFFILELOC="
 /data
 $CACHELOC
 /data/media/0
@@ -186,7 +186,7 @@ odm
 "
 
 # Additional fingerprint prop parts
-PRINTPROPS="
+PRINTPROPSPARTS="
 bootimage
 "
 
@@ -486,15 +486,17 @@ orig_check() {
 # Load currently set values
 curr_values() {
 	for ITEM in $VALPROPSLIST; do
-		CURRTMP=$(getprop $ITEM) >> $LOGFILE 2>&1
+		CURRTMP=$(getprop $ITEM)
 		TMPPROP=$(get_prop_type $ITEM | tr '[:lower:]' '[:upper:]')
 		eval "CURR${TMPPROP}='$CURRTMP'"
+		echo "${ITEM}: ${CURRTMP}" >> $LOGFILE 2>&1
 	done
 	if [ -z "$CURRFINGERPRINT" ]; then
-		CURRFINGERPRINT=$(getprop ro.bootimage.build.fingerprint) >> $LOGFILE 2>&1
+		CURRFINGERPRINT=$(getprop ro.bootimage.build.fingerprint)
 		if [ -z "$CURRFINGERPRINT" ]; then
-			CURRFINGERPRINT=$(getprop ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
+			CURRFINGERPRINT=$(getprop ro.vendor.build.fingerprint)
 		fi
+		echo "ro.build.fingerprint: ${CURRFINGERPRINT}" >> $LOGFILE 2>&1
 	fi
 }
 
@@ -610,7 +612,7 @@ reset_fn() {
 config_file() {
 	log_handler "Checking for configuration file."
 	CONFFILE=""
-	for ITEM in $CONFFILELST; do
+	for ITEM in $CONFFILELOC; do
 		if [ -s "$ITEM/propsconf_conf" ]; then
 			CONFFILE="$ITEM/propsconf_conf"
 			break
@@ -639,7 +641,8 @@ config_file() {
 			# Check if vendor fingerprint is set
 			if [ "$CONFVENDPRINT" == "true" ]; then
 				log_handler "Using vendor fingerprint"
-				CONFFINGERPRINT=$(getprop ro.vendor.build.fingerprint) >> $LOGFILE 2>&1
+				CONFFINGERPRINT=$(getprop ro.vendor.build.fingerprint)
+				echo "ro.vendor.build.fingerprint: ${CONFFINGERPRINT}" >> $LOGFILE 2>&1
 			fi
 			# Updates prop values (including fingerprint)	
 			PROPSTMPLIST=$PROPSLIST"
@@ -831,7 +834,7 @@ config_file() {
 
 		# Deletes the configuration file
 		log_handler "Deleting configuration file."
-		for ITEM in $CONFFILELST; do
+		for ITEM in $CONFFILELOC; do
 			rm -f $ITEM/propsconf_conf
 		done
 		log_handler "Configuration file import complete."
@@ -885,6 +888,7 @@ system_prop_cont() {
 # ======================== Installation functions ========================
 # Places and updates the settings file
 settings_placement() {
+	cp -af $ORIGLATEFILE $UPDATELATEFILE >> $LOGFILE 2>&1
 	UPDATEV=$(get_file_value $UPDATELATEFILE "SCRIPTV=")
 	UPDATETRANSF=$(get_file_value $UPDATELATEFILE "SETTRANSF=")
 	NOTTRANSF=$(get_file_value $UPDATELATEFILE "NOTTRANSF=")
@@ -978,14 +982,14 @@ settings_placement() {
 			if [ ! -d "$MHPCPATH" ]; then
 				mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
 			fi
-			cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
+			mv -f $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
 		# Downgraded file (flashed old module version)
 		elif [ "$UPDATEV" -lt "$FILEV" ]; then
 			log_print "- Settings cleared (file downgraded)"
 			if [ ! -d "$MHPCPATH" ]; then
 				mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
 			fi
-			cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
+			mv -f $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
 		# No update of file
 		else
 			log_print "- Module settings preserved"
@@ -995,7 +999,7 @@ settings_placement() {
 		if [ ! -d "$MHPCPATH" ]; then
 			mkdir -pv $MHPCPATH >> $LOGFILE 2>&1
 		fi
-		cp -af $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
+		mv -f $UPDATELATEFILE $LATEFILE >> $LOGFILE 2>&1
 	fi
 	if [ -f "$SERVICEPATH/propsconf_late" ]; then
 		log_handler "Old settings file found in $SERVICEPATH."
@@ -1085,7 +1089,7 @@ script_install() {
 	ui_print ""
 	# Checks for configuration file
 	CONFFILE=""
-	for ITEM in $CONFFILELST; do
+	for ITEM in $CONFFILELOC; do
 		if [ -s "$ITEM/propsconf_conf" ]; then
 			CONFFILE="$ITEM/propsconf_conf"
 			break
@@ -1138,7 +1142,7 @@ get_device_used() {
 
 # Set new fingerprint
 print_edit() {
-	if [ "$1" ]; then
+	if [ "$1" != "none" ]; then
 		before_change
 	fi
 	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ]; then
@@ -1154,7 +1158,7 @@ print_edit() {
 		# Changing props
 		if [ "$(getprop "ro.build.fingerprint")" ]; then
 			log_handler "Changing/writing ro.build.fingerprint."
-			if [ "$1" ]; then
+			if [ "$1" != "none" ]; then
 				echo "ro.build.fingerprint=${PRINTCHNG}" >> $1
 			else
 				resetprop -nv ro.build.fingerprint $PRINTCHNG >> $LOGFILE 2>&1
@@ -1167,7 +1171,7 @@ print_edit() {
 		if [ "$DESCRIPTIONSET" == 1 ]; then
 			if [ "$SIMDESCRIPTION" ]; then
 				log_handler "Changing/writing ro.build.description."
-				if [ "$1" ]; then
+				if [ "$1" != "none" ]; then
 					echo "ro.build.description=${SIMDESCRIPTION}" >> $1
 				else
 					resetprop -nv ro.build.description "$SIMDESCRIPTION" >> $LOGFILE 2>&1
@@ -1181,7 +1185,7 @@ print_edit() {
 
 # Edit security patch date if included
 patch_edit() {
-	if [ "$1" ]; then
+	if [ "$1" != "none" ]; then
 		before_change
 	fi
 	if [ "$PRINTVEND" != 1 ]; then
@@ -1190,7 +1194,7 @@ patch_edit() {
 				SECPATCH="$(get_sec_patch $MODULEFINGERPRINT)"
 				if [ "$SECPATCH" ]; then
 					log_handler "Updating security patch date to match fingerprint used."
-					if [ "$1" ]; then
+					if [ "$1" != "none" ]; then
 						echo "ro.build.version.security_patch=${SECPATCH}" >> $1
 					else
 						resetprop -nv ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
@@ -1384,7 +1388,13 @@ change_print() {
 
 	NEWFINGERPRINT=""
 
-	after_change "$1" "$3"
+	REBOOTCHK=""
+	# Check if fingerprints testing is active
+	if [ "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ]; then
+		REBOOTCHK="noreboot"
+	fi
+
+	after_change "$1" "$3" "$REBOOTCHK"
 }
 
 # Use vendor fingerprint
@@ -1473,7 +1483,7 @@ print_parts() {
 
 set_partition_props() {
 	if [ "$2" == "ro.build.fingerprint" ]; then
-		TMPLST=$PRINTPROPS$PARTITIONS
+		TMPLST=$PRINTPROPSPARTS$PARTITIONS
 	else
 		TMPLST=$PARTITIONS
 	fi
@@ -1488,10 +1498,10 @@ set_partition_props() {
 			fi
 			if [ "$(getprop $TMPPROP)" ]; then
 				log_handler "Changing/writing $TMPPROP."
-				if [ "$1" ]; then
+				if [ "$1" != "none" ]; then
 					echo "${TMPPROP}=${3}" >> $1
 				else
-					resetprop -nv $2 $3 >> $LOGFILE 2>&1
+					resetprop -nv $TMPPROP $3 >> $LOGFILE 2>&1
 				fi
 			else
 				log_handler "$TMPPROP not currently set on device. Skipping."
@@ -1509,7 +1519,7 @@ set_partition_props() {
 # ======================== Device simulation functions ========================
 # Edit the simulation props
 dev_sim_edit() {
-	if [ "$1" ]; then
+	if [ "$1" != "none" ]; then
 		before_change
 	fi
 	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ]; then
@@ -1524,7 +1534,7 @@ dev_sim_edit() {
 					if [ "$TMPENB" == 1 ] && [ "$TMPVALUE" ]; then
 						if [ "$(getprop $ITEM)" ]; then
 							log_handler "Changing/writing $ITEM."
-							if [ "$1" ]; then
+							if [ "$1" != "none" ]; then
 								echo "${ITEM}=${TMPVALUE}" >> $1
 							else
 								resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1

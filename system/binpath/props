@@ -186,7 +186,11 @@ exit_fn() {
 # Second menu level - fingerprint
 menu_change_fingerprint() {
 	rm -f $CSTMFILE
-	INPUT2=""
+	if [ "$DEVPRINTS" == "true" ]; then
+		INPUT2=f
+	else
+		INPUT2=""
+	fi
 	while true
 	do
 		if [ -z "$INPUT2" ]; then
@@ -226,7 +230,7 @@ menu_change_fingerprint() {
 					if [ "$PRINTMODULETXT" ]; then
 						get_device_used "$2"
 					fi
-					echo ${C}$2${N}					
+					echo ${C}$2${N}
 					if [ "$2" != "$3" ]; then
 						echo ""
 						echo "The original value is:"
@@ -318,6 +322,7 @@ menu_change_fingerprint() {
 
 # Third menu level - pick fingerprint
 menu_pick_print() {
+	DEVPRINTS="" # Disable automatically entering the fingerprints list after the first time.
 	INPUT3=""
 	OEMLIST=""
 	HEADERPRINTV="${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
@@ -343,6 +348,14 @@ menu_pick_print() {
 				ITEMCOUNT=1
 				menu_header "$HEADERPRINTV"
 				echo ""
+				# Display currently set print when fingerprints testing
+				if [ "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ]; then
+					TMPDEVPRINT="$(getprop ro.build.fingerprint)"
+					echo "Currently set to:"
+					get_device_used $TMPDEVPRINT
+					echo "${C}$TMPDEVPRINT${N}"
+					echo ""
+				fi
 				for ITEM in $OEMLIST; do
 					echo "${G}$ITEMCOUNT${N} - $ITEM"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
@@ -544,7 +557,14 @@ menu_pick_print_version() {
 
 # Sixth menu level - confirm fingerprint
 menu_new_print() {
-	INPUT6=""
+	# Check if fingerprints testing is active
+	if [ "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ]; then
+		DEVCHK=true
+		INPUT6=y
+	else
+		DEVCHK=false
+		INPUT6=""
+	fi
 	while true
 	do
 		if [ -z "$INPUT6" ]; then
@@ -564,6 +584,9 @@ menu_new_print() {
 		case "$INPUT6" in
 			y|Y)
 				change_print "$1" "$2"
+				if [ "$DEVCHK" == "true" ]; then
+					force_reboot
+				fi
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
@@ -3043,6 +3066,11 @@ if [ "$1" ]; then
 	esac
 fi
 
+# Check if fingerprints testing is active
+if [ "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ]; then
+	DEVPRINTS=true
+fi
+
 # ===================================================
 # ==================== Main menu ====================
 # ===================================================
@@ -3054,7 +3082,11 @@ do
 		log_handler "Original values are not loaded in propsconf_late."
 		reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
 	else
-		INPUT=""
+		if [ "$DEVPRINTS" == "true" ]; then
+			INPUT=1
+		else
+			INPUT=""
+		fi
 		ACTIVE="${G} (active)${N}"
 		DISABLED="${R} (disabled)${N}"
 		PRINTTXT=""

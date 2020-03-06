@@ -7,17 +7,22 @@
 MODPATH=${0%/*}
 BOOTSTAGE="late"
 
+# Variables
+MODULESPATH=${MODPATH%/*}
+ADBPATH=${MODULESPATH%/*}
+MHPCPATH=$ADBPATH/mhpc
+
+TMP_WAIT=0
+while [ ! -f "$MHPCPATH/propsconf_postchk" ] && [ "$TMP_WAIT" -lt 10 ]; do
+	sleep 1
+	TMP_WAIT=$(($TMP_WAIT + 1))
+done
+
 # Load functions
 . $MODPATH/common/util_functions.sh
 
 VLOGFILE=$MHPCPATH/propsconf_boot_verbose.log
 set -x 2>>$VLOGFILE
-
-TMP_WAIT=0
-until [ ! -f "$POSTCHKFILE" ] || [ "$TMP_WAIT" == 10 ]; do
-	sleep 1
-	TMP_WAIT=$(($TMP_WAIT + 1))
-done
 
 log_script_chk "Running service.sh module script."
 
@@ -65,30 +70,30 @@ log_handler "Editing prop values in late_start service mode."
 if [ "$OPTIONBOOT" == 2 ]; then
 	# ---Setting/Changing fingerprint---				
 	if [ "$PRINTSTAGE" == 0 ]; then
-		print_edit
+		print_edit "none"
 	fi
 	# ---Setting/Changing security patch date---
 	if [ "$PATCHSTAGE" == 0 ]; then
-		patch_edit
+		patch_edit "none"
 	fi
 	# ---Setting device simulation props---
 	if [ "$SIMSTAGE" == 0 ]; then
-		dev_sim_edit
+		dev_sim_edit "none"
 	fi
 	# ---Setting custom props---
 	custom_edit "CUSTOMPROPS"
 fi
 # Edit fingerprint if set for late_start service
 if [ "$OPTIONBOOT" != 2 ] && [ "$PRINTSTAGE" == 2 ]; then
-	print_edit
+	print_edit "none"
 fi
 # Edit security patch date if set for late_start service
 if [ "$OPTIONBOOT" != 2 ] && [ "$PATCHSTAGE" == 2 ]; then
-	patch_edit
+	patch_edit "none"
 fi
 # Edit simulation props if set for late_start service
 if [ "$OPTIONBOOT" != 2 ] && [ "$SIMSTAGE" == 2 ]; then
-	dev_sim_edit
+	dev_sim_edit "none"
 fi
 # Edit custom props set for late_start service
 custom_edit "CUSTOMPROPSLATE"

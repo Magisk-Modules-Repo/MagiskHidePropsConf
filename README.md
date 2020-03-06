@@ -68,6 +68,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [My build.prop doesn't change after setting a custom prop or removing a prop value](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-setting-a-custom-prop-or-removing-a-prop-value)
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
+  - [Boot takes a lot longer after changing fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#boot-takes-a-lot-longer-after-changing-fingerprint)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
   - [The screen goes black momentarily at boot](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-screen-goes-black-momentarily-at-boot)
   - [The Play Store is "uncertified"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-play-store-is-uncertified)
@@ -225,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v79_**
+**_Current fingerprints list version - v80_**
 
 
 ## Please add support for device X
@@ -305,7 +306,7 @@ It's possible to move the execution of the boot script from the default system.p
 
 It is also possible to set individual props, like fingerprint, security patch date and custom props individualy. There'll be an option under the corresponding menu.
 
-Note: post-fs-data runs earlier than system.prop and late_start service runs after, right at the end of the boot process. Having to many props set in post-fs-data may have an adverse effect on the boot process. Using the default system.prop file or late_start service is prefered if possible.
+Note: post-fs-data runs earlier than system.prop and late_start service runs after, right at the end of the boot process. Having to many props set in post-fs-data may have an adverse effect on the boot process and may result in props not being set properly. Using the default system.prop file or late_start service is prefered if possible.
 
 ### Script colours
 This option will disable or enable colours for the `props` script.
@@ -399,14 +400,17 @@ For some fingerprints it is necessary to also change the security patch date to 
 ### The interface looks weird
 If the interface of the props script looks strange, with a lot of gibberish along the lines of "\e[01;32m", that means that your terminal emulator of choice can't display colours properly (the "gibberish" is a colour code). Check the terminal emulators preferences if it is possible to change the terminal type to something that can display colours. You could also run the `props` command with the [-nc option](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#run-options) (No Colour), or disable colours in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours).
 
+### Boot takes a lot longer after setting props
+If boot takes longer than usual after setting a new fingerprint or a custom prop, try changing the ["boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) to post-fs-data.
+
 ### Device issues because of the module
 A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
 
-In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults.
+In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults or to disable the module without resetting.
 
-Place a file named `reset_mhpc` in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot.
+Place the required file in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. If you want to reset the module, name the file `reset_mhpc`, or if you want to disable the module name it `disable_mhpc`
 
-If your device does not have access to /sdcard, /data or /cache through recovery (there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset file in the root of your internal storage, and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset and you should be up and running again.
+If your device does not have access to /sdcard, /data or /cache through recovery (there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
 
 The reset file can be use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
@@ -451,8 +455,16 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.2.4  
+- Added a function for disabling the module by placing a specific file in /sdcard, /data or /cache (see the documentation for details). Useful if there are issues with booting the device after installing/setting up the module.
+- Fixed some issues with setting partition props in other boot stages than default.
+- Fixed an issue with boot scripts clashing if post-fs-data.sh script takes too long.
+- Fixed an issue with settings transfer overwriting the file backup at install.
+- Fixed an issue with log writing that came with the change to using getprop for retreiving prop values.
+- Added fingerprints for Xiaomi Redmi 7. Updated fingerprints for Google Pixel 2-4 (all variants), OnePlus 7 Pro NR, Samsung Galaxy A5 2017 and Xiaomi Pocophone F1. Fingerprints list updated to v80.
+
 ### v5.2.3  
-- Fixed issue with settings transfering between module updates.
+- Fixed issue with settings transferring between module updates.
 - Use resetprop only to set values and retrieve values with getprop. For whatever reason some devices have issues with resetprop and this might make the module work on those.
 - Updated fingerprints for OnePlus 6, 6T and 7T Pro NR. Fingerprints list updated to v79.
 
@@ -775,7 +787,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v79  
+### List v80  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -893,7 +905,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 7 Pro GM1913 (9 & 10)
 - OnePlus 7 Pro GM1915 (9)
 - OnePlus 7 Pro GM1917 (9 & 10)
-- OnePlus 7 Pro NR GM1920 (9)
+- OnePlus 7 Pro NR GM1920 (9 & 10)
 - OnePlus 7 Pro NR Spr GM1925 (9)
 - OnePlus 7T HD1901 (10)
 - OnePlus 7T HD1903 (10)
@@ -1017,6 +1029,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi 4A (7.1.2)
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi 5A (7.1.2 & 8.1.0)
+- Xiaomi Redmi 7 (9)
 - Xiaomi Redmi 8 (9)
 - Xiaomi Redmi Go (8.1.0)
 - Xiaomi Redmi K20 Pro (9 & 10)
