@@ -68,7 +68,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [My build.prop doesn't change after setting a custom prop or removing a prop value](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-setting-a-custom-prop-or-removing-a-prop-value)
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
-  - [Boot takes a lot longer after changing fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#boot-takes-a-lot-longer-after-changing-fingerprint)
+  - [Boot takes a lot longer after setting props](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#boot-takes-a-lot-longer-after-setting-props)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
   - [The screen goes black momentarily at boot](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-screen-goes-black-momentarily-at-boot)
   - [The Play Store is "uncertified"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#the-play-store-is-uncertified)
