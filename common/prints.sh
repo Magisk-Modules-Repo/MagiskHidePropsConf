@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=80
+PRINTSV=81
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -94,6 +94,7 @@ Motorola Moto G6 Play (8.0.0 & 9):Motorola:moto g(6) play=motorola/jeter_sprint/
 Motorola Moto G6 Plus (9):Motorola:moto g(6) plus=motorola/evert_amx_n/evert_n:9/PPWS29.116-16-6/5cbfe:user/release-keys__2019-05-01
 Motorola Moto G7 (9):Motorola:moto g(7)=motorola/river/river:9/PPOS29.114-134-7/b6963:user/release-keys__2019-12-01
 Motorola Moto G7 Power (9):Motorola:moto g(7) power=motorola/ocean/ocean:9/PPOS29.114-134-7/d9234:user/release-keys__2019-12-01
+Motorola Moto X Play (7.1.1):motorola:XT1562=motorola/lux_retasia_ds/lux_uds:7.1.1/NPD26.48-24-1/1:user/release-keys
 Motorola Moto X4 (8.0.0):Motorola:moto x4=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys
 Motorola Moto Z2 Play (8.0.0):Motorola:Moto Z2 Play=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
 Nextbook Ares 8A (6.0.1):Nextbook:NX16A8116K=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
@@ -114,8 +115,8 @@ OnePlus 2 (6.0.1):OnePlus:ONE A2003=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/14478
 OnePlus X (6.0.1):OnePlus:ONE E1003=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
 OnePlus 3 (8.0.0 & 9):OnePlus:ONEPLUS A3000=OnePlus/OnePlus3/OnePlus3:8.0.0/OPR1.170623.032/1809142047:user/release-keys__2018-09-01;OnePlus/OnePlus3/OnePlus3:9/PKQ1.181203.001/1911042107:user/release-keys__2019-10-01
 OnePlus 3T (8.0.0 & 9):OnePlus:ONEPLUS A3003=OnePlus/OnePlus3/OnePlus3T:8.0.0/OPR1.170623.032/1812060016:user/release-keys__2018-11-01;OnePlus/OnePlus3/OnePlus3T:9/PKQ1.181203.001/1911042108:user/release-keys__2019-10-01
-OnePlus 5 (8.1.0 & 9):OnePlus:ONEPLUS A5000=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
-OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9):OnePlus:ONEPLUS A5010=OnePlus/OnePlus5T/OnePlus5T:7.1.1/NMF26X/12152312:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.0.0/OPR1.170623.032/02040656:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/1912311102:user/release-keys__2019-12-01
+OnePlus 5 (8.1.0 & 9):OnePlus:ONEPLUS A5000=OnePlus/OnePlus5/OnePlus5:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5/OnePlus5:9/PKQ1.180716.001/2002242003:user/release-keys__2020-02-01
+OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9):OnePlus:ONEPLUS A5010=OnePlus/OnePlus5T/OnePlus5T:7.1.1/NMF26X/12152312:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.0.0/OPR1.170623.032/02040656:user/release-keys;OnePlus/OnePlus5T/OnePlus5T:8.1.0/OPM1.171019.011/1809241512:user/release-keys__2018-09-01;OnePlus/OnePlus5T/OnePlus5T:9/PKQ1.180716.001/2002242012:user/release-keys__2020-02-01
 OnePlus 6 (8.1.0 & 9 & 10):OnePlus:ONEPLUS A6003=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/2002220019:user/release-keys__2020-02-01
 OnePlus 6T (9 & 10):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/2002220019:user/release-keys__2020-02-01
 OnePlus 6T T-Mobile (9):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6TSingle/OnePlus6TSingle:9/PKQ1.180716.001/1810291147:user/release-keys__2018-11-01
@@ -181,7 +182,9 @@ Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2):Samsung:GT-P5110=samsung/espresso10wif
 Samsung Galaxt Tab A WiFi SM-T590 (9):Samsung:SM-T590=samsung/gta2xlwifixx/gta2xlwifi:9/PPR1.180610.011/T590XXU3BSJ1:user/release-keys__2019-10-01
 Samsung Galaxt Tab A LTE SM-T595 (9):Samsung:SM-T595=samsung/gta2xlltexx/gta2xllte:9/PPR1.180610.011/T595XXU3BSF3:user/release-keys__2019-06-01
 Samsung Galaxt Tab A LTE SM-T597 (9):Samsung:SM-T597=samsung/gta2xlltespr/gta2xlltespr:9/PPR1.180610.011/T597PVPU2BSH7:user/release-keys__2019-08-01
+Samsung Galaxy Tab S2 SM-T813 (7.0):samsung:SM-T813=samsung/gts210vewifixx/gts210vewifi:7.0/NRD90M/T813XXS2BSJ3:user/release-keys__2019-08-01
 Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0):Samsung:SM-T825=samsung/gts3lltexx/gts3llte:8.0.0/R16NW/T825XXU2BRL2:user/release-keys__2018-12-01
+Samsung Galaxy Tab S5e SM-T720 (9):samsung:SM-T720=samsung/gts4lvwifixx/gts4lvwifi:9/PPR1.180610.011/T720XXS1ASL3:user/release-keys__2020-01-01
 Sony Xperia X F5121 (8.0.0):Sony:F5121=Sony/F5121/F5121:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
 Sony Xperia X Compact F5321 (8.0.0):Sony:F5321=Sony/F5321/F5321:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
 Sony Xperia X Dual F5122 (8.0.0):Sony:F5122=Sony/F5122/F5122:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
@@ -227,6 +230,8 @@ Xiaomi Mi 9 SE (9):MI 9 SE=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:
 Xiaomi Mi 9T European (9 & 10):Xiaomi:Mi 9T=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01;Xiaomi/davinci_eea/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJEUXM:user/release-keys__2019-12-01
 Xiaomi Mi 9T Global (10):Xiaomi:Mi 9T=Xiaomi/davinci/davinci:10/QKQ1.190825.002/V11.0.1.0.QFJMIXM:user/release-keys__2019-12-01
 Xiaomi Mi 9T Pro (9 & 10):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01;Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
+Xiaomi Mi 10 (10):Xiaomi:Mi 10=Xiaomi/umi/umi:10/QKQ1.191117.002/V11.0.15.0.QJBCNXM:user/release-keys__2020-02-01
+Xiaomi Mi 10 Pro (10):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V11.0.13.0.QJACNXM:user/release-keys__2020-02-01
 Xiaomi Mi A1 (8.0.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.4.0.PDHMIXM:user/release-keys__2019-01-05
 Xiaomi Mi A2 (8.1.0 & 9):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.16.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.14.0.PDIMIXM:user/release-keys__2019-09-05
 Xiaomi Mi A2 Lite (9):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.1.0.PDLMIFJ:user/release-keys__2018-11-05
@@ -236,8 +241,8 @@ Xiaomi Mi Max (6.0.1):Xiaomi:MI MAX=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.M
 Xiaomi Mi Max 2 (7.1.1):Xiaomi:MI MAX 2=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
 Xiaomi Mi Max 3 (9):Xiaomi:MI MAX 3=Xiaomi/nitrogen/nitrogen:9/PKQ1.181007.001/V10.3.1.0.PEDMIXM:user/release-keys__2019-03-01
 Xiaomi Mi Mix 2 (8.0.0 & 9):Xiaomi:Mi MIX 2=Xiaomi/chiron/chiron:8.0.0/OPR1.170623.027/V10.2.2.0.ODEMIXM:user/release-keys__2018-12-01;Xiaomi/chiron/chiron:9/PKQ1.190118.001/V11.0.3.0.PDEMIXM:user/release-keys__2019-09-01
-Xiaomi Mi Mix 2S (8.0.0 & 9):Xiaomi:Mi MIX 2S=Xiaomi/polaris/polaris:8.0.0/OPR1.170623.032/V9.5.19.0.ODGMIFA:user/release-keys;Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.3.3.0.PDGMIXM:user/release-keys__2019-05-01
-Xiaomi Mi Mix 3 (9):Xiaomi:Mi MIX 3=Xiaomi/perseus/perseus:9/PKQ1.180729.001/V10.3.1.0.PEEMIXM:user/release-keys__2019-03-01
+Xiaomi Mi Mix 2S (8.0.0 & 9 & 10):Xiaomi:Mi MIX 2S=Xiaomi/polaris/polaris:8.0.0/OPR1.170623.032/V9.5.19.0.ODGMIFA:user/release-keys;Xiaomi/polaris/polaris:9/PKQ1.180729.001/V10.3.3.0.PDGMIXM:user/release-keys__2019-05-01;Xiaomi/polaris/polaris:10/QKQ1.190828.002/V11.0.1.0.QDGCNXM:user/release-keys__2019-12-01
+Xiaomi Mi Mix 3 (9 & 10):Xiaomi:Mi MIX 3=Xiaomi/perseus/perseus:9/PKQ1.180729.001/V10.3.1.0.PEEMIXM:user/release-keys__2019-03-01;Xiaomi/perseus/perseus:10/QKQ1.190828.002/V11.0.3.0.QEEMIXM:user/release-keys__2020-02-01
 Xiaomi Mi Note 2 (7.0 & 8.0.0):Xiaomi:Mi Note 2=Xiaomi/scorpio/scorpio:7.0/NRD90M/V9.2.1.0.NADMIEK:user/release-keys;Xiaomi/scorpio/scorpio:8.0.0/OPR1.170623.032/V9.6.1.0.OADCNFD:user/release-keys
 Xiaomi Mi Note 3 (8.1.0):Xiaomi:Mi Note 3=Xiaomi/jason/jason:8.1.0/OPM1.171019.019/V10.2.2.0.OCHMIXM:user/release-keys__2018-12-01
 Xiaomi Mi Note 10 European (9):Xiaomi:Mi Note 10=Xiaomi/tucana_eea/tucana:9/PKQ1.190302.001/V11.0.11.0.PFDEUXM:user/release-keys__2019-11-01

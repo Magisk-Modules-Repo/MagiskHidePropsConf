@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v80_**
+**_Current fingerprints list version - v81_**
 
 
 ## Please add support for device X
@@ -401,7 +401,7 @@ For some fingerprints it is necessary to also change the security patch date to 
 If the interface of the props script looks strange, with a lot of gibberish along the lines of "\e[01;32m", that means that your terminal emulator of choice can't display colours properly (the "gibberish" is a colour code). Check the terminal emulators preferences if it is possible to change the terminal type to something that can display colours. You could also run the `props` command with the [-nc option](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#run-options) (No Colour), or disable colours in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours).
 
 ### Boot takes a lot longer after setting props
-If boot takes longer than usual after setting a new fingerprint or a custom prop, try changing the ["boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) to post-fs-data.
+If boot takes longer than usual after setting a new fingerprint or a custom prop, try changing the [boot stage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) to post-fs-data.
 
 ### Device issues because of the module
 A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
@@ -787,7 +787,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v80  
+### List v81  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -873,6 +873,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Motorola Moto G6 Plus (9)
 - Motorola Moto G7 (9)
 - Motorola Moto G7 Power (9)
+- Moto X Play (7.1.1)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
 - Nextbook Ares 8A (6.0.1)
@@ -960,7 +961,9 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
 - Samsung Galaxt Tab A LTE SM-T597 (9)
+- Samsung Galaxy Tab S2 SM-T813 (7.0)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
+- Samsung Galaxy Tab S5e SM-T720 (9)
 - Sony Xperia X F5121 (8.0.0)
 - Sony Xperia X Compact F5321 (8.0.0)
 - Sony Xperia X Dual F5122 (8.0.0)
@@ -1006,6 +1009,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 9T European (9 & 10)
 - Xiaomi Mi 9T Global (10)
 - Xiaomi Mi 9T Pro (9 & 10)
+- Xiaomi Mi 10 (10)
+- Xiaomi Mi 10 Pro (10)
 - Xiaomi Mi A1 (8.0.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9)
 - Xiaomi Mi A2 Lite (9)
