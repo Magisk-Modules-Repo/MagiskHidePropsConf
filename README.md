@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v81_**
+**_Current fingerprints list version - v82_**
 
 
 ## Please add support for device X
@@ -787,7 +787,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v81  
+### List v82  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -873,6 +873,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Motorola Moto G6 Plus (9)
 - Motorola Moto G7 (9)
 - Motorola Moto G7 Power (9)
+- Motorola Moto G7 Play (9)
 - Moto X Play (7.1.1)
 - Motorola Moto X4 (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
