@@ -430,7 +430,7 @@ If there are issues with other apps or your system as a result of using this mod
 ### Collecting logs manually
 If you can't run the `props` script for some reason, the module logs are stored in /data/adb/mhpc and all files in that directory would be useful for troubleshooting. The Magisk log (retrieved from /cache or saved from the Magisk Manager) and magisk.log.bak would also help. Providing the output from terminal might be useful as well.
 
-Please provide the above mentioned files in an archive (zip-file), for simplicity.
+Please provide the above mentioned files in an archive (zip-file), for simplicity and convenience.
 
 
 ## Donations
