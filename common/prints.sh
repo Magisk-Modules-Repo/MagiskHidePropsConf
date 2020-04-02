@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=81
+PRINTSV=83
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -71,6 +71,7 @@ LG G5 H830 (8.0.0):LGE:LG-H830=lge/h1_tmo_us/h1:8.0.0/OPR1.170623.032/1822519134
 LG G5 H850 (8.0.0):LGE:LG-H850=lge/h1_global_com/h1:8.0.0/OPR1.170623.032/190380127377a:user/release-keys__2018-12-01
 LG G5 RS988 (7.0):LGE:RS988=lge/h1_lra_us/h1:7.0/NRD90U/1707917149a1b:user/release-keys
 LG G6 H870 (7.0 & 8.0.0):LGE:LG-H870=lge/lucye_global_com/lucye:7.0/NRD90U/171732341982c:user/release-keys;lge/lucye_global_com/lucye:8.0.0/OPR1.170623.032/183301757502c:user/release-keys__2018-11-01
+LG G7 ThinQ LM-G710EMW (9):LGE:LM-G710EMW=lge/judyln_lao_com/judyln:9/PKQ1.181105.001/200350248e04d.FGN:user/release-keys__2020-01-01
 LG V20 H910 (8.0.0):LGE:LG-H910=lge/elsa_att_us/elsa:8.0.0/OPR1.170623.032/181871124f959:user/release-keys__2018-06-01
 LG V20 H918 (8.0.0):LGE:LG-H918=lge/elsa_tmo_us/elsa:8.0.0/OPR1.170623.032/1831917495b33:user/release-keys__2018-11-01
 LG V20 H990DS (7.0):LGE:LG-H990=lge/elsa_global_com/elsa:7.0/NRD90M/1801800193678:user/release-keys
@@ -121,14 +122,14 @@ OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9):OnePlus:ONEPLUS A5010=OnePlus/OnePlus5T/O
 OnePlus 6 (8.1.0 & 9 & 10):OnePlus:ONEPLUS A6003=OnePlus/OnePlus6/OnePlus6:8.1.0/OPM1.171019.011/06140300:user/release-keys;OnePlus/OnePlus6/OnePlus6:9/PKQ1.180716.001/1908012000:user/release-keys__2019-08-01;OnePlus/OnePlus6/OnePlus6:10/QKQ1.190716.003/2002220019:user/release-keys__2020-02-01
 OnePlus 6T (9 & 10):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6T/OnePlus6T:9/PKQ1.180716.001/1909112330:user/release-keys__2019-08-01;OnePlus/OnePlus6T/OnePlus6T:10/QKQ1.190716.003/2002220019:user/release-keys__2020-02-01
 OnePlus 6T T-Mobile (9):OnePlus:ONEPLUS A6013=OnePlus/OnePlus6TSingle/OnePlus6TSingle:9/PKQ1.180716.001/1810291147:user/release-keys__2018-11-01
-OnePlus 7 GM1901 (9 & 10):OnePlus:GM1901=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
-OnePlus 7 GM1903 (9 & 10):OnePlus:GM1905=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7_EEA/OnePlus7:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
-OnePlus 7 GM1905 (9 & 10):OnePlus:GM1903=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
-OnePlus 7 Pro GM1911 (9 & 10):OnePlus:GM1911=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
+OnePlus 7 GM1901 (9 & 10):OnePlus:GM1901=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/2003131900:user/release-keys__2020-03-01
+OnePlus 7 GM1903 (9 & 10):OnePlus:GM1903=OnePlus/OnePlus7_EEA/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7_EEA/OnePlus7:10/QKQ1.190716.003/2003131900:user/release-keys__2020-03-01
+OnePlus 7 GM1905 (9 & 10):OnePlus:GM1905=OnePlus/OnePlus7/OnePlus7:9/PKQ1.190110.001/1907280700:user/release-keys__2019-08-01;OnePlus/OnePlus7/OnePlus7:10/QKQ1.190716.003/2003131900:user/release-keys__2020-03-01
+OnePlus 7 Pro GM1911 (9 & 10):OnePlus:GM1911=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/2003131900:user/release-keys__2020-03-01
 OnePlus 7 Pro GM1913 (9 & 10):OnePlus:GM1913=OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro_EEA/OnePlus7Pro:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
 OnePlus 7 Pro GM1915 (9):OnePlus:GM1915=OnePlus/OnePlus7ProTMO/OnePlus7ProTMO:9/PKQ1.190110.001/1905021004:user/release-keys__2019-03-01
-OnePlus 7 Pro GM1917 (9 & 10):OnePlus:GM1917=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/2002021900:user/release-keys__2020-01-01
-OnePlus 7 Pro NR GM1920 (9 & 10):OnePlus:GM1920=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1912171007:user/release-keys__2019-12-01;OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:10/QKQ1.190716.003/2002141334:user/release-keys__2020-01-01
+OnePlus 7 Pro GM1917 (9 & 10):OnePlus:GM1917=OnePlus/OnePlus7Pro/OnePlus7Pro:9/PKQ1.190110.001/1907281556:user/release-keys__2019-08-01;OnePlus/OnePlus7Pro/OnePlus7Pro:10/QKQ1.190716.003/2003131900:user/release-keys__2020-03-01
+OnePlus 7 Pro NR GM1920 (9 & 10):OnePlus:GM1920=OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:9/PKQ1.190223.001/1912171007:user/release-keys__2019-12-01;OnePlus/OnePlus7ProNR_EEA/OnePlus7ProNR:10/QKQ1.190716.003/2003171325:user/release-keys__2020-03-01
 OnePlus 7 Pro NR Spr GM1925 (9 & 10):OnePlus:GM1925=OnePlus/OP7ProNRSpr/OP7ProNRSpr:9/PKQ1.190223.001/1908201041:user/release-keys__2019-08-01;OnePlus/OP7ProNRSpr/OP7ProNRSpr:10/QKQ1.190716.003/2002281825:user/release-keys__2020-02-01
 OnePlus 7T HD1901 (10):OnePlus:HD1901=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/2002022020:user/release-keys__2020-01-01
 OnePlus 7T HD1903 (10):OnePlus:HD1903=OnePlus/OnePlus7T_EEA/OnePlus7T:10/QKQ1.190716.003/2002022021:user/release-keys__2020-01-01
