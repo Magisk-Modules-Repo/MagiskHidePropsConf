@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v83_**
+**_Current fingerprints list version - v84_**
 
 
 ## Please add support for device X
@@ -789,7 +789,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v83  
+### List v84  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -861,6 +861,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - LG V20 VS995 (8.0.0)
 - LG V30 H930 (8.0.0)
 - Mecool KM8 (8.0.0 & 9)
+- Meizu X8 (8.1.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto E4 Plus (7.1.1)
@@ -898,7 +899,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus X (6.0.1)
 - OnePlus 3 (8.0.0 & 9)
 - OnePlus 3T (8.0.0 & 9)
-- OnePlus 5 (8.1.0 & 9)
+- OnePlus 5 (8.1.0 & 9 & 10)
 - OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9)
 - OnePlus 6 (8.1.0 & 9 & 10)
 - OnePlus 6T (9 & 10)
@@ -921,6 +922,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 7T Pro NR HD1925 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
+- POCO X2 (10)
 - Razer Phone (8.1.0)
 - Razer Phone 2 (8.1.0 & 9)
 - Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
@@ -1005,7 +1007,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 5/5 Pro (7.0 & 8.0.0)
 - Xiaomi Mi 5S (7.0)
 - Xiaomi Mi 5S Plus (6.0.1 & 7.0)
-- Xiaomi Mi 6 (8.0.0)
+- Xiaomi Mi 6 (8.0.0 & 9)
 - Xiaomi Mi 8 (8.1.0 & 9)
 - Xiaomi Mi 9 European (9)
 - Xiaomi Mi 9 Lite (9)

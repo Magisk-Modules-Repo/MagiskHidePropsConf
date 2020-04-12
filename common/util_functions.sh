@@ -1467,10 +1467,10 @@ print_parts() {
 	replace_fn SIMDISPLAY "\"$SIMDISPLAY\"" "\"$VARDESCRIPTION\"" $LATEFILE
 	replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE		
 	TMPPARTS=$(get_eq_left "$(grep $1 $PRINTSLOC)" | sed 's|.*)\:||')
-	if [ -z "$TMPPARTS" ]; then
+	if [ -z "$TMPPARTS" -a -s "$CSTMPRINTS" ]; then
 		TMPPARTS=$(get_eq_left "$(grep $1 $CSTMPRINTS)" | sed 's|.*)\:||')
 	fi
-	if [ $(echo $TMPPARTS | grep -o "\:" | wc -l) == 1 ]; then
+	if [ "$TMPPARTS" -a $(echo $TMPPARTS | grep -o "\:" | wc -l) == 1 ]; then
 		replace_fn SIMMANUFACTURER "\"$SIMMANUFACTURER\"" "\"$(echo $TMPPARTS | cut -f 1 -d ':')\"" $LATEFILE
 		replace_fn SIMMODEL "\"$SIMMODEL\"" "\"$(echo $TMPPARTS | cut -f 2 -d ':')\"" $LATEFILE
 	else
