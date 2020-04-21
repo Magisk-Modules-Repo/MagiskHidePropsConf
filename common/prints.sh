@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=84
+PRINTSV=85
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -63,6 +63,7 @@ Huawei P20 EML-L09 (9):Huawei:EML-L09=HUAWEI/EML-L09/HWEML:9/HUAWEIEML-L09/9.1.0
 Huawei P20 Dual SIM EML-L29 (9):Huawei:EML-L29=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
 Huawei P20 Lite ANE-LX1 (8.0.0 & 9):Huawei:ANE-LX1=HUAWEI/ANE-LX1/HWANE:8.0.0/HUAWEIANE-LX1/180(C432):user/release-keys__2019-04-05;HUAWEI/ANE-LX1/HWANE:9/HUAWEIANE-L21/132C432R1:user/release-keys__2019-05-05
 Huawei P20 Pro CLT-L29 (8.1.0 & 9):Huawei:CLT-L29=HUAWEI/CLT-L29/HWCLT:8.1.0/HUAWEICLT-L29/128(C432):user/release-keys;HUAWEI/CLT-L09/HWCLT:9/HUAWEICLT-L09/203C432R1:user/release-keys__2019-02-01
+Infinix Note 5 (9 & 10):Infinix:Infinix X604=Infinix/H633/Infinix-X604_sprout:9/PPR1.180610.011/H-190617V240:user/release-keys__2019-06-05;Infinix/H633/Infinix-X604_sprout:10/QP1A.190711.020/H-191227V306:user/release-keys__2020-01-05
 Lenovo K6 Note (7.0):Lenovo:Lenovo K53a48=Lenovo/karatep/K53a48:7.0/NRD90N/K53_S228_171114_ROW:user/release-keys
 LeEco Le Pro3 (6.0.1):Leeco:LEX725=LeEco/ZL1_NA/le_zl1:6.0.1/WEXNAOP5802101261S/letv01261206:user/release-keys
 LG G2 VS980 (5.0.2):LGE:VS980 4G=lge/g2_vzw/g2:5.0.2/LRX22G/15046001715f9:user/release-keys
@@ -139,6 +140,9 @@ OnePlus 7T Pro HD1911 (10):OnePlus:HD1911=OnePlus/OnePlus7TPro/OnePlus7TPro:10/Q
 OnePlus 7T Pro HD1913 (10):OnePlus:HD1913=OnePlus/OnePlus7TPro_EEA/OnePlus7TPro:10/QKQ1.190716.003/2003271900:user/release-keys__2020-03-01
 OnePlus 7T Pro HD1917 (10):OnePlus:HD1917=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/2003271900:user/release-keys__2020-03-01
 OnePlus 7T Pro NR HD1925 (10):OnePlus:HD1925=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2002150222:user/release-keys__2020-02-01
+OnePlus 8 IN2013 (10):OnePlus:IN2013=OnePlus/OnePlus8_EEA/OnePlus8:10/QKQ1.191222.002/2004050031:user/release-keys__2020-03-01
+OnePlus 8 Pro IN2023 (10):OnePlus:IN2023=OnePlus/OnePlus8Pro_EEA/OnePlus8Pro:10/QKQ1.191222.002/2004111413:user/release-keys__2020-03-01
+OnePlus 8 Pro IN2025 (10):OnePlus:IN2025=OnePlus/OnePlus8Pro/OnePlus8Pro:10/QKQ1.191222.002/2004111414:user/release-keys__2020-03-01
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 POCO X2 (10):POCO:POCO X2=POCO/phoenixin/phoenixin:10/QKQ1.190825.002/V11.0.6.0.QGHINXM:user/release-keys__2020-03-01
@@ -214,6 +218,7 @@ Sony Xperia Z3 Compact D5803 (6.0.1):Sony:D5803=Sony/D5803/D5803:6.0.1/23.5.A.1.
 Sony Xperia Z3 Tablet Compact SGP621 (6.0.1):Sony:SGP621=Sony/SGP621/SGP621:6.0.1/23.5.A.1.291/3706784398:user/release-keys
 Sony Xperia Z4 Tablet LTE SGP771 (7.1.1):Sony:SGP771=Sony/SGP771/SGP771:7.1.1/32.4.A.1.54/219395100:user/release-keys
 Sony Xperia Z5 E6603 (7.1.1):Sony:E6603=Sony/E6603/E6603:7.1.1/32.4.A.1.54/3761073091:user/release-keys
+Sony Xperia Z5 E6653 (7.1.1):Sony:E6653=Sony/E6653/E6653:7.1.1/32.4.A.1.54/3761073091:user/release-keys
 Sony Xperia Z5 Compact E5823 (7.1.1):Sony:E5823=Sony/E5823/E5823:7.1.1/32.4.A.1.54/3761073091:user/release-keys
 Sony Xperia Z5 Dual E6633 (7.1.1):Sony:E6633=Sony/E6633/E6633:7.1.1/32.4.A.1.54/3761073091:user/release-keys
 Sony Xperia Z5 Premium E6853 (7.1.1):Sony:E6853=Sony/E6853/E6853:7.1.1/32.4.A.1.54/3761073091:user/release-keys

@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v84_**
+**_Current fingerprints list version - v85_**
 
 
 ## Please add support for device X
@@ -789,7 +789,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v84  
+### List v85  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -844,6 +844,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Huawei P20 Dual SIM EML-L29 (9)
 - Huawei P20 Lite ANE-LX1 (8.0.0 & 9)
 - Huawei P20 Pro CLT-L29 (8.1.0 & 9)
+- Infinix Note 5 (9 & 10)
 - Lenovo K6 Note (7.0)
 - LeEco Le Pro3 (6.0.1)
 - LG G2 VS980 (5.0.2)
@@ -920,6 +921,9 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 7T Pro HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
 - OnePlus 7T Pro NR HD1925 (10)
+- OnePlus 8 IN2013 (10)
+- OnePlus 8 Pro IN2023 (10)
+- OnePlus 8 Pro IN2025 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - POCO X2 (10)
@@ -995,6 +999,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Sony Xperia Z3 Tablet Compact SGP621 (6.0.1)
 - Sony Xperia Z4 Tablet LTE SGP771 (7.1.1)
 - Sony Xperia Z5 E6603 (7.1.1)
+- Sony Xperia Z5 E6653 (7.1.1)
 - Sony Xperia Z5 Compact E5823 (7.1.1)
 - Sony Xperia Z5 Dual E6633 (7.1.1)
 - Sony Xperia Z5 Premium E6853 (7.1.1)
