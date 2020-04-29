@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v85_**
+**_Current fingerprints list version - v86_**
 
 
 ## Please add support for device X
@@ -789,7 +789,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v85  
+### List v86  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -814,7 +814,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Google Nexus 9 WiFi (7.1.1)
 - Google Nexus 9 LTE (7.1.1)
 - Google Nexus 10 (5.1.1)
-- Google Nexus Player (6.0.1)
+- Google Nexus Player (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0)
 - Google Pixel (8.1.0 & 9 & 10)
 - Google Pixel XL (8.1.0 & 9 & 10)
 - Google Pixel 2 (8.1.0 & 9 & 10)
@@ -879,8 +879,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Motorola Moto G7 (9)
 - Motorola Moto G7 Power (9)
 - Motorola Moto G7 Play (9)
-- Moto X Play (7.1.1)
-- Motorola Moto X4 (8.0.0)
+- Motorola Moto X Play (7.1.1)
+- Motorola Moto X4 (8.0.0 & 9)
 - Motorola Moto Z2 Play (8.0.0)
 - Nextbook Ares 8A (6.0.1)
 - Nokia 6 TA-1021 (9)
@@ -939,6 +939,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
 - Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
 - Samsung Galaxy J2 SM-J200H (5.1.1)
+- Samsung Galaxy J2 SM-S260DL (8.1.0)
 - Samsung Galaxy J3 SM-J320FN (5.1.1)
 - Samsung Galaxy J5 2015 SM-J500FN (6.0.1)
 - Samsung Galaxy J5 2016 SM-J510FN (7.1.1)
@@ -951,7 +952,9 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy Note 5 SM-N920C (7.0)
 - Samsung Galaxy Note 8 SM-N950F (8.0.0)
 - Samsung Galaxy Note 9 SM-N960F (10)
+- Samsung Galaxy Note 10 Plus SM-N9750 (10)
 - Samsung Galaxy Note 10 Plus SM-N975F (10)
+- Samsung Galaxy Note 10 Plus SM-N975U (10)
 - Samsung Galaxy Note 10.1 2014 SM-P600 (5.1.1)
 - Samsung Galaxy S3 Neo GT-I9300I (4.4.4)
 - Samsung Galaxy S4 GT-I9505 (5.0.1)
@@ -967,6 +970,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy S9 Plus SM-G965F (8.0.0)
 - Samsung Galaxy S10 Plus SM-G975F (10)
 - Samsung Galaxy S10 Plus SM-G975U (9)
+- Samsung Galaxy S10e SM-G970N (10)
+- Samsung Galaxy S20 Ultra SM-G988B (10)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
@@ -980,6 +985,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Sony Xperia X Performance F8131 (8.0.0)
 - Sony Xperia X Performance Dual F8132 (8.0.0)
 - Sony Xperia XA2 Dual H4113 (8.0.0)
+- Sony Xperia XA2 Ultra H3223 (9)
 - Sony Xperia XZ F8331 (8.0.0)
 - Sony Xperia XZ Dual F8332 (8.0.0)
 - Sony Xperia XZ Premium G8141 (8.0.0)
@@ -1022,7 +1028,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 9T Pro (9 & 10)
 - Xiaomi Mi 10 (10)
 - Xiaomi Mi 10 Pro (10)
-- Xiaomi Mi A1 (8.0.0 & 9)
+- Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9)
 - Xiaomi Mi A2 Lite (9)
 - Xiaomi Mi A3 (9)
