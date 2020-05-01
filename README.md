@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v86_**
+**_Current fingerprints list version - v87_**
 
 
 ## Please add support for device X
@@ -789,7 +789,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v86  
+### List v87  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -853,7 +853,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - LG G5 H850 (8.0.0)
 - LG G5 RS988 (7.0)
 - LG G6 H870 (7.0 & 8.0.0)
-- LG G7 ThinQ (9)
+- LG G7 ThinQ LM-G710 (9)
 - LG V20 H910 (8.0.0)
 - LG V20 H918 (8.0.0)
 - LG V20 H990DS (7.0)
@@ -901,7 +901,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 3 (8.0.0 & 9)
 - OnePlus 3T (8.0.0 & 9)
 - OnePlus 5 (8.1.0 & 9 & 10)
-- OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9)
+- OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9 & 10)
 - OnePlus 6 (8.1.0 & 9 & 10)
 - OnePlus 6T (9 & 10)
 - OnePlus 6T T-Mobile (9)
@@ -913,7 +913,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 7 Pro GM1915 (9)
 - OnePlus 7 Pro GM1917 (9 & 10)
 - OnePlus 7 Pro NR GM1920 (9 & 10)
-- OnePlus 7 Pro NR Spr GM1925 (9)
+- OnePlus 7 Pro NR Spr GM1925 (9 & 10)
 - OnePlus 7T HD1901 (10)
 - OnePlus 7T HD1903 (10)
 - OnePlus 7T HD1905 (10)
@@ -921,7 +921,11 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 7T Pro HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
 - OnePlus 7T Pro NR HD1925 (10)
+- OnePlus 8 IN2011 (10)
 - OnePlus 8 IN2013 (10)
+- OnePlus 8 IN2015 (10)
+- OnePlus 8 IN2017 (10)
+- OnePlus 8 Pro IN2021 (10)
 - OnePlus 8 Pro IN2023 (10)
 - OnePlus 8 Pro IN2025 (10)
 - OPPO Neo 7 A33w (5.1)
@@ -979,6 +983,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy Tab S2 SM-T813 (7.0)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
 - Samsung Galaxy Tab S5e SM-T720 (9)
+- Sony Xperia M (4.3)
 - Sony Xperia X F5121 (8.0.0)
 - Sony Xperia X Compact F5321 (8.0.0)
 - Sony Xperia X Dual F5122 (8.0.0)
@@ -1019,7 +1024,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 5S (7.0)
 - Xiaomi Mi 5S Plus (6.0.1 & 7.0)
 - Xiaomi Mi 6 (8.0.0 & 9)
-- Xiaomi Mi 8 (8.1.0 & 9)
+- Xiaomi Mi 8 (8.1.0 & 9 & 10)
 - Xiaomi Mi 9 European (9)
 - Xiaomi Mi 9 Lite (9)
 - Xiaomi Mi 9 SE (9)
@@ -1037,8 +1042,8 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi Max 2 (7.1.1)
 - Xiaomi Mi Max 3 (9)
 - Xiaomi Mi Mix 2 (8.0.0 & 9)
-- Xiaomi Mi Mix 2S (8.0.0 & 9)
-- Xiaomi Mi Mix 3 (9)
+- Xiaomi Mi Mix 2S (8.0.0 & 9 & 10)
+- Xiaomi Mi Mix 3 (9 & 10)
 - Xiaomi Mi Note 2 (7.0 & 8.0.0)
 - Xiaomi Mi Note 3 (8.1.0)
 - Xiaomi Mi Note 10 European (9)
@@ -1055,6 +1060,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi 8 (9)
 - Xiaomi Redmi Go (8.1.0)
 - Xiaomi Redmi K20 Pro (9 & 10)
+- Xiaomi Redmi K30 Pro (10)
 - Xiaomi Redmi Note 2 (5.0.2)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE (6.0.1)
