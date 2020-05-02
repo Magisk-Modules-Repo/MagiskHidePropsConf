@@ -46,6 +46,7 @@ Google Pixel 4 (10)=google/flame/flame:10/QQ1B.200205.002/6084387:user/release-k
 Google Pixel 4 XL (10)=google/coral/coral:10/QQ1B.200205.002/6084387:user/release-keys__2020-02-05
 Google Pixel C (8.1.0)=google/ryu/dragon:8.1.0/OPM8.190605.005/5749003:user/release-keys__2019-06-05
 HTC 10 (6.0.1)=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
+HTC Exodus 1 (9)=htc/exouhl_00617/htc_exouhl:9/PQ2A.190205.003/1109191.2:user/release-keys__2020-03-01
 HTC U11 (8.0.0)=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
 HTC U12 Plus (8.0.0)=htc/imeuhl_00617/htc_imeuhl:8.0.0/OPR1.170623.032/1041457.3:user/release-keys__2018-06-01
 HTC U12 Plus (9)=htc/imeuhl_00617/htc_imeuhl:9/PQ2A.190205.003/1087121.1:user/release-keys__2019-07-01
