@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=87
+PRINTSV=88
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -48,6 +48,7 @@ Google Pixel C (8.1.0):Google:Pixel C=google/ryu/dragon:8.1.0/OPM8.190605.005/57
 HTC 10 (6.0.1):HTC:HTC 10=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0):HTC:HTC U-3w=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
 HTC U12 Plus (8.0.0 & 9):HTC:HTC U12+=htc/imeuhl_00617/htc_imeuhl:8.0.0/OPR1.170623.032/1041457.3:user/release-keys__2018-06-01;htc/imeuhl_00617/htc_imeuhl:9/PQ2A.190205.003/1087121.1:user/release-keys__2019-07-01
+HTC Exodus 1 (9):HTC:EXODUS 1=htc/exouhl_00617/htc_exouhl:9/PQ2A.190205.003/1109191.2:user/release-keys__2020-03-01
 Huawei Honor 6X BLN-AL10 (8.0.0):Huawei:BLN-AL10=HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/528(C00):user/release-keys
 Huawei Honor 8X JSN-L21 (8.1.0):Huawei:JSN-L21=HONOR/JSN-L21RU/HWJSN-H:8.1.0/HONORJSN-L21/101(C10):user/release-keys__2018-10-01
 Huawei Honor 9 STF-L09 (8.0.0 & 9):Huawei:STF-L09=HONOR/STF-L09/HWSTF:8.0.0/HUAWEISTF-L09/364(C432):user/release-keys;HONOR/STF-L09/HWSTF:9/HUAWEISTF-L09/157C432R1:user/release-keys__2019-02-01
@@ -215,7 +216,7 @@ Sony Xperia XZ Dual F8332 (8.0.0):Sony:F8332=Sony/F8332/F8332:8.0.0/41.3.A.2.99/
 Sony Xperia XZ Premium G8141 (8.0.0):Sony:G8141=Sony/G8141/G8141:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia XZ Premium Dual G8142 (8.0.0):Sony:G8142=Sony/G8142/G8142:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia XZ1 G8341 (8.0.0):Sony:G8341=Sony/G8341/G8341:8.0.0/47.1.A.12.179/1909673090:user/release-keys
-Sony Xperia XZ1 Compact G8441 (8.0.0 & 9):Sony:G8441=Sony/G8441/G8441:8.0.0/47.1.A.12.179/1909673090:user/release-keys;Sony/G8441/G8441:9/47.2.A.2.33/3676206253:user/release-keys__2018-11-01
+Sony Xperia XZ1 Compact G8441 (8.0.0 & 9):Sony:G8441=Sony/G8441/G8441:8.0.0/47.1.A.12.179/1909673090:user/release-keys;Sony/G8441/G8441:9/47.2.A.11.228/3311891731:user/release-keys__2019-09-01
 Sony Xperia XZ1 Dual G8342 (8.0.0):Sony:G8342=Sony/G8342/G8342:8.0.0/47.1.A.12.179/1909673090:user/release-keys
 Sony Xperia XZ2 H8216 (8.0.0):Sony:H8216=Sony/H8216/H8216:8.0.0/51.1.A.3.159/620448843:user/release-keys
 Sony Xperia XZ2 Compact H8314 (8.0.0):Sony:H8314=Sony/H8314/H8314:8.0.0/51.1.A.3.159/620448843:user/release-keys
