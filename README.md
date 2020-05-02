@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v88_**
+**_Current fingerprints list version - v89_**
 
 
 ## Please add support for device X
@@ -789,7 +789,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v88  
+### List v89  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -800,32 +800,32 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Asus ZenPad S 8.0 P01MA (6.0.1)
 - BLU S1 (7.0)
 - Elephone U Pro (8.0.0)
-- Essential PH-1 (9 & 10)
+- Essential PH-1 (7.1.1 & 8.1.0 & 9 & 10)
 - Fairphone 2 (6.0.1)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
-- Google Nexus 5X (8.1.0)
-- Google Nexus 6 (7.1.1)
-- Google Nexus 6P (8.1.0)
+- Google Nexus 5X (6.0 & 6.0.1 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
+- Google Nexus 6 (5.0 & 5.0.1 & 5.1 & 5.1.1 & 6.0 & 6.0.1 & 7.0 & 7.1.1)
+- Google Nexus 6P (6.0 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
+- Google Nexus 7 2012 Mobile (5.1.1)
 - Google Nexus 7 2012 WiFi (5.1.1)
-- Google Nexus 7 2012 LTE (5.1.1)
+- Google Nexus 7 2013 Mobile (6.0.1)
 - Google Nexus 7 2013 WiFi (6.0.1)
-- Google Nexus 7 2013 LTE (6.0.1)
-- Google Nexus 9 WiFi (7.1.1)
-- Google Nexus 9 LTE (7.1.1)
+- Google Nexus 9 LTE (5.0.1 & 5.0.2 & 5.1.1 & 6.0 & 6.0.1 & 7.0 & 7.1.1)
+- Google Nexus 9 WiFi (5.0 & 5.0.1 & 5.0.2 & 5.1.1 & 6.0 & 6.0.1 & 7.0 & 7.1.1)
 - Google Nexus 10 (5.1.1)
-- Google Nexus Player (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0)
-- Google Pixel (8.1.0 & 9 & 10)
-- Google Pixel XL (8.1.0 & 9 & 10)
-- Google Pixel 2 (8.1.0 & 9 & 10)
-- Google Pixel 2 XL (8.1.0 & 9 & 10)
+- Google Nexus Player (5.0 & 5.1 & 5.1.1 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0)
+- Google Pixel (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10)
+- Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10)
+- Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10)
+- Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10)
 - Google Pixel 3 (9 & 10)
 - Google Pixel 3 XL (9 & 10)
 - Google Pixel 3a (9 & 10)
 - Google Pixel 3a XL (9 & 10)
 - Google Pixel 4 (10)
 - Google Pixel 4 XL (10)
-- Google Pixel C (8.1.0)
+- Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
 - HTC U12 Plus (8.0.0 & 9)
@@ -932,7 +932,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - POCO X2 (10)
-- Razer Phone (8.1.0)
+- Razer Phone (7.1.1 & 8.1.0 & 9)
 - Razer Phone 2 (8.1.0 & 9)
 - Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
 - Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
@@ -1035,9 +1035,9 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Mi 10 (10)
 - Xiaomi Mi 10 Pro (10)
 - Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
-- Xiaomi Mi A2 (8.1.0 & 9)
-- Xiaomi Mi A2 Lite (9)
-- Xiaomi Mi A3 (9)
+- Xiaomi Mi A2 (8.1.0 & 9 & 10)
+- Xiaomi Mi A2 Lite (8.1.0 & 9 & 10)
+- Xiaomi Mi A3 (9 & 10)
 - Xiaomi Mi Box S (9)
 - Xiaomi Mi Max (6.0.1)
 - Xiaomi Mi Max 2 (7.1.1)
