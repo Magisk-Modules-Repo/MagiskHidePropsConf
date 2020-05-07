@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=89
+PRINTSV=90
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -36,14 +36,14 @@ Google Nexus 10 (5.1.1):Samsung:Nexus 10=google/mantaray/manta:5.1.1/LMY49J/2640
 Google Nexus Player (5.0 & 5.1 & 5.1.1 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0):Asus:Nexus Player=google/fugu/fugu:5.0/LRX21V/1586762:user/release-keys;google/fugu/fugu:5.1/LMY47D/1743759:user/release-keys;google/fugu/fugu:5.1.1/LMY48N/2167335:user/release-keys;google/fugu/fugu:6.0.1/MOB30W/3031100:user/release-keys;google/fugu/fugu:7.0/NRD91N/3318108:user/release-keys;google/fugu/fugu:7.1.1/NMF27D/3783773:user/release-keys;google/fugu/fugu:7.1.2/N2G48C/4104010:user/release-keys;google/fugu/fugu:8.0.0/OPR2.170623.027/4397545:user/release-keys
 Google Pixel (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel=google/sailfish/sailfish:7.1/NDE63V/3389651:user/release-keys;google/sailfish/sailfish:7.1.1/NOF27D/3757586:user/release-keys;google/sailfish/sailfish:7.1.2/NJH47F/4146041:user/release-keys;google/sailfish/sailfish:8.0.0/OPR3.170623.013/4397526:user/release-keys;google/sailfish/sailfish:8.1.0/OPM4.171019.021.P1/4820305:user/release-keys__2018-07-05;google/sailfish/sailfish:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
 Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel XL=google/marlin/marlin:7.1/NDE63V/3389651:user/release-keys;google/marlin/marlin:7.1.1/NOF27D/3757586:user/release-keys;google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys;google/marlin/marlin:8.0.0/OPR3.170623.013/4397526:user/release-keys;google/marlin/marlin:8.1.0/OPM4.171019.021.P1/4820305:user/release-keys__2018-07-05;google/marlin/marlin:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
-Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10):Google:Pixel 2=google/walleye/walleye:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/walleye/walleye:8.1.0/OPM2.171026.006.G1/4820017:user/release-keys__2018-07-05;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10):Google:Pixel 2 XL=google/taimen/taimen:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/taimen/taimen:8.1.0/OPM2.171026.006.H1/4833802:user/release-keys__2018-07-05;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 3 (9 & 10):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 3 XL (9 & 10):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 3a (9 & 10):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 3a XL (9 & 10):Google:Pixel 3a XL=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 4 (10):Google:Pixel 4=google/flame/flame:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
-Google Pixel 4 XL (10):Google:Pixel 4 XL=google/coral/coral:10/QQ2A.200405.005/6254899:user/release-keys__2020-04-05
+Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10):Google:Pixel 2=google/walleye/walleye:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/walleye/walleye:8.1.0/OPM2.171026.006.G1/4820017:user/release-keys__2018-07-05;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ2A.200501.001.B3/6396602:user/release-keys__2020-05-05
+Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10):Google:Pixel 2 XL=google/taimen/taimen:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/taimen/taimen:8.1.0/OPM2.171026.006.H1/4833802:user/release-keys__2018-07-05;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ2A.200501.001.B3/6396602:user/release-keys__2020-05-05
+Google Pixel 3 (9 & 10):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ2A.200501.001.B2/6352890:user/release-keys__2020-05-05
+Google Pixel 3 XL (9 & 10):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ2A.200501.001.B2/6352890:user/release-keys__2020-05-05
+Google Pixel 3a (9 & 10):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ2A.200501.001.B2/6352890:user/release-keys__2020-05-05
+Google Pixel 3a XL (9 & 10):Google:Pixel 3a XL=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ2A.200501.001.B2/6352890:user/release-keys__2020-05-05
+Google Pixel 4 (10):Google:Pixel 4=google/flame/flame:10/QQ2A.200501.001.B2/6352890:user/release-keys__2020-05-05
+Google Pixel 4 XL (10):Google:Pixel 4 XL=google/coral/coral:10/QQ2A.200501.001.B2/6352890:user/release-keys__2020-05-05
 Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0):Google:Pixel C=google/ryu/dragon:6.0.1/MXC89L/3084571:user/release-keys;google/ryu/dragon:7.0/NRD91N/3318108:user/release-keys;google/ryu/dragon:7.1.1/N4F26T/3687331:user/release-keys;google/ryu/dragon:7.1.2/N2G48C/4104010:user/release-keys;google/ryu/dragon:8.0.0/OPR1.170623.032/4397478:user/release-keys;google/ryu/dragon:8.1.0/OPM8.190605.005/5749003:user/release-keys__2019-06-05
 HTC 10 (6.0.1):HTC:HTC 10=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0):HTC:HTC U-3w=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
