@@ -236,7 +236,7 @@ If you want a specific device fingerprint to be added to the module, see [Findin
 
 
 ## Please update fingerprint X
-Fingerprints included in the module are updated once in a while. Mainly if a user (that's you) provides the updated fingerprint, but sometimes I do look up new fingerprints (that is purely based on how much time I have on my hands and how bored I am though, and I have very little time and a very interesting life).
+Fingerprints included in the module are updated once in a while. Mainly if a user (that's you) provides the updated fingerprint, but sometimes I do look up new fingerprints (that is purely based on how much time I have on my hands and how bored I am though, and I have very little time and a very interesting life). Take a look at [Finding a certified fingerprint] (https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#finding-a-certified-fingerprint) to get some hints as to how you can find a print to submit.
 
 If you have an updated fingerprint available (and you've posted it for me to update the list), but I haven't yet updated the fingerprints list (which might be a while depending on how much IRL stuff I have to do), it is still perfectly possible for you to use the updated fingerprint.
 
