@@ -428,7 +428,7 @@ The logs will also automatically be saved to the root of the device's internal s
 If there are issues with other apps or your system as a result of using this module, a logcat/recovery log/etc showing the issue will most likely be necessary. Take a look in my [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHelp) for guidance on that.
 
 ### Collecting logs manually
-If you can't run the `props` script for some reason, the module logs are stored in /data/adb/mhpc and all files in that directory would be useful for troubleshooting. The Magisk log (retrieved from /cache or saved from the Magisk Manager) and magisk.log.bak would also help. Providing the output from terminal might be useful as well.
+If you can't run the `props` script for some reason, or the automatic option mentioned above doesn't work, the module logs are stored in /data/adb/mhpc and all files in that directory would be useful for troubleshooting. The Magisk log (retrieved from /cache or saved from the Magisk Manager) and magisk.log.bak would also help. Providing the output from terminal might be useful as well.
 
 Please provide the above mentioned files in an archive (zip-file), for simplicity and convenience.
 
