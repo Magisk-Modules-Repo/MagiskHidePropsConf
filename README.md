@@ -466,6 +466,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 ## Changelog
 ### v5.2.5  
 - Fixed and improved verbose boot logging.
+- Fixed collecting logs producing a broken 0-byte file.
 - Logging does not need to use nanoseconds. Microseconds is enough.
 - Added ro.bootmode and ro.boot.mode to "Edit MagiskHide props".
 - Don't use ro.build.selinux in "Edit MagiskHide props" if it isn't set.
