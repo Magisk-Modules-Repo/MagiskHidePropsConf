@@ -2039,7 +2039,8 @@ collect_logs() {
 	tar -zcvf propslogs.tar.gz propslogs >> $LOGFILE 2>&1
 
 	# Copy package to internal storage
-	mv -f $MHPCPATH/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE 2>&1
+	cp -f $MHPCPATH/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE 2>&1
+	rm -f $MHPCPATH/propslogs.tar.gz
 
 	# Remove temporary directory
 	rm -rf $TMPLOGLOC >> $LOGFILE 2>&1
