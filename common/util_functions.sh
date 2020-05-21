@@ -112,8 +112,6 @@ else
 	$CACHELOC/magisk.log
 	$CACHELOC/magisk.log.bak
 	$MHPCPATH/propsconf*
-	$MIRRORPATH/system/build.prop
-	$MIRRORPATH/vendor/build.prop
 	$LATEFILE
 	"
 fi
@@ -165,6 +163,8 @@ ro.debuggable
 ro.secure
 ro.build.type
 ro.build.tags
+ro.bootmode
+ro.boot.mode
 ro.build.selinux
 "
 
@@ -174,6 +174,8 @@ ro.debuggable=0
 ro.secure=1
 ro.build.type=user
 ro.build.tags=release-keys
+ro.bootmode=unknown
+ro.boot.mode=unknown
 ro.build.selinux=0
 "
 
@@ -277,7 +279,7 @@ fi
 log_handler() {
 	if [ "$(id -u)" == 0 ] ; then
 		echo "" >> $LOGFILE 2>&1
-		echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - $1" >> $LOGFILE 2>&1
+		echo -e "$(date +"%Y-%m-%d %H:%M:%S.%3N") - $1" >> $LOGFILE 2>&1
 	fi
 }
 log_print() {
@@ -1669,7 +1671,11 @@ change_to() {
 		;;
 		ro.build.tags) if [ "$2" == "test-keys" ]; then CHANGE="release-keys"; else CHANGE="test-keys"; fi
 		;;
-		ro.build.selinux) if [ "$2" == 0 ]; then CHANGE=1; else CHANGE=0; fi
+		ro.bootmode) if [ "$2" == "recovery" ]; then CHANGE="unknown"; else CHANGE="recovery"; fi
+		;;
+		ro.boot.mode) if [ "$2" == "recovery" ]; then CHANGE="unknown"; else CHANGE="recovery"; fi
+		;;
+		ro.build.selinux) if [ "$2" == 1 ]; then CHANGE=0; else CHANGE=1; fi
 		;;
 	esac
 }
@@ -2013,14 +2019,8 @@ collect_logs() {
 	# Saving Magisk and module log files and device original build.prop
 	for ITEM in $TMPLOGLIST; do
 		if [ -f "$ITEM" ]; then
-			case "$ITEM" in
-				*build.prop*) BPNAME="build_$(echo $ITEM | sed 's|\/build.prop||' | sed 's|.*\/||g').prop"
-				;;
-				*) BPNAME=""
-				;;
-			esac
 			if [ "$ITEM" != "$MHPCPATH/propsconf.log" ]; then
-				cp -af $ITEM ${TMPLOGLOC}/${BPNAME} >> $LOGFILE 2>&1
+				cp -af $ITEM ${TMPLOGLOC} >> $LOGFILE 2>&1
 			fi
 		else
 			log_handler "$ITEM not available."

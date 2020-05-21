@@ -21,9 +21,6 @@ done
 # Load functions
 . $MODPATH/common/util_functions.sh
 
-VLOGFILE=$MHPCPATH/propsconf_boot_verbose.log
-set -x 2>>$VLOGFILE
-
 log_script_chk "Running service.sh module script."
 
 # Resets the reboot and print update variables in propsconf_late

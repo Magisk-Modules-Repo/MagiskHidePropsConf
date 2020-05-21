@@ -1420,18 +1420,28 @@ menu_magiskhide_props() {
 			if [ "$RETAGS" == "true" ]; then
 				TAGSTXT=$ACTIVE
 			fi
+			if [ "$REBOOTMODE" == "true" ]; then
+				BOOTMODETXT=$ACTIVE
+			fi
+			if [ "$REMODE" == "true" ]; then
+				MODETXT=$ACTIVE
+			fi
 			if [ "$RESELINUX" == "true" ]; then
 				SELINUXTXT=$ACTIVE
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
-			echo "Change the sensitive props set by MagiskHide."
+			echo "Change some of the sensitive props set by MagiskHide."
 			echo ""
 			echo "${G}1${N} - ro.debuggable${DEBUGGABLETXT}"
 			echo "${G}2${N} - ro.secure${SECURETXT}"
 			echo "${G}3${N} - ro.build.type${TYPETXT}"
 			echo "${G}4${N} - ro.build.tags${TAGSTXT}"
-			echo "${G}5${N} - ro.build.selinux${SELINUXTXT}"
+			echo "${G}5${N} - ro.bootmode${BOOTMODETXT}"
+			echo "${G}6${N} - ro.boot.mode${MODETXT}"
+			if [ "$(getprop ro.build.selinux)" ]; then
+				echo "${G}7${N} - ro.build.selinux${SELINUXTXT}"
+			fi
 			if [ "$PROPCOUNT" -lt 5 ]; then
 				echo "${G}a${N} - Change all props"
 			fi
@@ -1443,7 +1453,7 @@ menu_magiskhide_props() {
 			echo ""
 			echo "Pick several options at once by"
 			echo "separating inputs with a comma."
-			echo "Example: 1,5,6"
+			echo "Example: 1,3,4"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -1467,7 +1477,16 @@ menu_magiskhide_props() {
 			;;
 			4) menu_change_prop "ro.build.tags" $CURRTAGS $ORIGTAGS $MODULETAGS
 			;;
-			5) menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
+			5) menu_change_prop "ro.bootmode" $CURRBOOTMODE $ORIGBOOTMODE $MODULEBOOTMODE
+			;;
+			6) menu_change_prop "ro.boot.mode" $CURRMODE $ORIGMODE $MODULEMODE
+			;;
+			7)
+				if [ "$(getprop ro.build.selinux)" ]; then
+					menu_change_prop "ro.build.selinux" $CURRSELINUX $ORIGSELINUX $MODULESELINUX
+				else
+					invalid_input 1 2
+				fi
 			;;
 			a|A)
 				if [ "$PROPCOUNT" -lt 5 ]; then
@@ -1509,13 +1528,28 @@ menu_change_prop() {
 				TMPLST=$(echo $2 | sed 's|\,| |g')
 				for ITEM in $PROPSLIST; do
 					for INT in $TMPLST; do
-						if [ "$INT" == "$CNT" ]; then
-							if [ "$TMPITEMS" ]; then
-								TMPITEMS="$TMPITEMS $ITEM"
-							else
-								TMPITEMS="$ITEM"
-							fi
-						fi
+						case $INT in
+							7)
+								if [ "$(getprop ro.build.selinux)" ]; then
+									if [ "$INT" == "$CNT" ]; then
+										if [ "$TMPITEMS" ]; then
+											TMPITEMS="$TMPITEMS $ITEM"
+										else
+											TMPITEMS="$ITEM"
+										fi
+									fi
+								fi
+							;;
+							*)
+								if [ "$INT" == "$CNT" ]; then
+									if [ "$TMPITEMS" ]; then
+										TMPITEMS="$TMPITEMS $ITEM"
+									else
+										TMPITEMS="$ITEM"
+									fi
+								fi
+							;;
+						esac
 					done
 					CNT=$(($CNT+1))
 				done

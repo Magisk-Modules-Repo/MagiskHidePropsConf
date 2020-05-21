@@ -226,7 +226,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v90_**
+**_Current fingerprints list version - v91_**
 
 
 ## Please add support for device X
@@ -267,17 +267,23 @@ Whenever a fingerprint is set by the module, the `ro.build.description` prop wil
 
 
 ## Set/reset MagiskHide Sensitive props
-By default, if MagiskHide detects certain sensitive prop values they will be changed to known safe values. These are currently:
+By default, if MagiskHide detects certain sensitive prop values they will be changed to known safe values. Some of these that this feature can change are:
 - ro.debuggable (set to "0" by MagiskHide - sensitive value is "1")
 - ro.secure (set to "1" by MagiskHide - sensitive value is "0")
 - ro.build.type (set to "user" by MagiskHide - sensitive value is "userdebug")
 - ro.build.tags (set to "release-keys" by MagiskHide - sensitive value is "test-keys" or "dev-keys")
+- ro.bootmode (set to "unknown" by MagiskHide - sensitive value is "recovery")
+- ro.boot.mode (set to "unknown" by MagiskHide - sensitive value is "recovery")
 - ro.build.selinux (set to "0" by MagiskHide - sensitive value is "1")
+
+There are other props set by MagiskHide, but they are mainly used for finding the bootloader state and not needed here.
+
+From Magisk Canary build 20412 ro.build.selinux is no longer changed by MagiskHide, since different root checking libraries look for different sensitive values (someone made a thought boo-boo somewhere). From Canary build 20412 the prop is simply removed.
 
 If, for some reason, you need one or more of these to be kept as their original value (one example would be resetting ro.build.type to userdebug since some ROMs need this to work properly), you can reset to the original value with this module. Keep in mind that this might trigger some apps looking for these prop values as a sign of your device being rooted.
 
 It is possible to change or reset each prop individually or all of them at once. It is also possible to change several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma.
-Example: If I would like to change ro.debuggable, ro.secure and ro.build.selinux I would enter __"1,2,5"__.
+Example: If I would like to change ro.debuggable, ro.secure and ro.build.tags I would enter __"1,2,4"__.
 
 **NOTE:** When activating this feature the screen will go black momentarily at the end of the boot cycle. This is caused by the module doing a soft reboot to reload the prop values properly.
 
@@ -444,6 +450,7 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 ## Credits
 @topjohnwu @ XDA Developers, for Magisk.  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
+@Some_Random_Username for all the OnePlus fingerprints.
 @ipdev, for being always helpful and bringing tons of fingerprints to the module list.  
 And of course, everyone that provides fingerprints for me to add to the list. The module wouldn't be the same without you guys. Thank you!
 
@@ -457,6 +464,13 @@ Releases from v4.0.0 are compatible with Magisk v19+.
 Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 ## Changelog
+### v5.2.5  
+- Fixed and improved verbose boot logging.
+- Logging does not need to use nanoseconds. Microseconds is enough.
+- Added ro.bootmode and ro.boot.mode to "Edit MagiskHide props".
+- Don't use ro.build.selinux in "Edit MagiskHide props" if it isn't set.
+- Added fingerprints for POCO F2 Pro, Redmi K30 Pro Zoom Edition and Note 9S, Samsung Galaxy A20 and Xiaomi Redmi 6 and 6A. Updated fingerprint for OnePlus 5, 5T, 7 Pro (GM1911 and GM1917) several variants of 8 and 8 Pro, Redmi K30 Pro and Xiaomi Mi A1, Mi A3, Redmi 7 and Redmi Note 7. Relabeled Xiaomi Redmi K30 Pro and Redmi Note 8 Pro with Redmi as manufacturer. List updated to v91.
+
 ### v5.2.4  
 - Added a function for disabling the module by placing a specific file in /sdcard, /data or /cache (see the documentation for details). Useful if there are issues with booting the device after installing/setting up the module.
 - Fixed some issues with setting partition props in other boot stages than default.
@@ -789,7 +803,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 
 
 ## Current fingerprints list
-### List v90  
+### List v91  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -804,7 +818,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Fairphone 2 (6.0.1)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
-- Google Nexus 5X (6.0 & 6.0.1 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
+- Google Nexus 5X (6.0 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - Google Nexus 6 (5.0 & 5.0.1 & 5.1 & 5.1.1 & 6.0 & 6.0.1 & 7.0 & 7.1.1)
 - Google Nexus 6P (6.0 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - Google Nexus 7 2012 Mobile (5.1.1)
@@ -931,9 +945,14 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - OnePlus 8 Pro IN2025 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
+- POCO F2 Pro (10)
 - POCO X2 (10)
 - Razer Phone (7.1.1 & 8.1.0 & 9)
 - Razer Phone 2 (8.1.0 & 9)
+- Redmi K30 Pro (10)
+- Redmi K30 Pro Zoom Edition (10)
+- Redmi Note 8 Pro (9)
+- Redmi Note 9S (10)
 - Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
 - Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
 - Samsung Galaxy A5 2017 SM-A520F (8.0.0)
@@ -941,6 +960,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Samsung Galaxy A6 Plus SM-A605G (9)
 - Samsung Galaxy A7 2017 SM-A720F (8.0.0)
 - Samsung Galaxy A8 Plus SM-A730F (7.1.1)
+- Samsung Galaxy A20 (9)
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
 - Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
 - Samsung Galaxy J2 2015 SM-J200H (5.1.1)
@@ -1057,11 +1077,12 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi 4A (7.1.2)
 - Xiaomi Redmi 4X (6.0.1)
 - Xiaomi Redmi 5A (7.1.2 & 8.1.0)
+- Xiaomi Redmi 6 (9)
+- Xiaomi Redmi 6A (9)
 - Xiaomi Redmi 7 (9)
 - Xiaomi Redmi 8 (9)
 - Xiaomi Redmi Go (8.1.0)
 - Xiaomi Redmi K20 Pro (9 & 10)
-- Xiaomi Redmi K30 Pro (10)
 - Xiaomi Redmi Note 2 (5.0.2)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE (6.0.1)
@@ -1075,7 +1096,6 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 - Xiaomi Redmi Note 6 Pro (8.1.0)
 - Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Note 7 Pro (9)
-- Xiaomi Redmi Note 8 Pro (9)
 - Xiaomi Redmi Note 8T European (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)

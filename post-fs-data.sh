@@ -26,10 +26,11 @@
 	if [ -f "$LOGFILE" ]; then
 		mv -f $LOGFILE $LASTLOGFILE
 	fi
-	if [ -f "$VLOGFILE" ]; then
-		mv -f $VLOGFILE $VLASTLOGFILE
-	fi
-	set -x 2>$VLOGFILE
+
+	# Run the boot logcat script
+	. $MODPATH/common/bootlog.sh
+
+	#Start logging
 	echo "***************************************************" > $LOGFILE 2>&1
 	echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
 	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
