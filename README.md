@@ -462,6 +462,7 @@ Releases up until v2.4.0 are compatible with Magisk v15 to v16.7.
 Releases from v2.4.1 are compatible with Magisk v17 to v18.1.  
 Releases from v4.0.0 are compatible with Magisk v19+.  
 Releases from v5.0.0 are recommended for Magisk v19.4+.
+Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
 ### v5.2.5  
