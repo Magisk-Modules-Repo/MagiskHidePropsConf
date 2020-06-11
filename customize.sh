@@ -12,7 +12,6 @@ INSTFN=true
 ui_print ""
 ui_print "************************"
 ui_print " Installing $MODVERSION "
-ui_print " By Didgeridoohan @ XDA "
 ui_print "************************"
 ui_print ""
 

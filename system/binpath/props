@@ -82,18 +82,15 @@ set -x 2>$VLOGFILE
 
 log_handler "Running props script."
 
+# Checking for Busybox
 if [ -z "$BBPATH" ]; then
 	menu_header "${C}No Busybox found${N}"
 	echo ""
-	echo "You don't seem to have Busybox installed"
-	echo "on your device. Please install it, since"
-	echo "it is required to ensure proper"
-	echo "functionality of the scripts."
+	echo "The script couldn't find Magisk's Busybox."
+	echo "Make sure that your installation of Magisk"
+	echo "is functioning properly and try again."
 	echo ""
-	echo "I recommend osm0sis' Busybox, installable"
-	echo "as a Magisk module from the Magisk repo."
-	echo ""
-	echo "If you do have Busybox installed, please"
+	echo "If you can't find anything wrong, please"
 	echo "check the module documentation on how to"
 	echo "ask for support and provide logs."
 	echo ""
@@ -101,6 +98,9 @@ if [ -z "$BBPATH" ]; then
 	log_handler "Exiting... Bye bye.\n\n===================="	
 	exit 0
 fi
+
+# Check MagiskHide status
+MHTEMP=$(magiskhide status) >> $LOGFILE 2>&1
 
 blank_input() {
 	# Find menu level
@@ -243,6 +243,8 @@ menu_change_fingerprint() {
 				echo ""
 				echo "Enter the new fingerprint or"
 				echo "pick from the options below."
+				echo ""
+				$(magiskhide status)
 				echo ""
 				echo "${G}f${N} - Pick a certified fingerprint"
 				if [ "$PRINTMODULETXT" ]; then

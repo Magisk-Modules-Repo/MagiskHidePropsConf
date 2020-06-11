@@ -298,11 +298,7 @@ log_script_chk() {
 # Finding and setting up installed Busybox
 if [ ! "$INSTFN" ] && [ "$BOOTSTAGE" != "post" -a "$BOOTSTAGE" != "late" ]; then
 	log_handler "Setting up Busybox."
-	if [ -d "$MODULESPATH/busybox-ndk" ]; then
-		BBPATH=$(find $MODULESPATH/busybox-ndk -name 'busybox')
-	else
-		BBPATH=$(which busybox)
-	fi
+	BBPATH=$ADBPATH/magisk/busybox
 	if [ "$BBPATH" ]; then
 		log_handler "Using $($BBPATH | head -1)."
 		echo "$BBPATH" >> $LOGFILE 2>&1
@@ -1085,10 +1081,6 @@ script_install() {
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEFILE"
 	load_settings
 	print_files
-	ui_print ""
-	ui_print "- Make sure to have Busybox installed."
-	ui_print "- osm0sis' Busybox is recommended."
-	ui_print ""
 	# Checks for configuration file
 	CONFFILE=""
 	for ITEM in $CONFFILELOC; do

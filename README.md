@@ -29,7 +29,7 @@ Keep reading below to find out more details about the different parts of the mod
   - [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint)
     - [The getprop method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-getprop-method)
     - [The stock ROM/firmware/factory image method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-stock-romfirmwarefactory-image-method)
-  - [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
+	  - [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
     - [The firmware.mobi method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method)
   - [Custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#custom-fingerprints-list)
   - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
@@ -60,7 +60,6 @@ Keep reading below to find out more details about the different parts of the mod
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
   - [props not found](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-not-found)
   - [The boot scripts did not run](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-boot-scripts-did-not-run)
-  - [Requires Magisk v19+](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#requires-magisk-v19)
   - [An option is marked as "disabled"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#an-option-is-marked-as-disabled)
   - [I can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-ctsprofile-check)
   - [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)
@@ -84,8 +83,7 @@ Keep reading below to find out more details about the different parts of the mod
 
 
 ## Prerequisites
-- Magisk v19+.
-- Busybox, preferably @osm0sis' (installable from the Magisk Manager Downloads).
+- Magisk v20+.
 
 
 ## Installation
@@ -106,15 +104,15 @@ If you want further details as to what this module does and can do, keep reading
 Usage: props [options]...
 
 Options:
-  -d  Update to fingerprints test list.
-  -f  Update fingerprints list.
-  -l  Save module logs and info.
-  -h  Show this message.
-  -nc Run without colours.
-  -nw Run without fingerprint startup check.
-  -r  Reset all options/settings.
-  -s  Open script settings menu.
-  -t  Activate test mode.
+  -d	  Update to fingerprints test list.
+  -f	  Update fingerprints list.
+  -l	  Save module logs and info.
+  -h	  Show this message.
+  -nc	  Run without colours.
+  -nw	  Run without fingerprint startup check.
+  -r	  Reset all options/settings.
+  -s	  Open script settings menu.
+  -t	  Activate test mode.
 ```
 
 The settings option (-s) can be used even if the module boot scripts did not run.
@@ -227,12 +225,12 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v91_**
+**_Current fingerprints list version - v92_**
 
 
 ## Please add support for device X
 Adding device fingerprints to the list relies heavily on the users. You guys. I've looked up a fingerprint from time to time, but it is a bit time consuming and I don't have that time...
-  
+	
 If you want a specific device fingerprint to be added to the module, see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint) above. If you can find a fingerprint for the device you have in mind, [submit](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#how-do-i-submit-a-fingerprint) it for inclusion in the list of certified fingerprints.
 
 
@@ -373,9 +371,6 @@ If the issue is caused by having changed any of the script settings (for boot st
 
 It might still be possible to use the module, even though you can't run the `props` command. Use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) to set your desired options and make sure that all the boot options (CONFPRINTBOOT, CONFPATCHBOOT, CONFSIMBOOT and CONFBOOT) are set to use the default boot stage (since the boot scripts don't seem to run properly).
 
-### Requires Magisk v19+
-If the module won't install, with the message that Magisk v19+ is required, but you have Magisk v19+ installed, that means that your Magisk installation is broken. It's likely that you did not update properly (always update directly from the Manager) from a previous Magisk version (or something along those lines) and core parts of Magisk are still from an old install. The solution is to do a reinstallation by using "Direct install" in the Magisk Manager. If you for some reason can't do a direct install you're likely going to have to uninstall Magisk and start over.
-
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
 - _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed.
@@ -466,6 +461,12 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.2.6  
+- Fixed the supposedly "improved" verbose boot logging.
+- Change to using Magisk's internal Busybox for the `props` script (the boot scripts are already using it without issues and have for some time). Separately installed Busybox no longer needed. Thank you @Juzman for the push.
+- Added info about MagiskHide's status in the "Edit device fingeprint" menu. 
+- Added fingerprint for Lenovo Tab 4 10 Plus TB-X704F and TB-X704L, Samsung Galaxy Note 4 SM-N910G and Xiaomi Redmi Note 8. Updated fingerprints for Google Pixel 2-4 XL, Motorola Moto G7 Power, OnePlus 5, 5T, 6, 6T, several variants of 7, 7 Pro, several variants of 7T and 7T Pro and several variants of 8 and 8 Pro, Poco X2, Redmi K30 Pro, Samsung Galaxy A5 2017 and Xiaomi Mi A2, Mi A2 Lite and PocoPhone F1. List updated to v92.
+
 ### v5.2.5  
 - Fixed and improved verbose boot logging.
 - Fixed collecting logs producing a broken 0-byte file.
@@ -806,7 +807,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v91  
+### List v92  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -864,6 +865,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Huawei P20 Pro CLT-L29 (8.1.0 & 9)
 - Infinix Note 5 (9 & 10)
 - Lenovo K6 Note (7.0)
+- Lenovo Tab 4 10 Plus TB-X704F (7.1.1)
+- Lenovo Tab 4 10 Plus TB-X704L (7.1.1)
 - LeEco Le Pro3 (6.0.1)
 - LG G2 VS980 (5.0.2)
 - LG G4 H812 (6.0)
@@ -1099,6 +1102,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi Note 6 Pro (8.1.0)
 - Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Note 7 Pro (9)
+- Xiaomi Redmi Note 8 (9)
 - Xiaomi Redmi Note 8T European (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
