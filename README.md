@@ -225,7 +225,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v92_**
+**_Current fingerprints list version - v93_**
 
 
 ## Please add support for device X
@@ -807,7 +807,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v92  
+### List v93  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -875,6 +875,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - LG G5 RS988 (7.0)
 - LG G6 H870 (7.0 & 8.0.0)
 - LG G7 ThinQ LM-G710 (9)
+- LG K20 Plus LG-TP260 (7.0)
 - LG V20 H910 (8.0.0)
 - LG V20 H918 (8.0.0)
 - LG V20 H990DS (7.0)
@@ -910,7 +911,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Nokia 6 TA-1039 (9)
 - Nokia 6.1 Plus (9 & 10)
 - Nokia 6.2 (9)
-- Nokia 7 Plus (9)
+- Nokia 7 Plus (9 & 10)
 - Nokia 7.1 TA-1095 (10)
 - Nvidia Shield K1 (7.0)
 - Nvidia Shield Tablet (7.0)
@@ -957,16 +958,18 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Razer Phone 2 (8.1.0 & 9)
 - Redmi K30 Pro (10)
 - Redmi K30 Pro Zoom Edition (10)
-- Redmi Note 8 Pro (9)
+- Redmi Note 8 Pro India (9 & 10)
+- Redmi Note 8 Pro Russia (10)
 - Redmi Note 9S (10)
 - Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
 - Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
 - Samsung Galaxy A5 2017 SM-A520F (8.0.0)
-- Samsung Galaxy A51 SM-A515F (10)
 - Samsung Galaxy A6 Plus SM-A605G (9)
 - Samsung Galaxy A7 2017 SM-A720F (8.0.0)
 - Samsung Galaxy A8 Plus SM-A730F (7.1.1)
-- Samsung Galaxy A20 (9)
+- Samsung Galaxy A20 SM-A205W (9)
+- Samsung Galaxy A50 SM-A505F (9)
+- Samsung Galaxy A51 SM-A515F (10)
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
 - Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
 - Samsung Galaxy J2 2015 SM-J200H (5.1.1)
@@ -975,6 +978,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy J5 2015 SM-J500FN (6.0.1)
 - Samsung Galaxy J5 2016 SM-J510FN (7.1.1)
 - Samsung Galaxy J5 Prime SM-G570F (7.0)
+- Samsung Galaxy J7 2016 SM-J710FQ (8.1.0)
 - Samsung Galaxy J7 2017 SM-J730F (8.1.0)
 - Samsung Galaxy J7 Prime SM-G610F (6.0.1)
 - Samsung Galaxy M20 SM-M205F (10)
