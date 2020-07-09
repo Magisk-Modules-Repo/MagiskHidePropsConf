@@ -2053,7 +2053,7 @@ menu_set_new_custprop() {
 			echo "${C}$1${N} to,"
 			echo "or select from the options below."
 			echo ""
-			echo "The current value is:"
+			echo "The currently set value is:"
 			if [ "$TMPPROP" ]; then				
 				echo "${C}$TMPPROP${N}"
 				echo "Please enter the new value."
@@ -2220,6 +2220,17 @@ menu_set_custprop() {
 			echo ""
 			echo "${C}$2${N}"
 			echo ""
+			if [ "$4" == "option" ]; then
+				echo "The currently set value is:"
+				if [ "$(getprop "$1")" ]; then				
+					echo "${C}$(getprop "$1")${N}"
+					echo "Please enter the new value."
+				else
+					echo "${C}Currently not set, or the value could not be retrieved.${N}"
+					echo "Please enter the value to set."
+				fi
+				echo ""
+			fi
 			echo "Pick an option below to change"
 			echo "what boot stage the prop will"
 			echo "be set in:"
@@ -2231,7 +2242,11 @@ menu_set_custprop() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}e${N}(xit)"
+			if [ "$4" == "option" ]; then
+				echo "Enter ${G}y${N}(es) or ${G}n${N}(o)"
+			else
+				echo "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}e${N}(xit)"
+			fi
 			echo -n "or an option from above: "
 			read -r INPUT5
 		fi
@@ -2301,9 +2316,19 @@ menu_set_custprop() {
 				INPUT5=""
 				break
 			;;
-			e|E) exit_fn
+			e|E)
+				if [ "$4" == "option" ]; then
+					invalid_input 2 5
+				else
+					exit_fn
+				fi
 			;;
-			*)	invalid_input 3 5
+			*)
+				if [ "$4" == "option" ]; then
+					invalid_input 2 5
+				else
+					invalid_input 3 5
+				fi
 			;;
 		esac
 	done
@@ -3021,21 +3046,63 @@ fi
 
 if [ "$ISSUECHK" == 1 ] && [ "$1" != "-s" ]; then
 	collect_logs "issue"
-	reboot_fn "${ISSUETXT}\n\n Things to try:\n Disable EdXposed.\n Change boot stage settings or background\n execution for the boot script\n (run the props\n command with the -s option).\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for further details.${N}" "reset-script"
+	reboot_fn "${ISSUETXT}\n\n Things to try:\n Disable other modules.\n (Cloudflare and EdXposed are known examples)\n Change boot stage settings or background\n execution for the boot script\n (run the props\n command with the -s option).\n\n If the issue persists after a reboot,\n please report the issue, ${R}with logs!${C}\n\n Logs have automatically been saved\n to your internal storage\n ${R}(propslogs.tar.gz)${C}.\n\n If the automatic collection failed,\n please collect the logs manually.\n\n ${G}See the documentation for further details.${N}" "reset-script"
 fi
 
 # ====================================================
 # ====================== Options =====================
 # ====================================================
 
+invalid_option() {
+	log_handler "Invalid option."
+	clear
+	menu_header "${C}Help${N}"
+	echo ""
+	echo "${R}Invalid option.${N}"
+	echo ""
+	echo "Try again without options,"
+	echo "or use -h for help and details."
+	echo ""
+	log_handler "Exiting... Bye bye.\n\n===================="
+	exit 0
+}
+
+if [ "$2" ]; then
+	log_handler "Setting custom prop from command prompt."
+	clear
+	menu_set_custprop "$1" "$2" "$(getprop $1)" "option"
+	clear
+	echo "Done."
+	echo ""
+	log_handler "Exiting... Bye bye.\n\n===================="
+	exit 0
+else
+	if [ "$1" ]; then
+		case "$1" in
+			*\.*|*\=*) invalid_option
+			;;
+			*d*|*f*|*l*|*h*|*nc*|*nw*|*r*|*s*|*t*) # Do nothing
+			;;
+			*) invalid_option
+			;;
+		esac
+	fi
+fi
+
 case "$1" in
 	-h)
 		log_handler "Showing help (-h)."
+		clear
 		menu_header "${C}Help${N}"
 		echo ""
 		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
 		echo ""
-		echo "Usage: props [options]..."
+		echo "Usage: props NAME VALUE"
+		echo "   or: props [options]..."
+		echo ""
+		echo "Entering a property NAME and VALUE will save"
+		echo "this information to the module settings as custom"
+		echo "prop values."
 		echo ""
 		echo "Options:"
 		echo "  -d		Update to fingerprints test list."
@@ -3079,25 +3146,6 @@ if [ "$OPTIONWEB" == 1 ]; then
 		*d*|*f*) # Do nothing
 		;;
 		*) download_prints
-		;;
-	esac
-fi
-
-if [ "$1" ]; then
-	case "$1" in
-		*d*|*f*|*l*|*h*|*nc*|*nw*|*r*|*s*|*t*) # Do nothing
-		;;
-		*)
-			log_handler "Invalid option."
-			menu_header "${C}Help${N}"
-			echo ""
-			echo "${R}Invalid option.${N}"
-			echo ""
-			echo "Try again without options,"
-			echo "or use -h for help and details."
-			echo ""
-			log_handler "Exiting... Bye bye.\n\n===================="	
-			exit 0
 		;;
 	esac
 fi

@@ -11,7 +11,9 @@ This module is a very complicated way of doing something very simple. Complicate
 
 What this module does is that it adds a terminal based UI for those that don't want (or can't) create a boot script for themselves, making the process of creating such a boot script very simple. With this module I'm also maintaining a list of certified build fingerprints for a number of devices, so that it's easy to pick one you want to use.
 
-Keep reading below to find out more details about the different parts of the module
+Keep reading below to find out more details about the different parts of the module.
+
+Keep in mind that this module cannot help you pass CTS if your device uses hardware backed key attestation to detect an unlocked bootloader. There is currently no known way to circumvent that.
 
 
 ## Documentation index
@@ -101,18 +103,23 @@ If you want further details as to what this module does and can do, keep reading
 
 ### Run options
 ```
-Usage: props [options]...
+Usage: props NAME VALUE
+   or: props [options]...
+
+Entering a property NAME and VALUE will save
+this information to the module settings as custom
+prop values.
 
 Options:
-  -d	  Update to fingerprints test list.
-  -f	  Update fingerprints list.
-  -l	  Save module logs and info.
-  -h	  Show this message.
-  -nc	  Run without colours.
-  -nw	  Run without fingerprint startup check.
-  -r	  Reset all options/settings.
-  -s	  Open script settings menu.
-  -t	  Activate test mode.
+  -d    Update to fingerprints test list.
+  -f    Update fingerprints list.
+  -l    Save module logs and info.
+  -h    Show this message.
+  -nc   Run without colours.
+  -nw   Run without fingerprint startup check.
+  -r    Reset all options/settings.
+  -s    Open script settings menu.
+  -t    Activate test mode.
 ```
 
 The settings option (-s) can be used even if the module boot scripts did not run.
@@ -197,6 +204,7 @@ Google Nexus 6 (7.1.1):Motorola:Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:
 ### I still can't pass the ctsProfile check
 If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
 - Make sure that [MagiskHide is enabled and working](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Test_MagiskHide).
+- Check if your device uses [hardware backed key attestation to detect an unlocked bootloader](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3). If it does, there's no way to circumvent that.
 - Do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
 - Go to the "Edit fingerprints menu", select "Boot stages", and start by changing the security patch date boot stage to either default or post-fs-data. If that doesn't work, also try changing the fingerprint boot stage to post-fs-data. The default boot stage can also be changed if you go into the script options and change the boot stage to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
 - Try a different fingerprint (pick one from the provided list). You might want to reset the "Boot stage" settings to the default values first though.
@@ -225,7 +233,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v93_**
+**_Current fingerprints list version - v94_**
 
 
 ## Please add support for device X
@@ -289,6 +297,8 @@ Example: If I would like to change ro.debuggable, ro.secure and ro.build.tags I 
 
 ## Change/set custom prop values
 It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop, default.prop, etc, you can now do with this module instead. If you have a lot of props that you want to change it'll be a lot easier to use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) (see below).
+
+A custom prop can also be set by running the `props` command with the prop name and value directly in the command prompt (no need for using the ui). See [Run options](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#run-options).
 
 When setting a custom prop you can also pick in what boot stage it should be set in. This can also be changed later for each individual custom prop. There are three options:
 - Default - The main module option will decide (see [Prop script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#boot-stage) below).
@@ -412,7 +422,7 @@ In case of issues, if you've set a prop value that doesn't work on your device c
 
 Place the required file in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. If you want to reset the module, name the file `reset_mhpc`, or if you want to disable the module name it `disable_mhpc`
 
-If your device does not have access to /sdcard, /data or /cache through recovery (there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
+If your device does not have access to /sdcard, /data or /cache through recovery (or there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
 
 The reset file can be use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
@@ -461,6 +471,10 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.2.7  
+- Added a new run option to set custom props directly from the command prompt. See the documentation for details. Shoutout to @ps000000 @ XDA Developers for putting the idea in my head.
+- Added fingerprints for OnePlus 8 IN2019, Realme X2 Pro, Samsung Galaxy A90 5G and Tab A 8.0 LTE 2019. Updated fingerprints for Google Pixel 2-4 (all variants), Huawei P20, OnePlus 8 IN2017, POCO X2 and Xiaomi Mi A1, Mi A2, Mi A2 Lite and Mi A3. Fingerprints list updated to v94.
+
 ### v5.2.6  
 - Fixed the supposedly "improved" verbose boot logging.
 - Change to using Magisk's internal Busybox for the `props` script (the boot scripts are already using it without issues and have for some time). Separately installed Busybox no longer needed. Thank you @Juzman for the push.
@@ -807,7 +821,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v93  
+### List v94  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -859,7 +873,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Huawei P9 EVA-L09 (7.0)
 - Huawei P9 Lite VNS-L31 (7.0)
 - Huawei P9 Plus VIE-L09 (7.0)
-- Huawei P20 EML-L09 (9)
+- Huawei P20 EML-L09 (9 & 10)
 - Huawei P20 Dual SIM EML-L29 (9)
 - Huawei P20 Lite ANE-LX1 (8.0.0 & 9)
 - Huawei P20 Pro CLT-L29 (8.1.0 & 9)
@@ -947,6 +961,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 8 IN2013 (10)
 - OnePlus 8 IN2015 (10)
 - OnePlus 8 IN2017 (10)
+- OnePlus 8 IN2019 (10)
 - OnePlus 8 Pro IN2021 (10)
 - OnePlus 8 Pro IN2023 (10)
 - OnePlus 8 Pro IN2025 (10)
@@ -956,6 +971,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - POCO X2 (10)
 - Razer Phone (7.1.1 & 8.1.0 & 9)
 - Razer Phone 2 (8.1.0 & 9)
+- Realme X2 Pro (10)
 - Redmi K30 Pro (10)
 - Redmi K30 Pro Zoom Edition (10)
 - Redmi Note 8 Pro India (9 & 10)
@@ -970,6 +986,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy A20 SM-A205W (9)
 - Samsung Galaxy A50 SM-A505F (9)
 - Samsung Galaxy A51 SM-A515F (10)
+- Samsung Galaxy A90 5G SM-A908B (9)
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
 - Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
 - Samsung Galaxy J2 2015 SM-J200H (5.1.1)
@@ -984,6 +1001,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy M20 SM-M205F (10)
 - Samsung Galaxy Note 3 SM-N9005 (5.0)
 - Samsung Galaxy Note 4 SM-N910F (6.0.1)
+- Samsung Galaxy Note 4 SM-N910G (6.0.1)
 - Samsung Galaxy Note 5 SM-N920C (7.0)
 - Samsung Galaxy Note 8 SM-N950F (8.0.0)
 - Samsung Galaxy Note 9 SM-N960F (10)
@@ -1008,6 +1026,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S10e SM-G970N (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
+- Samsung Galaxy Tab A 8.0 LTE 2019 SM-T295 (9)
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
 - Samsung Galaxt Tab A LTE SM-T597 (9)
