@@ -420,7 +420,7 @@ A common reason for issues with booting the device or with system apps force clo
 
 In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults or to disable the module without resetting.
 
-Place the required file in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. If you want to reset the module, name the file `reset_mhpc`, or if you want to disable the module name it `disable_mhpc`
+Place a file (named `reset_mhpc` or `disable_mhpc` depending on your needs, keep reading for details) in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. If you want to reset the module, name the file `reset_mhpc`, or if you want to disable the module name it `disable_mhpc`. If you disable the module it can later be enabled again from the Magisk Manager.
 
 If your device does not have access to /sdcard, /data or /cache through recovery (or there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
 
