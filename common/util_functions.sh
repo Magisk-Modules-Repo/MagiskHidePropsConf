@@ -45,6 +45,7 @@ if [ "$INSTFN" ]; then
 	PRINTEDIT
 	PRINTVEND
 	PRINTCHK
+	BASICATTEST
 	DEVSIM
 	PROPCOUNT
 	PROPEDIT
@@ -98,8 +99,8 @@ if [ "$INSTFN" ]; then
 	"
 else
 	# Placeholder variables
-	MODVERSIONPH=VER_PLACEHOLDER
-	BINPH=BIN_PLACEHOLDER
+	MODVERSION=v5.3.0
+	BIN=xbin
 
 	# Log variables
 	LOGFILE=$MHPCPATH/propsconf.log
@@ -860,6 +861,9 @@ system_prop() {
 		if [ "$PATCHSTAGE" == 0 ]; then
 			patch_edit "$MODPATH/system.prop"
 		fi
+		if [ "$BASICATTEST" == 1 ]; then
+			forced_basic "$MODPATH/system.prop"
+		fi
 		if [ "$SIMSTAGE" == 0 ]; then
 			dev_sim_edit "$MODPATH/system.prop"
 		fi
@@ -1223,9 +1227,20 @@ print_files() {
 	OEMLIST="$TMPOEMLIST"
 	log_handler "Creating files."
 	for OEM in $OEMLIST; do
-		echo -e "PRINTSLIST=\"" >> $MODPATH/printfiles/${OEM}\.sh
-		awk "/^$OEM/" $MODPATH/common/prints.sh >> $MODPATH/printfiles/${OEM}\.sh
-		echo -e "\"" >> $MODPATH/printfiles/${OEM}\.sh
+		TMPFILE=$MODPATH/printfiles/${OEM}\.sh
+		echo -e "PRINTSLIST=\"" >> $TMPFILE
+		awk "/^$OEM/" $MODPATH/common/prints.sh >> $TMPFILE
+		echo -e "\"" >> $TMPFILE
+		TMPI=6
+		while [ "$TMPI" -ge 4 ]; do
+			TMPLINE=$(grep -m 1 "(${TMPI}" $TMPFILE)
+			if [ "$TMPLINE" ]; then
+				break
+			else
+				TMPI=$(($TMPI - 1))
+			fi
+		done
+    echo -e "BASICATTMODEL=\"$(get_eq_left "$TMPLINE" | sed "s|^.*\:||")\"" >> $TMPFILE
 	done
 	# Check for updated fingerprint
 	device_print_update "Updating module fingerprint."
@@ -1508,6 +1523,98 @@ set_partition_props() {
 			fi
 		done
 	done
+}
+
+# ======================== Force BASIC attestation ========================
+# Switch/set forced basic attestation
+forced_basic() {
+	# Find what brand is being used
+	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ] && [ "$MODULEFINGERPRINT" ]; then
+		BASICATTDEV="$SIMBRAND"
+	else
+		BASICATTDEV="$(getprop ro.product.brand)"
+	fi
+  if [ "$BASICATTCUST" ]; then
+		BASICATTMODEL=$BASICATTCUST
+  elif [ "$BASICATTLIST" ]; then
+		BASICATTMODEL=$BASICATTLIST
+  else
+		# Find the OEM print file
+		TMPFILE="$(ls $MODPATH/printfiles | grep -i $BASICATTDEV)"
+		BASICATTMODEL="$(get_file_value "$MODPATH/printfiles/$TMPFILE" "BASICATTMODEL=")"
+  fi
+	# Write or load values
+	if [ "$1" != "none" ]; then
+		if [ "$1" == "$MODPATH/system.prop" ]; then
+			if [ "$BASICATTMODEL" ]; then
+				TMPVAL="$BASICATTMODEL"
+			else
+				TMPVAL="$(getprop ro.product.device)"
+			fi
+			echo "ro.product.model=$TMPVAL" >> "$1"
+			set_partition_props "$1" "ro.product.model" "$TMPVAL"
+		else
+			TMPVAL=1
+			if [ "$BASICATTEST" == 0 ]; then
+				log_handler "Enabling forced basic attestation."
+			elif [ "$BASICATTEST" == 1 ] && [ -z "$2" ] && [ -z "$3" ] && [ "$4" != "reset" ]; then
+				TMPVAL=0
+				log_handler "Disabling forced basic attestation."
+			fi
+
+			# Enables or disables the settings
+			replace_fn "BASICATTEST" $BASICATTEST $TMPVAL $LATEFILE
+			replace_fn "BASICATTLIST" "\"$BASICATTLIST\"" "\"$2\"" $LATEFILE
+			replace_fn "BASICATTCUST" "\"$BASICATTCUST\"" "\"$3\"" $LATEFILE
+
+			after_change "$1"
+		fi
+	else
+		if [ "$BASICATTMODEL" ]; then
+			TMPVAL="$BASICATTMODEL"
+		else
+			TMPVAL="$(getprop ro.product.device)"
+		fi
+		resetprop -nv ro.product.model $TMPVAL >> $LOGFILE 2>&1
+		set_partition_props "none" "ro.product.model" "$TMPVAL"
+	fi
+}
+
+# Set a list value for forced basic attestation
+forced_list_confirm() {
+	log_handler "Setting value for forced basic attestation to \"$2\" (from fingerprints list)."
+
+	forced_basic "$1" "$2"
+}
+
+# Set a custom value for forced basic attestation
+forced_custom_confirm() {
+	log_handler "Setting custom value for forced basic attestation to \"$2\"."
+
+	forced_basic "$1" "" "$2"
+}
+
+# Reset the values for forced basic attestation
+forced_reset() {
+	LISTVAL="$BASICATTLIST"
+	CUSTVAL="$BASICATTCUST"
+	if [ "$2" == 1 ] || [ "$2" == 3 ]; then
+		LISTVAL=""
+		TMPTXT="list value"
+	fi
+
+	if [ "$2" == 2 ] || [ "$2" == 3 ]; then
+		CUSTVAL=""
+		TMPTXT="custom value"
+	fi
+
+	if [ "$2" == 3 ]; then
+		TMPTXT="custom/list values"
+	fi
+
+	log_handler "Resetting $TMPTXT for forced basic attestation."
+
+	forced_basic "$1" "$LISTVAL" "$CUSTVAL" "reset"
 }
 
 # ======================== Device simulation functions ========================
