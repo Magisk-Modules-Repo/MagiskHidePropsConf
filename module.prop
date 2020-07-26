@@ -1,6 +1,6 @@
 id=MagiskHidePropsConf
 name=MagiskHide Props Config
-version=v5.2.7-v94
-versionCode=60
+version=v5.3.0-v95
+versionCode=61
 author=Didgeridoohan
 description=Change your device's fingerprint, to pass SafetyNet's CTS Profile check. Set/reset prop values set by MagiskHide. Change any prop values easily, and set your own custom props.

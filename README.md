@@ -39,6 +39,8 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Current fingerprints list version](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#current-fingerprints-list-version)
 - [Please add support for device X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-add-support-for-device-x)
 - [Please update fingerprint X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-update-fingerprint-x)
+##### Forcing BASIC attestation for the bootloader check
+- [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation)
 ##### Simulating another device
 - [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation)
 ##### MagiskHide props
@@ -60,6 +62,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
+  - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
   - [props not found](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-not-found)
   - [The boot scripts did not run](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-boot-scripts-did-not-run)
   - [An option is marked as "disabled"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#an-option-is-marked-as-disabled)
@@ -70,7 +73,6 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
   - [Boot takes a lot longer after setting props](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#boot-takes-a-lot-longer-after-setting-props)
-  - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
   - [The screen goes black momentarily at boot](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-screen-goes-black-momentarily-at-boot)
   - [The Play Store is "uncertified"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-play-store-is-uncertified)
 - [Logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs)
@@ -233,7 +235,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v94_**
+**_Current fingerprints list version - v95_**
 
 
 ## Please add support for device X
@@ -250,6 +252,18 @@ If you have an updated fingerprint available (and you've [posted it](https://git
 You can enter the fingerprint manually in the `Edit device fingerprint` menu in the module, you can use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#configuration-file), or you can make a [custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#custom-fingerprints-list).
 
 
+## Force BASIC key attestation
+As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` props.
+
+By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If no model prop value from an old enough device is available, the value from ro.product.device will be used instead.
+
+It is also possible to pick a device manually from the list of fingerprints or set your own custom value.
+
+Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate ro.product.model will be disabled when this feature is enabled.
+
+Thanks to @Displax over at XDA-Developers for bringing this to everyones attention. 
+
+
 ## Device simulation
 **_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it!_**
 
@@ -263,10 +277,10 @@ If you want to simulate a specific device (to get access to device specific apps
 - ro.build.display.id
 - ro.build.version.sdk
 - ro.product.manufacturer
-- ro.product.model
+- ro.product.model (disabled if [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) is enabled)
 
 By default all props are disabled when this option is activated, but it is possible to activate or deactivate each prop individually or all of them at once. It is also possible to activate several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma.
-Example: If I would like to activate ro.product.name, ro.product.device and ro.product.model I would enter __"2,3,10"__.
+Example: If I would like to activate ro.product.name, ro.product.device and ro.product.manufacturer I would enter __"2,3,9"__.
 
 There are also several partition specific variations of some of the used props (system, vendor, product, odm). If these are available they will also be set to the simulation prop value. This can be disabled in the option settings.
 
@@ -366,6 +380,17 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 ### Known issues
 For the moment, nothing special (I think). If you've got issues, take a look at the most common problems listed below.
 
+### Device issues because of the module
+A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
+
+In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults or to disable the module without resetting.
+
+Create a file (named `reset_mhpc` or `disable_mhpc` depending on your needs, keep reading for details) in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. If you want to reset the module, name the file `reset_mhpc`, or if you want to disable the module name it `disable_mhpc`. If you disable the module it can later be enabled again from the Magisk Manager.
+
+If your device does not have access to /sdcard, /data or /cache through recovery (or there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
+
+The reset file can be use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
+
 ### props not found
 There are two common reasons why you would get an error saying "not found" when running the `props` command in a terminal emulator.
 
@@ -415,17 +440,6 @@ If the interface of the props script looks strange, with a lot of gibberish alon
 ### Boot takes a lot longer after setting props
 If boot takes longer than usual after setting a new fingerprint or a custom prop, try changing the [boot stage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) to post-fs-data.
 
-### Device issues because of the module
-A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
-
-In case of issues, if you've set a prop value that doesn't work on your device causing it not to boot, etc, don't worry. There are options. You can follow the advice in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/Magisk#hn_Module_causing_issues_Magisk_functionality_bootloop_loss_of_root_etc) to remove or disable the module, or you can use the module's built-in options to reset all module settings to the defaults or to disable the module without resetting.
-
-Create a file (named `reset_mhpc` or `disable_mhpc` depending on your needs, keep reading for details) in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. If you want to reset the module, name the file `reset_mhpc`, or if you want to disable the module name it `disable_mhpc`. If you disable the module it can later be enabled again from the Magisk Manager.
-
-If your device does not have access to /sdcard, /data or /cache through recovery (or there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
-
-The reset file can be use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
-
 ### The screen goes black momentarily at boot
 This is caused by the [MagiskHide Sensitive props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setreset-magiskhide-sensitive-props) function of the module doing a soft reboot at the end of the boot cycle. This is necessary to reaload the prop values properly.
 
@@ -456,7 +470,8 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 ## Credits
 @topjohnwu @ XDA Developers, for Magisk.  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
-@Some_Random_Username for all the OnePlus fingerprints.
+@Some_Random_Username, for all the OnePlus fingerprints.
+@Displax, for all the prints and the basic attestation workaround.
 @ipdev, for being always helpful and bringing tons of fingerprints to the module list.  
 And of course, everyone that provides fingerprints for me to add to the list. The module wouldn't be the same without you guys. Thank you!
 
@@ -471,6 +486,10 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.3.0  
+- Added a new feature to force SafteyNet's bootloader check to use basic attestation rather than hardware. See the documentation for details.
+- Added fingerprints for Asus ZenFone Max Pro M2, Fxtec Pro 1, Huawei Honor 6X BLN-L22, Lenovo Tab 4 8 Plus, LG V30, OnePlus 7, 7 Pro, 7T, 7T Pro, 8 and 8 Pro (Chinese variants), OnePlus Nord, Redmi Note 9 Pro, Samsung Galaxy A3 2016 and 2027 and Galaxy Tab 4 7.0, 8.0 and 10.1 and Xiaomi Redmi K20 Pro India. Updated fingerprints for OnePlus 7 Pro NR and 7 Pro NR Spr, 8 (almost all variants) and 8 Pro (all variants), Redmi Note 8 Pro and Xiaomi Mi A1, Mi A3 and Redmi 8. List updated to v95.
+
 ### v5.2.7  
 - Added a new run option to set custom props directly from the command prompt. See the documentation for details. Shoutout to @ps000000 @ XDA Developers for putting the idea in my head.
 - Added fingerprints for OnePlus 8 IN2019, Realme X2 Pro, Samsung Galaxy A90 5G and Tab A 8.0 LTE 2019. Updated fingerprints for Google Pixel 2-4 (all variants), Huawei P20, OnePlus 8 IN2017, POCO X2 and Xiaomi Mi A1, Mi A2, Mi A2 Lite and Mi A3. Fingerprints list updated to v94.
@@ -821,7 +840,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v94  
+### List v95  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
@@ -829,11 +848,13 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Asus Zenfone 6 ASUS_I01WD (9)
 - Asus Zenfone Max M1 ASUS_X00PD (8.0.0)
 - Asus Zenfone Max Pro M1 ASUS_X00TD (8.1.0)
+- Asus Zenfone Max Pro M2 ASUS_X01BD (9)
 - Asus ZenPad S 8.0 P01MA (6.0.1)
 - BLU S1 (7.0)
 - Elephone U Pro (8.0.0)
 - Essential PH-1 (7.1.1 & 8.1.0 & 9 & 10)
 - Fairphone 2 (6.0.1)
+- Fxtec Pro 1 (9)
 - Google Nexus 4 (5.1.1)
 - Google Nexus 5 (6.0.1)
 - Google Nexus 5X (6.0 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
@@ -863,6 +884,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - HTC U12 Plus (8.0.0 & 9)
 - HTC Exodus 1 (9)
 - Huawei Honor 6X BLN-AL10 (8.0.0)
+- Huawei Honor 6X BLN-L22 (8.0.0)
 - Huawei Honor 8X JSN-L21 (8.1.0)
 - Huawei Honor 9 STF-L09 (8.0.0 & 9)
 - Huawei Mate 10 ALP-L29 (8.0.0)
@@ -879,6 +901,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Huawei P20 Pro CLT-L29 (8.1.0 & 9)
 - Infinix Note 5 (9 & 10)
 - Lenovo K6 Note (7.0)
+- Lenovo Tab 4 8 Plus TB-8704F (8.1.0)
 - Lenovo Tab 4 10 Plus TB-X704F (7.1.1)
 - Lenovo Tab 4 10 Plus TB-X704L (7.1.1)
 - LeEco Le Pro3 (6.0.1)
@@ -897,6 +920,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - LG V20 US996 (8.0.0)
 - LG V20 VS995 (8.0.0)
 - LG V30 H930 (8.0.0)
+- LG V30 LS998 (8.0.0)
 - Mecool KM8 (8.0.0 & 9)
 - Meizu X8 (8.1.0)
 - Motorola Moto C Plus (7.0)
@@ -941,30 +965,38 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 6 (8.1.0 & 9 & 10)
 - OnePlus 6T (9 & 10)
 - OnePlus 6T T-Mobile (9)
+- OnePlus 7 GM1900 (10)
 - OnePlus 7 GM1901 (9 & 10)
 - OnePlus 7 GM1903 (9 & 10)
 - OnePlus 7 GM1905 (9 & 10)
+- OnePlus 7 Pro GM1910 (10)
 - OnePlus 7 Pro GM1911 (9 & 10)
 - OnePlus 7 Pro GM1913 (9 & 10)
 - OnePlus 7 Pro GM1915 (9)
 - OnePlus 7 Pro GM1917 (9 & 10)
 - OnePlus 7 Pro NR GM1920 (9 & 10)
 - OnePlus 7 Pro NR Spr GM1925 (9 & 10)
+- OnePlus 7T HD1900 (10)
 - OnePlus 7T HD1901 (10)
 - OnePlus 7T HD1903 (10)
 - OnePlus 7T HD1905 (10)
+- OnePlus 7T Pro HD1910 (10)
 - OnePlus 7T Pro HD1911 (10)
 - OnePlus 7T Pro HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
 - OnePlus 7T Pro NR HD1925 (10)
+- OnePlus 8 IN2010 (10)
 - OnePlus 8 IN2011 (10)
 - OnePlus 8 IN2013 (10)
 - OnePlus 8 IN2015 (10)
 - OnePlus 8 IN2017 (10)
 - OnePlus 8 IN2019 (10)
+- OnePlus 8 Pro IN2020 (10)
 - OnePlus 8 Pro IN2021 (10)
 - OnePlus 8 Pro IN2023 (10)
 - OnePlus 8 Pro IN2025 (10)
+- OnePlus Nord AC2001 (10)
+- OnePlus Nord AC2003 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - POCO F2 Pro (10)
@@ -975,9 +1007,12 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Redmi K30 Pro (10)
 - Redmi K30 Pro Zoom Edition (10)
 - Redmi Note 8 Pro India (9 & 10)
-- Redmi Note 8 Pro Russia (10)
+- Redmi Note 8 Pro Russia (9 & 10)
+- Redmi Note 9 Pro (10)
 - Redmi Note 9S (10)
 - Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
+- Samsung Galaxy A3 2016 SM-A310F (7.0)
+- Samsung Galaxy A3 2017 SM-A320FL (8.0.0)
 - Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
 - Samsung Galaxy A5 2017 SM-A520F (8.0.0)
 - Samsung Galaxy A6 Plus SM-A605G (9)
@@ -1026,6 +1061,9 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S10e SM-G970N (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
+- Samsung Galaxy Tab 4 7.0 SM-T230NU (4.4.2)
+- Samsung Galaxy Tab 4 8.0 SM-T330NU (5.1.1)
+- Samsung Galaxy Tab 4 10.1 SM-T530NU (5.0.2)
 - Samsung Galaxy Tab A 8.0 LTE 2019 SM-T295 (9)
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
@@ -1109,9 +1147,10 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi 6 (9)
 - Xiaomi Redmi 6A (9)
 - Xiaomi Redmi 7 (9)
-- Xiaomi Redmi 8 (9)
+- Xiaomi Redmi 8 (9 & 10)
 - Xiaomi Redmi Go (8.1.0)
-- Xiaomi Redmi K20 Pro (9 & 10)
+- Xiaomi Redmi K20 Pro China (10)
+- Xiaomi Redmi K20 Pro India (9 & 10)
 - Xiaomi Redmi Note 2 (5.0.2)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE (6.0.1)

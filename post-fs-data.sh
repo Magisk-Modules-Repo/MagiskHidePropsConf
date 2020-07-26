@@ -129,6 +129,10 @@
 			if [ "$PATCHSTAGE" == 0 ]; then
 				patch_edit "none"
 			fi
+			# Forced basic attestation
+			if [ "$BASICATTEST" == 1 ]; then
+				forced_basic "none"
+			fi
 			# Setting device simulation props
 			if [ "$SIMSTAGE" == 0 ]; then
 				dev_sim_edit "none"
