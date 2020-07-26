@@ -24,9 +24,9 @@ echo ""
 # ================ Paths and variables ================
 # =====================================================
 
-ADBPATHPH=ADB_PLACEHOLDER
+ADBPATH=/data/adb
 MODPATH=$ADBPATH/modules/MagiskHidePropsConf
-LATEFILEPH=LATE_PLACEHOLDER
+LATEFILE=/data/adb/mhpc/propsconf_late
 BOOTSTAGE="props"
 
 # Development testing set to false
@@ -879,6 +879,540 @@ menu_bootstage_print_set() {
 	done
 }
 
+# ======================== Force BASIC key attestation ========================
+# Second menu level - BASIC attestation
+menu_force_basic() {
+	INPUT2=""
+	while true
+	do
+		if [ "$BASICATTEST" == 0 ]; then
+			STATETXT="${G}enable${N}"
+			YTXT=" (use default value)"
+		else
+			STATETXT="${R}disable${N}"
+			YTXT=""
+		fi
+		if [ "$BASICATTCUST" ]; then
+			CUSTTXT=" ${G}active${N}"
+		else
+			CUSTTXT=""
+		fi
+		if [ "$BASICATTLIST" ]; then
+			LISTTXT=" ${G}active${N}"
+		else
+			LISTTXT=""
+		fi
+		if [ -z "$INPUT2" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to $STATETXT"
+			echo "forced BASIC key attestation?"
+			echo ""
+			echo "The currently loaded value is:"
+			echo "${C}$(getprop ro.product.model)${N}"
+			if [ "$BASICATTEST" == 1 ] && [ "$ORIGMODEL" != "$(getprop ro.product.model)" ]; then
+				echo "(Set by this module.)"
+			fi
+			echo ""
+			echo "${G}y${N} - Yes$YTXT"
+			echo "${G}n${N} - No"
+			echo "${G}f${N} - Pick from fingerprints list$LISTTXT"
+			echo "${G}c${N} - Custom value$CUSTTXT"
+			if [ "$BASICATTCUST" ] || [ "$BASICATTLIST" ]; then
+				echo "${G}r${N} - Reset"
+			fi
+			echo "${G}e${N} - Exit"
+			echo ""
+			if [ "$BASICATTEST" == 0 ]; then
+				echo "This may disable some device"
+				echo "specific features, like the"
+				echo "Samsung Galaxy Store. YMMV."
+				echo ""
+			fi
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter your desired option: "
+			read -r INPUT2
+		fi
+		case "$INPUT2" in
+			y|Y)
+				forced_basic "$1"
+				INPUT=""
+			;;
+			n|N)
+				INPUT=""
+				break
+			;;
+			f|F)
+				forced_list_menu "$1"
+				INPUT=""
+			;;
+			c|C)
+				forced_custom_menu "$1"
+				INPUT=""
+			;;
+			r|R)
+				if [ "$BASICATTCUST" ] || [ "$BASICATTLIST" ]; then
+					forced_reset_menu "$1"
+					INPUT=""
+					break
+				else
+					invalid_input 1 2
+				fi
+			;;
+			e|E) exit_fn
+			;;
+			*) invalid_input 1 2
+			;;
+		esac
+	done
+}
+
+# Third menu level - Pick from list
+forced_list_menu() {
+	INPUT3=""
+	OEMLIST=""
+	HEADERPRINTV="${C}$1${N}\n List version - v$(get_file_value $PRINTSLOC "PRINTSV=")\n Select an option below."
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			# Load the list of fingerprint files
+			log_handler "Loading fingerprints list v$(get_file_value $PRINTSLOC "PRINTSV=")."
+			OEMLIST="$(ls $PRINTFILES | sed 's|\.sh||g')"
+			if [ "$OEMLIST" ]; then
+				ITEMCOUNT=1
+				menu_header "$HEADERPRINTV"
+				echo ""
+				for ITEM in $OEMLIST; do
+					echo "${G}$ITEMCOUNT${N} - $ITEM"
+					ITEMCOUNT=$(($ITEMCOUNT+1))
+				done
+				echo ""
+				if [ "$BASICATTLIST" ]; then
+					echo "The currently set list value is:"
+					echo "${C}$BASICATTLIST${N}"
+					echo ""
+					echo "${G}r${N} - Reset list value"
+				else
+					echo "Currently the default/custom"
+					echo "values are being used."
+					echo ""
+				fi
+				echo "${G}b${N} - Go back"
+				echo "${G}e${N} - Exit"
+				echo ""
+				echo -n "Enter your desired option: "
+				read -r INPUT3
+			else
+				log_handler "No fingerprints list."
+				collect_logs "issue"
+				menu_header "${C}$1${N}\n Something's wrong!"
+				echo "Hm... That's not right."
+				echo ""
+				echo "There is currently no fingerprints list"
+				echo "available. Try updating it manually."
+				echo ""
+				echo "If the issue persists, report it in the"
+				echo "support thread @ XDA, ${R}with logs!${C}"
+				echo ""
+				echo "Logs have automatically been saved to"
+				echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+				echo ""
+				echo -n "Press enter to continue..."
+				read -r INPUTTMP
+				INPUT2=""
+				break
+			fi
+		fi
+		case "$INPUT3" in
+			r|R)
+				if [ "$BASICATTLIST" ]; then
+					forced_list_reset_menu "$1"
+					INPUT2=""
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			b|B)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$INPUT3" -ge 1 -a "$INPUT3" -lt "$ITEMCOUNT" ]; then
+					ITEMCOUNT=1
+					for ITEM in $OEMLIST; do
+						if [ "$ITEMCOUNT" == "$INPUT3" ]; then
+							forced_list_pick_menu "$HEADERPRINTV" "$ITEM"
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+				else
+					invalid_input 1 3
+				fi
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - reset list value
+forced_list_reset_menu() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Are you sure you want to reset"
+			echo "the list value for forced BASIC"
+			echo "key attestation to the default."
+			echo ""
+			echo "${G}y${N} - Yes"
+			echo "${G}n${N} - No"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				forced_reset "$1" 1
+				INPUT2=""
+				INPUT3=""
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*) invalid_input 3 4
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - pick from list
+forced_list_pick_menu() {
+	# Loading fingerprints
+	TMPFILE=$PRINTFILES/$2.sh
+	if [ -f "$TMPFILE" ]; then
+		. $TMPFILE
+		INPUT4=""
+	else
+		menu_header "$1"
+		log_handler "Can't find '$TMPFILE'."
+		collect_logs "issue"
+		echo "Oh no! Something went wrong..."
+		echo ""
+		echo "Can't find the fingerprints file."
+		echo "Try updating it manually."
+		echo ""
+		echo "If the issue persists, report it in the"
+		echo "support thread @ XDA, ${R}with logs!${C}"
+		echo ""
+		echo "Logs have automatically been saved to"
+		echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+		echo ""
+		echo -n "Press enter to continue..."
+		read -r INPUTTMP
+		INPUT4="b"
+	fi
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			ITEMCOUNT=1
+			menu_header "$1"
+			echo ""
+			SAVEIFS=$IFS
+			IFS=$(echo -en "\n\b")
+			for ITEM in $PRINTSLIST; do
+				if [ "$(get_first $ITEM)" == "$2" ]; then
+					echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+					ITEMCOUNT=$(($ITEMCOUNT+1))
+				fi
+			done
+			IFS=$SAVEIFS
+			echo "${G}b${N} - Go back"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo -n "Enter your desired option: "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			b|B)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$INPUT4" -ge 1 -a "$INPUT4" -lt "$ITEMCOUNT" ]; then
+					ITEMCOUNT=1
+					SAVEIFS=$IFS
+					IFS=$(echo -en "\n\b")
+					for ITEM in $PRINTSLIST; do
+						if [ "$ITEMCOUNT" == "$INPUT4" ]; then
+							IFS=$SAVEIFS
+							forced_list_confirm_menu "$1" "$(get_eq_left "$ITEM" | sed "s|^.*\:||")"
+							INPUT2=""
+							INPUT3=""
+							break
+						fi
+						ITEMCOUNT=$(($ITEMCOUNT+1))
+					done
+					IFS=$SAVEIFS
+				else
+					invalid_input 1 4
+				fi
+			;;
+		esac
+	done
+}
+
+# Fifth menu level - confirm list value
+forced_list_confirm_menu() {
+	INPUT5=""
+	while true
+	do
+		if [ -z "$INPUT5" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to use the following"
+			echo "as the value for the module props?"
+			echo ""
+			echo "${C}$2${N}"
+			echo ""
+			if [ "$BASICATTLIST" ]; then
+				echo "The currently set list value is:"
+				echo "${C}$BASICATTLIST${N}"
+			else
+				echo "Currently the default/custom"
+				echo "values are being used."
+			fi
+			echo ""
+			echo "${G}y${N} - Yes"
+			echo "${G}n${N} - No"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT5
+		fi
+		case "$INPUT5" in
+			y|Y)
+				forced_list_confirm "$1" "$2"
+				INPUT2=""
+				INPUT3=""
+				INPUT4=""
+				break
+			;;
+			n|N)
+				INPUT4=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*) invalid_input 3 5
+			;;
+		esac
+	done
+}
+
+# Third menu level - set custom value
+forced_custom_menu() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Enter the value you want the"
+			echo "module props to have, or pick"
+			echo "an option below."
+			echo ""
+			if [ "$BASICATTCUST" ]; then
+				echo "The currently set custom value is:"
+				echo "${C}$BASICATTCUST${N}"
+				echo ""
+				echo "${G}r${N} - Reset custom value"
+			else
+				echo "Currently the default/list"
+				echo "values are being used."
+				echo ""
+			fi
+			echo "${G}b${N} - Back"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter your desired option: "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			r|R)
+				if [ "$BASICATTCUST" ]; then
+					forced_custom_reset_menu "$1"
+					INPUT2=""
+					break
+				else
+					invalid_input 1 3
+				fi
+			;;
+			b|B)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*) forced_custom_confirm_menu "$1" "$INPUT3"
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - reset custom value
+forced_custom_reset_menu() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Are you sure you want to reset"
+			echo "the custom value for forced BASIC"
+			echo "key attestation to the default."
+			echo ""
+			echo "${G}y${N} - Yes"
+			echo "${G}n${N} - No"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				forced_reset "$1" 2
+				INPUT2=""
+				INPUT3=""
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*) invalid_input 3 4
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - confirm custom value
+forced_custom_confirm_menu() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to use the following"
+			echo "as the value for the module props?"
+			echo ""
+			echo "${C}$2${N}"
+			echo ""
+			if [ "$BASICATTCUST" ]; then
+				echo "The currently set custom value is:"
+				echo "${C}$BASICATTCUST${N}"
+			else
+				echo "Currently the default module"
+				echo "values are being used."
+			fi
+			echo ""
+			echo "${G}y${N} - Yes"
+			echo "${G}n${N} - No"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				forced_custom_confirm "$1" "$2"
+				INPUT2=""
+				INPUT3=""
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*) invalid_input 3 4
+			;;
+		esac
+	done
+}
+
+# Third menu level - reset
+forced_reset_menu() {
+	INPUT3=""
+	while true
+	do
+		if [ -z "$INPUT3" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Are you sure you want to reset"
+			echo "the custom/list value for forced"
+			echo "BASIC key attestation to the default."
+			echo ""
+			echo "${G}y${N} - Yes"
+			echo "${G}n${N} - No"
+			echo "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT3
+		fi
+		case "$INPUT3" in
+			y|Y)
+				forced_reset "$1" 3
+				INPUT2=""
+				break
+			;;
+			n|N)
+				INPUT2=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*) invalid_input 3 3
+			;;
+		esac
+	done
+}
+
 # ======================== Device simulation ========================
 # Second menu level - Device simulation
 menu_dev_sim() {
@@ -981,7 +1515,11 @@ menu_dev_sim() {
 				echo "${G} 8${N} - ro.build.display.id${DISPTXT}"
 				if [ "$SIMMANUFACTURER" ] && [ "$SIMMODEL" ]; then
 					echo "${G} 9${N} - ro.product.manufacturer${MANUFACTURERTXT}"
-					echo "${G}10${N} - ro.product.model${MODELTXT}"
+					if [ "$BASICATTEST" == 0 ]; then
+						echo "${G}10${N} - ro.product.model${MODELTXT}"
+					else
+						echo "(Simulating ro.product.model is currently disabled.)"
+					fi
 					MANMODEN=true
 				else
 					MANMODEN=false
@@ -1023,10 +1561,24 @@ menu_dev_sim() {
 								if [ "$MANMODEN" == "false" ]; then
 									invalid_input 1 2
 								else
-									if [ -z "$NUMCHECK" ]; then
-										menu_dev_sim_prop "$1" "$INPUT2"
+									if [ "$BASICATTEST" == 1 ]; then
+										case "$INPUT2" in
+											*10*) invalid_input 7 2
+											;;
+											*)
+												if [ -z "$NUMCHECK" ]; then
+													menu_dev_sim_prop "$1" "$INPUT2"
+												else
+													invalid_input 7 2
+												fi
+											;;
+										esac
 									else
-										invalid_input 7 2
+										if [ -z "$NUMCHECK" ]; then
+											menu_dev_sim_prop "$1" "$INPUT2"
+										else
+											invalid_input 7 2
+										fi
 									fi
 								fi
 							;;
@@ -1040,7 +1592,11 @@ menu_dev_sim() {
 							if [ "$MANMODEN" == "false" ] && [ "$INPUT2" == 9 -o "$INPUT2" == 10 ]; then
 								invalid_input 1 2
 							else
-								menu_dev_sim_prop "$1" "$INPUT2"
+								if [ "$BASICATTEST" == 1 ] && [ "$INPUT2" == 10 ]; then
+									invalid_input 1 2
+								else
+									menu_dev_sim_prop "$1" "$INPUT2"
+								fi
 							fi
 						else
 							invalid_input 1 2
@@ -3174,6 +3730,7 @@ do
 		ACTIVE="${G} (active)${N}"
 		DISABLED="${R} (disabled)${N}"
 		PRINTTXT=""
+		BASICTXT=""
 		DEVTXT=""
 		FILETXT=""
 		PROPTXT=""
@@ -3184,6 +3741,9 @@ do
 				PRINTTXT=$DISABLED
 			elif [ "$PRINTEDIT" == 1 ]; then
 				PRINTTXT=$ACTIVE
+			fi
+			if [ "$BASICATTEST" == 1 ]; then
+				BASICTXT=$ACTIVE
 			fi
 			if [ "$FINGERPRINTENB" == 0 ] || [ "$PRINTEDIT" == 0 ]; then
 				DEVTXT=$DISABLED
@@ -3202,12 +3762,13 @@ do
 			menu_header "Select an option below."
 			echo ""
 			echo "${G}1${N} - Edit device fingerprint${PRINTTXT}"
-			echo "${G}2${N} - Device simulation${DEVTXT}"
-			echo "${G}3${N} - Edit MagiskHide props${PROPTXT}"
-			echo "${G}4${N} - Add/edit custom props${CUSTTXT}"
-			echo "${G}5${N} - Delete prop values${DELTXT}"
-			echo "${G}6${N} - Script settings"
-			echo "${G}7${N} - Collect logs"
+			echo "${G}2${N} - Force BASIC key attestation${BASICTXT}"
+			echo "${G}3${N} - Device simulation${DEVTXT}"
+			echo "${G}4${N} - Edit MagiskHide props${PROPTXT}"
+			echo "${G}5${N} - Add/edit custom props${CUSTTXT}"
+			echo "${G}6${N} - Delete prop values${DELTXT}"
+			echo "${G}7${N} - Script settings"
+			echo "${G}8${N} - Collect logs"
 			echo "${G}r${N} - Reset all options/settings"
 			echo "${G}b${N} - Reboot device"
 			echo "${G}e${N} - Exit"
@@ -3231,17 +3792,19 @@ do
 		case "$INPUT" in
 			1) menu_change_fingerprint "Edit device fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
 			;;
-			2) menu_dev_sim "Device simulation${DEVTXT}"
+			2) menu_force_basic "Force BASIC key attestation${BASICTXT}"
 			;;
-			3) menu_magiskhide_props "MagiskHide props${PROPTXT}"
+			3) menu_dev_sim "Device simulation${DEVTXT}"
 			;;
-			4) menu_custom_props "Custom props${CUSTTXT}"
+			4) menu_magiskhide_props "MagiskHide props${PROPTXT}"
 			;;
-			5) menu_delete_props "Delete props${DELTXT}"
+			5) menu_custom_props "Custom props${CUSTTXT}"
 			;;
-			6) menu_options "Script settings"
+			6) menu_delete_props "Delete props${DELTXT}"
 			;;
-			7) menu_logs "Collect logs"
+			7) menu_options "Script settings"
+			;;
+			8) menu_logs "Collect logs"
 			;;
 			r|R) reset_everything "Reset all options/settings"
 			;;
