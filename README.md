@@ -467,7 +467,7 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config)
 
 
-## Credits
+## Credits and mentions
 @topjohnwu @ XDA Developers, for Magisk.  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
 @Some_Random_Username, for all the OnePlus fingerprints.
