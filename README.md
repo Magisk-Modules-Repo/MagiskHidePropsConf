@@ -253,13 +253,13 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Force BASIC key attestation
-As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` props (to pass the CTS profile check even with an unlocked bootloader). Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
+As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` props (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter partition specific props (odm, product, system and vendor) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
 
-By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If no model prop value from an old enough device is available, the value from ro.product.device will be used instead.
+By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
 
 It is also possible to pick a device manually from the list of fingerprints or set your own custom value.
 
-Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate ro.product.model will be disabled when this feature is enabled.
+Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled.
 
 Thanks to @Displax over at XDA-Developers for bringing this to everyones attention. 
 
