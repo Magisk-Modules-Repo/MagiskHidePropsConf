@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=95
+PRINTSV=96
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -317,8 +317,8 @@ Xiaomi Redmi 6A (9):Xiaomi:Redmi 6A=xiaomi/cactus/cactus:9/PPR1.180610.011/V11.0
 Xiaomi Redmi 7 (9):Xiaomi:Redmi 7=xiaomi/onc/onc:9/PKQ1.181021.001/V11.0.5.0.PFLMIXM:user/release-keys__2020-03-01
 Xiaomi Redmi 8 (9 & 10):Xiaomi:Redmi 8=Xiaomi/olive/olive:9/PKQ1.190319.001/V11.0.7.0.PCNCNXM:user/release-keys__2019-12-01;Xiaomi/olive/olive:10/QKQ1.191014.001/V11.0.1.0.QCNCNXM:user/release-keys__2020-06-01
 Xiaomi Redmi Go (8.1.0):Xiaomi:Redmi Go=Xiaomi/tiare/tiare:8.1.0/OPM1.171019.026/V10.2.6.0.OCLMIXM:user/release-keys__2019-01-01
-Xiaomi Redmi K20 Pro China (9 & 10):Xiamoi:Redmi K20 Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01;Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
-Xiaomi Redmi K20 Pro India (10):Xiamoi:Redmi K20 Pro=Xiaomi/raphaelin/raphaelin:10/QKQ1.190825.002/V12.0.2.0.QFKINXM:user/release-keys__2020-06-01
+Xiaomi Redmi K20 Pro China (9 & 10):Xiaomi:Redmi K20 Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01;Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
+Xiaomi Redmi K20 Pro India (10):Xiaomi:Redmi K20 Pro=Xiaomi/raphaelin/raphaelin:10/QKQ1.190825.002/V12.0.2.0.QFKINXM:user/release-keys__2020-06-01
 Xiaomi Redmi Note 2 (5.0.2):Xiaomi:Redmi Note 2=Xiaomi/hermes/hermes:5.0.2/LRX22G/V9.2.4.0.LHMMIEK:user/release-keys
 Xiaomi Redmi Note 3 Pro (6.0.1):Xiaomi:Redmi Note 3=Xiaomi/kenzo/kenzo:6.0.1/MMB29M/V8.2.1.0.MHOCNDL:user/release-keys
 Xiaomi Redmi Note 3 Pro SE (6.0.1):Xiaomi:Redmi Note 3=Xiaomi/kate/kate:6.0.1/MMB29M/V8.1.3.0.MHRMIDI:user/release-keys
