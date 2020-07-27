@@ -470,8 +470,8 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 ## Credits and mentions
 @topjohnwu @ XDA Developers, for Magisk.  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
-@Some_Random_Username, for all the OnePlus fingerprints.
-@Displax, for all the prints and the basic attestation workaround.
+@Some_Random_Username, for all the OnePlus fingerprints.  
+@Displax, for all the prints and the basic attestation workaround.  
 @ipdev, for being always helpful and bringing tons of fingerprints to the module list.  
 And of course, everyone that provides fingerprints for me to add to the list. The module wouldn't be the same without you guys. Thank you!
 
