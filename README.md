@@ -206,7 +206,7 @@ Google Nexus 6 (7.1.1):Motorola:Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:
 ### I still can't pass the ctsProfile check
 If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
 - Make sure that [MagiskHide is enabled and working](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Test_MagiskHide).
-- Check if your device uses [hardware backed key attestation to detect an unlocked bootloader](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3). If it does, there's no way to circumvent that.
+- Check if your device uses [hardware backed key attestation to detect an unlocked bootloader](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3). If it does, you can try using the [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) option..
 - Do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
 - Go to the "Edit fingerprints menu", select "Boot stages", and start by changing the security patch date boot stage to either default or post-fs-data. If that doesn't work, also try changing the fingerprint boot stage to post-fs-data. The default boot stage can also be changed if you go into the script options and change the boot stage to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
 - Try a different fingerprint (pick one from the provided list). You might want to reset the "Boot stage" settings to the default values first though.
@@ -253,7 +253,7 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Force BASIC key attestation
-As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` props.
+As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` props. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
 
 By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If no model prop value from an old enough device is available, the value from ro.product.device will be used instead.
 
