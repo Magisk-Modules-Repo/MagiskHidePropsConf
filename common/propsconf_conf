@@ -9,13 +9,17 @@
 # =================================================================
 
 # Required module version (or newer). Do not edit this value!
-CONFTRANSF=520
+CONFTRANSF=531
 
 # Device fingerprint
 CONFFINGERPRINT=""
 CONFVENDPRINT=false
 CONFPRINTBOOT=default
 CONFPATCHBOOT=late
+
+# Force BASIC attestation
+CONFBASICATTEST=false
+CONFBASICATTCUST=""
 
 # Device simulation
 CONFDEVSIM=false
@@ -44,6 +48,7 @@ CONFSELINUX=""
 CONFPROPS=""
 CONFPROPSPOST=""
 CONFPROPSLATE=""
+CONFPROPSDELAY=""
 PROPOPTION=replace
 
 # Delete props
@@ -69,7 +74,8 @@ CONFBACK=false
 # Example:
 # CONFFINGERPRINT=preserve
 
-# When placed in /cache or /data, the module will load these
+# When placed in the root of your internal storage (/sdcard), in /data
+# or in /cache (or /data/cache if you're using an A/B device), the module will load these
 # values during boot and the configuration file will be deleted. Keep a backup of the
 # file if you want to reuse it at a later time (clean ROM flash, etc).
 
@@ -104,6 +110,11 @@ CONFBACK=false
 # the prop will be set during either the default or post-fs-data stage. The
 # late_start service boot stage is used by default as to not cause issues for devices with 
 # Keymaster 4 (bootloops). If the prop doesn't seem to set properly, try changing the stage.
+
+# CONFBASICATTEST is used to enable Forced BASIC attestation, which is done by changing the
+# variable to 'true'. To set a custom value, change CONFBASICATTCUST to the value you want.
+# Example:
+# CONFBASICATTCUST="randommodelname"
 
 # CONFDEVSIM and the following CONFBRAND, CONFNAME, CONFDEVICE, CONFRELEASE
 # CONFID, CONFINCREMENTAL, CONFDESCRIPTION, CONFDISPLAY, CONFSDK, CONFMANUFACTURER and CONFMODEL
@@ -142,6 +153,9 @@ CONFBACK=false
 # If you want a specific prop to run in either post-fs-data or late_start service,
 # use either CONFPROPSPOST or CONFPROPSLATE instead. Any props added to CONFPROPS
 # will run in the boot stage currently set in the module options (see CONFLATE below).
+#
+# The CONFPROPSDELAY option is used to set a delay for when a specific custom prop is set. Will automacially
+# set the prop during the late_start service boot stage.
 #
 # With PROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",

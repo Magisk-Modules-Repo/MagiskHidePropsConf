@@ -24,9 +24,9 @@ echo ""
 # ================ Paths and variables ================
 # =====================================================
 
-ADBPATH=/data/adb
+ADBPATHPH=ADB_PLACEHOLDER
 MODPATH=$ADBPATH/modules/MagiskHidePropsConf
-LATEFILE=/data/adb/mhpc/propsconf_late
+LATEFILEPH=LATE_PLACEHOLDER
 BOOTSTAGE="props"
 
 # Development testing set to false
@@ -83,7 +83,7 @@ set -x 2>$VLOGFILE
 log_handler "Running props script."
 
 # Checking for Busybox
-if [ -z "$BBPATH" ]; then
+if [ ! -f "$BBPATH" ]; then
 	menu_header "${C}No Busybox found${N}"
 	echo ""
 	echo "The script couldn't find Magisk's Busybox."
@@ -120,14 +120,14 @@ blank_input() {
 	esac
 
 	echo ""
-	echo "${R}Don't enter an empty value${N}."
+	echo -e "${R}Don't enter an empty value${N}."
 	echo "Try again."
 	sleep 2
 }
 
 active_option() {
 	echo ""
-	echo "${R}That's already the active option.${N}"
+	echo -e "${R}That's already the active option.${N}"
 	sleep 2
 }
 
@@ -150,6 +150,8 @@ invalid_input() {
 		;;
 		7) INPMSG="Only pick numbers, separated by a comma."
 		;;
+		8) INPMSG="Only enter numbers, or an option from above."
+		;;
 	esac
 
 	# Find menu level
@@ -171,7 +173,7 @@ invalid_input() {
 	esac
 
 	echo ""
-	echo "${R}Invalid input${N}. $INPMSG"
+	echo -e "${R}Invalid input${N}. $INPMSG"
 	sleep 2
 }
 
@@ -183,7 +185,7 @@ exit_fn() {
 }
 
 # ======================== Device's fingerprint ========================
-# Second menu level - fingerprint
+# Second menu level - fingerprint, $1=header, $2=Current fingerprint, $3=Original fingerprint, $4=Module set fingerprint
 menu_change_fingerprint() {
 	rm -f $CSTMFILE
 	if [ "$DEVPRINTS" == "true" ]; then
@@ -230,11 +232,11 @@ menu_change_fingerprint() {
 					if [ "$PRINTMODULETXT" ]; then
 						get_device_used "$2"
 					fi
-					echo ${C}$2${N}
+					echo -e ${C}$2${N}
 					if [ "$2" != "$3" ]; then
 						echo ""
 						echo "The original value is:"
-						echo ${C}$3${N}
+						echo -e ${C}$3${N}
 					fi
 				else
 					echo "ro.build.fingerprint doesn't seem to"
@@ -246,9 +248,9 @@ menu_change_fingerprint() {
 				echo ""
 				$(magiskhide status)
 				echo ""
-				echo "${G}f${N} - Pick a certified fingerprint"
+				echo -e "${G}f${N} - Pick a certified fingerprint"
 				if [ "$PRINTMODULETXT" ]; then
-					echo "${G}r${N} - Reset fingerprint"
+					echo -e "${G}r${N} - Reset fingerprint"
 				fi
 				if [ "$ORIGVENDPRINT" ]; then
 					if [ "$PRINTVEND" == 1 ]; then
@@ -256,18 +258,18 @@ menu_change_fingerprint() {
 					else
 						VENDTXT=""
 					fi
-					echo "${G}v${N} - Use vendor fingerprint (for Treble GSI ROMs)${VENDTXT}"
+					echo -e "${G}v${N} - Use vendor fingerprint (for Treble GSI ROMs)${VENDTXT}"
 				fi
 				if [ "$OPTIONWEB" == 0 ]; then
-					echo "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
+					echo -e "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
 				fi
-				echo "${G}s${N} - Boot stages (${C}${PRINTSTAGETXT}/${PATCHSTAGETXT}${N})."
-				echo "${G}b${N} - Go back."
-				echo "${G}e${N} - Exit"
+				echo -e "${G}s${N} - Boot stages (${C}${PRINTSTAGETXT}/${PATCHSTAGETXT}${N})."
+				echo -e "${G}b${N} - Go back."
+				echo -e "${G}e${N} - Exit"
 				echo ""
 				if [ "$PRINTCHK" == 1 ]; then
-					echo "${R}The device fingerprint has been updated.${N}"
-					echo "${R}Please reboot to apply.${N}"
+					echo -e "${R}The device fingerprint has been updated.${N}"
+					echo -e "${R}Please reboot to apply.${N}"
 					echo ""
 				fi
 				echo "See the module readme or the"
@@ -322,7 +324,7 @@ menu_change_fingerprint() {
 	done
 }
 
-# Third menu level - pick fingerprint
+# Third menu level - pick fingerprint, $1=header
 menu_pick_print() {
 	DEVPRINTS="" # Disable automatically entering the fingerprints list after the first time.
 	INPUT3=""
@@ -355,15 +357,15 @@ menu_pick_print() {
 					TMPDEVPRINT="$(getprop ro.build.fingerprint)"
 					echo "Currently set to:"
 					get_device_used $TMPDEVPRINT
-					echo "${C}$TMPDEVPRINT${N}"
+					echo -e "${C}$TMPDEVPRINT${N}"
 					echo ""
 				fi
 				for ITEM in $OEMLIST; do
-					echo "${G}$ITEMCOUNT${N} - $ITEM"
+					echo -e "${G}$ITEMCOUNT${N} - $ITEM"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				done
-				echo "${G}b${N} - Go back"
-				echo "${G}e${N} - Exit"
+				echo -e "${G}b${N} - Go back"
+				echo -e "${G}e${N} - Exit"
 				echo ""
 				echo -n "Enter your desired option: "
 				read -r INPUT3
@@ -377,10 +379,10 @@ menu_pick_print() {
 				echo "available. Try updating it manually."
 				echo ""
 				echo "If the issue persists, report it in the"
-				echo "support thread @ XDA, ${R}with logs!${C}"
+				echo -e "support thread @ XDA, ${R}with logs!${C}"
 				echo ""
 				echo "Logs have automatically been saved to"
-				echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+				echo -e "your internal storage ${R}(propslogs.tar.gz)${C}."
 				echo ""
 				echo -n "Press enter to continue..."
 				read -r INPUTTMP
@@ -413,7 +415,7 @@ menu_pick_print() {
 	done
 }
 
-# Fourth menu level - pick fingerprint
+# Fourth menu level - pick fingerprint, $1=header, $2=OEM
 menu_pick_print_sub() {
 	# Loading fingerprints
 	TMPFILE=$PRINTFILES/$2.sh
@@ -430,10 +432,10 @@ menu_pick_print_sub() {
 		echo "Try updating it manually."
 		echo ""
 		echo "If the issue persists, report it in the"
-		echo "support thread @ XDA, ${R}with logs!${C}"
+		echo -e "support thread @ XDA, ${R}with logs!${C}"
 		echo ""
 		echo "Logs have automatically been saved to"
-		echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+		echo -e "your internal storage ${R}(propslogs.tar.gz)${C}."
 		echo ""
 		echo -n "Press enter to continue..."
 		read -r INPUTTMP
@@ -449,13 +451,13 @@ menu_pick_print_sub() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$(get_first $ITEM)" == "$2" ] || [ "$2" == "Custom" ]; then
-					echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+					echo -e "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
 			done
 			IFS=$SAVEIFS
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT4
@@ -502,7 +504,7 @@ menu_pick_print_sub() {
 	done
 }
 
-# Fifth menu level - pick Android version
+# Fifth menu level - pick Android version, $1=header, $2=Device, $3=fingerprint string (without device info)
 menu_pick_print_version() {
 	INPUT5=""
 	ANDROIDV="$(get_print_versions "$2")"
@@ -516,14 +518,14 @@ menu_pick_print_version() {
 			echo "for this device, for different versions"
 			echo "of Android. Pick one."
 			echo ""
-			echo "${C}$(echo "$2" | sed 's| (.*||')${N}"
+			echo -e "${C}$(echo "$2" | sed 's| (.*||')${N}"
 			echo ""
 			for ITEM in $ANDROIDV; do
-				echo "${G}$ITEMCOUNT${N} - Android version ${C}$ITEM${N}"
+				echo -e "${G}$ITEMCOUNT${N} - Android version ${C}$ITEM${N}"
 				ITEMCOUNT=$(($ITEMCOUNT+1))
 			done
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT5
@@ -557,7 +559,7 @@ menu_pick_print_version() {
 	done
 }
 
-# Sixth menu level - confirm fingerprint
+# Sixth menu level - confirm fingerprint, $1=header, $2=fingerprint
 menu_new_print() {
 	# Check if fingerprints testing is active
 	if [ "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ]; then
@@ -575,12 +577,12 @@ menu_new_print() {
 			echo "You are about to use the following as your device's fingerprint."
 			echo ""
 			get_device_used "$2"
-			echo "${V}$(get_print_display $2)${N}"
+			echo -e "${V}$(get_print_display $2)${N}"
 			echo ""
 			echo "Make sure that it is correct before continuing."
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT6
 		fi
 		case "$INPUT6" in
@@ -610,7 +612,7 @@ menu_new_print() {
 	done
 }
 
-# Third menu level - Reset fingerprint
+# Third menu level - Reset fingerprint, $1=header
 menu_reset_print() {
 	INPUT3=""
 	while true
@@ -623,7 +625,7 @@ menu_reset_print() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -644,7 +646,7 @@ menu_reset_print() {
 	done
 }
 
-# Third menu level - Vendor fingerprint
+# Third menu level - Vendor fingerprint, $1=header
 menu_vendor_print() {
 	INPUT3=""
 	while true
@@ -661,17 +663,17 @@ menu_vendor_print() {
 		if [ -z "$INPUT3" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "This will $STATETXT using the vendor"
+			echo -e "This will $STATETXT using the vendor"
 			echo "fingerprint for Treble GSI ROMs."
 			echo ""
-			echo "The option is currently $CURRTXT."
+			echo -e "The option is currently $CURRTXT."
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -692,7 +694,7 @@ menu_vendor_print() {
 	done
 }
 
-# Third menu level - Update fingerprints list
+# Third menu level - Update fingerprints listj, $1=header
 menu_update_print() {
 	INPUT3=""
 	while true
@@ -703,7 +705,7 @@ menu_update_print() {
 			echo "Do you want to check online if there"
 			echo "is an update to the fingerprints list?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -724,7 +726,7 @@ menu_update_print() {
 	done
 }
 
-# Third menu level - Boot stage
+# Third menu level - Boot stage, $1=header
 menu_bootstage_print() {
 	INPUT3=""
 	while true
@@ -751,10 +753,10 @@ menu_bootstage_print() {
 			echo ""
 			echo "Pick an option below."
 			echo ""
-			echo "${G}1${N} - Device fingerprint$PRINTSTAGETXT."
-			echo "${G}2${N} - Security patch date$PATCHSTAGETXT."
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}1${N} - Device fingerprint$PRINTSTAGETXT."
+			echo -e "${G}2${N} - Security patch date$PATCHSTAGETXT."
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT3
@@ -782,7 +784,7 @@ menu_bootstage_print() {
 	done
 }
 
-# Fourth menu level - Set boot stage
+# Fourth menu level - Set boot stage, $1=header, $2=type (print or patch)
 menu_bootstage_print_set() {
 	INPUT4=""
 	while true
@@ -816,9 +818,9 @@ menu_bootstage_print_set() {
 			echo "${G}$CURRTXT${N}."
 			echo ""
 			echo "Do you want to change it to"
-			echo "$TMPTXT?"
+			echo -e "$TMPTXT?"
 			echo ""
-			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
@@ -880,7 +882,7 @@ menu_bootstage_print_set() {
 }
 
 # ======================== Force BASIC key attestation ========================
-# Second menu level - BASIC attestation
+# Second menu level - BASIC attestation, $1=header
 menu_force_basic() {
 	INPUT2=""
 	while true
@@ -905,23 +907,23 @@ menu_force_basic() {
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Do you want to $STATETXT"
+			echo -e "Do you want to $STATETXT"
 			echo "forced BASIC key attestation?"
 			echo ""
 			echo "The currently loaded value is:"
-			echo "${C}$(getprop ro.product.model)${N}"
+			echo -e "${C}$(getprop ro.product.model)${N}"
 			if [ "$BASICATTEST" == 1 ] && [ "$ORIGMODEL" != "$(getprop ro.product.model)" ]; then
 				echo "(Set by this module.)"
 			fi
 			echo ""
-			echo "${G}y${N} - Yes$YTXT"
-			echo "${G}n${N} - No"
-			echo "${G}f${N} - Pick from fingerprints list$LISTTXT"
-			echo "${G}c${N} - Custom value$CUSTTXT"
+			echo -e "${G}y${N} - Yes$YTXT"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}f${N} - Pick from fingerprints list$LISTTXT"
+			echo -e "${G}c${N} - Custom value$CUSTTXT"
 			if [ "$BASICATTCUST" ] || [ "$BASICATTLIST" ]; then
-				echo "${G}r${N} - Reset"
+				echo -e "${G}r${N} - Reset"
 			fi
-			echo "${G}e${N} - Exit"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			if [ "$BASICATTEST" == 0 ]; then
 				echo "This may disable some device"
@@ -969,7 +971,7 @@ menu_force_basic() {
 	done
 }
 
-# Third menu level - Pick from list
+# Third menu level - Pick from list, $1=header
 forced_list_menu() {
 	INPUT3=""
 	OEMLIST=""
@@ -985,22 +987,22 @@ forced_list_menu() {
 				menu_header "$HEADERPRINTV"
 				echo ""
 				for ITEM in $OEMLIST; do
-					echo "${G}$ITEMCOUNT${N} - $ITEM"
+					echo -e "${G}$ITEMCOUNT${N} - $ITEM"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				done
 				echo ""
 				if [ "$BASICATTLIST" ]; then
 					echo "The currently set list value is:"
-					echo "${C}$BASICATTLIST${N}"
+					echo -e "${C}$BASICATTLIST${N}"
 					echo ""
-					echo "${G}r${N} - Reset list value"
+					echo -e "${G}r${N} - Reset list value"
 				else
 					echo "Currently the default/custom"
 					echo "values are being used."
 					echo ""
 				fi
-				echo "${G}b${N} - Go back"
-				echo "${G}e${N} - Exit"
+				echo -e "${G}b${N} - Go back"
+				echo -e "${G}e${N} - Exit"
 				echo ""
 				echo -n "Enter your desired option: "
 				read -r INPUT3
@@ -1014,10 +1016,10 @@ forced_list_menu() {
 				echo "available. Try updating it manually."
 				echo ""
 				echo "If the issue persists, report it in the"
-				echo "support thread @ XDA, ${R}with logs!${C}"
+				echo -e "support thread @ XDA, ${R}with logs!${C}"
 				echo ""
 				echo "Logs have automatically been saved to"
-				echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+				echo -e "your internal storage ${R}(propslogs.tar.gz)${C}."
 				echo ""
 				echo -n "Press enter to continue..."
 				read -r INPUTTMP
@@ -1059,7 +1061,7 @@ forced_list_menu() {
 	done
 }
 
-# Fourth menu level - reset list value
+# Fourth menu level - reset list value, $1=header
 forced_list_reset_menu() {
 	INPUT4=""
 	while true
@@ -1071,14 +1073,14 @@ forced_list_reset_menu() {
 			echo "the list value for forced BASIC"
 			echo "key attestation to the default."
 			echo ""
-			echo "${G}y${N} - Yes"
-			echo "${G}n${N} - No"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
@@ -1100,7 +1102,7 @@ forced_list_reset_menu() {
 	done
 }
 
-# Fourth menu level - pick from list
+# Fourth menu level - pick from list, $1=header, $2=OEM
 forced_list_pick_menu() {
 	# Loading fingerprints
 	TMPFILE=$PRINTFILES/$2.sh
@@ -1117,10 +1119,10 @@ forced_list_pick_menu() {
 		echo "Try updating it manually."
 		echo ""
 		echo "If the issue persists, report it in the"
-		echo "support thread @ XDA, ${R}with logs!${C}"
+		echo -e "support thread @ XDA, ${R}with logs!${C}"
 		echo ""
 		echo "Logs have automatically been saved to"
-		echo "your internal storage ${R}(propslogs.tar.gz)${C}."
+		echo -e "your internal storage ${R}(propslogs.tar.gz)${C}."
 		echo ""
 		echo -n "Press enter to continue..."
 		read -r INPUTTMP
@@ -1136,13 +1138,13 @@ forced_list_pick_menu() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$(get_first $ITEM)" == "$2" ]; then
-					echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+					echo -e "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
 			done
 			IFS=$SAVEIFS
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT4
@@ -1178,7 +1180,7 @@ forced_list_pick_menu() {
 	done
 }
 
-# Fifth menu level - confirm list value
+# Fifth menu level - confirm list value, $1=header, $2=device info
 forced_list_confirm_menu() {
 	INPUT5=""
 	while true
@@ -1189,24 +1191,24 @@ forced_list_confirm_menu() {
 			echo "Do you want to use the following"
 			echo "as the value for the module props?"
 			echo ""
-			echo "${C}$2${N}"
+			echo -e "${C}$2${N}"
 			echo ""
 			if [ "$BASICATTLIST" ]; then
 				echo "The currently set list value is:"
-				echo "${C}$BASICATTLIST${N}"
+				echo -e "${C}$BASICATTLIST${N}"
 			else
 				echo "Currently the default/custom"
 				echo "values are being used."
 			fi
 			echo ""
-			echo "${G}y${N} - Yes"
-			echo "${G}n${N} - No"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT5
 		fi
 		case "$INPUT5" in
@@ -1229,7 +1231,7 @@ forced_list_confirm_menu() {
 	done
 }
 
-# Third menu level - set custom value
+# Third menu level - set custom value, $1=header
 forced_custom_menu() {
 	INPUT3=""
 	while true
@@ -1243,16 +1245,16 @@ forced_custom_menu() {
 			echo ""
 			if [ "$BASICATTCUST" ]; then
 				echo "The currently set custom value is:"
-				echo "${C}$BASICATTCUST${N}"
+				echo -e "${C}$BASICATTCUST${N}"
 				echo ""
-				echo "${G}r${N} - Reset custom value"
+				echo -e "${G}r${N} - Reset custom value"
 			else
 				echo "Currently the default/list"
 				echo "values are being used."
 				echo ""
 			fi
-			echo "${G}b${N} - Back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -1282,7 +1284,7 @@ forced_custom_menu() {
 	done
 }
 
-# Fourth menu level - reset custom value
+# Fourth menu level - reset custom value, $1=header
 forced_custom_reset_menu() {
 	INPUT4=""
 	while true
@@ -1294,14 +1296,14 @@ forced_custom_reset_menu() {
 			echo "the custom value for forced BASIC"
 			echo "key attestation to the default."
 			echo ""
-			echo "${G}y${N} - Yes"
-			echo "${G}n${N} - No"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
@@ -1323,7 +1325,7 @@ forced_custom_reset_menu() {
 	done
 }
 
-# Fourth menu level - confirm custom value
+# Fourth menu level - confirm custom value, $1=header, $2=custom input value
 forced_custom_confirm_menu() {
 	INPUT4=""
 	while true
@@ -1334,24 +1336,24 @@ forced_custom_confirm_menu() {
 			echo "Do you want to use the following"
 			echo "as the value for the module props?"
 			echo ""
-			echo "${C}$2${N}"
+			echo -e "${C}$2${N}"
 			echo ""
 			if [ "$BASICATTCUST" ]; then
 				echo "The currently set custom value is:"
-				echo "${C}$BASICATTCUST${N}"
+				echo -e "${C}$BASICATTCUST${N}"
 			else
 				echo "Currently the default module"
 				echo "values are being used."
 			fi
 			echo ""
-			echo "${G}y${N} - Yes"
-			echo "${G}n${N} - No"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
@@ -1373,7 +1375,7 @@ forced_custom_confirm_menu() {
 	done
 }
 
-# Third menu level - reset
+# Third menu level - reset, $1=header
 forced_reset_menu() {
 	INPUT3=""
 	while true
@@ -1385,14 +1387,14 @@ forced_reset_menu() {
 			echo "the custom/list value for forced"
 			echo "BASIC key attestation to the default."
 			echo ""
-			echo "${G}y${N} - Yes"
-			echo "${G}n${N} - No"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -1414,7 +1416,7 @@ forced_reset_menu() {
 }
 
 # ======================== Device simulation ========================
-# Second menu level - Device simulation
+# Second menu level - Device simulation, $1=header
 menu_dev_sim() {
 	INPUT2=""
 	while true
@@ -1497,26 +1499,26 @@ menu_dev_sim() {
 			echo "based on the currently set device"
 			echo "fingerprint."
 			echo ""
-			echo "${R}Only enable this if you really need it"
+			echo -e "${R}Only enable this if you really need it"
 			echo "and be careful about which props you"
-			echo "enable.${N}"
+			echo -e "enable.${N}"
 			echo ""
 			echo "Pick an option below."
 			echo ""
-			echo "${G} s${N} - Device simulation${DEVSIMTXT}"
+			echo -e "${G} s${N} - Device simulation${DEVSIMTXT}"
 			if [ "$DEVSIM" == 1 ]; then
-				echo "${G} 1${N} - ro.product.brand${BRANDTXT}"
-				echo "${G} 2${N} - ro.product.name${NAMETXT}"
-				echo "${G} 3${N} - ro.product.device${DEVICETXT}"
-				echo "${G} 4${N} - ro.build.version.release${RELEASETXT}"
-				echo "${G} 5${N} - ro.build.id${IDTXT}"
-				echo "${G} 6${N} - ro.build.version.incremental${INCREMENTALTXT}"
-				echo "${G} 7${N} - ro.build.version.sdk${SDKTXT}"
-				echo "${G} 8${N} - ro.build.display.id${DISPTXT}"
+				echo -e "${G} 1${N} - ro.product.brand${BRANDTXT}"
+				echo -e "${G} 2${N} - ro.product.name${NAMETXT}"
+				echo -e "${G} 3${N} - ro.product.device${DEVICETXT}"
+				echo -e "${G} 4${N} - ro.build.version.release${RELEASETXT}"
+				echo -e "${G} 5${N} - ro.build.id${IDTXT}"
+				echo -e "${G} 6${N} - ro.build.version.incremental${INCREMENTALTXT}"
+				echo -e "${G} 7${N} - ro.build.version.sdk${SDKTXT}"
+				echo -e "${G} 8${N} - ro.build.display.id${DISPTXT}"
 				if [ "$SIMMANUFACTURER" ] && [ "$SIMMODEL" ]; then
-					echo "${G} 9${N} - ro.product.manufacturer${MANUFACTURERTXT}"
+					echo -e "${G} 9${N} - ro.product.manufacturer${MANUFACTURERTXT}"
 					if [ "$BASICATTEST" == 0 ]; then
-						echo "${G}10${N} - ro.product.model${MODELTXT}"
+						echo -e "${G}10${N} - ro.product.model${MODELTXT}"
 					else
 						echo "(Simulating ro.product.model is currently disabled.)"
 					fi
@@ -1524,13 +1526,13 @@ menu_dev_sim() {
 				else
 					MANMODEN=false
 				fi
-				echo "${G} a${N} - Enable/disable all props"
+				echo -e "${G} a${N} - Enable/disable all props"
 			fi
-			echo "${G} d${N} - ro.build.description${DESCRIPTIONTXT}"
-			echo "${G} p${N} - Use partition props$PARTPROPSTXT"
-			echo "${G} t${N} - Boot stage$STAGETXT"
-			echo "${G} b${N} - Go back"
-			echo "${G} e${N} - Exit"
+			echo -e "${G} d${N} - ro.build.description${DESCRIPTIONTXT}"
+			echo -e "${G} p${N} - Use partition props$PARTPROPSTXT"
+			echo -e "${G} t${N} - Boot stage$STAGETXT"
+			echo -e "${G} b${N} - Go back"
+			echo -e "${G} e${N} - Exit"
 			echo ""
 			echo "Pick several options at once by"
 			echo "separating inputs with a comma."
@@ -1620,7 +1622,7 @@ menu_dev_sim() {
 	done
 }
 
-# Third menu level - Enable device simulation
+# Third menu level - Enable device simulation, $1=header
 menu_dev_sim_enable() {
 	INPUT3=""
 	while true
@@ -1635,10 +1637,10 @@ menu_dev_sim_enable() {
 		if [ -z "$INPUT3" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Do you want to $STATETXT basic"
+			echo -e "Do you want to $STATETXT basic"
 			echo "device simulation?"
 			echo ""
-			echo "Currently $CURRTXT."
+			echo -e "Currently $CURRTXT."
 			echo ""
 			if [ "$DEVSIM" == 0 ]; then
 				echo "Enabling this option will let you"
@@ -1646,7 +1648,7 @@ menu_dev_sim_enable() {
 				echo "currently used device fingerprint."
 				echo ""
 			fi
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -1667,7 +1669,7 @@ menu_dev_sim_enable() {
 	done
 }
 
-# Third menu level - Set device simulation props
+# Third menu level - Set device simulation props, $1=header, $2=list value for specific prop/option
 menu_dev_sim_prop() {
 	INPUT3=""
 	while true
@@ -1732,23 +1734,23 @@ menu_dev_sim_prop() {
 			if [ -z "$INPUT3" ]; then
 				menu_header "${C}$1${N}"
 				echo ""
-				echo "Do you want to ${G}enable${N} or ${R}disable${N}"
+				echo -e "Do you want to ${G}enable${N} or ${R}disable${N}"
 				echo "$TYPETXT simulation props?"
 				echo ""
 				if [ "$TMPTXT" == "Multi" ]; then
 					echo "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
 					echo ""
 				fi
-				echo "${R}Warning!${N} Some of these props"
+				echo -e "${R}Warning!${N} Some of these props"
 				echo "may cause issues with your device."
 				echo ""
 				echo "See the module readme or the"
 				echo "support thread @ XDA for details."
 				echo ""
-				echo "${G}1${N} - Enable"
-				echo "${G}2${N} - Disable"
-				echo "${G}b${N} - Go back"
-				echo "${G}e${N} - Exit"
+				echo -e "${G}1${N} - Enable"
+				echo -e "${G}2${N} - Disable"
+				echo -e "${G}b${N} - Go back"
+				echo -e "${G}e${N} - Exit"
 				echo ""
 				echo -n "Enter your desired option: "
 				read -r INPUT3
@@ -1791,11 +1793,11 @@ menu_dev_sim_prop() {
 			if [ -z "$INPUT3" ]; then
 				menu_header "${C}$1${N}"
 				echo ""
-				echo "Do you want to $STATETXT simulating"
-				echo "${C}${TMPTXT}${N}?"
-				echo "It is currently $CURRTXT."
+				echo -e "Do you want to $STATETXT simulating"
+				echo -e "${C}${TMPTXT}${N}?"
+				echo -e "It is currently $CURRTXT."
 				echo ""
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 				read -r INPUT3
 				case "$INPUT3" in
 					y|Y)
@@ -1821,7 +1823,7 @@ menu_dev_sim_prop() {
 	done
 }
 
-# Third menu level - Partition props
+# Third menu level - Partition props, $1=header, $2=Partition simulation currently enabled or disabled
 menu_partprops_sim() {
 	INPUT3=""
 	while true
@@ -1841,11 +1843,11 @@ menu_partprops_sim() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Partition specific props simulation"
-			echo "is currently ${G}$CURRTXT${N}."
+			echo -e "is currently ${G}$CURRTXT${N}."
 			echo ""
-			echo "Do you want to ${C}$TMPTXT${N} it?"
+			echo -e "Do you want to ${C}$TMPTXT${N} it?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -1866,7 +1868,7 @@ menu_partprops_sim() {
 	done
 }
 
-# Third menu level - Boot stage
+# Third menu level - Boot stage, $1=header
 menu_bootstage_sim() {
 	INPUT3=""
 	while true
@@ -1887,12 +1889,12 @@ menu_bootstage_sim() {
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Current boot stage is ${G}$CURRTXT${N}."
+			echo -e "Current boot stage is ${G}$CURRTXT${N}."
 			echo ""
 			echo "Do you want to change it to"
-			echo "$TMPTXT?"
+			echo -e "$TMPTXT?"
 			echo ""
-			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -1954,7 +1956,7 @@ menu_bootstage_sim() {
 }
 
 # ======================== MagiskHide Props ========================
-# Second menu level - MagiskHide props
+# Second menu level - MagiskHide props, $1=header
 menu_magiskhide_props() {
 	INPUT2=""
 	while true
@@ -1991,23 +1993,23 @@ menu_magiskhide_props() {
 			echo ""
 			echo "Change some of the sensitive props set by MagiskHide."
 			echo ""
-			echo "${G}1${N} - ro.debuggable${DEBUGGABLETXT}"
-			echo "${G}2${N} - ro.secure${SECURETXT}"
-			echo "${G}3${N} - ro.build.type${TYPETXT}"
-			echo "${G}4${N} - ro.build.tags${TAGSTXT}"
-			echo "${G}5${N} - ro.bootmode${BOOTMODETXT}"
-			echo "${G}6${N} - ro.boot.mode${MODETXT}"
+			echo -e "${G}1${N} - ro.debuggable${DEBUGGABLETXT}"
+			echo -e "${G}2${N} - ro.secure${SECURETXT}"
+			echo -e "${G}3${N} - ro.build.type${TYPETXT}"
+			echo -e "${G}4${N} - ro.build.tags${TAGSTXT}"
+			echo -e "${G}5${N} - ro.bootmode${BOOTMODETXT}"
+			echo -e "${G}6${N} - ro.boot.mode${MODETXT}"
 			if [ "$(getprop ro.build.selinux)" ]; then
-				echo "${G}7${N} - ro.build.selinux${SELINUXTXT}"
+				echo -e "${G}7${N} - ro.build.selinux${SELINUXTXT}"
 			fi
 			if [ "$PROPCOUNT" -lt 5 ]; then
-				echo "${G}a${N} - Change all props"
+				echo -e "${G}a${N} - Change all props"
 			fi
 			if [ "$PROPCOUNT" -gt 1 ]; then
-				echo "${G}r${N} - Reset all props"
+				echo -e "${G}r${N} - Reset all props"
 			fi
-			echo "${G}b${N} - Go back to main menu"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Go back to main menu"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "Pick several options at once by"
 			echo "separating inputs with a comma."
@@ -2072,7 +2074,7 @@ menu_magiskhide_props() {
 	done
 }
 
-# Third menu level - MagiskHide props
+# Third menu level - MagiskHide props, $1=header, $2=Currently set prop value, $3=Original prop value, $4=Module set prop value
 menu_change_prop() {
 	INPUT3=""
 	while true
@@ -2114,7 +2116,7 @@ menu_change_prop() {
 				echo "Do you want to change the"
 				echo "following props:"
 				echo ""
-				echo "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
+				echo -e "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
 			elif [ "$1" == "Change all props" ]; then
 				echo "Do you want to change all"
 				echo "MagiskHide sensitive props?"
@@ -2131,18 +2133,18 @@ menu_change_prop() {
 						PROPMODULETXT=""
 						BACKTXT=""
 					fi
-					echo "Currently set to ${C}$2${N}${PROPMODULETXT}."				
+					echo -e "Currently set to ${C}$2${N}${PROPMODULETXT}."				
 					if [ "$2" != "$3" ]; then
-						echo "The original value is ${C}$3${N}."
+						echo -e "The original value is ${C}$3${N}."
 					fi
 					echo ""
 					safe_props "$1" $2
 					change_to "$1" $2
 					if [ "$SAFE" == 1 ]; then
 						echo "You currently have the safe value set."
-						echo "Are you sure you want to change it$BACKTXT to ${C}$CHANGE${N}?"
+						echo -e "Are you sure you want to change it$BACKTXT to ${C}$CHANGE${N}?"
 					else
-						echo "Do you want to change it${BACKTXT} to ${C}$CHANGE${N}?"
+						echo -e "Do you want to change it${BACKTXT} to ${C}$CHANGE${N}?"
 					fi
 				else
 					echo "This prop doesn't currently exist on your system."
@@ -2154,7 +2156,7 @@ menu_change_prop() {
 				fi
 			fi
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -2189,7 +2191,7 @@ menu_change_prop() {
 	done
 }
 
-# Third menu level - Reset all MagiskHide props
+# Third menu level - Reset all MagiskHide props, $1=header
 menu_reset_prop_all() {
 	INPUT3=""
 	while true
@@ -2202,7 +2204,7 @@ menu_reset_prop_all() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -2223,7 +2225,7 @@ menu_reset_prop_all() {
 	done
 }
 
-# Third menu level - Reset specific MagiskHide prop
+# Third menu level - Reset specific MagiskHide prop, $1=header, $2=prop name
 menu_reset_prop() {
 	INPUT3=""
 	while true
@@ -2236,7 +2238,7 @@ menu_reset_prop() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -2258,7 +2260,7 @@ menu_reset_prop() {
 }
 
 # ======================== Custom Props ========================
-# Second menu level - Custom props
+# Second menu level - Custom props, $1=Header
 menu_custom_props() {
 	INPUT2=""
 	while true
@@ -2274,41 +2276,47 @@ menu_custom_props() {
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""			
-			if [ "$CUSTOMEDIT" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" ]; then
+			if [ "$CUSTOMEDIT" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" -o "$CUSTOMPROPSDELAY" ]; then
 				CTRLSET=0
-				echo "You have ${C}custom props set${N},"
-				echo "but the option is ${R}not activated${N}."
+				echo -e "You have ${C}custom props set${N},"
+				echo -e "but the option is ${R}not activated${N}."
 				echo ""
-				echo "Do you want to activate it (enter ${G}r${N} to reset)?"
+				echo -e "Do you want to activate it (enter ${G}r${N} to reset)?"
 				echo ""
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
+				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
 				read -r INPUT2
 			else
 				CTRLSET=1
 				echo "Set or edit custom prop values for your device."
 				echo ""
-				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ]; then
+				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ] || [ "$CUSTOMPROPSDELAY" ]; then
 					ITEMCOUNT=1
 					if [ "$CUSTOMPROPS" ]; then
-						echo "${C}Default boot stage${G}${DEFSTAGETXT}${N}"
+						echo -e "${C}Default boot stage${G}${DEFSTAGETXT}${N}"
 						for ITEM in $CUSTOMPROPS; do
-							echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+							echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
 							ITEMCOUNT=$(($ITEMCOUNT+1))
 						done
 					fi
 					if [ "$CUSTOMPROPSPOST" ]; then
 						echo ""
-						echo "${C}post-fs-data boot stage${N}"
+						echo -e "${C}post-fs-data boot stage${N}"
 						for ITEM in $CUSTOMPROPSPOST; do
-							echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+							echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
 							ITEMCOUNT=$(($ITEMCOUNT+1))
 						done
 					fi
-					if [ "$CUSTOMPROPSLATE" ]; then
+					if [ "$CUSTOMPROPSLATE" ] || [ "$CUSTOMPROPSDELAY" ]; then
+						CUSTOMPROPSLATETMP="$CUSTOMPROPSLATE $CUSTOMPROPSDELAY"
 						echo ""
-						echo "${C}late_start service boot stage${N}"
-						for ITEM in $CUSTOMPROPSLATE; do
-							echo "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+						echo -e "${C}late_start service boot stage${N}"
+						for ITEM in $CUSTOMPROPSLATETMP; do
+							if [ "$(echo $CUSTOMPROPSDELAY | grep $(get_eq_left $ITEM))" ]; then
+								DELAYTXT=" ${C}(delayed)${N}"
+							else
+								DELAYTXT=""
+							fi
+							echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")$DELAYTXT"
 							ITEMCOUNT=$(($ITEMCOUNT+1))
 						done
 					fi
@@ -2318,12 +2326,12 @@ menu_custom_props() {
 					echo "\"New custom prop\" below."
 				fi
 				echo ""
-				echo "${G}n${N} - New custom prop"
-				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ]; then
-					echo "${G}r${N} - Reset all custom props"
+				echo -e "${G}n${N} - New custom prop"
+				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ] || [ "$CUSTOMPROPSDELAY" ]; then
+					echo -e "${G}r${N} - Reset all custom props"
 				fi
-				echo "${G}b${N} - Go back to main menu"
-				echo "${G}e${N} - Exit"
+				echo -e "${G}b${N} - Go back to main menu"
+				echo -e "${G}e${N} - Exit"
 				echo ""
 				echo "See the module readme or the"
 				echo "support thread @ XDA for details."
@@ -2371,7 +2379,7 @@ menu_custom_props() {
 						ITEMCOUNT=1
 						for ITEM in $CUSTOMPROPSLIST; do
 							if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-								menu_edit_custprop "$(get_device "$ITEM")"
+								menu_edit_custprop "$(get_eq_left "$ITEM")"
 								break
 							fi
 							ITEMCOUNT=$(($ITEMCOUNT+1))
@@ -2389,25 +2397,34 @@ menu_custom_props() {
 	done
 }
 
-# Third menu level - Edit custom prop
+# Third menu level - Edit custom prop, $1=prop name
 menu_edit_custprop() {
 	INPUT3=""
 	if [ "$(echo $CUSTOMPROPS | grep $1)" ]; then
 		STAGETXT=" ${C}(system.prop)${N}"
-	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" -o "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
 		STAGETXT=" ${C}(both)${N}"
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
 		STAGETXT=" ${C}(post-fs-data)${N}"
-	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
+	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ] || [ "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
 		STAGETXT=" ${C}(late_start service)${N}"
-	else
-		TMPBSTAGE=""
+	fi
+	DELAYTXT=""
+	if [ "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
+		for ITEM in $CUSTOMPROPSDELAY; do
+			case $ITEM in
+				*$1*)
+					DELAYTXT=" ${G}(active, $(get_prop_delay "$ITEM") seconds)${N}"
+					break
+				;;
+			esac
+		done
 	fi
 	while true
 	do
 		if [ -z "$INPUT3" ]; then
 			for ITEM in $CUSTOMPROPSLIST; do
-				TMPITEM=$(echo $(get_eq_right "$ITEM") | sed 's|_sp_| |g')
+				TMPITEM=$(get_prop_value "$ITEM")
 				if [ "$(get_eq_left "$ITEM")" == "$1" ]; then
 					if [ "$TMPITEM" == "$(getprop $1)" ]; then
 						PROPNOTSET=0
@@ -2421,9 +2438,9 @@ menu_edit_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "The current value for"
-			echo "${C}'$1'${N} is:"
+			echo -e "${C}\"$1\"${N} is:"
 			echo ""
-			echo "${C}$(getprop $1)${N}"
+			echo -e "${C}$(getprop $1)${N}"
 			if [ "$PROPNOTSET" == 0 ]; then
 				echo "(Set by this module.)"
 				echo ""
@@ -2431,25 +2448,24 @@ menu_edit_custprop() {
 				echo "from the options below."
 				echo ""
 			else
-				echo "${R}Not yet set by this module. Please reboot to set.${N}"
+				echo ""
+				echo -e "${R}Not yet set by this module. Please reboot to set.${N}"
 				if [ "$OPTIONBOOT" == 1 ] || [ "$STAGETXT" == " ${C}(post-fs-data)${N}" ] || [ "$STAGETXT" == " ${C}(system.prop)${N}" ]; then
 					echo ""
 					echo "This might be caused by the prop being set"
 					echo "too early. If the above state does not change"
 					echo "after a reboot, try changing the boot stage"
-					echo "when the prop is set to ${G}late_start service${N}."
+					echo -e "when the prop is set to ${G}late_start service${N}."
 				fi
 				echo ""
-				echo "Do you want to reboot now (${G}y/n${N})?"
+				echo -e "Do you want to reboot now (${G}y/n${N})?"
 				echo ""
 			fi
-			echo "${G}s${N} - Prop boot stage$STAGETXT"
-#			if [ "$STAGETXT" == "late_start service" ] || [ "$STAGETXT" == "both" ]; then
-#				echo "${G}d${N} - Delay timer"
-#			fi
-			echo "${G}r${N} - Reset prop"
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}s${N} - Prop boot stage$STAGETXT"
+			echo -e "${G}d${N} - Delay$DELAYTXT"
+			echo -e "${G}r${N} - Reset prop"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT3
@@ -2461,12 +2477,10 @@ menu_edit_custprop() {
 				INPUT2=""
 				break
 			;;
-			s|S)
-				menu_bootstage_custprop "$1" "$SETPROPVALUE"
+			s|S) menu_bootstage_custprop "$1" "$SETPROPVALUE"
 			;;
-#			d|D)
-#				menu_delay_custprop "$1"
-#			;;
+			d|D) menu_delay_custprop "$1" "$SETPROPVALUE" "$(getprop $1)" "edit"
+			;;
 			r|R)
 				menu_reset_custprop "$1" "$SETPROPVALUE"
 				break
@@ -2489,7 +2503,7 @@ menu_edit_custprop() {
 	done
 }
 
-# Third menu level - New custom prop
+# Third menu level - New custom prop, $1=Header
 menu_new_custprop() {
 	INPUT3=""
 	while true
@@ -2498,8 +2512,8 @@ menu_new_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Enter the prop to set,"
-			echo "${G}b${N} to go back, or"
-			echo "${G}e${N}' to exit."
+			echo -e "${G}b${N} to go back, or"
+			echo -e "${G}e${N} to exit."
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT3
@@ -2525,7 +2539,7 @@ menu_new_custprop() {
 	done
 }
 
-# Third menu level - Reset all custom props
+# Third menu level - Reset all custom props, $1=Header
 menu_reset_all_custprop() {
 	INPUT3=""
 	while true
@@ -2538,7 +2552,7 @@ menu_reset_all_custprop() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -2549,6 +2563,7 @@ menu_reset_all_custprop() {
 			;;
 			n|N)
 				INPUT2=""
+				INPUT3=""
 				break
 			;;
 			e|E) exit_fn
@@ -2559,7 +2574,7 @@ menu_reset_all_custprop() {
 	done
 }
 
-# Fourth menu level - MagiskHide custom prop and duplicate props
+# Fourth menu level - MagiskHide custom prop and duplicate props, $1=prop name
 menu_magiskhide_custprop() {
 	INPUT4=""
 	while true
@@ -2568,17 +2583,17 @@ menu_magiskhide_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			if [ "$(echo $PROPSLIST | grep -o $1)" ]; then
-				echo "That prop, ${C}$1${N}, is"
+				echo -e "That prop, ${C}$1${N}, is"
 				echo "one of the sensitive props already set"
 				echo "by MagiskHide. No need to do it again."
 			else
-				echo "That prop, ${C}$1${N}, is"
+				echo -e "That prop, ${C}$1${N}, is"
 				echo "already on your list of custom props."
 				echo "No need to set it again."
 			fi
 			echo ""
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT4
@@ -2596,7 +2611,7 @@ menu_magiskhide_custprop() {
 	done
 }
 
-# Fourth menu level - Set new custom prop
+# Fourth menu level - Set new custom prop, $1=prop name
 menu_set_new_custprop() {
 	INPUT4=""
 	TMPPROP=$(getprop "$1")
@@ -2606,20 +2621,20 @@ menu_set_new_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Enter the value to set"
-			echo "${C}$1${N} to,"
+			echo -e "${C}$1${N} to,"
 			echo "or select from the options below."
 			echo ""
 			echo "The currently set value is:"
 			if [ "$TMPPROP" ]; then				
-				echo "${C}$TMPPROP${N}"
+				echo -e "${C}$TMPPROP${N}"
 				echo "Please enter the new value."
 			else
-				echo "${C}Currently not set, or the value could not be retrieved.${N}"
+				echo -e "${C}Currently not set, or the value could not be retrieved.${N}"
 				echo "Please enter the value to set."
 			fi
 			echo ""
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT4
@@ -2644,7 +2659,7 @@ menu_set_new_custprop() {
 	done
 }
 
-# Fourth menu level - Custom prop boot stage
+# Fourth menu level - Custom prop boot stage, $1=prop name, $2=prop value
 menu_bootstage_custprop() {
 	INPUT4=""
 	PLEND=" is"
@@ -2660,18 +2675,22 @@ menu_bootstage_custprop() {
 		TMPBSTAGE="default"
 		DEFAULTTXT="${G} (current)${N}"
 		INTOPT=1
+	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
+		TMPBSTAGE="post-fs-data"
+		POSTTXT="${G} (current)${N}"
+		INTOPT=2
+	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ] || [ "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
+		TMPBSTAGE="late_start service"
+		if [ "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
+			LATETXT="${G} (current, delayed)${N}"
+		else
+			LATETXT="${G} (current)${N}"
+		fi
+		INTOPT=3
 	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ] && [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
 		TMPBSTAGE="both"
 		PLEND="s are"
 		BOTHTXT="${G} (current)${N}"
-		INTOPT=2
-	elif [ "$(echo $CUSTOMPROPSPOST | grep $1)" ]; then
-		TMPBSTAGE="post-fs-data"
-		POSTTXT="${G} (current)${N}"
-		INTOPT=3
-	elif [ "$(echo $CUSTOMPROPSLATE | grep $1)" ]; then
-		TMPBSTAGE="late_start service"
-		LATETXT="${G} (current)${N}"
 		INTOPT=4
 	else
 		TMPBSTAGE=""
@@ -2682,20 +2701,20 @@ menu_bootstage_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Select what boot stage"
-			echo "${C}$1${N}"
+			echo -e "${C}$1${N}"
 			echo "should be set in."
 			echo ""
-			echo "Currently ${C}${TMPBSTAGE}${N}"
+			echo -e "Currently ${C}${TMPBSTAGE}${N}"
 			echo "boot stage$PLEND used."
 			echo ""
 			echo "Select an option below."
 			echo ""
-			echo "${G}1${N} - Default${DEFAULTTXT}"
-			echo "${G}2${N} - post-fs-data${POSTTXT}"
-			echo "${G}3${N} - late_start service${LATETXT}"
-			echo "${G}4${N} - Both boot stages${BOTHTXT}"
-			echo "${G}b${N} - Go back"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}1${N} - Default${DEFAULTTXT}"
+			echo -e "${G}2${N} - post-fs-data${POSTTXT}"
+			echo -e "${G}3${N} - late_start service${LATETXT}"
+			echo -e "${G}4${N} - Both boot stages${BOTHTXT}"
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT4
@@ -2708,6 +2727,7 @@ menu_bootstage_custprop() {
 				else
 					OPTTYPE="OPTTYPE${INPUT4}"
 					set_custprop "$1" "$2" "$(eval "echo \$$OPTTYPE")"
+					DELAYTXT=""
 					INPUT3=""
 					break
 				fi
@@ -2724,7 +2744,7 @@ menu_bootstage_custprop() {
 	done
 }
 
-# Fourth menu level - Reset custom prop
+# Fourth menu level - Reset custom prop, $1=prop name, $2=prop value
 menu_reset_custprop() {
 	INPUT4=""
 	while true
@@ -2732,12 +2752,12 @@ menu_reset_custprop() {
 		if [ -z "$INPUT4" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "This will reset ${C}$1${N}"
+			echo -e "This will reset ${C}$1${N}"
 			echo "to its original value."
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
@@ -2749,6 +2769,7 @@ menu_reset_custprop() {
 			;;
 			n|N)
 				INPUT3=""
+				INPUT4=""
 				break
 			;;
 			e|E) exit_fn
@@ -2759,49 +2780,63 @@ menu_reset_custprop() {
 	done
 }
 
-# Fifth menu level - Set custom prop
+# Fifth menu level - Set custom prop, $1=prop name, $2=prop value, $3=current value, $4=option
 menu_set_custprop() {
 	PROPSTAGE="default"
 	DEFAULTTXT=" ${G}(current)${N}"
 	POSTTXT=""
 	LATETXT=""
 	BOTHTXT=""
+	DELAYTXT=""
+	DELAYVAL=""
+	DELAYTIMING=""
+	if [ "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
+		for ITEM in $CUSTOMPROPSDELAY; do
+			case $ITEM in
+				*$1*)
+					DELAYTXT=" ${G}(active)${N}"
+					break
+				;;
+			esac
+		done
+	fi
 	INPUT5=""
 	while true
 	do
 		if [ -z "$INPUT5" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "This will set ${C}$1${N} to:"
+			echo -e "This will set ${C}$1${N} to:"
 			echo ""
-			echo "${C}$2${N}"
+			echo -e "${C}$2${N}"
 			echo ""
 			if [ "$4" == "option" ]; then
 				echo "The currently set value is:"
 				if [ "$(getprop "$1")" ]; then				
-					echo "${C}$(getprop "$1")${N}"
+					echo -e "${C}$(getprop "$1")${N}"
 					echo "Please enter the new value."
 				else
-					echo "${C}Currently not set, or the value could not be retrieved.${N}"
+					echo -e "${C}Currently not set, or the value could not be retrieved.${N}"
 					echo "Please enter the value to set."
 				fi
 				echo ""
 			fi
 			echo "Pick an option below to change"
 			echo "what boot stage the prop will"
-			echo "be set in:"
+			echo "be set in, or set/reset a delay:"
 			echo ""
-			echo "${G}1${N} - Default${DEFAULTTXT}"
-			echo "${G}2${N} - post-fs-data${POSTTXT}"
-			echo "${G}3${N} - late_start service${LATETXT}"
-			echo "${G}4${N} - both boot stages${BOTHTXT}"
+			echo -e "${G}1${N} - Default${DEFAULTTXT}"
+			echo -e "${G}2${N} - post-fs-data${POSTTXT}"
+			echo -e "${G}3${N} - late_start service${LATETXT}"
+			echo -e "${G}4${N} - Both boot stages${BOTHTXT}"
+			echo -e "${G}d${N} - Delay${DELAYTXT}"
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
 			if [ "$4" == "option" ]; then
-				echo "Enter ${G}y${N}(es) or ${G}n${N}(o)"
+				echo -e "Enter ${G}y${N}(es) or ${G}n${N}(o)"
 			else
-				echo "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}e${N}(xit)"
+				echo -e "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}e${N}(xit)"
 			fi
 			echo -n "or an option from above: "
 			read -r INPUT5
@@ -2817,6 +2852,9 @@ menu_set_custprop() {
 					POSTTXT=""
 					LATETXT=""
 					BOTHTXT=""
+					DELAYTXT=""
+					DELAYVAL=""
+					DELAYTIMING=""
 					INPUT5=""
 				fi
 			;;
@@ -2830,6 +2868,9 @@ menu_set_custprop() {
 					POSTTXT=" ${G}(current)${N}"
 					LATETXT=""
 					BOTHTXT=""
+					DELAYTXT=""
+					DELAYVAL=""
+					DELAYTIMING=""
 					INPUT5=""
 				fi
 			;;
@@ -2843,6 +2884,9 @@ menu_set_custprop() {
 					POSTTXT=""
 					LATETXT=" ${G}(current)${N}"
 					BOTHTXT=""
+					DELAYTXT=""
+					DELAYVAL=""
+					DELAYTIMING=""
 					INPUT5=""
 				fi
 			;;
@@ -2856,11 +2900,16 @@ menu_set_custprop() {
 					POSTTXT=""
 					LATETXT=""
 					BOTHTXT=" ${G}(current)${N}"
+					DELAYTXT=""
+					DELAYVAL=""
+					DELAYTIMING=""
 					INPUT5=""
 				fi
 			;;
+			d|D) menu_delay_custprop "$1" "$2" "$3" "new"
+			;;
 			y|Y)
-				set_custprop "$1" "$2" "$PROPSTAGE" "$3"
+				set_custprop "$1" "$2" "$PROPSTAGE" "$3" "$DELAYVAL" "$DELAYTIMING"
 				INPUT2=""
 				INPUT3=""
 				INPUT4=""
@@ -2890,8 +2939,226 @@ menu_set_custprop() {
 	done
 }
 
+# Fourth or sixth menu level - Delay prop, $1=prop name, $2=prop value, $3=current value, $4=new or edit
+menu_delay_custprop() {
+	INPUTTMP=""
+	TMPDELAY="$DELAYVAL"
+	TIMINGTXT=" ${G}(Wait for \"Boot completed\")${N}"
+	TIMINGOPT="boot"
+	if [ "$4" == "edit" ]; then
+		INPUT4=""
+		if [ "$CUSTOMPROPSDELAY" ]; then
+			for ITEM in $CUSTOMPROPSDELAY; do
+				case $ITEM in
+					*$1*)
+						TMPDELAY="$(get_prop_delay "$ITEM")"
+						if [ "$(get_prop_delay_exec "$ITEM")" != "boot" ]; then
+							TIMINGTXT=" ${G}(Run immediately)${N}"
+							TIMINGOPT=""
+						fi
+					;;
+				esac
+			done
+		fi
+	elif [ "$4" == "new" ]; then
+		INPUT6=""
+	fi
+	while true
+	do
+		if [ "$4" == "edit" ] && [ -z "$INPUT4" ] || [ "$4" == "new" ] && [ -z "$INPUT6" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Enter the time (in seconds)"
+			echo "you want the prop"
+			echo -e "${C}$1${N}"
+			echo "to be delayed."
+			if [ "$TMPDELAY" ]; then
+				echo ""
+				echo "Currently delayed by"
+				echo -e "${C}$TMPDELAY${N} seconds"
+			fi
+			echo ""
+			echo "Note that this prop will"
+			echo "automatically be set during the"
+			echo "late_start service boot stage."
+			echo ""
+			echo -e "${G}t${N} - Change timing$TIMINGTXT"
+			if [ "$DELAYTXT" ]; then
+				echo -e "${G}r${N} - Reset delay"
+			fi
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
+			echo ""
+			echo -n "Enter your desired option: "
+			if [ "$4" == "edit" ]; then
+				read -r INPUT4
+			elif [ "$4" == "new" ]; then
+				read -r INPUT6
+			fi
+		fi
+		if [ "$4" == "edit" ]; then
+			INPUTTMP=$INPUT4
+		elif [ "$4" == "new" ]; then
+			INPUTTMP=$INPUT6
+		fi
+		case "$INPUTTMP" in
+			t|T)
+				if [ "$TIMINGOPT" ]; then
+					TIMINGTXT=" ${G}(Run immediately)${N}"
+					TIMINGOPT=""
+				else
+					TIMINGTXT=" ${G}(Wait for \"Boot completed\")${N}"
+					TIMINGOPT="boot"
+				fi
+				if [ "$4" == "edit" ]; then
+					INPUT4=""
+					INPUTTMP=""
+				elif [ "$4" == "new" ]; then
+					INPUT6=""
+					INPUTTMP=""
+				fi
+			;;
+			r|R) menu_reset_delay_custprop "$1" "$2" "$3" "$4"
+			;;
+			b|B)
+				if [ "$4" == "edit" ]; then
+					INPUT3=""
+					break
+				elif [ "$4" == "new" ]; then
+					INPUT5=""
+					break
+				fi
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$INPUTTMP" ]; then
+					NUMCHECK="$(echo $INPUTTMP | tr -d [0-9])"
+					if [ -z "$NUMCHECK" ]; then
+						if  [ "$4" == "edit" ]; then
+							STAGETXT=" ${C}(late_start service)${N}"
+							DELAYTXT=" ${G}(active, $INPUTTMP seconds)${N}"
+							INPUT3=""
+							set_custprop "$1" "$2" "delay" "$3" "$INPUTTMP" "$TIMINGOPT"
+							break
+						elif [ "$4" == "new" ]; then
+							PROPSTAGE="delay"
+							DEFAULTTXT=""
+							POSTTXT=""
+							LATETXT=" ${G}(current)${N}"
+							BOTHTXT=""
+							DELAYTXT=" ${G}(active)${N}"
+							DELAYVAL="$INPUTTMP"
+							DELAYTIMING="$TIMINGOPT"
+							INPUT5=""
+							break
+						fi
+					else
+						if [ "$4" == "edit" ]; then
+							invalid_input 8 4
+						elif [ "$4" == "new" ]; then
+							invalid_input 8 6
+						fi
+					fi
+				else
+					if [ "$4" == "edit" ]; then
+						invalid_input 8 4
+					elif [ "$4" == "new" ]; then
+						invalid_input 8 6
+					fi
+				fi
+			;;
+		esac
+	done
+}
+
+# Fifth or seventh level - Reset delay, $1=prop name, $2=prop value, $3=current value, $4=new or edit
+menu_reset_delay_custprop() {
+	if [ "$4" == "edit" ]; then
+		INPUT5=""
+	elif [ "$4" == "new" ]; then
+		INPUT7=""
+	fi
+	INPUTTMP=""
+	TMPDELAY=""
+	if [ "$(echo $CUSTOMPROPSDELAY | grep $1)" ]; then
+		for ITEM in $CUSTOMPROPSDELAY; do
+			case $ITEM in
+				*$1*)
+					TMPDELAY="$(get_prop_delay "$ITEM")"
+					break
+				;;
+			esac
+		done
+	fi
+	while true
+	do
+		if [ "$4" == "edit" ] && [ -z "$INPUT5" ] || [ "$4" == "new" ] && [ -z "$INPUT7" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to reset"
+			echo "the delay for prop"
+			echo -e "${C}$1${N}"
+			echo ""
+			echo "The current delay is"
+			echo -e "${C}$TMPDELAY${N} seconds"
+			echo ""
+			echo "This will move the prop back"
+			echo "to the default boot stage."
+			echo ""
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
+			echo -e "${G}e${N} - Exit"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			if [ "$4" == "edit" ]; then
+				read -r INPUT5
+			elif [ "$4" == "new" ]; then
+				read -r INPUT7
+			fi
+		fi
+		if [ "$4" == "edit" ]; then
+			INPUTTMP=$INPUT5
+		elif [ "$4" == "new" ]; then
+			INPUTTMP=$INPUT7
+		fi
+		case "$INPUTTMP" in
+			y|Y)
+				set_custprop "$1" "$2" "default" "$3"
+				if [ "$4" == "edit" ]; then
+					INPUT3=""
+					INPUT4=""
+					break
+				elif [ "$4" == "new" ]; then
+					INPUT5=""
+					INPUT6=""
+					break
+				fi
+			;;
+			n|N)
+				if [ "$4" == "edit" ]; then
+					INPUT4=""
+					break
+				elif [ "$4" == "new" ]; then
+					INPUT6=""
+					break
+				fi
+			;;
+			e|E) exit_fn
+			;;
+			*)
+				if [ "$4" == "edit" ]; then
+					invalid_input 3 5
+				elif [ "$4" == "new" ]; then
+					invalid_input 3 7
+				fi
+			;;
+		esac
+	done
+}
+
 # ======================== Delete Props ========================
-# Second menu level - Delete props
+# Second menu level - Delete props, $1=header
 menu_delete_props() {
 	INPUT2=""
 	while true
@@ -2902,12 +3169,12 @@ menu_delete_props() {
 			echo ""			
 			if [ "$DELEDIT" == 0 ] && [ "$DELETEPROPS" ]; then
 				CTRLSET=0
-				echo "You have a list of ${C}props to delete${N},"
-				echo "but the option is ${R}not activated${N}."
+				echo -e "You have a list of ${C}props to delete${N},"
+				echo -e "but the option is ${R}not activated${N}."
 				echo ""
-				echo "Do you want to activate it (enter ${G}r${N} to reset)?"
+				echo -e "Do you want to activate it (enter ${G}r${N} to reset)?"
 				echo ""
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
+				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o), ${G}r${N}(eset) or ${G}e${N}(xit): "
 				read -r INPUT2
 			else
 				CTRLSET=1
@@ -2918,7 +3185,7 @@ menu_delete_props() {
 					echo "Select a prop below to reset it."
 					echo ""
 					for ITEM in $DELETEPROPS; do
-						echo "${G}$ITEMCOUNT${N} - $ITEM"
+						echo -e "${G}$ITEMCOUNT${N} - $ITEM"
 						ITEMCOUNT=$(($ITEMCOUNT+1))
 					done
 				else
@@ -2927,12 +3194,12 @@ menu_delete_props() {
 					echo "\"New prop\" below."
 				fi
 				echo ""
-				echo "${G}n${N} - New prop"
+				echo -e "${G}n${N} - New prop"
 				if [ "$CUSTOMPROPS" ]; then
-					echo "${G}r${N} - Reset all props"
+					echo -e "${G}r${N} - Reset all props"
 				fi
-				echo "${G}b${N} - Go back to main menu"
-				echo "${G}e${N} - Exit"
+				echo -e "${G}b${N} - Go back to main menu"
+				echo -e "${G}e${N} - Exit"
 				echo ""
 				echo "See the module readme or the"
 				echo "support thread @ XDA for details."
@@ -2998,7 +3265,7 @@ menu_delete_props() {
 	done
 }
 
-# Third menu level - Reset deleted prop
+# Third menu level - Reset deleted prop, $1=header/prop name
 menu_reset_delprop() {
 	INPUT3=""
 	while true
@@ -3006,12 +3273,12 @@ menu_reset_delprop() {
 		if [ -z "$INPUT3" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "This will remove ${C}$1${N}"
+			echo -e "This will remove ${C}$1${N}"
 			echo "from the list of props to delete."
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -3032,7 +3299,7 @@ menu_reset_delprop() {
 	done
 }
 
-# Third menu level - New prop to delete
+# Third menu level - New prop to delete, $1=header
 menu_new_delprop() {
 	INPUT3=""
 	while true
@@ -3041,8 +3308,8 @@ menu_new_delprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Enter the prop to delete,"
-			echo "${G}b${N} to go back, or"
-			echo "${G}e${N}' to exit."
+			echo -e "${G}b${N} to go back, or"
+			echo -e "${G}e${N}' to exit."
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT3
@@ -3054,7 +3321,7 @@ menu_new_delprop() {
 			;;
 			e|E) exit_fn
 			;;
-			""|[[:blank:]]*)	blank_input 3
+			""|[[:blank:]]*) blank_input 3
 			;;
 			*)
 				menu_set_new_delprop "$INPUT3"
@@ -3064,7 +3331,7 @@ menu_new_delprop() {
 	done
 }
 
-# Third menu level - Reset all deleted props
+# Third menu level - Reset all deleted props, $1=header
 menu_reset_all_delprop() {
 	INPUT3=""
 	while true
@@ -3077,7 +3344,7 @@ menu_reset_all_delprop() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -3098,7 +3365,7 @@ menu_reset_all_delprop() {
 	done
 }
 
-# Fourth menu level - Set new prop to delete
+# Fourth menu level - Set new prop to delete, $1=header/prop name
 menu_set_new_delprop() {
 	INPUT4=""
 	TMPPROP=$(getprop "$1")
@@ -3109,10 +3376,10 @@ menu_set_new_delprop() {
 			echo ""
 			if [ "$TMPPROP" ]; then
 				echo "The current value is:"
-				echo "${C}$TMPPROP${N}"
+				echo -e "${C}$TMPPROP${N}"
 				echo ""
 				echo "This will delete"
-				echo "${C}$1${N}"
+				echo -e "${C}$1${N}"
 				echo "from your system."
 			else
 				echo "This prop doesn't currently exist on your system."
@@ -3126,7 +3393,7 @@ menu_set_new_delprop() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
@@ -3149,7 +3416,7 @@ menu_set_new_delprop() {
 }
 
 # ======================== Options ========================
-# Second menu level - Options
+# Second menu level - Options, $1=header
 menu_options() {
 	INPUT2=""
 	while true
@@ -3194,17 +3461,17 @@ menu_options() {
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
-			echo "${G}1${N} - Boot stage (currently ${C}${BOOTTXT}${N})"
-			echo "${G}2${N} - Script colours (currently ${CC}${COLOURTXT}${N})"
-			echo "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
-			echo "${G}4${N} - Automatic fingerprints update (currently ${CU}${UPDATECHKTXT}${N})"
-			echo "${G}5${N} - Background boot script (currently ${CB}${BACKCHKTXT}${N})"
-			echo "${G}x${N} - Export settings"
-			echo "${G}r${N} - Reset all settings"
+			echo -e "${G}1${N} - Boot stage (currently ${C}${BOOTTXT}${N})"
+			echo -e "${G}2${N} - Script colours (currently ${CC}${COLOURTXT}${N})"
+			echo -e "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
+			echo -e "${G}4${N} - Automatic fingerprints update (currently ${CU}${UPDATECHKTXT}${N})"
+			echo -e "${G}5${N} - Background boot script (currently ${CB}${BACKCHKTXT}${N})"
+			echo -e "${G}x${N} - Export settings"
+			echo -e "${G}r${N} - Reset all settings"
 			if [ "$2" != "s" ]; then
-				echo "${G}b${N} - Go back to main menu"
+				echo -e "${G}b${N} - Go back to main menu"
 			fi
-			echo "${G}e${N} - Exit"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -3243,7 +3510,7 @@ menu_options() {
 	done
 }
 
-# Third menu level - Options, boot stage
+# Third menu level - Options, boot stage, $1=header, $2=Current stage
 menu_options_bootstage() {
 	INPUT3=""
 	while true
@@ -3261,12 +3528,12 @@ menu_options_bootstage() {
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Current boot stage is ${G}$2${N}."
+			echo -e "Current boot stage is ${G}$2${N}."
 			echo ""
 			echo "Do you want to change it to"
-			echo "$TMPTXT?"
+			echo -e "$TMPTXT?"
 			echo ""
-			echo -n "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
+			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -3327,7 +3594,7 @@ menu_options_bootstage() {
 	done
 }
 
-# Third menu level - Options, general function
+# Third menu level - Options, general function, $1=header, $2=is option disabled or enabled, $3=information text
 menu_option_chng() {
 	INPUT3=""
 	while true
@@ -3348,11 +3615,11 @@ menu_option_chng() {
 			fi
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "$3 currently ${G}$2${N}."
+			echo -e "$3 currently ${G}$2${N}."
 			echo ""
-			echo "Do you want to ${C}$TMPTXT${N} it?"
+			echo -e "Do you want to ${C}$TMPTXT${N} it?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -3379,7 +3646,7 @@ menu_option_chng() {
 	done
 }
 
-# Third menu level - Export all settings to a module configuration file
+# Third menu level - Export all settings to a module configuration file, $1=header
 menu_option_export() {
 	INPUT3=""
 	while true
@@ -3392,12 +3659,12 @@ menu_option_export() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
 			y|Y)
-				export_settings $1
+				export_settings "$1"
 				INPUT2=""
 				break
 			;;
@@ -3413,7 +3680,7 @@ menu_option_export() {
 	done
 }
 
-# Third menu level - Options, reset all options
+# Third menu level - Options, reset all options, $1=header
 menu_options_reset() {
 	INPUT3=""
 	while true
@@ -3426,7 +3693,7 @@ menu_options_reset() {
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
-			echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
@@ -3455,7 +3722,7 @@ menu_options_reset() {
 }
 
 # ======================== Logs ========================
-# Second menu level - Logs
+# Second menu level - Logs, $1=header, $2=Run as a command flag or not
 menu_logs() {
 	INPUT2=""
 	while true
@@ -3476,9 +3743,9 @@ menu_logs() {
 			echo "Do you want to contine?"
 			echo ""
 			if [ "$2" == "l" ]; then
-				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+				echo -en "Enter ${G}y${N}(es) or ${G}n${N}(o): "
 			else
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			fi
 			read -r INPUT2
 		fi
@@ -3510,7 +3777,7 @@ menu_logs() {
 }
 
 # ======================== Reset all options and settings ========================
-# Second menu level - Reset all options and settings
+# Second menu level - Reset all options and settings, $1=header, $2=Run as a command flag or not
 reset_everything() {
 	INPUT2=""
 	while true
@@ -3524,12 +3791,12 @@ reset_everything() {
 			echo "Do you want to continue?"
 			echo ""
 			if [ "$2" == "r" ]; then
-				echo -n "Enter ${G}y${N}(es) or ${G}n${N}(o): "
+				echo -en "Enter ${G}y${N}(es) or ${G}n${N}(o): "
 				LOGTXT=" (option -r)"
 				INV1=2
 				INV2=1
 			else
-				echo -n "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 				LOGTXT=""
 				INV1=3
 				INV2=2
@@ -3614,7 +3881,7 @@ invalid_option() {
 	clear
 	menu_header "${C}Help${N}"
 	echo ""
-	echo "${R}Invalid option.${N}"
+	echo -e "${R}Invalid option.${N}"
 	echo ""
 	echo "Try again without options,"
 	echo "or use -h for help and details."
@@ -3623,6 +3890,7 @@ invalid_option() {
 	exit 0
 }
 
+# Check for second input variable. If found, set custom prop
 if [ "$2" ]; then
 	log_handler "Setting custom prop from command prompt."
 	clear
@@ -3645,6 +3913,7 @@ else
 	fi
 fi
 
+# Help menu
 case "$1" in
 	-h)
 		log_handler "Showing help (-h)."
@@ -3679,6 +3948,7 @@ case "$1" in
 	;;	
 esac
 
+# Run options
 case "$1" in
 	*d*) # Download developers prints list, for testing prints
 		download_prints "Dev"
@@ -3697,6 +3967,7 @@ case "$1" in
 	;;
 esac
 
+# Download fingerprints list if enabled
 if [ "$OPTIONWEB" == 1 ]; then
 	case "$1" in
 		*d*|*f*) # Do nothing
@@ -3761,26 +4032,26 @@ do
 			fi
 			menu_header "Select an option below."
 			echo ""
-			echo "${G}1${N} - Edit device fingerprint${PRINTTXT}"
-			echo "${G}2${N} - Force BASIC key attestation${BASICTXT}"
-			echo "${G}3${N} - Device simulation${DEVTXT}"
-			echo "${G}4${N} - Edit MagiskHide props${PROPTXT}"
-			echo "${G}5${N} - Add/edit custom props${CUSTTXT}"
-			echo "${G}6${N} - Delete prop values${DELTXT}"
-			echo "${G}7${N} - Script settings"
-			echo "${G}8${N} - Collect logs"
-			echo "${G}r${N} - Reset all options/settings"
-			echo "${G}b${N} - Reboot device"
-			echo "${G}e${N} - Exit"
+			echo -e "${G}1${N} - Edit device fingerprint${PRINTTXT}"
+			echo -e "${G}2${N} - Force BASIC key attestation${BASICTXT}"
+			echo -e "${G}3${N} - Device simulation${DEVTXT}"
+			echo -e "${G}4${N} - Edit MagiskHide props${PROPTXT}"
+			echo -e "${G}5${N} - Add/edit custom props${CUSTTXT}"
+			echo -e "${G}6${N} - Delete prop values${DELTXT}"
+			echo -e "${G}7${N} - Script settings"
+			echo -e "${G}8${N} - Collect logs"
+			echo -e "${G}r${N} - Reset all options/settings"
+			echo -e "${G}b${N} - Reboot device"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			if [ "$REBOOTCHK" == 1 ]; then
-				echo "${R}Some options/settings have been changed.${N}"
-				echo "${R}Please reboot for them to take affect.${N}"
+				echo -e "${R}Some options/settings have been changed.${N}"
+				echo -e "${R}Please reboot for them to take affect.${N}"
 				echo ""
 			fi
 			if [ "$PRINTCHK" == 1 ]; then
-				echo "${R}The device fingerprint has been updated.${N}"
-				echo "${R}Please reboot to apply.${N}"
+				echo -e "${R}The device fingerprint has been updated.${N}"
+				echo -e "${R}Please reboot to apply.${N}"
 				echo ""
 			fi
 			echo "See the module readme or the"

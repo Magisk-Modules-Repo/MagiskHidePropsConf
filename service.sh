@@ -98,6 +98,7 @@ if [ "$OPTIONBOOT" != 2 ] && [ "$SIMSTAGE" == 2 ]; then
 fi
 # Edit custom props set for late_start service
 custom_edit "CUSTOMPROPSLATE"
+custom_edit "CUSTOMPROPSDELAY"
 
 # Edit MagiskHide sensitive values
 if [ "$PROPEDIT" == 1 ]; then

@@ -235,7 +235,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v96_**
+**_Current fingerprints list version - v97_**
 
 
 ## Please add support for device X
@@ -259,7 +259,7 @@ By default this feature will use an old devices model prop value, to make sure t
 
 It is also possible to pick a device manually from the list of fingerprints or set your own custom value.
 
-Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled.
+Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled (all other simiulation props will still work though). It is also worth noting that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature and picking an old enough device will also force a basic attestation.
 
 Thanks to @Displax over at XDA-Developers for bringing this to everyones attention. 
 
@@ -314,14 +314,16 @@ It's quite easy to change prop values with Magisk. With this module it's even ea
 
 A custom prop can also be set by running the `props` command with the prop name and value directly in the command prompt (no need for using the ui). See [Run options](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#run-options).
 
-When setting a custom prop you can also pick in what boot stage it should be set in. This can also be changed later for each individual custom prop. There are three options:
+When setting a custom prop you can also pick in what boot stage it should be set in. This can also be changed later for each individual custom prop. There are four options:
 - Default - The main module option will decide (see [Prop script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#boot-stage) below).
 - post-fs-data - The prop will always be set in post-fs-data, regardless of the main module option.
 - late_start service - The prop will always be set in late_start service, regardless of the main module option.
 - Both post-fs-data late_start service - In some special cases you would want the prop to be set during both boot stages. An example would be if the system reapplies the stock prop value late in the boot process (after post-fs-data).
+**Note: post-fs-data runs earlier than late_start service.**
 
-Note: post-fs-data runs earlier than late_start service.
-
+It is also possible to set a delay for when the prop is supposed to be set. This is useful if a prop value is originally set late during boot, or even a while after the device has finished booting. Pick this option while setting a new prop or editing one that has already been set and enter the amount of seconds you want the delay to be. By default the script will wait for "Boot completed" to be broadcast before starting to count the delay. This option can be disabled on a per prop level if necessary.
+**Note 1: A prop with a delay will automatically be set during the late_start service boot stage.
+Note 2: The delay will usually be sligtly longer (usually counted in tenths of a second) than the entered value, due to small delays in execution of the scripts.**
 
 ## Removing prop values
 If you would like to delete a certain prop value from your system, that can be done with the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop). With this module you can easily set that up by adding whatever prop you want removed to the "Delete props" list. Be very careful when using this option, since removing the wrong prop may cause isses with your device. See ["Device issues because of the module"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#device-issues-because-of-the-module) below if this happens.
@@ -470,9 +472,9 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 ## Credits and mentions
 @topjohnwu @ XDA Developers, for Magisk.  
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
-@Some_Random_Username, for all the OnePlus fingerprints.  
-@Displax, for all the prints and the basic attestation workaround.  
-@ipdev, for being always helpful and bringing tons of fingerprints to the module list.  
+@Some_Random_Username @ XDA Developers, for all the OnePlus fingerprints.  
+@Displax @ XDA Developers, for all the prints and the basic attestation workaround.  
+@ipdev @ XDA Developers, for being always helpful and bringing tons of fingerprints to the module list.  
 And of course, everyone that provides fingerprints for me to add to the list. The module wouldn't be the same without you guys. Thank you!
 
 
@@ -486,6 +488,13 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.3.1  
+- Added a feature to enable a delay for when custom props to be executed (during the late_start service boot stage). See the documentation for details.
+- Fixed a possibly longstanding bug where props couldn't be set using the ui on some devices (would get stuck on "Working. Please wait...").
+- Fixed some of the settings in an exported settings file not being set correctly.
+- Minor adjustments and bugfixes (mainly stupid bugs introduced in the last update).
+- Added fingerprint for Nokia 6.1, Samsung Galaxy S5, S10 and Tab S4 and Xiaomi Mi 10 Lite 5G. Updated fingerprints for Asus ZenFone Max M1, Google Pixel 2-4 (all variants) and Xiaomi Pocofone F1. List updated to v97.
+
 ### v5.3.0  
 - Added a new feature to force SafteyNet's bootloader check to use basic attestation rather than hardware. See the documentation for details.
 - Added fingerprints for Asus ZenFone Max Pro M2, Fxtec Pro 1, Huawei Honor 6X BLN-L22, Lenovo Tab 4 8 Plus, LG V30, OnePlus 7, 7 Pro, 7T, 7T Pro, 8 and 8 Pro (Chinese variants), OnePlus Nord, Redmi Note 9 Pro, Samsung Galaxy A3 2016 and 2027 and Galaxy Tab 4 7.0, 8.0 and 10.1 and Xiaomi Redmi K20 Pro India. Updated fingerprints for OnePlus 7 Pro NR and 7 Pro NR Spr, 8 (almost all variants) and 8 Pro (all variants), Redmi Note 8 Pro and Xiaomi Mi A1, Mi A3 and Redmi 8. List updated to v95.
@@ -840,13 +849,13 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v96  
+### List v97  
 - Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
 - Asus ZenFone 5Z ASUS_Z01RD (9)
 - Asus Zenfone 6 ASUS_I01WD (9)
-- Asus Zenfone Max M1 ASUS_X00PD (8.0.0)
+- Asus Zenfone Max M1 ASUS_X00PD (8.0.0 & 9 & 10)
 - Asus Zenfone Max Pro M1 ASUS_X00TD (8.1.0)
 - Asus Zenfone Max Pro M2 ASUS_X01BD (9)
 - Asus ZenPad S 8.0 P01MA (6.0.1)
@@ -947,6 +956,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Nokia 6 TA-1025 (9)
 - Nokia 6 TA-1033 (9)
 - Nokia 6 TA-1039 (9)
+- Nokia 6.1 (10)
 - Nokia 6.1 Plus (9 & 10)
 - Nokia 6.2 (9)
 - Nokia 7 Plus (9 & 10)
@@ -1047,7 +1057,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S3 Neo GT-I9300I (4.4.4)
 - Samsung Galaxy S4 GT-I9505 (5.0.1)
 - Samsung Galaxy S4 Active GT-I9295 (5.0.1)
-- Samsung Galaxy S5 SM-G900H (6.0.1)
+- Samsung Galaxy S5 SM-G900F (6.0.1)
+- Samsung Galaxy S5 SM-G900H )(6.0.1)
 - Samsung Galaxy S6 SM-G920F (7.0)
 - Samsung Galaxy S6 Edge SM-G925F (7.0)
 - Samsung Galaxy S7 SM-G930F (8.0.0)
@@ -1056,6 +1067,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S8 Plus SM-G955F (8.0.0)
 - Samsung Galaxy S9 SM-G960F (8.0.0)
 - Samsung Galaxy S9 Plus SM-G965F (8.0.0)
+- Samsung Galaxy S10 SM-G973F (10)
 - Samsung Galaxy S10 Plus SM-G975F (10)
 - Samsung Galaxy S10 Plus SM-G975U (9)
 - Samsung Galaxy S10e SM-G970N (10)
@@ -1070,6 +1082,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxt Tab A LTE SM-T597 (9)
 - Samsung Galaxy Tab S2 SM-T813 (7.0)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
+- Samsung Galaxy Tab S4 SM-T380 (10)
 - Samsung Galaxy Tab S5e SM-T720 (9)
 - Sony Xperia M (4.3)
 - Sony Xperia X F5121 (8.0.0)
@@ -1120,6 +1133,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 9T Global (10)
 - Xiaomi Mi 9T Pro (9 & 10)
 - Xiaomi Mi 10 (10)
+- Xiaomi Mi 10 Lite 5G (10)
 - Xiaomi Mi 10 Pro (10)
 - Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9 & 10)

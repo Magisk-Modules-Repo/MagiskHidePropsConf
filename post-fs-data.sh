@@ -36,14 +36,14 @@
 	echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
 	echo "***************************************************" >> $LOGFILE 2>&1
 	echo ""
-	STRST="$(date +"%m-%d-%Y %H:%M:%S:%N") - Log start (regular execution)."
+	STRST="$(date +"%m-%d-%Y %H:%M:%S.%3N") - Log start (regular execution)."
 	echo -e $STRST >> $LOGFILE 2>&1
 	echo -e $STRST > $RUNFILE 2>&1
 
 	# Save default prop values
 	getprop > $MHPCPATH/defaultprops
 	echo "" >> $LOGFILE 2>&1
-	echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - Saved default values" >> $LOGFILE 2>&1
+	echo -e "$(date +"%Y-%m-%d %H:%M:%S.%3N") - Saved default values" >> $LOGFILE 2>&1
 
 {
 	# Creates/updates the script control file
@@ -52,7 +52,7 @@
 	# Logging
 	log_handler() {
 		echo "" >> $LOGFILE 2>&1
-		echo -e "$(date +"%Y-%m-%d %H:%M:%S:%N") - $1" >> $LOGFILE 2>&1
+		echo -e "$(date +"%Y-%m-%d %H:%M:%S.%3N") - $1" >> $LOGFILE 2>&1
 	}
 
 	# Reset/disable file locations
