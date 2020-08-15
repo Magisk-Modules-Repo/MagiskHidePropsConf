@@ -155,7 +155,17 @@ CONFBACK=false
 # will run in the boot stage currently set in the module options (see CONFLATE below).
 #
 # The CONFPROPSDELAY option is used to set a delay for when a specific custom prop is set. Will automacially
-# set the prop during the late_start service boot stage.
+# set the prop during the late_start service boot stage. The syntax is as follows:
+# Follow the same instructions a for the CONFPROPS variable above to set up the props with the desired values.
+# Then append the time in seconds, preceeded by a semicolon. To make the delay wait for
+# "Boot completed" also append the word boot, preceeded by two underscores. If the delay is
+# supposed to execute instantly, don't add anything after the desired time. Example:
+# CONFPROPSDELAY="
+# ro.sf.lcd_density=320;10__boot
+# ro.config.media_vol_steps=30;20
+# "
+# In the example above, the density prop will be set 10 seconds after "Boot completed", and the volume steps prop
+# will be set 20 seconds after the script is executed in the late_start service boot stage.
 #
 # With PROPOPTION you can decide if the current custom prop list should
 # be replaced, added to or preserved. Add the corresponding words "replace",
