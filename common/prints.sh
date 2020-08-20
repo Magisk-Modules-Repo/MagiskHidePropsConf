@@ -8,7 +8,7 @@ PRINTSV=98
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=475
+# Current fingerprints count=476
 PRINTSLIST="
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0):Asus:ASUS_X00DD=asus/WW_Phone/ASUS_X00DD:7.1.1/NMF26F/14.0200.1712.347-20171214:user/release-keys;asus/WW_Phone/ASUS_X00DD:8.1.0/OPM1.171019.011/15.0200.1812.503-0:user/release-keys__2018-12-05
