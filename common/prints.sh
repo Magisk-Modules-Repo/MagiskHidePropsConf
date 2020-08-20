@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=97
+PRINTSV=98
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -170,7 +170,7 @@ OnePlus Nord AC2003 (10):OnePlus:AC2003=OnePlus/Nord_EEA/Nord:10/QKQ1.200412.002
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 POCO F2 Pro (10):POCO:POCO F2 Pro=POCO/lmi_eea/lmi:10/QKQ1.191117.002/V11.0.6.0.QJKEUXM:user/release-keys__2020-04-01
-POCO X2 (10):POCO:POCO X2=POCO/phoenixin/phoenixin:10/QKQ1.190825.002/V11.0.11.0.QGHINXM:user/release-keys__2020-06-01
+POCO X2 (10):POCO:POCO X2=POCO/phoenixin/phoenixin:10/QKQ1.190825.002/V12.0.1.0.QGHINXM:user/release-keys__2020-07-01
 Razer Phone (7.1.1 & 8.1.0 & 9):Razer:Phone=razer/cheryl/cheryl:7.1.1/NMF26X-RZR-180118/3005:user/release-keys__2018-01-05;razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05;razer/cheryl/cheryl:9/P-MR2-RC001-RZR-N/7083:user/release-keys__2019-11-05
 Razer Phone 2 (8.1.0 & 9):Razer:Phone 2=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05;razer/cheryl2/aura:9/P-SMR3-RC002-RZR-200226/3141:user/release-keys__2020-03-05
 Realme X2 Pro (10):realme:RMX1931=realme/RMX1931EEA/RMX1931L1:10/QKQ1.191021.002/1590460856:user/release-keys__2020-06-05
@@ -244,6 +244,7 @@ Samsung Galaxy Tab S2 SM-T813 (7.0):samsung:SM-T813=samsung/gts210vewifixx/gts21
 Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0):Samsung:SM-T825=samsung/gts3lltexx/gts3llte:8.0.0/R16NW/T825XXU2BRL2:user/release-keys__2018-12-01
 Samsung Galaxy Tab S4 SM-T830 (10):samsung:SM-T830=samsung/gts4lwifixx/gts4lwifi:10/QP1A.190711.020/T830XXU4CTF5:user/release-keys__2020-06-01
 Samsung Galaxy Tab S5e SM-T720 (9):samsung:SM-T720=samsung/gts4lvwifixx/gts4lvwifi:9/PPR1.180610.011/T720XXS1ASL3:user/release-keys__2020-01-01
+Sony Xperia 5 DSDS J9210 (10)=Sony/J9210_RU/J9210:10/55.1.A.9.52/055001A009005201481357772:user/release-keys__2020-07-01
 Sony Xperia M (4.3):Sony:C1905=Sony/C1905/C1905:4.3/15.4.A.1.9/eng.user.20140509.125022:user/release-keys
 Sony Xperia X F5121 (8.0.0):Sony:F5121=Sony/F5121/F5121:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
 Sony Xperia X Compact F5321 (8.0.0):Sony:F5321=Sony/F5321/F5321:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
@@ -296,9 +297,9 @@ Xiaomi Mi 10 (10):Xiaomi:Mi 10=Xiaomi/umi/umi:10/QKQ1.191117.002/V11.0.15.0.QJBC
 Xiaomi Mi 10 Lite 5G (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.191222.002/V12.0.1.0.QJIEUXM:user/release-keys__2020-06-01
 Xiaomi Mi 10 Pro (10):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V11.0.13.0.QJACNXM:user/release-keys__2020-02-01
 Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.23.0.PDHMIXM:user/release-keys__2020-07-01
-Xiaomi Mi A2 (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.11.0.QDIMIXM:user/release-keys__2020-06-01
-Xiaomi Mi A2 Lite (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.7.0.QDLMIXM:user/release-keys__2020-06-01
-Xiaomi Mi A3 (9 & 10):Xiaomi:Mi A3=Xiaomi/laurel_sprout/laurel_sprout:9/PKQ1.190416.001/V10.3.16.0.PFQMIXM:user/release-keys__2020-03-05;Xiaomi/laurel_sprout/laurel_sprout:10/QKQ1.190910.002/V11.0.19.0.QFQMIXM:user/release-keys__2020-07-05
+Xiaomi Mi A2 (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.12.0.QDIMIXM:user/release-keys__2020-07-05
+Xiaomi Mi A2 Lite (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.9.0.QDLMIXM:user/release-keys__2020-07-01
+Xiaomi Mi A3 (9 & 10):Xiaomi:Mi A3=Xiaomi/laurel_sprout/laurel_sprout:9/PKQ1.190416.001/V10.3.16.0.PFQMIXM:user/release-keys__2020-03-05;Xiaomi/laurel_sprout/laurel_sprout:10/QKQ1.190910.002/V11.0.20.0.QFQMIXM:user/release-keys__2020-08-05
 Xiaomi Mi Box S (9):Xiaomi:MIBOX4=Xiaomi/oneday/oneday:9/PI/2231:user/release-keys__2019-11-05
 Xiaomi Mi Max (6.0.1):Xiaomi:MI MAX=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.MBDMIDL:user/release-keys
 Xiaomi Mi Max 2 (7.1.1):Xiaomi:MI MAX 2=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
