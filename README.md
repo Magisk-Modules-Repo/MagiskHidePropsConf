@@ -13,8 +13,6 @@ What this module does is that it adds a terminal based UI for those that don't w
 
 Keep reading below to find out more details about the different parts of the module.
 
-Keep in mind that this module cannot help you pass CTS if your device uses hardware backed key attestation to detect an unlocked bootloader. There is currently no known way to circumvent that.
-
 
 ## Documentation index
 ##### Installation and usage
