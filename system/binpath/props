@@ -92,7 +92,8 @@ if [ ! -f "$BBPATH" ]; then
 	echo ""
 	echo "If you can't find anything wrong, please"
 	echo "check the module documentation on how to"
-	echo "ask for support and provide logs."
+	echo "ask for support and please provide"
+	echo "logs (see the module documentation)."
 	echo ""
 	log_handler "No Busybox found."
 	log_handler "Exiting... Bye bye.\n\n===================="	
@@ -199,8 +200,9 @@ menu_change_fingerprint() {
 			menu_header "${C}$1${N}"
 			echo ""
 			if [ "$FINGERPRINTENB" == 0 ]; then
-				echo "Fingerprint modification currently disabled"
-				echo "because of a conflicting module."
+				echo "Fingerprint modification currently"
+				echo "disabled because of a conflicting"
+				echo "module (see the logs for details)."
 				echo ""
 				echo "Nothing to do... Returning to main menu."
 				sleep 3
@@ -815,7 +817,7 @@ menu_bootstage_print_set() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Current boot stage for $PROPTXT is"
-			echo "${G}$CURRTXT${N}."
+			echo -e "${G}$CURRTXT${N}."
 			echo ""
 			echo "Do you want to change it to"
 			echo -e "$TMPTXT?"
@@ -2290,8 +2292,10 @@ menu_custom_props() {
 				echo "Set or edit custom prop values for your device."
 				echo ""
 				if [ "$CUSTOMPROPS" ] || [ "$CUSTOMPROPSPOST" ] || [ "$CUSTOMPROPSLATE" ] || [ "$CUSTOMPROPSDELAY" ]; then
+					echo "Currently set props (pick to edit):"
 					ITEMCOUNT=1
 					if [ "$CUSTOMPROPS" ]; then
+						echo ""
 						echo -e "${C}Default boot stage${G}${DEFSTAGETXT}${N}"
 						for ITEM in $CUSTOMPROPS; do
 							echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")"
@@ -2438,7 +2442,7 @@ menu_edit_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "The current value for"
-			echo -e "${C}\"$1\"${N} is:"
+			echo -e "${C}$1${N} is:"
 			echo ""
 			echo -e "${C}$(getprop $1)${N}"
 			if [ "$PROPNOTSET" == 0 ]; then
@@ -2511,9 +2515,11 @@ menu_new_custprop() {
 		if [ -z "$INPUT3" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Enter the prop to set,"
-			echo -e "${G}b${N} to go back, or"
-			echo -e "${G}e${N} to exit."
+			echo "Enter the prop to set. Example:"
+			echo -e "${C}ro.sf.lcd_density${N}"
+			echo ""
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT3
@@ -2583,11 +2589,11 @@ menu_magiskhide_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			if [ "$(echo $PROPSLIST | grep -o $1)" ]; then
-				echo -e "That prop, ${C}$1${N}, is"
+				echo -e "${C}$1${N} is"
 				echo "one of the sensitive props already set"
 				echo "by MagiskHide. No need to do it again."
 			else
-				echo -e "That prop, ${C}$1${N}, is"
+				echo -e "${C}$1${N} is"
 				echo "already on your list of custom props."
 				echo "No need to set it again."
 			fi
@@ -2620,7 +2626,7 @@ menu_set_new_custprop() {
 		if [ -z "$INPUT4" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Enter the value to set"
+			echo "Enter the value you want to set"
 			echo -e "${C}$1${N} to,"
 			echo "or select from the options below."
 			echo ""
@@ -3307,9 +3313,11 @@ menu_new_delprop() {
 		if [ -z "$INPUT3" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "Enter the prop to delete,"
-			echo -e "${G}b${N} to go back, or"
-			echo -e "${G}e${N}' to exit."
+			echo "Enter the prop to delete. Example:"
+			echo -e "${C}ro.sf.lcd_density${N}"
+			echo ""
+			echo -e "${G}b${N} - Go back"
+			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT3
@@ -3731,14 +3739,13 @@ menu_logs() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "This will package the Magisk log and the"
-			echo "module specific log files, together"
-			echo "with the device default build.prop"
-			echo "file and all the current prop values"
-			echo "to a file and save it on your device."
+			echo "module specific log files, together with"
+			echo "all the original and current prop values"
+			echo "and save it on your device."
 			echo ""
-			echo "Upload the file to the support thread"
-			echo "@ XDA, with a detailed description if"
-			echo "you're having issues."
+			echo "If you are having issues, please upload"
+			echo "the packaged file to the support thread"
+			echo "@ XDA, with a detailed description."
 			echo ""
 			echo "Do you want to contine?"
 			echo ""
@@ -3920,7 +3927,7 @@ case "$1" in
 		clear
 		menu_header "${C}Help${N}"
 		echo ""
-		echo $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
+		echo -e $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
 		echo ""
 		echo "Usage: props NAME VALUE"
 		echo "   or: props [options]..."

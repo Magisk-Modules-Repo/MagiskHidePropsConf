@@ -13,6 +13,8 @@ What this module does is that it adds a terminal based UI for those that don't w
 
 Keep reading below to find out more details about the different parts of the module.
 
+Keep in mind that this module cannot help you pass CTS if your device uses hardware backed key attestation to detect an unlocked bootloader. There is currently no known way to circumvent that.
+
 
 ## Documentation index
 ##### Installation and usage
@@ -125,9 +127,9 @@ Options:
 The settings option (-s) can be used even if the module boot scripts did not run.
 
 ## Spoofing device's fingerprint to pass the ctsProfile check
-If your device can't pass SafetyNet fully, the CTS profile check fails while basic integrity passes, that means MagiskHide is working on your device but Google doesn't recognise your device as being certified (if basic integrity fails there is nothing this module can do, please check [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)).
+If your device can't pass SafetyNet fully, the CTS profile check fails while basic integrity passes, that means MagiskHide is working on your device but Google doesn't recognise your device as being certified (if basic integrity fails there is generally nothing this module can do, please check [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)).
 
-This might be because your device simply hasn't been certified or that the ROM you are using on your device isn't recognised by Google (because it's a custom ROM). 
+This might be because your device simply hasn't been certified or that the ROM you are using on your device isn't recognised by Google (because it's a custom ROM). Stock ROMs usually do not need this feature.
 
 To fix this, you can use a known working device fingerprint (`ro.build.fingerprint`), one that has been certified by Google, usually from a stock ROM/firmware/factory image, and replace your device's current fingerprint with this. You can also use a fingerprint from another device, but this will change how your device is perceived.
 
@@ -146,7 +148,7 @@ When using a Treble GSI ROM with a stock vendor partition, it is sometimes possi
 For some devices, if the fingerprint is for an Android build after March 16th 2018, it is necessary to use a security patch date that matches the fingerprint used. For the module provided fingerprints this is done automatically, but if you enter a fingerprint manually you will have to update the security patch date yourself (if they don't already match). If you're setting a fingeprint without using the internal fingerprints list, use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date.
 
 ### Can I use any fingerprint?
-It's usually possible to use any fingerprint that's certified for your device. It doesn't have to match, either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter (most of the time, there might of course be exceptions).
+It's usually possible to use any certfied fingerprint to pass CTS on your device. It doesn't have to match either device or Android version. If you don't use a fingerprint for your device, the device might be percieved as the device that the fingerprint belongs to, in certain situations (Play Store, etc). The Android version doesn't matter much, and if you're using a ROM with an Android version much newer than what is officially available for your device, you are going to have to use an older fingerprint if you want to use the one for your device. But, like already stated, that doesn't really matter (most of the time, there might of course be exceptions).
 
 ### How do I submit a fingerprint?
 If you have a device fingerprint that you want to submit to the module, just post it in the [Support Thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) together with device details and the [matching security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#matching-the-android-security-patch-date).
@@ -233,7 +235,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v98_**
+**_Current fingerprints list version - v99_**
 
 
 ## Please add support for device X
@@ -251,7 +253,9 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Force BASIC key attestation
-As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` props (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter partition specific props (odm, product, system and vendor) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
+See here for details on hardware based key attestation for detecting the bootloader state: https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3
+
+As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` prop (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter partition specific props (odm, product, system and vendor) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
 
 By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If OEM specific features still don't work after activating this option, try picking a device manually from the included list. If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
 
@@ -408,7 +412,7 @@ It might still be possible to use the module, even though you can't run the `pro
 
 ### An option is marked as "disabled"
 A couple of the options in the `props` script will be automatically disabled in some circumstances. These are:  
-- _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed.
+- _"Edit device fingerprint"_ will be disabled if another Magisk module that is known to also edit the device fingerprint is installed. This is to avoid confusion about which fingerprint is actually applied.
 - _"Device simulation"_ will be disabled if there is no device fingerprint set by the module.
 
 ### I can't pass the ctsProfile check
@@ -486,6 +490,11 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.3.2  
+- Some minor fixes/clarifications in the ui.
+- Added PIXELARITY to the list of modules that also edit device fingerprint.
+- Added fingerprint for Google Pixel 4a, Huawei Mate 9 and P9 EVA-AL10, OnePlus Nord Global AC2003, Samsung Galaxy A7 2018 and Xiaomi Mi 10 European. Updated print for Google Pixel 2-4 (all variants), Oneplus 6, 6T, 7 (several variants), 7 Pro (several variants), 7T (several variants), 7T Pro (several variants), 8 (several variants), 8 Pro (several variants) and OnePlus Nord, POCO F2 Pro, Samsung Galaxy A5 2017 and Xiaomi Mi A1, Mi A2 and Mi 9T European. List updadet to v99.
+
 ### v5.3.1  
 - Added a feature to enable a delay for when custom props to be executed (during the late_start service boot stage). See the documentation for details.
 - Fixed a possibly longstanding bug where props couldn't be set using the ui on some devices (would get stuck on "Working. Please wait...").
@@ -847,15 +856,15 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v98  
-- Asus Zenfone 2 Laser ASUS_Z00LD (6.0.1)
-- Asus Zenfone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
-- Asus Zenfone 4 Max ASUS_X00HD (7.1.1)
+### List v99  
+- Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
+- Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
+- Asus ZenFone 4 Max ASUS_X00HD (7.1.1)
 - Asus ZenFone 5Z ASUS_Z01RD (9)
-- Asus Zenfone 6 ASUS_I01WD (9)
-- Asus Zenfone Max M1 ASUS_X00PD (8.0.0 & 9 & 10)
-- Asus Zenfone Max Pro M1 ASUS_X00TD (8.1.0)
-- Asus Zenfone Max Pro M2 ASUS_X01BD (9)
+- Asus ZenFone 6 ASUS_I01WD (9)
+- Asus ZenFone Max M1 ASUS_X00PD (8.0.0 & 9 & 10)
+- Asus ZenFone Max Pro M1 ASUS_X00TD (8.1.0)
+- Asus ZenFone Max Pro M2 ASUS_X01BD (9)
 - Asus ZenPad S 8.0 P01MA (6.0.1)
 - BLU S1 (7.0)
 - Elephone U Pro (8.0.0)
@@ -877,14 +886,15 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Google Nexus Player (5.0 & 5.1 & 5.1.1 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0)
 - Google Pixel (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10)
 - Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10)
-- Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10)
-- Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10)
-- Google Pixel 3 (9 & 10)
-- Google Pixel 3 XL (9 & 10)
-- Google Pixel 3a (9 & 10)
-- Google Pixel 3a XL (9 & 10)
-- Google Pixel 4 (10)
-- Google Pixel 4 XL (10)
+- Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10 & 11)
+- Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10 & 11)
+- Google Pixel 3 (9 & 10 & 11)
+- Google Pixel 3 XL (9 & 10 & 11)
+- Google Pixel 3a (9 & 10 & 11)
+- Google Pixel 3a XL (9 & 10 & 11)
+- Google Pixel 4 (10 & 11)
+- Google Pixel 4 XL (10 & 11)
+- Google Pixel 4a (10)
 - Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
@@ -894,11 +904,13 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Huawei Honor 6X BLN-L22 (8.0.0)
 - Huawei Honor 8X JSN-L21 (8.1.0)
 - Huawei Honor 9 STF-L09 (8.0.0 & 9)
+- Huawei Mate 9 MHA-L29 (9)
 - Huawei Mate 10 ALP-L29 (8.0.0)
 - Huawei Mate 10 Pro BLA-L29 (8.0.0)
 - Huawei Mate 20 Lite SNE-LX1 (9)
 - Huawei Mate 20 Pro LYA-L29 (9)
 - Huawei P8 Lite PRA-LX1 (8.0.0)
+- Huawei P9 EVA-AL10 (8.0.0)
 - Huawei P9 EVA-L09 (7.0)
 - Huawei P9 Lite VNS-L31 (7.0)
 - Huawei P9 Plus VIE-L09 (7.0)
@@ -988,7 +1000,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 7T HD1901 (10)
 - OnePlus 7T HD1903 (10)
 - OnePlus 7T HD1905 (10)
-- OnePlus 7T Pro HD1910 (10)
+- OnePlus 7 Pro HD1910 (10)
 - OnePlus 7T Pro HD1911 (10)
 - OnePlus 7T Pro HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
@@ -1004,7 +1016,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 8 Pro IN2023 (10)
 - OnePlus 8 Pro IN2025 (10)
 - OnePlus Nord AC2001 (10)
-- OnePlus Nord AC2003 (10)
+- OnePlus Nord European AC2003 (10)
+- OnePlus Nord Global AC2003 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
 - POCO F2 Pro (10)
@@ -1025,6 +1038,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy A5 2017 SM-A520F (8.0.0)
 - Samsung Galaxy A6 Plus SM-A605G (9)
 - Samsung Galaxy A7 2017 SM-A720F (8.0.0)
+- Samsung Galaxy A7 2018 SM-A750GN (9 & 10)
 - Samsung Galaxy A8 Plus SM-A730F (7.1.1)
 - Samsung Galaxy A20 SM-A205W (9)
 - Samsung Galaxy A50 SM-A505F (9)
@@ -1056,7 +1070,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S4 GT-I9505 (5.0.1)
 - Samsung Galaxy S4 Active GT-I9295 (5.0.1)
 - Samsung Galaxy S5 SM-G900F (6.0.1)
-- Samsung Galaxy S5 SM-G900H )(6.0.1)
+- Samsung Galaxy S5 SM-G900H (6.0.1)
 - Samsung Galaxy S6 SM-G920F (7.0)
 - Samsung Galaxy S6 Edge SM-G925F (7.0)
 - Samsung Galaxy S7 SM-G930F (8.0.0)
@@ -1080,7 +1094,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxt Tab A LTE SM-T597 (9)
 - Samsung Galaxy Tab S2 SM-T813 (7.0)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
-- Samsung Galaxy Tab S4 SM-T380 (10)
+- Samsung Galaxy Tab S4 SM-T830 (10)
 - Samsung Galaxy Tab S5e SM-T720 (9)
 - Sony Xperia 5 DSDS J9210 (10)
 - Sony Xperia M (4.3)
@@ -1131,7 +1145,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 9T European (9 & 10)
 - Xiaomi Mi 9T Global (10)
 - Xiaomi Mi 9T Pro (9 & 10)
-- Xiaomi Mi 10 (10)
+- Xiaomi MI 10 European (10)
+- Xiaomi Mi 10 Global (10)
 - Xiaomi Mi 10 Lite 5G (10)
 - Xiaomi Mi 10 Pro (10)
 - Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
@@ -1162,8 +1177,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi 7 (9)
 - Xiaomi Redmi 8 (9 & 10)
 - Xiaomi Redmi Go (8.1.0)
-- Xiaomi Redmi K20 Pro China (10)
-- Xiaomi Redmi K20 Pro India (9 & 10)
+- Xiaomi Redmi K20 Pro China (9 & 10)
+- Xiaomi Redmi K20 Pro India (10)
 - Xiaomi Redmi Note 2 (5.0.2)
 - Xiaomi Redmi Note 3 Pro (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE (6.0.1)

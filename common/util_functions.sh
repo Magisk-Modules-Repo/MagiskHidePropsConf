@@ -173,6 +173,7 @@ samodx-safetyskipper
 safetypatcher
 petnoires-safetyspoofer
 VR_Patch
+PIXELARITY
 "
 
 # Configuration file locations
@@ -2228,8 +2229,9 @@ collect_logs() {
 		echo ""
 		echo "Logs and information collected."
 		echo ""
-		echo "The packaged file has been saved to the"
-		echo "root of your device's internal storage."
+		echo "The packaged file (${C}propslogs.tar.gz${N})"
+		echo "has been saved to the root of your device's"
+		echo "internal storage."
 		echo "If it did not, please see the documentation"
 		echo "for details on how to collect the logs"
 		echo "manually."
