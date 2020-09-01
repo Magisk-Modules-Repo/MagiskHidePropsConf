@@ -71,6 +71,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
   - [Props don't seem to set properly](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly)
   - [My build.prop doesn't change after setting a custom prop or removing a prop value](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-setting-a-custom-prop-or-removing-a-prop-value)
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
+  - [My device's model has changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-model-has-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
   - [Boot takes a lot longer after setting props](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#boot-takes-a-lot-longer-after-setting-props)
   - [The screen goes black momentarily at boot](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-screen-goes-black-momentarily-at-boot)
@@ -235,7 +236,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v99_**
+**_Current fingerprints list version - v100_**
 
 
 ## Please add support for device X
@@ -437,6 +438,9 @@ If the prop has been removed, the command should return nothing.
 
 ### My device's Android security patch date changed
 For some fingerprints it is necessary to also change the security patch date to match the fingerprint used (the actual patch won't change, just the displayed date). This is automatically done by the module when using a fingerprint from a build after March 16 2018. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and load back the original date, but keep in mind that this may result in the fingerprint not working and SafetyNet will fail.
+
+### My device's model has changed
+In order to fool SafetyNet into using basic key attestation for the bootloader state check rather than hardware (which we cannot fool), the device model has to be changed to one that isn't on Googles list of devices that should use the hardware check. If your device uses hardware backed attestation, the only way (currently) to pass the CTS profile check of SafetyNet is to change the device model. More details here: https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3
 
 ### The interface looks weird
 If the interface of the props script looks strange, with a lot of gibberish along the lines of "\e[01;32m", that means that your terminal emulator of choice can't display colours properly (the "gibberish" is a colour code). Check the terminal emulators preferences if it is possible to change the terminal type to something that can display colours. You could also run the `props` command with the [-nc option](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#run-options) (No Colour), or disable colours in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours).
@@ -856,7 +860,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v99  
+### List v100  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 4 Max ASUS_X00HD (7.1.1)
@@ -913,6 +917,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Huawei P9 EVA-AL10 (8.0.0)
 - Huawei P9 EVA-L09 (7.0)
 - Huawei P9 Lite VNS-L31 (7.0)
+- Huawei P9 Plus VIE-AL10 (8.0.0)
 - Huawei P9 Plus VIE-L09 (7.0)
 - Huawei P20 EML-L09 (9 & 10)
 - Huawei P20 Dual SIM EML-L29 (9)
@@ -955,9 +960,10 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Motorola Moto G6 (9)
 - Motorola Moto G6 Play (8.0.0 & 9)
 - Motorola Moto G6 Plus (9)
-- Motorola Moto G7 (9)
-- Motorola Moto G7 Power (9)
-- Motorola Moto G7 Play (9)
+- Motorola Moto G7 XT1962-1 (9 & 10)
+- Motorola Moto G7 XT1962-5 (10)
+- Motorola Moto G7 Power (9 & 10)
+- Motorola Moto G7 Play (9 & 10)
 - Motorola Moto X Play (7.1.1)
 - Motorola Moto X4 (8.0.0 & 9)
 - Motorola Moto Z2 Play (8.0.0)
@@ -1089,6 +1095,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy Tab 4 8.0 SM-T330NU (5.1.1)
 - Samsung Galaxy Tab 4 10.1 SM-T530NU (5.0.2)
 - Samsung Galaxy Tab A 8.0 LTE 2019 SM-T295 (9)
+- Samsung Galaxy tab A 10.1 WiFi 2019 SM-T510 (10)
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
 - Samsung Galaxt Tab A LTE SM-T597 (9)

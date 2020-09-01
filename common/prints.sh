@@ -4,11 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=99
+PRINTSV=100
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=491
+# Current fingerprints count=494
+# Unique devices=345
 PRINTSLIST="
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0):Asus:ASUS_X00DD=asus/WW_Phone/ASUS_X00DD:7.1.1/NMF26F/14.0200.1712.347-20171214:user/release-keys;asus/WW_Phone/ASUS_X00DD:8.1.0/OPM1.171019.011/15.0200.1812.503-0:user/release-keys__2018-12-05
@@ -66,6 +67,7 @@ Huawei P8 Lite PRA-LX1 (8.0.0):Huawei:PRA-LX1=HUAWEI/PRA-LX1/HWPRA-H:8.0.0/HUAWE
 Huawei P9 EVA-AL10 (8.0.0):Huawei:EVA-AL10=HUAWEI/EVA-AL10/HWEVA:8.0.0/HUAWEIEVA-AL10/550(C00):user/release-keys__2020-07-01
 Huawei P9 EVA-L09 (7.0):Huawei:EVA-L09=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C432B502:user/release-keys
 Huawei P9 Lite VNS-L31 (7.0):Huawei:HUAWEI VNS-L31=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/release-keys__2018-06-01
+Huawei P9 Plus VIE-AL10 (8.0.0):HUAWEI:VIE-AL10=HUAWEI/VIE-AL10/HWVIE:8.0.0/HUAWEIVIE-AL10/550(C00):user/release-keys__2020-07-01
 Huawei P9 Plus VIE-L09 (7.0):Huawei:VIE-L09=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
 Huawei P20 EML-L09 (9 & 10):Huawei:EML-L09=HUAWEI/EML-L09/HWEML:9/HUAWEIEML-L09/9.1.0.381C109:user/release-keys__2020-01-01;HUAWEI/EML-L09/HWEML:10/HUAWEIEML-L09/10.0.0.161C109:user/release-keys__2020-04-01
 Huawei P20 Dual SIM EML-L29 (9):Huawei:EML-L29=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
@@ -108,9 +110,10 @@ Motorola Moto G5S Plus (8.1.0):Motorola:Moto G (5S) Plus=motorola/sanders_n/sand
 Motorola Moto G6 (9):Motorola:moto g(6)=motorola/ali/ali:9/PPS29.55-34/0c5d:user/release-keys__2019-02-01
 Motorola Moto G6 Play (8.0.0 & 9):Motorola:moto g(6) play=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys;motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys__2019-01-01
 Motorola Moto G6 Plus (9):Motorola:moto g(6) plus=motorola/evert_amx_n/evert_n:9/PPWS29.116-16-6/5cbfe:user/release-keys__2019-05-01
-Motorola Moto G7 (9):Motorola:moto g(7)=motorola/river/river:9/PPOS29.114-134-10/ca814:user/release-keys__2020-02-01
-Motorola Moto G7 Power (9):Motorola:moto g(7) power=motorola/ocean/ocean:9/PPOS29.114-134-13/6abfe:user/release-keys__2020-04-01
-Motorola Moto G7 Play (9):Motorola:moto g(7) channel=motorola/channel/channel:9/PPY29.105-160-4/56a11:user/release-keys__2019-12-01
+Motorola Moto G7 XT1962-1 (9 & 10):Motorola:moto g(7)=motorola/river/river:9/PPOS29.114-134-10/ca814:user/release-keys__2020-02-01;motorola/river/river:10/QPU30.52-16-2/be43c:user/release-keys__2020-04-01
+Motorola Moto G7 XT1962-5 (10):Motorola:moto g(7)=motorola/river_retru_n/river_n:10/QPUS30.52-16-2-5/58144:user/release-keys__2020-08-01
+Motorola Moto G7 Power (9 & 10):Motorola:moto g(7) power=motorola/ocean/ocean:9/PPOS29.114-134-13/6abfe:user/release-keys__2020-04-01;motorola/ocean/ocean:10/QPO30.52-29/c0490:user/release-keys__2020-04-01
+Motorola Moto G7 Play (9 & 10):Motorola:moto g(7) channel=motorola/channel/channel:9/PPY29.105-160-4/56a11:user/release-keys__2019-12-01;motorola/channel/channel:10/QPY30.52-22/355d1:user/release-keys__2020-04-01
 Motorola Moto X Play (7.1.1):motorola:XT1562=motorola/lux_retasia_ds/lux_uds:7.1.1/NPD26.48-24-1/1:user/release-keys
 Motorola Moto X4 (8.0.0 & 9):Motorola:moto x4=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys;motorola/payton_fi/payton_sprout:9/PPWS29.69-39-6-6/8c843:user/release-keys__2020-03-01
 Motorola Moto Z2 Play (8.0.0):Motorola:Moto Z2 Play=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
@@ -182,7 +185,7 @@ Redmi K30 Pro (10):Xiaomi:Redmi K30 Pro=Redmi/lmi/lmi:10/QKQ1.191117.002/V12.0.1
 Redmi K30 Pro Zoom Edition (10):Redmi:Redmi K30 Pro Zoom Edition=Redmi/lmipro/lmipro:10/QKQ1.191117.002/V11.0.16.0.QJKCNXM:user/release-keys__2020-04-01
 Redmi Note 8 Pro India (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begoniain/begoniain:9/PPR1.180610.011/V10.4.4.0.PGGINXM:user/release-keys__2019-09-01;Redmi/begoniain/begoniain:10/QP1A.190711.020/V11.0.2.0.QGGINXM:user/release-keys__2020-02-01
 Redmi Note 8 Pro Russia (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begonia_ru/begonia:9/PPR1.180610.011/V11.0.3.0.PGGRUXM:user/release-keys__2019-11-01;Redmi/begonia_ru/begonia:10/QP1A.190711.020/V11.0.2.0.QGGRUXM:user/release-keys__2020-02-01
-Redmi Note 9 Pro (10):Xiaomi:Redmi Note 9 Pro=Redmi/joyeuse_global/joyeuse:10/QKQ1.191215.002/V11.0.4.0.QJZMIXM:user/release-keys__2020-06-01
+Redmi Note 9 Pro (10):Xiaomi:Redmi Note 9 Pro=Redmi/joyeuse_global/joyeuse:10/QKQ1.191215.002/V11.0.5.0.QJZMIXM:user/release-keys__2020-07-01
 Redmi Note 9S (10):Redmi:Redmi Note 9S:=Redmi/curtana_global/curtana:10/QKQ1.191215.002/V11.0.10.0.QJWMIXM:user/release-keys__2020-07-01
 Samsung Galaxy A3 2015 SM-A300FU (6.0.1):Samsung:SM-A300FU=samsung/a3ultexx/a3ulte:6.0.1/MMB29M/A300FUXXU1CRF1:user/release-keys
 Samsung Galaxy A3 2016 SM-A310F (7.0):samsung:SM-A310F=samsung/a3xeltexx/a3xelte:7.0/NRD90M/A310FXXU4CSB2:user/release-keys__2019-02-01
@@ -242,6 +245,7 @@ Samsung Galaxy Tab 4 7.0 SM-T230NU (4.4.2):samsung:SM-T230NU=samsung/degaswifiue
 Samsung Galaxy Tab 4 8.0 SM-T330NU (5.1.1):samsung:SM-T330NU=samsung/milletwifiue/milletwifiue:5.1.1/LMY47X/T330NUUES1BPL1:user/release-keys
 Samsung Galaxy Tab 4 10.1 SM-T530NU (5.0.2):samsung:SM-T530NU=samsung/matissewifiue/matissewifiue:5.0.2/LRX22G/T530NUUEU1BQC1:user/release-keys
 Samsung Galaxy Tab A 8.0 LTE 2019 SM-T295 (9):Samsung:SM-T295=samsung/gtoxx/gto:9/PPR1.180610.011/T295XXS3ATB2:user/release-keys__2020-03-01
+Samsung Galaxy tab A 10.1 WiFi 2019 SM-T510 (10):Samsung:SM-T510=samsung/gta3xlwifieea/gta3xlwifi:10/QP1A.190711.020/T510XXU3BTFN:user/release-keys__2020-07-01
 Samsung Galaxt Tab A WiFi SM-T590 (9):Samsung:SM-T590=samsung/gta2xlwifixx/gta2xlwifi:9/PPR1.180610.011/T590XXU3BSJ1:user/release-keys__2019-10-01
 Samsung Galaxt Tab A LTE SM-T595 (9):Samsung:SM-T595=samsung/gta2xlltexx/gta2xllte:9/PPR1.180610.011/T595XXU3BSF3:user/release-keys__2019-06-01
 Samsung Galaxt Tab A LTE SM-T597 (9):Samsung:SM-T597=samsung/gta2xlltespr/gta2xlltespr:9/PPR1.180610.011/T597PVPU2BSH7:user/release-keys__2019-08-01
@@ -301,7 +305,7 @@ Xiaomi Mi 9T Pro (9 & 10):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.
 Xiaomi MI 10 European (10):Xiaomi:Mi 10=Xiaomi/umi_eea/umi:10/QKQ1.191117.002/V11.0.10.0.QJBEUVF:user/release-keys__2020-07-01
 Xiaomi Mi 10 Global (10):Xiaomi:Mi 10=Xiaomi/umi/umi:10/QKQ1.191117.002/V11.0.15.0.QJBCNXM:user/release-keys__2020-02-01
 Xiaomi Mi 10 Lite 5G (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.191222.002/V12.0.1.0.QJIEUXM:user/release-keys__2020-06-01
-Xiaomi Mi 10 Pro (10):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V11.0.13.0.QJACNXM:user/release-keys__2020-02-01
+Xiaomi Mi 10 Pro (10):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01
 Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.13.0.QDIMIXM:user/release-keys__2020-08-05
 Xiaomi Mi A2 Lite (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.9.0.QDLMIXM:user/release-keys__2020-07-01
