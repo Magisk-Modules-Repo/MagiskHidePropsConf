@@ -69,7 +69,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
   - [I can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-ctsprofile-check)
   - [I can't pass the basicIntegrity check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-cant-pass-the-basicintegrity-check)
   - [Props don't seem to set properly](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly)
-  - [My build.prop doesn't change after setting a custom prop or removing a prop value](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-setting-a-custom-prop-or-removing-a-prop-value)
+  - [My build.prop doesn't change after using the module](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-using-the-module)
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
   - [My device's model has changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-model-has-changed)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
@@ -236,7 +236,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v100_**
+**_Current fingerprints list version - v101_**
 
 
 ## Please add support for device X
@@ -260,7 +260,7 @@ As long as Google doesn't roll out hardware based key attestation universally, i
 
 By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If OEM specific features still don't work after activating this option, try picking a device manually from the included list. If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
 
-It is also possible to pick a device manually from the list of fingerprints or set your own custom value.
+It is also possible to pick a device manually from the list of devices (based on the included fingerprints list) or set your own custom value.
 
 Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled (all other simiulation props will still work though). It is also worth noting that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature and picking an old enough device will also force a basic attestation.
 
@@ -429,8 +429,8 @@ If it seems like props you're trying to set with the module don't get set proper
 
 This may also be caused by the post-fs-data.sh script being set to run in the background because of the execution taking to long. Try disabling this option in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prop-script-settings) and see if that changes anything.
 
-### My build.prop doesn't change after setting a custom prop or removing a prop value
-Magisk doesn't alter the build.prop file when changing or removing a prop value, it simply loads a new value or prevents the prop to load instead of adding or removing it from build.prop. If you want to check if the prop has been changed use the `getprop` command in a terminal emulator to check. Example:
+### My build.prop doesn't change after using the module
+Magisk doesn't alter the build.prop file when changing or removing a prop value, it simply loads a new value or prevents the prop to load instead of adding or removing it from build.prop. If you want to check if a prop has been changed use the `getprop` command in a terminal emulator to check. Example:
 ```
 getprop ro.build.fingerprint
 ```
@@ -494,10 +494,15 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.3.3  
+- More (very) minor ui tweaks.
+- Added fingerprint for Samsung Galaxy J7 Neo SM-J701M. Updated fingerprints for OnePlus 8 IN2013, 8 Pro IN2023, Nord AC2001, Nord European AC2003 and Nord Global AC2003 and Samsung Galaxy Tab S5e SM-T720. List updated to v5.
+- There are 10 types of people in the world. Those who understand binary numbers and those who don't.
+
 ### v5.3.2  
 - Some minor fixes/clarifications in the ui.
 - Added PIXELARITY to the list of modules that also edit device fingerprint.
-- Added fingerprint for Google Pixel 4a, Huawei Mate 9 and P9 EVA-AL10, OnePlus Nord Global AC2003, Samsung Galaxy A7 2018 and Xiaomi Mi 10 European. Updated print for Google Pixel 2-4 (all variants), Oneplus 6, 6T, 7 (several variants), 7 Pro (several variants), 7T (several variants), 7T Pro (several variants), 8 (several variants), 8 Pro (several variants) and OnePlus Nord, POCO F2 Pro, Samsung Galaxy A5 2017 and Xiaomi Mi A1, Mi A2 and Mi 9T European. List updadet to v99.
+- Added fingerprint for Google Pixel 4a, Huawei Mate 9 and P9 EVA-AL10, OnePlus Nord Global AC2003, Samsung Galaxy A7 2018 and Xiaomi Mi 10 European. Updated print for Google Pixel 2-4 (all variants), Oneplus 6, 6T, 7 (several variants), 7 Pro (several variants), 7T (several variants), 7T Pro (several variants), 8 (several variants), 8 Pro (several variants) and OnePlus Nord, POCO F2 Pro, Samsung Galaxy A5 2017 and Xiaomi Mi A1, Mi A2 and Mi 9T European. List updated to v99.
 
 ### v5.3.1  
 - Added a feature to enable a delay for when custom props to be executed (during the late_start service boot stage). See the documentation for details.
@@ -860,7 +865,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v100  
+### List v101  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 4 Max ASUS_X00HD (7.1.1)
@@ -1060,6 +1065,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy J5 Prime SM-G570F (7.0)
 - Samsung Galaxy J7 2016 SM-J710FQ (8.1.0)
 - Samsung Galaxy J7 2017 SM-J730F (8.1.0)
+- Samsung Galaxy J7 Neo SM-J701M (8.1.0)
 - Samsung Galaxy J7 Prime SM-G610F (6.0.1)
 - Samsung Galaxy M20 SM-M205F (10)
 - Samsung Galaxy Note 3 SM-N9005 (5.0)
@@ -1102,7 +1108,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy Tab S2 SM-T813 (7.0)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
 - Samsung Galaxy Tab S4 SM-T830 (10)
-- Samsung Galaxy Tab S5e SM-T720 (9)
+- Samsung Galaxy Tab S5e SM-T720 (9 & 10)
 - Sony Xperia 5 DSDS J9210 (10)
 - Sony Xperia M (4.3)
 - Sony Xperia X F5121 (8.0.0)

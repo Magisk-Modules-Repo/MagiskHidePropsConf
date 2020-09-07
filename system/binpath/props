@@ -199,6 +199,9 @@ menu_change_fingerprint() {
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
+			echo "Edit the device fingerprint to"
+			echo "pass SafetyNet's CTS profile."
+			echo
 			if [ "$FINGERPRINTENB" == 0 ]; then
 				echo "Fingerprint modification currently"
 				echo "disabled because of a conflicting"
@@ -909,6 +912,10 @@ menu_force_basic() {
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
+			echo "Edit device model to change"
+			echo "bootloader state check from"
+			echo "hardware based to basic."
+			echo ""
 			echo -e "Do you want to $STATETXT"
 			echo "forced BASIC key attestation?"
 			echo ""
@@ -920,7 +927,7 @@ menu_force_basic() {
 			echo ""
 			echo -e "${G}y${N} - Yes$YTXT"
 			echo -e "${G}n${N} - No"
-			echo -e "${G}f${N} - Pick from fingerprints list$LISTTXT"
+			echo -e "${G}f${N} - Pick from device list$LISTTXT"
 			echo -e "${G}c${N} - Custom value$CUSTTXT"
 			if [ "$BASICATTCUST" ] || [ "$BASICATTLIST" ]; then
 				echo -e "${G}r${N} - Reset"
@@ -1486,6 +1493,10 @@ menu_dev_sim() {
 		fi
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
+			echo ""
+			echo "Change prop values based on the"
+			echo "currently used fingerprint to"
+			echo "simulate that device."
 			echo ""
 			if [ "$PRINTEDIT" == 0 ]; then
 				echo "This option is only enabled if there"
@@ -2277,7 +2288,7 @@ menu_custom_props() {
 				DEFSTAGETXT=" (late_start service)"
 			fi
 			menu_header "${C}$1${N}\n Select an option below:"
-			echo ""			
+			echo ""
 			if [ "$CUSTOMEDIT" == 0 ] && [ "$CUSTOMPROPS" -o "$CUSTOMPROPSPOST" -o "$CUSTOMPROPSLATE" -o "$CUSTOMPROPSDELAY" ]; then
 				CTRLSET=0
 				echo -e "You have ${C}custom props set${N},"

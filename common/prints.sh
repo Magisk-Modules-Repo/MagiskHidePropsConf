@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=100
+PRINTSV=101
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -156,24 +156,24 @@ OnePlus 7T HD1900 (10):OnePlus:HD1900=OnePlus/OnePlus7T_CH/OnePlus7T:10/QKQ1.190
 OnePlus 7T HD1901 (10):OnePlus:HD1901=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/2007240000:user/release-keys__2020-07-01
 OnePlus 7T HD1903 (10):OnePlus:HD1903=OnePlus/OnePlus7T_EEA/OnePlus7T:10/QKQ1.190716.003/2007240000:user/release-keys__2020-07-01
 OnePlus 7T HD1905 (10):OnePlus:HD1905=OnePlus/OnePlus7T/OnePlus7T:10/QKQ1.190716.003/2007240000:user/release-keys__2020-07-01
-OnePlus 7 Pro HD1910 (10):OnePlus:HD1910=OnePlus/OnePlus7TPro_CH/OnePlus7TPro:10/QKQ1.190716.003/2005131900:user/release-keys__2020-05-01
+OnePlus 7T Pro HD1910 (10):OnePlus:HD1910=OnePlus/OnePlus7TPro_CH/OnePlus7TPro:10/QKQ1.190716.003/2005131900:user/release-keys__2020-05-01
 OnePlus 7T Pro HD1911 (10):OnePlus:HD1911=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/2007240000:user/release-keys__2020-07-01
 OnePlus 7T Pro HD1913 (10):OnePlus:HD1913=OnePlus/OnePlus7TPro_EEA/OnePlus7TPro:10/QKQ1.190716.003/2007240000:user/release-keys__2020-07-01
 OnePlus 7T Pro HD1917 (10):OnePlus:HD1917=OnePlus/OnePlus7TPro/OnePlus7TPro:10/QKQ1.190716.003/2007240000:user/release-keys__2020-07-01
 OnePlus 7T Pro NR HD1925 (10):OnePlus:HD1925=OnePlus/OnePlus7TProNR/OnePlus7TProNR:10/QKQ1.190716.003/2005062342:user/release-keys__2020-04-01
 OnePlus 8 IN2010 (10):OnePlus:IN2010=OnePlus/OnePlus8_CH/OnePlus8:10/QKQ1.191222.002/2006300106:user/release-keys__2020-06-01
 OnePlus 8 IN2011 (10):OnePlus:IN2011=OnePlus/OnePlus8_IND/OnePlus8:10/QKQ1.191222.002/2008080019:user/release-keys__2020-08-01
-OnePlus 8 IN2013 (10):OnePlus:IN2013=OnePlus/OnePlus8_EEA/OnePlus8:10/QKQ1.191222.002/2008080019:user/release-keys__2020-08-01
+OnePlus 8 IN2013 (10):OnePlus:IN2013=OnePlus/OnePlus8_EEA/OnePlus8:10/QKQ1.191222.002/2008150504:user/release-keys__2020-08-01
 OnePlus 8 IN2015 (10):OnePlus:IN2015=OnePlus/OnePlus8/OnePlus8:10/QKQ1.191222.002/2008080019:user/release-keys__2020-08-01
 OnePlus 8 IN2017 (10):OnePlus:IN2017=OnePlus/OnePlus8TMO/OnePlus8TMO:10/QKQ1.191222.002/2006102149:user/release-keys__2020-06-01
 OnePlus 8 IN2019 (10):OnePlus:IN2019=OnePlus/OnePlus8VZW/OnePlus8VZW:10/QKQ1.191222.002/2004072220:user/release-keys__2020-02-01
 OnePlus 8 Pro IN2020 (10):OnePlus:IN2020=OnePlus/OnePlus8Pro_CH/OnePlus8Pro:10/QKQ1.191222.002/2007021926:user/release-keys__2020-06-01
 OnePlus 8 Pro IN2021 (10):OnePlus:IN2021=OnePlus/OnePlus8Pro_IND/OnePlus8Pro:10/QKQ1.191222.002/2008080018:user/release-keys__2020-08-01
-OnePlus 8 Pro IN2023 (10):OnePlus:IN2023=OnePlus/OnePlus8Pro_EEA/OnePlus8Pro:10/QKQ1.191222.002/2008080018:user/release-keys__2020-08-01
+OnePlus 8 Pro IN2023 (10):OnePlus:IN2023=OnePlus/OnePlus8Pro_EEA/OnePlus8Pro:10/QKQ1.191222.002/2008150503:user/release-keys__2020-08-01
 OnePlus 8 Pro IN2025 (10):OnePlus:IN2025=OnePlus/OnePlus8Pro/OnePlus8Pro:10/QKQ1.191222.002/2008080018:user/release-keys__2020-08-01
-OnePlus Nord AC2001 (10):OnePlus:AC2001=OnePlus/Nord_IND/Nord:10/QKQ1.200412.002/2008180201:user/release-keys__2020-07-01
-OnePlus Nord European AC2003 (10):OnePlus:AC2003=OnePlus/Nord_EEA/Nord:10/QKQ1.200412.002/2008180157:user/release-keys__2020-07-01
-OnePlus Nord Global AC2003 (10):OnePlus:AC2003=OnePlus/Nord/Nord:10/QKQ1.200412.002/2008180159:user/release-keys__2020-07-01
+OnePlus Nord AC2001 (10):OnePlus:AC2001=OnePlus/Nord_IND/Nord:10/QKQ1.200412.002/2009010217:user/release-keys__2020-07-01
+OnePlus Nord European AC2003 (10):OnePlus:AC2003=OnePlus/Nord_EEA/Nord:10/QKQ1.200412.002/2009010216:user/release-keys__2020-07-01
+OnePlus Nord Global AC2003 (10):OnePlus:AC2003=OnePlus/Nord/Nord:10/QKQ1.200412.002/2009010217:user/release-keys__2020-07-01
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 POCO F2 Pro (10):POCO:POCO F2 Pro=POCO/lmi_eea/lmi:10/QKQ1.191117.002/V12.0.2.0.QJKEUXM:user/release-keys__2020-07-01
@@ -210,6 +210,7 @@ Samsung Galaxy J5 2016 SM-J510FN (7.1.1):Samsung:SM-J510FN=samsung/j5xnltexx/j5x
 Samsung Galaxy J5 Prime SM-G570F (7.0):Samsung:SM-G570F=samsung/on5xeltejv/on5xelte:7.0/NRD90M/G570FXXU1BQI6:user/release-keys
 Samsung Galaxy J7 2016 SM-J710FQ (8.1.0):Samsung:SM-J710FQ=samsung/j7xeltetur/j7xelte:8.1.0/M1AJQ/J710FQXXU3CSG1:user/release-keys__2019-07-01
 Samsung Galaxy J7 2017 SM-J730F (8.1.0):Samsung:SM-J730F=samsung/j7y17ltexx/j7y17lte:8.1.0/M1AJQ/J730FXXU3BRK2:user/release-keys__2018-11-01
+Samsung Galaxy J7 Neo SM-J701M (8.1.0):Samsung:SM-J701M=samsung/j7velteub/j7velte:8.1.0/M1AJQ/J701MUBU6BSD2:user/release-keys__2019-04-01
 Samsung Galaxy J7 Prime SM-G610F (6.0.1):Samsung:SM-G610F=samsung/on7xeltedd/on7xelte:6.0.1/MMB29K/G610FDDU1AQG2:user/release-keys
 Samsung Galaxy M20 SM-M205F (10):Samsung:SM-M205F=samsung/m20ltedd/m20lte:10/QP1A.190711.020/M205FDDU3CSL4:user/release-keys__2019-12-01
 Samsung Galaxy Note 3 SM-N9005 (5.0):Samsung:SM-N9005=samsung/hltezh/hlte:5.0/LRX21V/N9005ZSUGPJ2:user/release-keys
@@ -252,7 +253,7 @@ Samsung Galaxt Tab A LTE SM-T597 (9):Samsung:SM-T597=samsung/gta2xlltespr/gta2xl
 Samsung Galaxy Tab S2 SM-T813 (7.0):samsung:SM-T813=samsung/gts210vewifixx/gts210vewifi:7.0/NRD90M/T813XXS2BSJ3:user/release-keys__2019-08-01
 Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0):Samsung:SM-T825=samsung/gts3lltexx/gts3llte:8.0.0/R16NW/T825XXU2BRL2:user/release-keys__2018-12-01
 Samsung Galaxy Tab S4 SM-T830 (10):samsung:SM-T830=samsung/gts4lwifixx/gts4lwifi:10/QP1A.190711.020/T830XXU4CTF5:user/release-keys__2020-06-01
-Samsung Galaxy Tab S5e SM-T720 (9):samsung:SM-T720=samsung/gts4lvwifixx/gts4lvwifi:9/PPR1.180610.011/T720XXS1ASL3:user/release-keys__2020-01-01
+Samsung Galaxy Tab S5e SM-T720 (9 & 10):samsung:SM-T720=samsung/gts4lvwifixx/gts4lvwifi:9/PPR1.180610.011/T720XXS1ASL3:user/release-keys__2020-01-01;samsung/gts4lvwifixx/gts4lvwifi:10/QP1A.190711.020/T720XXU1BTG3:user/release-keys__2020-06-01
 Sony Xperia 5 DSDS J9210 (10):Sony:J9210=Sony/J9210_RU/J9210:10/55.1.A.9.52/055001A009005201481357772:user/release-keys__2020-07-01
 Sony Xperia M (4.3):Sony:C1905=Sony/C1905/C1905:4.3/15.4.A.1.9/eng.user.20140509.125022:user/release-keys
 Sony Xperia X F5121 (8.0.0):Sony:F5121=Sony/F5121/F5121:8.0.0/34.4.A.2.118/1631208121:user/release-keys__2018-09-01
