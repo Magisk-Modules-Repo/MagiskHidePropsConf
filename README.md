@@ -31,7 +31,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
   - [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint)
     - [The getprop method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-getprop-method)
     - [The stock ROM/firmware/factory image method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-stock-romfirmwarefactory-image-method)
-	  - [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
+    - [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
     - [The firmware.mobi method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method)
   - [Custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#custom-fingerprints-list)
   - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
@@ -191,7 +191,7 @@ Once you have the file downloaded, there are several different ways that the fin
 - Etc... Experiment, the fingerprint will be in there somewhere. 
 
 #### The AndroidDumps method
-AndroidDumps is a great resource for finding props for different devices. [Check it out on GitHub](https://github.com/AndroidDumps).
+AndroidDumps is a great resource for finding props for different devices. [Check it out on GitLab](https://git.rip/dumps).
 
 #### The firmware.mobi method
 Sometimes you can also find up to date and certified fingerprints at [firmware.mobi](https://desktop.firmware.mobi/).
