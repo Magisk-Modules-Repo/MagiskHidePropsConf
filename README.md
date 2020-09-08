@@ -482,7 +482,7 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
 @Some_Random_Username @ XDA Developers, for all the OnePlus fingerprints.  
 @Displax @ XDA Developers, for all the prints and the basic attestation workaround.  
-@ipdev @ XDA Developers, for being always helpful, bringing tons of fingerprints to the module list and the [mHideGP script](https://github.com/ipdev99/mHideGP).
+@ipdev @ XDA Developers, for being always helpful, bringing tons of fingerprints to the module list and the [mHideGP script](https://github.com/ipdev99/mHideGP).  
 And of course, everyone that provides fingerprints for me to add to the list. The module wouldn't be the same without you guys. Thank you!
 
 
