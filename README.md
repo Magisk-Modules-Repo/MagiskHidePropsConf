@@ -92,7 +92,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 
 
 ## Installation
-Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), and install through the Magisk Manager -> Modules, or from recovery.
+Install through the Magisk Manager Downloads section. Or, download the zip from the Manager or the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), and install through the Magisk Manager -> Modules, or from a custom recovery.
 
 The current release is always attached to the OP of the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228). Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/releases).
 
@@ -159,7 +159,7 @@ Also see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Rep
 ### Finding a certified fingerprint
 If you need a certain fingerprint from a device, here are a few tips on how to find it. Also remember that you might need to get the security patch date that corresponds to the fingerprint you find (see [Matching the Android security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above).
 
-Make sure that you get the actual device fingerprint, since there might be props that look similar to what you need. Here's an example, taken from a Google Nexus 6 (named Shamu):
+Make sure that you get the actual device fingerprint, since there might be props that look similar to what you need. Here's an example, taken from a Google Nexus 6 (device name Shamu):
 ```
 google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
@@ -176,7 +176,9 @@ If you're already on a custom ROM that can't pass the CTS profile check, this mi
 #### The stock ROM/firmware/factory image method
 Another way to find a certified fingerprint is to download a stock ROM/firmware/factory image for your device and extract the fingerprint from there.
 
-*Note that this is possibly not the best way of finding the fingerprint. Using getprop is always preferred.*
+XDA member @ipdev has spent quite some time creating an automated script for extracting the necessary information from a downloaded stock ROM/firmware/factory image, and it can even create a fingerprints list for you. You can find it together with instructions on how to use it here: https://github.com/ipdev99/mHideGP
+
+*Note that this is possibly not the best way of finding the fingerprint. Using getprop on a device is always preferred.*
 The main problem is that it might be hard to find the actual, certified fingerprint since there might also be other similar props that aren't certified. The above mentioned getprop method is always preferred...
 
 You can find the file to download in your device's forum on XDA Developers (either as a firmware file, a proper stock ROM, or in the development section as a debloated stock ROM), from the manufacturer's website, or elsewhere on the great interweb (just remember to be careful when downloading unknown files, it's dangerous to go alone!).
@@ -200,7 +202,7 @@ Here's an example:
 ```
 Google Nexus 6 (7.1.1):Motorola:Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:user/release-keys
 ```
-**NOTE 1:** If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding two underscores directly followed by the date at the end of the fingerprint (`__2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error (quite tedious). The dates are usually always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.
+**NOTE 1:** If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding two underscores directly followed by the date at the end of the fingerprint (`__2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error (quite tedious). The dates are usually always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.  
 **NOTE 2:** If you want the [device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature of the module to work properly with the prints from the custom list you will also have to include the manufacturer and module in the list. This is done by adding the values for these two props right before the equal sign (=) that separates the device name from the fingerprint. Separate the device name and android versions and the two values with colons (:). See the example above.
 
 
@@ -325,8 +327,8 @@ When setting a custom prop you can also pick in what boot stage it should be set
 **Note: post-fs-data runs earlier than late_start service.**
 
 It is also possible to set a delay for when the prop is supposed to be set. This is useful if a prop value is originally set late during boot, or even a while after the device has finished booting. Pick this option while setting a new prop or editing one that has already been set and enter the amount of seconds you want the delay to be. By default the script will wait for "Boot completed" to be broadcast before starting to count the delay. This option can be disabled on a per prop level if necessary.
-**Note 1: A prop with a delay will automatically be set during the late_start service boot stage.
-Note 2: The delay will usually be sligtly longer (usually counted in tenths of a second) than the entered value, due to small delays in execution of the scripts.**
+**Note 1: A prop with a delay will automatically be set during the late_start service boot stage.  
+Note 2: The delay will usually be sligtly longer than the entered value (mostly counted in tenths of a second), due to small delays in execution of the scripts.**
 
 ## Removing prop values
 If you would like to delete a certain prop value from your system, that can be done with the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop). With this module you can easily set that up by adding whatever prop you want removed to the "Delete props" list. Be very careful when using this option, since removing the wrong prop may cause isses with your device. See ["Device issues because of the module"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#device-issues-because-of-the-module) below if this happens.
@@ -480,7 +482,7 @@ If you've had any help from me or this module, any kind of [donation](https://fo
 @Zackptg5, @veez21 and @jenslody @ XDA Developers, for help and inspiration.  
 @Some_Random_Username @ XDA Developers, for all the OnePlus fingerprints.  
 @Displax @ XDA Developers, for all the prints and the basic attestation workaround.  
-@ipdev @ XDA Developers, for being always helpful and bringing tons of fingerprints to the module list.  
+@ipdev @ XDA Developers, for being always helpful, bringing tons of fingerprints to the module list and the [mHideGP script](https://github.com/ipdev99/mHideGP).
 And of course, everyone that provides fingerprints for me to add to the list. The module wouldn't be the same without you guys. Thank you!
 
 
