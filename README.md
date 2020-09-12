@@ -502,7 +502,7 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
-### V5.3.4  
+### v5.3.4  
 - Added a module update check option. See the documentation for details.
 - Added `system_ext` to the list of partitions used for certain props (thank you @simonsmh).
 - Fixed an edge case where changing settings after updating the module, but not having rebooted yet would cause issues with system.prop being kept from the previous version.
