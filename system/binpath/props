@@ -265,7 +265,7 @@ menu_change_fingerprint() {
 					fi
 					echo -e "${G}v${N} - Use vendor fingerprint (for Treble GSI ROMs)${VENDTXT}"
 				fi
-				if [ "$OPTIONWEB" == 0 ]; then
+				if [ "$OPTIONWEBP" == 0 ]; then
 					echo -e "${G}u${N} - Update fingerprints list (v$(get_file_value $PRINTSLOC "PRINTSV="))"
 				fi
 				echo -e "${G}s${N} - Boot stages (${C}${PRINTSTAGETXT}/${PATCHSTAGETXT}${N})."
@@ -302,7 +302,7 @@ menu_change_fingerprint() {
 				fi
 			;;
 			u|U)
-				if [ "$OPTIONWEB" == 0 ]; then
+				if [ "$OPTIONWEBP" == 0 ]; then
 					menu_update_print "Update fingerprints list"
 				else
 					menu_new_print "$1" "$INPUT2" 2
@@ -452,6 +452,14 @@ menu_pick_print_sub() {
 			ITEMCOUNT=1
 			menu_header "$1"
 			echo ""
+			# Display currently set print when fingerprints testing
+			if [ "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ]; then
+				TMPDEVPRINT="$(getprop ro.build.fingerprint)"
+				echo "Currently set to:"
+				get_device_used $TMPDEVPRINT
+				echo -e "${C}$TMPDEVPRINT${N}"
+				echo ""
+			fi
 			SAVEIFS=$IFS
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
@@ -3457,19 +3465,26 @@ menu_options() {
 				COLOURTXT="disabled"
 				CC=${R}
 			fi
-			if [ "$OPTIONWEB" == 1 ]; then
+			if [ "$OPTIONWEBP" == 1 ]; then
 				PRINTSCHKTXT="enabled"
 				CP=${G}
 			else
 				PRINTSCHKTXT="disabled"
 				CP=${R}
 			fi
-			if [ "$OPTIONUPDATE" == 1 ]; then
-				UPDATECHKTXT="enabled"
-				CU=${G}
+			if [ "$OPTIONWEBU" == 1 ]; then
+				MUPDATECHKTXT="enabled"
+				CMU=${G}
 			else
-				UPDATECHKTXT="disabled"
-				CU=${R}
+				MUPDATECHKTXT="disabled"
+				CMU=${R}
+			fi
+			if [ "$OPTIONUPDATE" == 1 ]; then
+				PUPDATECHKTXT="enabled"
+				CPU=${G}
+			else
+				PUPDATECHKTXT="disabled"
+				CPU=${R}
 			fi
 			if [ "$OPTIONBACK" == 1 ]; then
 				BACKCHKTXT="enabled"
@@ -3482,9 +3497,10 @@ menu_options() {
 			echo ""
 			echo -e "${G}1${N} - Boot stage (currently ${C}${BOOTTXT}${N})"
 			echo -e "${G}2${N} - Script colours (currently ${CC}${COLOURTXT}${N})"
-			echo -e "${G}3${N} - Fingerprints list check (currently ${CP}${PRINTSCHKTXT}${N})"
-			echo -e "${G}4${N} - Automatic fingerprints update (currently ${CU}${UPDATECHKTXT}${N})"
-			echo -e "${G}5${N} - Background boot script (currently ${CB}${BACKCHKTXT}${N})"
+			echo -e "${G}3${N} - Automatic module update check (currently ${CMU}${MUPDATECHKTXT}${N})"
+			echo -e "${G}4${N} - Automatic update of fingerprints list (currently ${CP}${PRINTSCHKTXT}${N})"
+			echo -e "${G}5${N} - Automatic fingerprints update (currently ${CPU}${PUPDATECHKTXT}${N})"
+			echo -e "${G}6${N} - Background boot script (currently ${CB}${BACKCHKTXT}${N})"
 			echo -e "${G}x${N} - Export settings"
 			echo -e "${G}r${N} - Reset all settings"
 			if [ "$2" != "s" ]; then
@@ -3503,11 +3519,13 @@ menu_options() {
 			;;
 			2) menu_option_chng "Script colours" "$COLOURTXT" "Script colours are" "OPTIONCOLOUR"
 			;;
-			3) menu_option_chng "Fingerprints list check" "$PRINTSCHKTXT" "Automatic updating of the fingerprints\nlist is" "OPTIONWEB"
+			3) menu_option_chng "Automatic module update check" "$MUPDATECHKTXT" "Automatic checking for a module update\nis" "OPTIONWEBU"
 			;;
-			4) menu_option_chng "Automatic fingerprints update" "$UPDATECHKTXT" "Automatic updating of the applied\nfingerprint is" "OPTIONUPDATE"
+			4) menu_option_chng "Automatic update of fingerprints list" "$PRINTSCHKTXT" "Automatic updating of the fingerprints\nlist is" "OPTIONWEBP"
 			;;
-			5) menu_option_chng "Background boot script" "$BACKCHKTXT" "Background boot script execution\nis" "OPTIONBACK"
+			5) menu_option_chng "Automatic fingerprints update" "$PUPDATECHKTXT" "Automatic updating of the applied\nfingerprint is" "OPTIONUPDATE"
+			;;
+			6) menu_option_chng "Background boot script" "$BACKCHKTXT" "Background boot script execution\nis" "OPTIONBACK"
 			;;
 			x|X) menu_option_export "Export settings"
 			;;
@@ -3720,7 +3738,8 @@ menu_options_reset() {
 				log_handler "Resetting all script settings."
 				replace_fn OPTIONBOOT $OPTIONBOOT 0 $LATEFILE
 				replace_fn OPTIONCOLOUR $OPTIONCOLOUR 1 $LATEFILE
-				replace_fn OPTIONWEB $OPTIONWEB 1 $LATEFILE
+				replace_fn OPTIONWEBP $OPTIONWEBP 1 $LATEFILE
+				replace_fn OPTIONWEBU $OPTIONWEBU 1 $LATEFILE
 				replace_fn OPTIONUPDATE $OPTIONUPDATE 1 $LATEFILE
 				replace_fn OPTIONBACK $OPTIONBACK 0 $LATEFILE
 				# Load module values
@@ -3787,6 +3806,39 @@ menu_logs() {
 				else
 					exit_fn
 				fi
+			;;
+			*)	invalid_input 1 2
+			;;
+		esac
+	done
+}
+
+# ======================== Perform module update check ========================
+# Second menu level - Reset all options and settings, $1=header
+menu_update_check() {
+	INPUT2=""
+	while true
+	do
+		if [ -z "$INPUT2" ]; then
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Do you want to check online if there"
+			echo "is an update to module?"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT2
+		fi
+		case "$INPUT2" in
+			y|Y)	
+				update_check "manual"
+				INPUT=""
+				break
+			;;
+			n|N)	
+				INPUT=""
+				break
+			;;
+			e|E) exit_fn
 			;;
 			*)	invalid_input 1 2
 			;;
@@ -3894,103 +3946,148 @@ fi
 # ====================== Options =====================
 # ====================================================
 
-invalid_option() {
-	log_handler "Invalid option."
-	clear
-	menu_header "${C}Help${N}"
-	echo ""
-	echo -e "${R}Invalid option.${N}"
-	echo ""
-	echo "Try again without options,"
-	echo "or use -h for help and details."
-	echo ""
-	log_handler "Exiting... Bye bye.\n\n===================="
-	exit 0
-}
+# Testing connection
+test_connection "$1"
 
-# Check for second input variable. If found, set custom prop
-if [ "$2" ]; then
-	log_handler "Setting custom prop from command prompt."
-	clear
-	menu_set_custprop "$1" "$2" "$(getprop $1)" "option"
-	clear
-	echo "Done."
-	echo ""
-	log_handler "Exiting... Bye bye.\n\n===================="
-	exit 0
-else
-	if [ "$1" ]; then
+if [ "$1" ]; then
+	invalid_option() {
+		log_handler "Invalid option."
+		clear
+		menu_header "${C}Help${N}"
+		echo ""
+		echo -e "${R}Invalid option.${N}"
+		echo ""
+		echo "Try again without options,"
+		echo "or use -h for help and details."
+		echo ""
+		log_handler "Exiting... Bye bye.\n\n===================="
+		exit 0
+	}
+
+	# Check for second input variable. If found, set custom prop
+	if [ "$2" ]; then
+		log_handler "Setting custom prop from command prompt."
+		clear
+		menu_set_custprop "$1" "$2" "$(getprop $1)" "option"
+		clear
+		echo "Done."
+		echo ""
+		log_handler "Exiting... Bye bye.\n\n===================="
+		exit 0
+	else
 		case "$1" in
 			*\.*|*\=*) invalid_option
 			;;
-			*d*|*f*|*l*|*h*|*nc*|*nw*|*r*|*s*|*t*) # Do nothing
+			*d*|*f*|*l*|*h*|*nc*|*nw*|*r*|*s*|*t*|*u*) # Do nothing
 			;;
 			*) invalid_option
 			;;
 		esac
 	fi
+
+	# Check non-combinable options
+	for ITEM1 in $SOLORUN; do
+		case "$1" in
+			*$ITEM1*)
+				for ITEM2 in $SOLORUN; do
+					if [ "$ITEM1" != "$ITEM2" ]; then
+						case "$1" in
+							*$ITEM2*)
+								invalid_option
+							;;
+						esac
+					fi
+				done
+			;;
+		esac
+	done
+
+	# Help menu
+	case "$1" in
+		-h)
+			log_handler "Showing help (-h)."
+			clear
+			menu_header "${C}Help${N}"
+			echo ""
+			echo -e $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
+			echo ""
+			echo "Usage: props NAME VALUE"
+			echo "   or: props [options]..."
+			echo ""
+			echo "Entering a property NAME and VALUE will save"
+			echo "this information to the module settings as custom"
+			echo "prop values."
+			echo ""
+			echo "Options:"
+			echo "  -d		*Update to fingerprints test list during start."
+			echo "  -f		*Update fingerprints list during start."
+			echo "  -l		*Save module logs and info."
+			echo "  -h		*Show this message."
+			echo "  -nc		Run without colours."
+			echo "  -nw		Run without connecting to the web during start."
+			echo "  -r		*Reset all options/settings."
+			echo "  -s		*Open script settings menu."
+			echo "  -t		Activate test mode."
+			echo "  -u		*Perform a module update check during start."
+			echo ""
+			echo "Options marked with an asterisk (*) cannot be"
+			echo "combined with each other."
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
+			log_handler "Exiting... Bye bye.\n\n===================="
+			exit 0
+		;;	
+	esac
+
+	# Run options
+	case "$1" in
+		*d*) # Download developers prints list, for testing prints
+			download_prints "Dev" "$1"
+		;;
+		*f*) # Update fingerprints list
+			download_prints "f" "$1"
+		;;
+		*l*) # Save logs
+			menu_logs "Collect logs" "l"
+		;;
+		*r*) # Reset all settings
+			reset_everything "Reset all settings" "r"
+		;;
+		*s*) # Open settings menu
+			menu_options "Script settings" "s"
+		;;
+		*u*) # Perform an update check
+			update_check "" "$1"
+		;;
+	esac
 fi
 
-# Help menu
-case "$1" in
-	-h)
-		log_handler "Showing help (-h)."
-		clear
-		menu_header "${C}Help${N}"
-		echo ""
-		echo -e $(echo $(get_file_value $MODPATH/module.prop "description=") | sed 's|, |,\\n|g' | sed 's|\. |\.\\n|g')
-		echo ""
-		echo "Usage: props NAME VALUE"
-		echo "   or: props [options]..."
-		echo ""
-		echo "Entering a property NAME and VALUE will save"
-		echo "this information to the module settings as custom"
-		echo "prop values."
-		echo ""
-		echo "Options:"
-		echo "  -d		Update to fingerprints test list."
-		echo "  -f		Update fingerprints list."
-		echo "  -l		Save module logs and info."
-		echo "  -h		Show this message."
-		echo "  -nc		Run without colours."
-		echo "  -nw		Run without fingerprint startup check."
-		echo "  -r		Reset all options/settings."
-		echo "  -s		Open script settings menu."
-		echo "  -t		Activate test mode."
-		echo ""
-		echo "See the module readme or the"
-		echo "support thread @ XDA for details."
-		echo ""
-		log_handler "Exiting... Bye bye.\n\n===================="
-		exit 0
-	;;	
-esac
-
-# Run options
-case "$1" in
-	*d*) # Download developers prints list, for testing prints
-		download_prints "Dev"
-	;;
-	*f*) # Update fingerprints list
-		download_prints "f"
-	;;
-	*l*) # Save logs
-		menu_logs "Collect logs" "l"
-	;;
-	*r*) # Reset all settings
-		reset_everything "Reset all settings" "r"
-	;;
-	*s*) # Open settings menu
-		menu_options "Script settings" "s"
-	;;
-esac
-
-# Download fingerprints list if enabled
-if [ "$OPTIONWEB" == 1 ]; then
+# Download fingerprints list and perform a module update check, if enabled
+if [ "$OPTIONWEBP" == 1 ] || [ "$OPTIONWEBU" == 1 ]; then
 	case "$1" in
-		*d*|*f*) # Do nothing
+		*d*|*f*|*u*)
+			case "$1" in
+				*d*|*f*) # Don't download prints
+					if [ "$OPTIONWEBU" == 1 ]; then
+						update_check "" "$1"
+					fi
+				;;
+				*u*) # Don't perform the update check
+					if [ "$OPTIONWEBP" == 1 ]; then
+						download_prints "" "$1"
+					fi
+				;;
+			esac
 		;;
-		*) download_prints
+		*)
+			if [ "$OPTIONWEBP" == 1 ]; then
+				download_prints "" "$1"
+			fi
+			if [ "$OPTIONWEBU" == 1 ]; then
+				update_check "" "$1"
+			fi
 		;;
 	esac
 fi
@@ -4050,6 +4147,13 @@ do
 			fi
 			menu_header "Select an option below."
 			echo ""
+			if [ "$UPDATECHECK" ]; then
+				echo -e "${C}$UPDATECHECK${N}"
+				echo ""
+				if [ "$UPDATECHECK" == "No update available." ]; then
+					UPDATECHECK=""
+				fi
+			fi
 			echo -e "${G}1${N} - Edit device fingerprint${PRINTTXT}"
 			echo -e "${G}2${N} - Force BASIC key attestation${BASICTXT}"
 			echo -e "${G}3${N} - Device simulation${DEVTXT}"
@@ -4058,6 +4162,9 @@ do
 			echo -e "${G}6${N} - Delete prop values${DELTXT}"
 			echo -e "${G}7${N} - Script settings"
 			echo -e "${G}8${N} - Collect logs"
+			if [ -z "$UPDATECHECK" ]; then
+				echo -e "${G}u${N} - Perform module update check"
+			fi
 			echo -e "${G}r${N} - Reset all options/settings"
 			echo -e "${G}b${N} - Reboot device"
 			echo -e "${G}e${N} - Exit"
@@ -4094,6 +4201,13 @@ do
 			7) menu_options "Script settings"
 			;;
 			8) menu_logs "Collect logs"
+			;;
+			u|U)
+				if [ -z "$UPDATECHECK" ]; then
+					menu_update_check "Perform module update check"
+				else
+					invalid_input 1 1
+				fi
 			;;
 			r|R) reset_everything "Reset all options/settings"
 			;;

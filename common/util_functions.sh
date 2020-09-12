@@ -40,8 +40,6 @@ get_file_value() {
 # ======================== Variables ========================
 MODULESPATH=$ADBPATH/modules
 LATEFILE=$MHPCPATH/propsconf_late
-MIRRORLOC=/sbin/.magisk/mirror/system
-VENDLOC=/sbin/.magisk/mirror/vendor
 if [ -z $SLOT ]; then
 	CACHELOC=/cache
 else
@@ -81,7 +79,8 @@ if [ "$INSTFN" ]; then
 	SIMSTAGE
 	OPTIONBOOT
 	OPTIONCOLOUR
-	OPTIONWEB
+	OPTIONWEBP
+	OPTIONWEBU
 	OPTIONUPDATE
 	OPTIONBACK
 	BRANDSET
@@ -141,15 +140,15 @@ else
 	"
 fi
 
-COREPATH=/sbin/.magisk
-MIRRORPATH=$COREPATH/mirror
+TMPFSMOUNT=$(magisk --path)
+MIRRORPATH=$TMPFSMOUNT/.magisk/mirror
 SYSTEMFILE=$MODPATH/system.prop
 RUNFILE=$MHPCPATH/script_check
+UPDATECHECK=""
 # Make sure that the terminal app used actually can see resetprop
 if [ "$BOOTSTAGE" == "props" ]; then
 	alias resetprop="$ADBPATH/magisk/magisk resetprop"
 fi
-alias reboot="/system/bin/reboot"
 
 # Fingerprint variables
 PRINTSLOC=$MODPATH/common/prints.sh
@@ -183,6 +182,17 @@ $CACHELOC
 /data/media/0
 "
 
+# Solo-run run options
+SOLORUN="
+d
+f
+h
+l
+r
+s
+u
+"
+
 # MagiskHide props
 PROPSLIST="
 ro.debuggable
@@ -211,6 +221,7 @@ system
 vendor
 product
 odm
+system_ext
 "
 
 # Additional fingerprint prop parts
@@ -425,10 +436,14 @@ format_file() {
 
 # Reboot the device
 force_reboot() {
+	RBREASON=""
+	if [ "$(get_file_value "$TMPFSMOUNT/.magisk/config" "RECOVERYMODE=")" == "true" ]; then
+		RBREASON="recovery"
+	fi
 	echo ""
 	echo -e "${C}Rebooting...${N}"
 	log_handler "Rebooting."
-	[ $(getprop sys.boot_completed) == 1 ] && /system/bin/svc power reboot "" >> $LOGFILE 2>&1 || /system/bin/reboot "" >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
+	[ $(getprop sys.boot_completed) == 1 ] && /system/bin/svc power reboot $RBREASON >> $LOGFILE 2>&1 || /system/bin/reboot $RBREASON >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
 	sleep 15
 	log_handler "Rebooting failed."
 	echo ""
@@ -826,13 +841,21 @@ config_file() {
 			replace_fn OPTIONCOLOUR $OPTIONCOLOUR $OPTCCHNG $LATEFILE
 			log_handler "Colour is set to $CONFCOLOUR."
 			# Fingerprints list update
-			if [ "$CONFWEB" == "true" ]; then
+			if [ "$CONFWEBP" == "true" ]; then
 				OPTWCHNG=1
 			else
 				OPTWCHNG=0
 			fi
-			replace_fn OPTIONWEB $OPTIONWEB $OPTWCHNG $LATEFILE
-			log_handler "Automatic fingerprints list update is set to $CONFWEB."
+			replace_fn OPTIONWEBP $OPTIONWEBP $OPTWCHNG $LATEFILE
+			log_handler "Automatic fingerprints list update is set to $CONFWEBP."
+			# Module update check
+			if [ "$CONFWEBU" == "true" ]; then
+				OPTWCHNG=1
+			else
+				OPTWCHNG=0
+			fi
+			replace_fn OPTIONWEBU $OPTIONWEBU $OPTWCHNG $LATEFILE
+			log_handler "Module update check at start is set to $CONFWEBU."
 			# Automatic fingerprints update
 			if [ "$CONFUPDATE" == "true" ]; then
 				OPTFCHNG=1
@@ -864,7 +887,59 @@ config_file() {
 
 # Connection test
 test_connection() {
-	ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
+	case $1 in
+		*nw*) # Don't run if the -nw run option is used.
+		;;
+		*)
+			log_handler "Checking connection."
+			ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
+		;;
+	esac
+}
+
+# Module update check
+update_check() {
+	case $2 in
+		*nw*) # Don't run if the -nw run option is used.
+		;;
+		*)
+			if [ "$1" == "manual" ]; then
+				# Testing connection
+				test_connection
+			fi
+			if [ "$CNTTEST" == "true" ]; then
+				echo ""
+				log_print "Checking for module update."
+				MODPROPTMP=$MHPCPATH/module.prop
+				MODPROPWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHidePropsConf/master/module.prop"
+				MODVERTMP="$(echo $(get_file_value $MODPROPTMP "version=") | sed 's|-.*||' | sed 's|v||' | sed 's|\.||g')"
+				module_v_ctrl
+				wget -T 5 -q -O $MODPROPTMP $MODPROPWWW >> $LOGFILE 2>&1
+				if [ -s "$MODPROPTMP" ]; then
+					if [ "$VERSIONCMP" -lt "$MODVERTMP" ]; then
+						UPDATECHECK="There is a newer version of the module\navailable. Please update."
+						log_print "Module update available."
+					else
+						if [ "$1" == "manual" ]; then
+							UPDATECHECK="No update available."
+						else
+							UPDATECHECK=""
+						fi
+						log_print "No update available."
+					fi
+				elif [ -f "$MODPROPTMP" ]; then
+					rm -f $MODPROPTMP
+					log_print "! File not downloaded!"
+					log_handler "File is empty."
+				else
+					log_print "! File not downloaded!"
+				fi
+			else
+				log_handler "No connection."
+			fi
+			sleep 0.5
+		;;
+	esac
 }
 
 # system.prop creation
@@ -889,6 +964,14 @@ system_prop() {
 		fi
 		# Check system.prop content
 		system_prop_cont
+
+		# Check for edge case where module has been updated but no reboot has been done yet
+		if [ -d "$ADBPATH/modules_update/MagiskHidePropsConf" ] && [ -f "$MODPATH/system.prop" ]; then
+			log_handler "Copying system.prop to update folder."
+			cp -f $MODPATH/system.prop $ADBPATH/modules_update/MagiskHidePropsConf >> $LOGFILE 2>&1
+		else
+			rm -f $ADBPATH/modules_update/MagiskHidePropsConf/system.prop >> $LOGFILE 2>&1
+		fi
 	fi
 }
 
@@ -1046,7 +1129,7 @@ usnf_check() {
 
 # Check for bin/xbin
 bin_check() {
-	$BOOTMODE && BINCHECK=$COREPATH/mirror/system/xbin || BINCHECK=/system/xbin
+	$BOOTMODE && BINCHECK=$MIRRORPATH/system/xbin || BINCHECK=/system/xbin
 	if [ -d "$BINCHECK" ]; then
 		BIN=xbin
 	else
@@ -1321,61 +1404,65 @@ device_print_update() {
 
 # Checks and updates the prints list, $1=run option
 download_prints() {
-	# Don't clear screen if running through adb or if testing flag is used
-	if [ -z "$ANDROID_SOCKET_adbd" ] && [ "$DEVTESTING" == "false" ]; then
-		clear
-	fi
-	if [ "$1" == "Dev" ]; then
-		PRINTSWWW=$PRINTSDEV
-	fi
-	menu_header "Updating fingerprints list"
-	echo ""
-	# Testing connection
-	log_print "Checking connection."
-	test_connection
-	# Checking and downloading fingerprints list
-	if [ "$CNTTEST" == "true" ]; then
-		log_print "Checking list version."
-		wget -T 5 -q -O $PRINTSTMP $PRINTSWWW >> $LOGFILE 2>&1
-		if [ -s "$PRINTSTMP" ]; then
-			LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
-			if [ "$LISTVERSION" ]; then
-				if [ "$LISTVERSION" == "Dev" ] || [ "$1" == "f" -a "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
-					module_v_ctrl
-					if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le $VERSIONCMP ]; then
-						mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
-						# Updates list version in module.prop
-						replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
-						log_print "Updated list to v${LISTVERSION}."
-						print_files
+	case $2 in
+		*nw*) # Don't run if the -nw run option is used.
+		;;
+		*)
+			if [ "$1" == "Dev" ]; then
+				PRINTSWWW=$PRINTSDEV
+			fi
+			menu_header "Updating fingerprints list"
+			echo ""
+			if [ "$1" == "manual" ]; then
+				# Testing connection
+				test_connection
+			fi
+			# Checking and downloading fingerprints list
+			if [ "$CNTTEST" == "true" ]; then
+				echo ""
+				log_print "Checking list version."
+				wget -T 5 -q -O $PRINTSTMP $PRINTSWWW >> $LOGFILE 2>&1
+				if [ -s "$PRINTSTMP" ]; then
+					LISTVERSION=$(get_file_value $PRINTSTMP "PRINTSV=")
+					if [ "$LISTVERSION" ]; then
+						if [ "$LISTVERSION" == "Dev" ] || [ "$1" == "f" -a "$(get_file_value $PRINTSLOC "PRINTSV=")" == "Dev" ] || [ "$LISTVERSION" -gt "$(get_file_value $PRINTSLOC "PRINTSV=")" ]; then
+							module_v_ctrl
+							if [ "$(get_file_value $PRINTSTMP "PRINTSTRANSF=")" -le $VERSIONCMP ]; then
+								mv -f $PRINTSTMP $PRINTSLOC >> $LOGFILE 2>&1
+								# Updates list version in module.prop
+								replace_fn version $VERSIONTMP "${MODVERSION}-v${LISTVERSION}" $MODPATH/module.prop
+								log_print "Updated list to v${LISTVERSION}."
+								print_files
+							else
+								rm -f $PRINTSTMP
+								log_print "New fingerprints list requires module update."
+							fi
+						else
+							rm -f $PRINTSTMP
+							log_print "Fingerprints list up-to-date."
+						fi
 					else
 						rm -f $PRINTSTMP
-						log_print "New fingerprints list requires module update."
+						log_print "! File not downloaded!"
+						log_handler "Couldn't extract list version."
 					fi
-				else
+				elif [ -f "$PRINTSTMP" ]; then
 					rm -f $PRINTSTMP
-					log_print "Fingerprints list up-to-date."
+					log_print "! File not downloaded!"
+					log_handler "File is empty."
+				else
+					log_print "! File not downloaded!"
 				fi
 			else
-				rm -f $PRINTSTMP
-				log_print "! File not downloaded!"
-				log_handler "Couldn't extract list version."
+				log_print "No connection."
 			fi
-		elif [ -f "$PRINTSTMP" ]; then
-			rm -f $PRINTSTMP
-			log_print "! File not downloaded!"
-			log_handler "File is empty."
-		else
-			log_print "! File not downloaded!"
-		fi
-	else
-		log_print "No connection."
-	fi
-	if [ "$1" == "manual" ]; then
-		sleep 2
-	else
-		sleep 0.5
-	fi
+			if [ "$1" == "manual" ]; then
+				sleep 2
+			else
+				sleep 0.5
+			fi
+		;;
+	esac
 }
 
 # Reset the module fingerprint change, $1=prop name, $2=run option
@@ -2169,7 +2256,8 @@ export_settings() {
 	# Module settings
 	replace_fn CONFBOOT default $([ $OPTIONBOOT == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	replace_fn CONFCOLOUR true $([ $OPTIONCOLOUR == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFWEB true $([ $OPTIONWEB == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFWEBP true $([ $OPTIONWEBP == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFWEBU true $([ $OPTIONWEBU == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	replace_fn CONFUPDATE true $([ $OPTIONUPDATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	replace_fn CONFBACK false $([ $OPTIONBACK == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	log_handler "Export done."

@@ -52,7 +52,8 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Prop script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prop-script-settings)
   - [Boot stage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#boot-stage)
   - [Script colours](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#script-colours)
-  - [Fingerprints list check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#fingerprints-list-check)
+  - [Automatic module update check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#automatic-module-update-check)
+  - [Automatic update of fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#automatic-update-of-fingerprints-list)
   - [Automatic fingerprint update](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#automatic-fingerprint-update)
   - [Background boot script](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#background-boot-script)
   - [Export settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#export-settings)
@@ -114,16 +115,18 @@ this information to the module settings as custom
 prop values.
 
 Options:
-  -d    Update to fingerprints test list.
-  -f    Update fingerprints list.
-  -l    Save module logs and info.
-  -h    Show this message.
+  -d    *Update to fingerprints test list during start.
+  -f    *Update fingerprints list during start.
+  -l    *Save module logs and info.
+  -h    *Show this message.
   -nc   Run without colours.
-  -nw   Run without fingerprint startup check.
-  -r    Reset all options/settings.
-  -s    Open script settings menu.
+  -nw   Run without connecting to the web during start.
+  -r    *Reset all options/settings.
+  -s    *Open script settings menu.
   -t    Activate test mode.
+  -u    *Perform a module update check during start.
 ```
+Options marked with an asterisk (\*) cannot be combined with each other.
 
 The settings option (-s) can be used even if the module boot scripts did not run.
 
@@ -234,11 +237,11 @@ In case you can't get the Play Store to report your device as "certified", see [
 ## Current fingerprints list version
 The fingerprints list will update without the need to update the entire module. Keep an eye on the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) for info.
 
-Just run the `props` command and the list will be updated automatically. Use the -nw option to run the script without updating the list or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu or by running the `props` command with the -f option.
+Just run the `props` command and the list will be updated automatically. Use the -nw option to run the script without updating the list or disable it completely in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below). If you've disabled the this setting you can update the list manually in the `Edit device fingerprint` menu or by running the `props` command with the -f run option.
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v101_**
+**_Current fingerprints list version - v102_**
 
 
 ## Please add support for device X
@@ -335,7 +338,7 @@ If you would like to delete a certain prop value from your system, that can be d
 
 
 ## Prop script settings
-There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s option (use -h for details).
+There are a couple of persistent options that you can set for the `props` script. These are currently "Boot stage", "Script colours" and "Fingerprints list check". The options are found under "Script settings" when running the `props` script. The settings menu can also be opened by using the -s run option (use -h for details).
 
 ### Boot stage
 It's possible to move the execution of the boot script from the default system.prop file to either post-fs-data or late_start service. If there are any kind of issues during boot or that props don't set properly, try changing the boot stage to either post-fs-data or late_start service instead. Just keep in mind that this might cause other issues like the fingerprint not setting properly (if set during late_start service) or that post-fs-data will be interupted by having too many props causing the script to run too slow.
@@ -347,8 +350,11 @@ Note: post-fs-data runs earlier than system.prop and late_start service runs aft
 ### Script colours
 This option will disable or enable colours for the `props` script.
 
-### Fingerprints list check
-This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f option (use -h for details).
+### Automatic module update check
+This option will disable or enable the automatic check for a module update when the `props` script starts. If the update check is disabled, it can still be performed manually from within the script, in the main menu, or with the -u run option (use -h for details).
+
+### Automatic update of fingerprints list
+This option will disable or enable the automatic updating of the fingerprints list when the `props` script starts. If the fingerprints list check is disabled, the list can be manually updated from within the script, under the `Edit device fingerprint` menu, or with the -f run option (use -h for details).
 
 ### Automatic fingerprint update
 Whenever there is an update to the fingerprints list and if you have a fingerprint applied for a device that is on the list, the fingerprint will automatically be updated (if there is an update to that particular fingerprint). This option will not update a fingerprint to one for a different Android version if there are several fingerprints available for the same device.
@@ -457,7 +463,7 @@ This is caused by the [MagiskHide Sensitive props](https://github.com/Magisk-Mod
 If your device's Play Store reports that the device is "uncertified", this is usually fixed by making sure that you pass SafetyNet and then clearing data for the Play Store (and possibly rebooting). More details in the [Magisk troubleshooting guide](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Device_uncertified_in_Play_storeNetflix_and_other_apps_wont_install_or_doesnt_show_up).
 
 ## Logs
-In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l option, use -h for details). All the relevant logs and module files, together with the Magisk log, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
+In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l run option, use -h for details). All the relevant logs and module files, together with the Magisk log, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
 
 The logs will also automatically be saved to the root of the device's internal storage if there's an issue with the module scripts.
 
@@ -496,6 +502,14 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### V5.3.4  
+- Added a module update check option. See the documentation for details.
+- Added `system_ext` to the list of partitions used for certain props (thank you @simonsmh).
+- Fixed an edge case where changing settings after updating the module, but not having rebooted yet would cause issues with system.prop being kept from the previous version.
+- Fixed the -nw run option and made sure that some run options can't be picked together. See the documentation for details.
+- Cleaned up some unused variables.
+- Added print for Sony Xperia 10 II Dual XQ-AU52. Updated fingerprints for Google Pixel 2, 2 XL, 4, 4 XL and 4a, OnePlus 8 IN2015 and 8 Pro In2025 and Xiaomi Mi 10 Global, Mi 10 Pro and Pocophone F1. List updated to v102.
+
 ### v5.3.3  
 - More (very) minor ui tweaks.
 - Added fingerprint for Samsung Galaxy J7 Neo SM-J701M. Updated fingerprints for OnePlus 8 IN2013, 8 Pro IN2023, Nord AC2001, Nord European AC2003 and Nord Global AC2003 and Samsung Galaxy Tab S5e SM-T720. List updated to v5.
@@ -867,7 +881,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v101  
+### List v102  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 4 Max ASUS_X00HD (7.1.1)
@@ -905,7 +919,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Google Pixel 3a XL (9 & 10 & 11)
 - Google Pixel 4 (10 & 11)
 - Google Pixel 4 XL (10 & 11)
-- Google Pixel 4a (10)
+- Google Pixel 4a (10 & 11)
 - Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
@@ -1013,7 +1027,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 7T HD1901 (10)
 - OnePlus 7T HD1903 (10)
 - OnePlus 7T HD1905 (10)
-- OnePlus 7 Pro HD1910 (10)
+- OnePlus 7T Pro HD1910 (10)
 - OnePlus 7T Pro HD1911 (10)
 - OnePlus 7T Pro HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
@@ -1021,13 +1035,13 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 8 IN2010 (10)
 - OnePlus 8 IN2011 (10)
 - OnePlus 8 IN2013 (10)
-- OnePlus 8 IN2015 (10)
+- OnePlus 8 IN2015 (10 & 11)
 - OnePlus 8 IN2017 (10)
 - OnePlus 8 IN2019 (10)
 - OnePlus 8 Pro IN2020 (10)
 - OnePlus 8 Pro IN2021 (10)
 - OnePlus 8 Pro IN2023 (10)
-- OnePlus 8 Pro IN2025 (10)
+- OnePlus 8 Pro IN2025 (10 & 11)
 - OnePlus Nord AC2001 (10)
 - OnePlus Nord European AC2003 (10)
 - OnePlus Nord Global AC2003 (10)
@@ -1112,6 +1126,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy Tab S4 SM-T830 (10)
 - Samsung Galaxy Tab S5e SM-T720 (9 & 10)
 - Sony Xperia 5 DSDS J9210 (10)
+- Sony Xperia 10 II Dual XQ-AU52 (10)
 - Sony Xperia M (4.3)
 - Sony Xperia X F5121 (8.0.0)
 - Sony Xperia X Compact F5321 (8.0.0)
@@ -1161,9 +1176,9 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 9T Global (10)
 - Xiaomi Mi 9T Pro (9 & 10)
 - Xiaomi MI 10 European (10)
-- Xiaomi Mi 10 Global (10)
+- Xiaomi Mi 10 Global (10 & 11)
 - Xiaomi Mi 10 Lite 5G (10)
-- Xiaomi Mi 10 Pro (10)
+- Xiaomi Mi 10 Pro (10 & 11)
 - Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite (8.1.0 & 9 & 10)
