@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=102
+PRINTSV=103
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -42,10 +42,10 @@ Google Pixel (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel=google/
 Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel XL=google/marlin/marlin:7.1/NDE63V/3389651:user/release-keys;google/marlin/marlin:7.1.1/NOF27D/3757586:user/release-keys;google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys;google/marlin/marlin:8.0.0/OPR3.170623.013/4397526:user/release-keys;google/marlin/marlin:8.1.0/OPM4.171019.021.P1/4820305:user/release-keys__2018-07-05;google/marlin/marlin:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
 Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2=google/walleye/walleye:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/walleye/walleye:8.1.0/OPM2.171026.006.G1/4820017:user/release-keys__2018-07-05;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/walleye/walleye:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
 Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2 XL=google/taimen/taimen:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/taimen/taimen:8.1.0/OPM2.171026.006.H1/4833802:user/release-keys__2018-07-05;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/taimen/taimen:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
-Google Pixel 3 (9 & 10 & 11):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/blueline/blueline:11/RPB3.200720.005/6705141:user/release-keys__2020-08-05
-Google Pixel 3 XL (9 & 10 & 11):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/crosshatch/crosshatch:11/RPB3.200720.005/6705141:user/release-keys__2020-08-05
-Google Pixel 3a (9 & 10 & 11):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/sargo/sargo:11/RPB3.200720.005/6705141:user/release-keys__2020-08-05
-Google Pixel 3a XL (9 & 10 & 11):Google:Pixel 3a XL=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/bonito/bonito:11/RPB3.200720.005/6705141:user/release-keys__2020-08-05
+Google Pixel 3 (9 & 10 & 11):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/blueline/blueline:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
+Google Pixel 3 XL (9 & 10 & 11):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/crosshatch/crosshatch:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
+Google Pixel 3a (9 & 10 & 11):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/sargo/sargo:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
+Google Pixel 3a XL (9 & 10 & 11):Google:Pixel 3a XL=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/bonito/bonito:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
 Google Pixel 4 (10 & 11):Google:Pixel 4=google/flame/flame:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/flame/flame:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
 Google Pixel 4 XL (10 & 11):Google:Pixel 4 XL=google/coral/coral:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/coral/coral:11/RP1A.200720.009/6720564:user/release-keys__2020-09-05
 Google Pixel 4a (10 & 11):Google:Pixel 4a=google/sunfish/sunfish:10/QD4A.200805.003/6598198:user/release-keys__2020-08-05;google/sunfish/sunfish:11/RP1A.200720.011/6746289:user/release-keys__2020-09-05
