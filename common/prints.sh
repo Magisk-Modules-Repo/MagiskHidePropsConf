@@ -4,20 +4,24 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=103
+PRINTSV=104
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=505
-# Unique devices=347
+# Current fingerprints count=514
+# Unique devices=354
 PRINTSLIST="
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0):Asus:ASUS_X00DD=asus/WW_Phone/ASUS_X00DD:7.1.1/NMF26F/14.0200.1712.347-20171214:user/release-keys;asus/WW_Phone/ASUS_X00DD:8.1.0/OPM1.171019.011/15.0200.1812.503-0:user/release-keys__2018-12-05
+Asus ZenFone 3 Ultra ASUS_A001 (7.0):Asus:ASUS_A001=asus/WW_Phone/ASUS_A001:7.0/NRD90M/14.1010.1804.75-20180612:user/release-keys__2018-04-01
+Asus ZenFone 4 ASUS_Z01KD (8.0.0 & 9):Asus:ASUS_Z01KD=asus/WW_Z01KD/ASUS_Z01KD_1:8.0.0/OPR1.170623.032/15.0610.1909.39-0:user/release-keys__2019-09-01;asus/WW_Z01KD/ASUS_Z01KD_1:9/PPR1.180610.009/16.0620.1912.23-0:user/release-keys__2019-12-01
 Asus ZenFone 4 Max ASUS_X00HD (7.1.1):Asus:ASUS_X00HD=asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys
+Asus ZenFone 5 ASUS_X00QD (9):Asus:ASUS_X00QD=asus/WW_X00QD/ASUS_X00QD:9/PPR1.180610.009/16.0615.2006.131-0:user/release-keys__2020-06-01
 Asus ZenFone 5Z ASUS_Z01RD (9):Asus:ASUS_Z01RD=asus/WW_Z01RD/ASUS_Z01R_1:9/PPR1.180610.009/WW_90.11.162.72_20190531:user/release-keys__2019-05-01
 Asus ZenFone 6 ASUS_I01WD (9):Asus:ASUS_I01WD=asus/WW_I01WD/ASUS_I01WD:9/PPR2.181005.003/16.1220.1909.193-0:user/release-keys__2019-09-01
+Asus ZenFone 7/7 Pro ASUS_I002D (10):Asus:ASUS_I002D=asus/WW_I002D/ASUS_I002D:10/QKQ1.200127.002/29.12.18.14_20200902:user/release-keys__2020-07-05
 Asus ZenFone Max M1 ASUS_X00PD (8.0.0 & 9 & 10):Asus:ASUS_X00PD=asus/WW_X00PD/ASUS_X00P_1:8.0.0/OPR1.170623.032/15.00.2007.122:user/release-keys__2020-07-05;asus/WW_X00PD/ASUS_X00P_1:9/PPR1.180610.009/16.00.1906.411:user/release-keys__2019-06-05;asus/WW_X00PD/ASUS_X00P_1:10/QKQ1.191002.002/17.00.2003.23-20200401:user/release-keys__2020-03-05
-Asus ZenFone Max Pro M1 ASUS_X00TD (8.1.0):Asus:ASUS_X00TD=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.1902.340-20190216:user/release-keys__2019-02-01
+Asus ZenFone Max Pro M1 ASUS_X00TD (8.1.0 & 9):Asus:ASUS_X00TD=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.1902.340-20190216:user/release-keys__2019-02-01;asus/WW_X00TD/ASUS_X00T_3:9/PKQ1/16.2017.2009.087-20200826:user/release-keys__2020-09-05
 Asus ZenFone Max Pro M2 ASUS_X01BD (9):asus:ASUS_X01BD=asus/WW_X01BD/ASUS_X01BD_1:9/PKQ1/16.2017.2007.094-20200705:user/release-keys__2020-07-05
 Asus ZenPad S 8.0 P01MA (6.0.1):Asus:P01MA=asus/WW_P01M/P01M_3:6.0.1/MMB29P/WW_P01M-V5.6.0-20170608:user/release-keys
 BLU S1 (7.0):Blu:BLU_S1=BLU/BLU_S1/S0320WW:7.0/NRD90M/1514191903:user/release-keys
@@ -165,6 +169,7 @@ OnePlus 8 IN2010 (10):OnePlus:IN2010=OnePlus/OnePlus8_CH/OnePlus8:10/QKQ1.191222
 OnePlus 8 IN2011 (10):OnePlus:IN2011=OnePlus/OnePlus8_IND/OnePlus8:10/QKQ1.191222.002/2008080019:user/release-keys__2020-08-01
 OnePlus 8 IN2013 (10):OnePlus:IN2013=OnePlus/OnePlus8_EEA/OnePlus8:10/QKQ1.191222.002/2008150504:user/release-keys__2020-08-01
 OnePlus 8 IN2015 (10 & 11):OnePlus:IN2015=OnePlus/OnePlus8/OnePlus8:10/QKQ1.191222.002/2008080019:user/release-keys__2020-08-01;OnePlus/OnePlus8/OnePlus8:11/RP1A.201005.001/2009051300:user/release-keys__2020-09-01
+OnePlus 8 IN2015 Visible (10):OnePlus:IN2015=OnePlus/OnePlus8Visible/OnePlus8Visible:10/QKQ1.191222.002/2007221621:user/release-keys__2020-06-01
 OnePlus 8 IN2017 (10):OnePlus:IN2017=OnePlus/OnePlus8TMO/OnePlus8TMO:10/QKQ1.191222.002/2006102149:user/release-keys__2020-06-01
 OnePlus 8 IN2019 (10):OnePlus:IN2019=OnePlus/OnePlus8VZW/OnePlus8VZW:10/QKQ1.191222.002/2004072220:user/release-keys__2020-02-01
 OnePlus 8 Pro IN2020 (10):OnePlus:IN2020=OnePlus/OnePlus8Pro_CH/OnePlus8Pro:10/QKQ1.191222.002/2007021926:user/release-keys__2020-06-01
@@ -176,7 +181,8 @@ OnePlus Nord European AC2003 (10):OnePlus:AC2003=OnePlus/Nord_EEA/Nord:10/QKQ1.2
 OnePlus Nord Global AC2003 (10):OnePlus:AC2003=OnePlus/Nord/Nord:10/QKQ1.200412.002/2009010217:user/release-keys__2020-07-01
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
-POCO F2 Pro (10):POCO:POCO F2 Pro=POCO/lmi_eea/lmi:10/QKQ1.191117.002/V12.0.2.0.QJKEUXM:user/release-keys__2020-07-01
+POCO F2 Pro European (10):POCO:POCO F2 Pro=POCO/lmi_eea/lmi:10/QKQ1.191117.002/V12.0.2.0.QJKEUXM:user/release-keys__2020-07-01
+POCO F2 Pro Global (10):Xiaomi:POCO F2 Pro=POCO/lmi_global/lmi:10/QKQ1.191117.002/V12.0.3.0.QJKMIXM:user/release-keys__2020-07-01
 POCO X2 (10):POCO:POCO X2=POCO/phoenixin/phoenixin:10/QKQ1.190825.002/V12.0.1.0.QGHINXM:user/release-keys__2020-07-01
 Razer Phone (7.1.1 & 8.1.0 & 9):Razer:Phone=razer/cheryl/cheryl:7.1.1/NMF26X-RZR-180118/3005:user/release-keys__2018-01-05;razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05;razer/cheryl/cheryl:9/P-MR2-RC001-RZR-N/7083:user/release-keys__2019-11-05
 Razer Phone 2 (8.1.0 & 9):Razer:Phone 2=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05;razer/cheryl2/aura:9/P-SMR3-RC002-RZR-200226/3141:user/release-keys__2020-03-05
@@ -252,7 +258,8 @@ Samsung Galaxt Tab A LTE SM-T595 (9):Samsung:SM-T595=samsung/gta2xlltexx/gta2xll
 Samsung Galaxt Tab A LTE SM-T597 (9):Samsung:SM-T597=samsung/gta2xlltespr/gta2xlltespr:9/PPR1.180610.011/T597PVPU2BSH7:user/release-keys__2019-08-01
 Samsung Galaxy Tab S2 SM-T813 (7.0):samsung:SM-T813=samsung/gts210vewifixx/gts210vewifi:7.0/NRD90M/T813XXS2BSJ3:user/release-keys__2019-08-01
 Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0):Samsung:SM-T825=samsung/gts3lltexx/gts3llte:8.0.0/R16NW/T825XXU2BRL2:user/release-keys__2018-12-01
-Samsung Galaxy Tab S4 SM-T830 (10):samsung:SM-T830=samsung/gts4lwifixx/gts4lwifi:10/QP1A.190711.020/T830XXU4CTF5:user/release-keys__2020-06-01
+Samsung Galaxy Tab S4 WiFi SM-T830 (10):samsung:SM-T830=samsung/gts4lwifixx/gts4lwifi:10/QP1A.190711.020/T830XXU4CTF5:user/release-keys__2020-06-01
+Samsung Galaxy Tab S4 LTE SM-T835 (10):samsung:SM-T835=samsung/gts4lltexx/gts4llte:10/QP1A.190711.020/T835XXU4CTF5:user/release-keys__2020-06-01
 Samsung Galaxy Tab S5e SM-T720 (9 & 10):samsung:SM-T720=samsung/gts4lvwifixx/gts4lvwifi:9/PPR1.180610.011/T720XXS1ASL3:user/release-keys__2020-01-01;samsung/gts4lvwifixx/gts4lvwifi:10/QP1A.190711.020/T720XXU1BTG3:user/release-keys__2020-06-01
 Sony Xperia 5 DSDS J9210 (10):Sony:J9210=Sony/J9210_RU/J9210:10/55.1.A.9.52/055001A009005201481357772:user/release-keys__2020-07-01
 Sony Xperia 10 II Dual XQ-AU52 (10):Sony:XQ-AU52=Sony/XQ-AU52_EEA/XQ-AU52:10/59.0.A.6.24/059000A006002402956232951:user/release-keys__2020-07-01
@@ -310,7 +317,7 @@ Xiaomi Mi 10 Lite 5G (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.191222.
 Xiaomi Mi 10 Pro (10 & 11):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01;Xiaomi/cmi/cmi:11/RKQ1.200710.002/V12.1.2.0.RJACNXM:user/release-keys__2020-09-01
 Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.13.0.QDIMIXM:user/release-keys__2020-08-05
-Xiaomi Mi A2 Lite (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.9.0.QDLMIXM:user/release-keys__2020-07-01
+Xiaomi Mi A2 Lite (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.11.0.QDLMIXM:user/release-keys__2020-09-01
 Xiaomi Mi A3 (9 & 10):Xiaomi:Mi A3=Xiaomi/laurel_sprout/laurel_sprout:9/PKQ1.190416.001/V10.3.16.0.PFQMIXM:user/release-keys__2020-03-05;Xiaomi/laurel_sprout/laurel_sprout:10/QKQ1.190910.002/V11.0.20.0.QFQMIXM:user/release-keys__2020-08-05
 Xiaomi Mi Box S (9):Xiaomi:MIBOX4=Xiaomi/oneday/oneday:9/PI/2231:user/release-keys__2019-11-05
 Xiaomi Mi Max (6.0.1):Xiaomi:MI MAX=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.MBDMIDL:user/release-keys
