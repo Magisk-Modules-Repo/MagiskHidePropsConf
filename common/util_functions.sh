@@ -1259,7 +1259,7 @@ print_edit() {
 			if [ "$1" != "none" ]; then
 				echo "ro.build.fingerprint=${PRINTCHNG}" >> $1
 			else
-				resetprop -nv ro.build.fingerprint $PRINTCHNG >> $LOGFILE 2>&1
+				resetprop -nv ro.build.fingerprint "$PRINTCHNG" >> $LOGFILE 2>&1
 			fi
 		else
 			log_handler "ro.build.fingerprint not currently set on device. Skipping."
@@ -1295,7 +1295,7 @@ patch_edit() {
 					if [ "$1" != "none" ]; then
 						echo "ro.build.version.security_patch=${SECPATCH}" >> $1
 					else
-						resetprop -nv ro.build.version.security_patch $SECPATCH >> $LOGFILE 2>&1
+						resetprop -nv ro.build.version.security_patch "$SECPATCH" >> $LOGFILE 2>&1
 					fi
 				fi
 			;;
@@ -1616,7 +1616,7 @@ set_partition_props() {
 				if [ "$1" != "none" ]; then
 					echo "${TMPPROP}=${3}" >> $1
 				else
-					resetprop -nv $TMPPROP $3 >> $LOGFILE 2>&1
+					resetprop -nv $TMPPROP "$3" >> $LOGFILE 2>&1
 				fi
 			else
 				log_handler "$TMPPROP not currently set on device. Skipping."
@@ -1640,15 +1640,15 @@ forced_basic() {
 	else
 		BASICATTDEV="$(getprop ro.product.brand)"
 	fi
-  if [ "$BASICATTCUST" ]; then
+	if [ "$BASICATTCUST" ]; then
 		BASICATTMODEL=$BASICATTCUST
-  elif [ "$BASICATTLIST" ]; then
+	elif [ "$BASICATTLIST" ]; then
 		BASICATTMODEL=$BASICATTLIST
-  else
+	else
 		# Find the OEM print file
 		TMPFILE="$(ls $MODPATH/printfiles | grep -i $BASICATTDEV)"
 		BASICATTMODEL="$(get_file_value "$MODPATH/printfiles/$TMPFILE" "BASICATTMODEL=")"
-  fi
+	fi
 	# Write or load values
 	if [ "$1" != "none" ]; then
 		if [ "$1" == "$MODPATH/system.prop" ]; then
@@ -1663,6 +1663,8 @@ forced_basic() {
 			TMPVAL=1
 			if [ "$BASICATTEST" == 0 ]; then
 				log_handler "Enabling forced basic attestation."
+				# Disabling ro.product.model simulation
+				replace_fn "MODELSET" $MODELSET 0 $LATEFILE
 			elif [ "$BASICATTEST" == 1 ] && [ -z "$2" ] && [ -z "$3" ] && [ "$4" != "reset" ]; then
 				TMPVAL=0
 				log_handler "Disabling forced basic attestation."
@@ -1681,7 +1683,7 @@ forced_basic() {
 		else
 			TMPVAL="$(getprop ro.product.device)"
 		fi
-		resetprop -nv ro.product.model $TMPVAL >> $LOGFILE 2>&1
+		resetprop -nv ro.product.model "$TMPVAL" >> $LOGFILE 2>&1
 		set_partition_props "none" "ro.product.model" "$TMPVAL"
 	fi
 }
@@ -1744,13 +1746,13 @@ dev_sim_edit() {
 							if [ "$1" != "none" ]; then
 								echo "${ITEM}=${TMPVALUE}" >> $1
 							else
-								resetprop -nv $ITEM $TMPVALUE >> $LOGFILE 2>&1
+								resetprop -nv $ITEM "$TMPVALUE" >> $LOGFILE 2>&1
 							fi
 						else
 							log_handler "$ITEM not currently set on device. Skipping."
 						fi
 						if [ "$PARTPROPSSET" == 1 ]; then
-							set_partition_props $1 $ITEM $TMPVALUE
+							set_partition_props "$1" $ITEM "$TMPVALUE"
 						fi
 					else
 						log_handler "Changing/writing $ITEM is disabled."

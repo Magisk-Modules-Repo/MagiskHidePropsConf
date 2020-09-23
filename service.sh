@@ -109,7 +109,7 @@ if [ "$PROPEDIT" == 1 ]; then
 		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
 		if [ "$(eval "echo \$$REPROP")" == "true" ]; then
 			log_handler "Changing/writing $ITEM."
-			resetprop -nv $ITEM $(eval "echo \$$MODULEPROP") >> $LOGFILE 2>&1
+			resetprop -nv $ITEM "$(eval "echo \$$MODULEPROP")" >> $LOGFILE 2>&1
 		fi
 	done
 	stop

@@ -1155,7 +1155,7 @@ forced_list_pick_menu() {
 			IFS=$(echo -en "\n\b")
 			for ITEM in $PRINTSLIST; do
 				if [ "$(get_first $ITEM)" == "$2" ]; then
-					echo -e "${G}$ITEMCOUNT${N} - $(get_device "$ITEM")"
+					echo -e "${G}$ITEMCOUNT${N} - $(get_device "$ITEM" | sed "s| (.*)||")"
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
 			done
@@ -1541,7 +1541,8 @@ menu_dev_sim() {
 					if [ "$BASICATTEST" == 0 ]; then
 						echo -e "${G}10${N} - ro.product.model${MODELTXT}"
 					else
-						echo "(Simulating ro.product.model is currently disabled.)"
+						echo -e "     (Simulating ro.product.model is currently ${R}disabled${N}.)"
+						echo ""
 					fi
 					MANMODEN=true
 				else

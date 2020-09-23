@@ -504,6 +504,11 @@ Releases from v5.0.0 are recommended for Magisk v19.4+.
 Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Changelog
+### v5.3.5  
+- Fixed issue with partition model props not being set correctly.
+- Make sure that simulating ro.product.model is completely disabled when enabling "Force BASIC key attestation".
+- Removed Android versions from the device list when picking a model for "Force BASIC key attestation".
+
 ### v5.3.4  
 - Added a module update check option. See the documentation for details.
 - Added `system_ext` to the list of partitions used for certain props (thank you @simonsmh).
