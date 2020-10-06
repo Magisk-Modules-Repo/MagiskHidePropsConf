@@ -25,7 +25,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Usage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#usage)
 - [Run options](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#run-options)
 ##### What option should I use?
-- [What option should I use?](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#what-option-should-i-use)
+- [What option should I use?](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#what-option-should-i-use-1)
   - [Not passing SafetyNet](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#not-passing-safetynet)
   - [Simulating other devices](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#simulating-other-devices)
   - [Working with props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#working-with-props)
