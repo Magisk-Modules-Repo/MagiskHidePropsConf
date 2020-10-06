@@ -18,7 +18,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 
 ## Documentation index
 ##### Warning
-- [Warning](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#warning)
+- [Warning](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#warning-1)
 ##### Installation and usage
 - [Prerequisites](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prerequisites)
 - [Installation](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#installation)
