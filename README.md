@@ -99,7 +99,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 ## Warning
 Let's start off with a warning.
 
-This module changes your devices prop values. Fingerprint, model and whatever prop you want (depending on what options you use). This may have consequences (everything in life does, live with it). Your device might be perceived as a different device (create issues with the Play Store, OTA updates, etc) and cause system instabilities and even bootloops.
+This module changes your devices prop values. Fingerprint, model and whatever prop you want (depending on what options you use). This may have consequences (everything in life does, live with it). Your device might be perceived as a different device (create issues with the Play Store, YouTube video resolution, OTA updates, etc) and cause system instabilities and even bootloops.
 
 Read through the documentation to find more details and how to fix your device if things go south. 
 
