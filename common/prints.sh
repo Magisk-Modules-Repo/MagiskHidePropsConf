@@ -8,8 +8,8 @@ PRINTSV=105
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=526
-# Unique devices=365
+# Current fingerprints count=528
+# Unique devices=367
 PRINTSLIST="
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0):Asus:ASUS_X00DD=asus/WW_Phone/ASUS_X00DD:7.1.1/NMF26F/14.0200.1712.347-20171214:user/release-keys;asus/WW_Phone/ASUS_X00DD:8.1.0/OPM1.171019.011/15.0200.1812.503-0:user/release-keys__2018-12-05
@@ -323,8 +323,10 @@ Xiaomi Mi 9T Global (10):Xiaomi:Mi 9T=Xiaomi/davinci/davinci:10/QKQ1.190825.002/
 Xiaomi Mi 9T Pro (9 & 10):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01;Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
 Xiaomi MI 10 European (10):Xiaomi:Mi 10=Xiaomi/umi_eea/umi:10/QKQ1.191117.002/V11.0.10.0.QJBEUVF:user/release-keys__2020-07-01
 Xiaomi Mi 10 Global (10 & 11):Xiaomi:Mi 10=Xiaomi/umi/umi:10/QKQ1.191117.002/V11.0.15.0.QJBCNXM:user/release-keys__2020-02-01;Xiaomi/umi/umi:11/RKQ1.200710.002/V12.1.3.0.RJBCNXM:user/release-keys__2020-09-01
-Xiaomi Mi 10 Lite 5G (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.191222.002/V12.0.1.0.QJIEUXM:user/release-keys__2020-06-01
+Xiaomi Mi 10 Lite 5G European (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.191222.002/V12.0.1.0.QJIEUXM:user/release-keys__2020-06-01
+Xiaomi Mi 10 Lite 5G Global (10):Xiaomi:M2002J9G=Xiaomi/monet_global/monet:10/QKQ1.191222.002/V12.0.1.0.QJIMIXM:user/release-keys__2020-08-01
 Xiaomi Mi 10 Pro (10 & 11):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01;Xiaomi/cmi/cmi:11/RKQ1.200710.002/V12.1.2.0.RJACNXM:user/release-keys__2020-09-01
+Xiaomi Mi 10 Ultra (10):Xiaomi:Mi 10 Ultra=Xiaomi/cas/cas:10/QKQ1.200419.002/V12.0.10.0.QJJCNXM:user/release-keys__2020-08-01
 Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.13.0.QDIMIXM:user/release-keys__2020-08-05
 Xiaomi Mi A2 Lite (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.11.0.QDLMIXM:user/release-keys__2020-09-01
