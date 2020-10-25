@@ -12,7 +12,7 @@ else
 	LOGFILE=$MHPCPATH/propsconf.log
 fi
 
-# Finding and setting up installed Busybox
+# Checking Magisk Busybox
 if [ -z "$INSTFN" ] && [ "$BOOTSTAGE" != "post" -a "$BOOTSTAGE" != "late" ]; then
 	BBPATH=$ADBPATH/magisk/busybox
 	if [ -f "$BBPATH" ]; then
@@ -323,7 +323,7 @@ DIVIDER="${Y}=====================================${N}"
 
 # Header, $1=header text
 menu_header() {
-	# Don't clear screen if running from adb or if testing flag is active 
+	# Don't clear screen if running from adb or if testing flag is active
 	if [ -z "$ANDROID_SOCKET_adbd" ] && [ "$DEVTESTING" == "false" ]; then
 		clear
 	fi
@@ -594,7 +594,7 @@ reboot_fn() {
 				echo -en "Enter ${G}y${N}(es) or ${G}n${N}(o): "
 				INV1=2
 			else
-				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "	
+				echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 				INV1=3
 			fi
 			read -r INPUT5
@@ -630,7 +630,7 @@ reboot_fn() {
 # Reset module, $1=header, $2=Run options
 reset_fn() {
 	before_change
-	
+
 	cp -af $MODPATH/common/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 	if [ "$FINGERPRINTENB" ] && [ "$FINGERPRINTENB" != 1 ]; then
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
@@ -675,7 +675,7 @@ config_file() {
 				CONFFINGERPRINT=$(getprop ro.vendor.build.fingerprint)
 				echo "ro.vendor.build.fingerprint: ${CONFFINGERPRINT}" >> $LOGFILE 2>&1
 			fi
-			# Updates prop values (including fingerprint)	
+			# Updates prop values (including fingerprint)
 			PROPSTMPLIST=$PROPSLIST"
 			ro.build.fingerprint
 			"
@@ -1468,7 +1468,7 @@ download_prints() {
 # Reset the module fingerprint change, $1=prop name, $2=run option
 reset_print() {
 	before_change
-	
+
 	log_handler "Resetting device fingerprint to default system value."
 
 	# Saves new module valueS
@@ -1489,12 +1489,12 @@ reset_print() {
 # Use fingerprint, $1=header, $2=fingerprint
 change_print() {
 	before_change
-	
+
 	log_handler "Changing device fingerprint to $2."
 
 	# Saves new module values
 	replace_fn MODULEFINGERPRINT "\"$MODULEFINGERPRINT\"" "\"$2\"" $LATEFILE
-	
+
 	# Updates prop change variables in propsconf_late
 	replace_fn PRINTEDIT 0 1 $LATEFILE
 
@@ -1515,7 +1515,7 @@ change_print() {
 # Use vendor fingerprint, $1=header, $2=Current state of option (enabled or disabled)
 change_print_vendor() {
 	before_change
-	
+
 	if [ $2 == 1 ]; then
 		STATETXT="Enabling"
 		TMPVAL=0
@@ -1580,7 +1580,7 @@ print_parts() {
 	fi
 	replace_fn SIMDESCRIPTION "\"$SIMDESCRIPTION\"" "\"$VARDESCRIPTION\"" $LATEFILE
 	replace_fn SIMDISPLAY "\"$SIMDISPLAY\"" "\"$VARDESCRIPTION\"" $LATEFILE
-	replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE		
+	replace_fn SIMSDK "\"$SIMSDK\"" "\"$VARSDK\"" $LATEFILE
 	TMPPARTS=$(get_eq_left "$(grep $1 $PRINTSLOC)" | sed 's|.*)\:||')
 	if [ -z "$TMPPARTS" -a -s "$CSTMPRINTS" ]; then
 		TMPPARTS=$(get_eq_left "$(grep $1 $CSTMPRINTS)" | sed 's|.*)\:||')
@@ -1632,22 +1632,27 @@ set_partition_props() {
 }
 
 # ======================== Force BASIC attestation ========================
-# Switch/set forced basic attestation, $1=header/file to change (system.prop), $2=model prop value from fingerprint, $3=custom model prop value, $4=reset flag
-forced_basic() {
+# Find OEM print file
+fn_oem_file() {
 	# Find what brand is being used
 	if [ "$FINGERPRINTENB" == 1 -o "$PRINTMODULE" == 0 ] && [ "$PRINTEDIT" == 1 ] && [ "$MODULEFINGERPRINT" ]; then
 		BASICATTDEV="$SIMBRAND"
 	else
 		BASICATTDEV="$(getprop ro.product.brand)"
 	fi
+	# Find the OEM print file
+	TMPFILE="$(ls $MODPATH/printfiles | grep -i $BASICATTDEV)"
+	BASICATTMODEL="$(get_file_value "$MODPATH/printfiles/$TMPFILE" "BASICATTMODEL=")"
+}
+
+# Switch/set forced basic attestation, $1=header/file to change (system.prop), $2=model prop value from fingerprint, $3=custom model prop value, $4=reset flag
+forced_basic() {
 	if [ "$BASICATTCUST" ]; then
 		BASICATTMODEL=$BASICATTCUST
 	elif [ "$BASICATTLIST" ]; then
 		BASICATTMODEL=$BASICATTLIST
 	else
-		# Find the OEM print file
-		TMPFILE="$(ls $MODPATH/printfiles | grep -i $BASICATTDEV)"
-		BASICATTMODEL="$(get_file_value "$MODPATH/printfiles/$TMPFILE" "BASICATTMODEL=")"
+		fn_oem_file
 	fi
 	# Write or load values
 	if [ "$1" != "none" ]; then
@@ -1768,7 +1773,7 @@ dev_sim_edit() {
 # Enable/disable the option, $1=header, $2=run option
 change_dev_sim() {
 	before_change
-	
+
 	if [ $DEVSIM == 0 ]; then
 		STATETXT="Enabling"
 		TMPVAL=1
@@ -1797,7 +1802,7 @@ change_dev_sim() {
 # Change if prop should be simulated or not, $1=header, $2=prop name, $3=prop value, $4=run option
 change_sim_prop() {
 	before_change
-	
+
 	if [ $3 == 1 ]; then
 		STATETXT="enabled"
 	else
@@ -1817,7 +1822,7 @@ change_sim_prop() {
 # Change if description should be simulated or not, $1=header, $2=Check if option is enabled or disabled, $3=run option
 change_sim_descr() {
 	before_change
-	
+
 	if [ $2 == 1 ]; then
 		STATETXT="enabled"
 	else
@@ -1834,7 +1839,7 @@ change_sim_descr() {
 # Change if partition specific props should be simulated or not, $1=header, $2=Check if option is enabled or disabled, $3=run option
 change_sim_partprops() {
 	before_change
-	
+
 	if [ $2 == 1 ]; then
 		STATETXT="enabled"
 	else
@@ -1921,7 +1926,7 @@ reset_prop() {
 # Use prop value, $1=prop name, $2=new prop value, $3=run option
 change_prop() {
 	before_change
-	
+
 	# Sets variables
 	PROP=$(get_prop_type $1)
 	MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
@@ -1948,7 +1953,7 @@ change_prop() {
 # Reset all module prop changes, $1=header
 reset_prop_all() {
 	before_change
-	
+
 	log_handler "Resetting all props to default values."
 
 	for PROPTYPE in $PROPSLIST; do
@@ -1962,7 +1967,7 @@ reset_prop_all() {
 		# Changes prop
 		replace_fn $REPROP "true" "false" $LATEFILE
 	done
-	
+
 	# Updates prop change variables in propsconf_late
 	replace_fn PROPCOUNT $PROPCOUNT 0 $LATEFILE
 	replace_fn PROPEDIT 1 0 $LATEFILE
@@ -2125,7 +2130,7 @@ reset_custprop() {
 							break
 						;;
 					esac
-				done	
+				done
 			fi
 			TMPCUSTPROPS=$(echo $CURRCUSTPROPS | sed "s|${1}=${TMPVALUE}${TMPDELAY}${TMPBOOTEXEC}||" | tr -s " " | sed 's|^[ \t]*||;s|[ \t]*$||')
 			# Updating custom props string
@@ -2147,7 +2152,7 @@ reset_custprop() {
 prop_del() {
 	if [ "$DELEDIT" == 1 ]; then
 		log_handler "Deleting props."
-		for ITEM in $DELETEPROPS; do			
+		for ITEM in $DELETEPROPS; do
 			log_handler "Deleting $ITEM."
 			case "$ITEM" in
 				persist*)

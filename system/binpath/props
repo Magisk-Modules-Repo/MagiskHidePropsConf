@@ -29,7 +29,7 @@ MODPATH=$ADBPATH/modules/MagiskHidePropsConf
 LATEFILEPH=LATE_PLACEHOLDER
 BOOTSTAGE="props"
 
-# Development testing set to false
+# Development testing check
 DEVTESTING=false
 case "$1" in
 	*t*) # Development testing
@@ -96,7 +96,7 @@ if [ ! -f "$BBPATH" ]; then
 	echo "logs (see the module documentation)."
 	echo ""
 	log_handler "No Busybox found."
-	log_handler "Exiting... Bye bye.\n\n===================="	
+	log_handler "Exiting... Bye bye.\n\n===================="
 	exit 0
 fi
 
@@ -181,7 +181,7 @@ invalid_input() {
 exit_fn() {
 	menu_header "${C}Bye bye.${N}"
 	echo ""
-	log_handler "Exiting... Bye bye.\n\n===================="	
+	log_handler "Exiting... Bye bye.\n\n===================="
 	exit 0
 }
 
@@ -642,7 +642,7 @@ menu_reset_print() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y|Y)	
+			y|Y)
 				reset_print "$1"
 				INPUT2=""
 				break
@@ -722,7 +722,7 @@ menu_update_print() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y|Y)	
+			y|Y)
 				download_prints "manual"
 				INPUT2=""
 				break
@@ -901,8 +901,13 @@ menu_force_basic() {
 	while true
 	do
 		if [ "$BASICATTEST" == 0 ]; then
+			fn_oem_file # Find the OEM print file used
 			STATETXT="${G}enable${N}"
-			YTXT=" (use default value)"
+			if [ "$BASICATTMODEL" ]; then
+				YTXT=" (use default value, ${C}$BASICATTMODEL${N})"
+			else
+				YTXT=" (use default value, ${C}$(getprop ro.product.device)${N})"
+			fi
 		else
 			STATETXT="${R}disable${N}"
 			YTXT=""
@@ -935,7 +940,7 @@ menu_force_basic() {
 			echo ""
 			echo -e "${G}y${N} - Yes$YTXT"
 			echo -e "${G}n${N} - No"
-			echo -e "${G}f${N} - Pick from device list$LISTTXT"
+			echo -e "${G}d${N} - Pick from device list$LISTTXT"
 			echo -e "${G}c${N} - Custom value$CUSTTXT"
 			if [ "$BASICATTCUST" ] || [ "$BASICATTLIST" ]; then
 				echo -e "${G}r${N} - Reset"
@@ -963,7 +968,7 @@ menu_force_basic() {
 				INPUT=""
 				break
 			;;
-			f|F)
+			d|D)
 				forced_list_menu "$1"
 				INPUT=""
 			;;
@@ -1020,6 +1025,14 @@ forced_list_menu() {
 				fi
 				echo -e "${G}b${N} - Go back"
 				echo -e "${G}e${N} - Exit"
+				echo ""
+				echo "Do NOT use your actual device."
+				echo "Pick a device as close to yours"
+				echo "as you can, to possibly keep"
+				echo "device specific features working."
+				echo ""
+				echo "See the module readme or the"
+				echo "support thread @ XDA for details."
 				echo ""
 				echo -n "Enter your desired option: "
 				read -r INPUT3
@@ -1081,6 +1094,7 @@ forced_list_menu() {
 # Fourth menu level - reset list value, $1=header
 forced_list_reset_menu() {
 	INPUT4=""
+	fn_oem_file # Find the OEM print file used
 	while true
 	do
 		if [ -z "$INPUT4" ]; then
@@ -1088,7 +1102,12 @@ forced_list_reset_menu() {
 			echo ""
 			echo "Are you sure you want to reset"
 			echo "the list value for forced BASIC"
-			echo "key attestation to the default."
+			echo "key attestation to the default"
+			if [ "$BASICATTMODEL" ]; then
+				echo -e "value (${C}$BASICATTMODEL${N})?"
+			else
+				echo -e "value (${C}$(getprop ro.product.device)${N})?"
+			fi
 			echo ""
 			echo -e "${G}y${N} - Yes"
 			echo -e "${G}n${N} - No"
@@ -1311,7 +1330,12 @@ forced_custom_reset_menu() {
 			echo ""
 			echo "Are you sure you want to reset"
 			echo "the custom value for forced BASIC"
-			echo "key attestation to the default."
+			echo "key attestation to the default"
+			if [ "$BASICATTMODEL" ]; then
+				echo -e "value (${C}$BASICATTMODEL${N})?"
+			else
+				echo -e "value (${C}$(getprop ro.product.device)${N})?"
+			fi
 			echo ""
 			echo -e "${G}y${N} - Yes"
 			echo -e "${G}n${N} - No"
@@ -2051,7 +2075,7 @@ menu_magiskhide_props() {
 					invalid_input 7 2
 				fi
 			;;
-			1) menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE		
+			1) menu_change_prop "ro.debuggable" $CURRDEBUGGABLE $ORIGDEBUGGABLE $MODULEDEBUGGABLE
 			;;
 			2) menu_change_prop "ro.secure" $CURRSECURE $ORIGSECURE $MODULESECURE
 			;;
@@ -2155,7 +2179,7 @@ menu_change_prop() {
 						PROPMODULETXT=""
 						BACKTXT=""
 					fi
-					echo -e "Currently set to ${C}$2${N}${PROPMODULETXT}."				
+					echo -e "Currently set to ${C}$2${N}${PROPMODULETXT}."
 					if [ "$2" != "$3" ]; then
 						echo -e "The original value is ${C}$3${N}."
 					fi
@@ -2230,7 +2254,7 @@ menu_reset_prop_all() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y|Y)	
+			y|Y)
 				reset_prop_all "$1"
 				INPUT2=""
 				break
@@ -2264,7 +2288,7 @@ menu_reset_prop() {
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
-			y|Y)	
+			y|Y)
 				reset_prop "$2"
 				INPUT2=""
 				break
@@ -2651,7 +2675,7 @@ menu_set_new_custprop() {
 			echo "or select from the options below."
 			echo ""
 			echo "The currently set value is:"
-			if [ "$TMPPROP" ]; then				
+			if [ "$TMPPROP" ]; then
 				echo -e "${C}$TMPPROP${N}"
 				echo "Please enter the new value."
 			else
@@ -2838,7 +2862,7 @@ menu_set_custprop() {
 			echo ""
 			if [ "$4" == "option" ]; then
 				echo "The currently set value is:"
-				if [ "$(getprop "$1")" ]; then				
+				if [ "$(getprop "$1")" ]; then
 					echo -e "${C}$(getprop "$1")${N}"
 					echo "Please enter the new value."
 				else
@@ -3192,7 +3216,7 @@ menu_delete_props() {
 		if [ -z "$INPUT2" ]; then
 			ITEMCOUNT=0
 			menu_header "${C}$1${N}\n Select an option below:"
-			echo ""			
+			echo ""
 			if [ "$DELEDIT" == 0 ] && [ "$DELETEPROPS" ]; then
 				CTRLSET=0
 				echo -e "You have a list of ${C}props to delete${N},"
@@ -3830,12 +3854,12 @@ menu_update_check() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			y|Y)	
+			y|Y)
 				update_check "manual"
 				INPUT=""
 				break
 			;;
-			n|N)	
+			n|N)
 				INPUT=""
 				break
 			;;
@@ -3875,13 +3899,13 @@ reset_everything() {
 			read -r INPUT2
 		fi
 		case "$INPUT2" in
-			y|Y)	
+			y|Y)
 				log_handler "Resetting all module settings$LOGTXT."
 				reset_fn "$1" "$2"
 				INPUT=""
 				break
 			;;
-			n|N)	
+			n|N)
 				if [ "$2" == "r" ]; then
 					exit_fn
 				else
@@ -3889,7 +3913,7 @@ reset_everything() {
 					break
 				fi
 			;;
-			e|E)	
+			e|E)
 				if [ "$2" == "r" ]; then
 					invalid_input $INV1 $INV2
 				else
@@ -4039,7 +4063,7 @@ if [ "$1" ]; then
 			echo ""
 			log_handler "Exiting... Bye bye.\n\n===================="
 			exit 0
-		;;	
+		;;
 	esac
 
 	# Run options

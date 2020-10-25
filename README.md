@@ -41,7 +41,6 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
     - [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
     - [The firmware.mobi method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method)
   - [Custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#custom-fingerprints-list)
-  - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
 - [Keeping your device "certified"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#keeping-your-device-certified)
 - [Current fingerprints list version](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#current-fingerprints-list-version)
 - [Please add support for device X](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#please-add-support-for-device-x)
@@ -70,6 +69,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
+  - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
   - [props not found](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-not-found)
   - [The boot scripts did not run](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-boot-scripts-did-not-run)
@@ -101,7 +101,7 @@ Let's start off with a warning.
 
 This module changes your devices prop values. Fingerprint, model and whatever prop you want (depending on what options you use). This may have consequences (everything in life does, live with it). Your device might be perceived as a different device (which can create issues with the Play Store, YouTube video resolution, OTA updates, etc) and cause system instabilities and even bootloops.
 
-Read through the documentation to find more details and how to fix your device if things go south. 
+Read through the documentation to find more details and how to fix your device if things go south.
 
 
 ## Prerequisites
@@ -153,7 +153,7 @@ If you can't pass the CTS profile check of the SafetyNet check there are two fea
 
 If you are using a custom ROM (or have a stock ROM on a device that isn't certified by Google) you most likely need to change the device fingerprint to one that has been Google certified. Use the "[Edit device fingerprint"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#spoofing-devices-fingerprint-to-pass-the-ctsprofile-check) feature.
 
-It is also possible that you need to change your devices model to force SafetyNet to use basic key attestation rather than hardware backed. This might be applicable to both custom and stock ROMs. Use the "[Force BASIC key attestation"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) feature.
+It is also possible that you need to change your devices model to force SafetyNet to use basic key attestation rather than hardware backed. This might be applicable to both custom and stock ROMs. Use the "[Force BASIC key attestation"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) feature. If the SafteyNet check in the Magisk Manager fails CTS and shows "evalType HARDWARE" you'll need to use this feature.
 
 ### Simulating other devices
 Simple: use the ["Device simulation"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature.
@@ -232,7 +232,7 @@ Once you have the file downloaded, there are several different ways that the fin
 - Sometimes there'll be a build.prop file directly in the zip/package. You might find the fingerprint in there.
 - For some devices you'll have to unpack the system.img to get to the build.prop or default.prop file, where you might find the info you want.This can sometimes be done with a simple archive app/program, but sometimes more advanced utilities are needed. On Windows, you can use something like [this tool](https://forum.xda-developers.com/showpost.php?p=57742855&postcount=42). You'll also find more info in the [main thread for that post](https://forum.xda-developers.com/android/software-hacking/how-to-conver-lollipop-dat-files-to-t2978952).
 - Other times you'll find the fingerprint in META-INF\com\google\android\updater-script. Look for "Target:" and you'll likely find the fingerprint there.
-- Etc... Experiment, the fingerprint will be in there somewhere. 
+- Etc... Experiment, the fingerprint will be in there somewhere.
 
 
 #### The AndroidDumps method
@@ -251,19 +251,6 @@ Google Nexus 6 (7.1.1):Motorola:Nexus 6=google/shamu/shamu:7.1.1/N8I11B/4171878:
 ```
 **NOTE 1:** If you're using a fingerprint for an Android build after March 16th 2018 you might have to change the security patch date to one that matches the fingerprint used. This can be done directly in the fingerprints list, by adding two underscores directly followed by the date at the end of the fingerprint (`__2018-09-05`). You can also use the [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) function of this module to change `ro.build.version.security_patch` to the desired date. If you don't know the security patch date you can try finding it with trial and error (quite tedious). The dates are usually always either the 1st or the 5th of the month, so try different months one after the other until the CTS profile passes.  
 **NOTE 2:** If you want the [device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature of the module to work properly with the prints from the custom list you will also have to include the manufacturer and module in the list. This is done by adding the values for these two props right before the equal sign (=) that separates the device name from the fingerprint. Separate the device name and android versions and the two values with colons (:). See the example above.
-
-
-### I still can't pass the ctsProfile check
-If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
-- Make sure that [MagiskHide is enabled and working](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Test_MagiskHide).
-- Check if your device uses [hardware backed key attestation to detect an unlocked bootloader](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3). If it does, you can try using the [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) option..
-- Do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
-- Go to the "Edit fingerprints menu", select "Boot stages", and start by changing the security patch date boot stage to either default or post-fs-data. If that doesn't work, also try changing the fingerprint boot stage to post-fs-data. The default boot stage can also be changed if you go into the script options and change the boot stage to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
-- Try a different fingerprint (pick one from the provided list). You might want to reset the "Boot stage" settings to the default values first though.
-- If you're not using one of the fingerprints provided in the module, make sure you have a matching security patch date set in [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values). See ["Matching the Android security patch date"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above.
-- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide, or that they are built in a way that makes it impossible to pass SafetyNet. Check in your ROM thread or with the creator/developer.
-- You might have remnants of previous modifications that trigger SafetyNet on your device. A clean install of your system may be required.
-- If you can't get things working, and want help, make sure to provide logs and details. See ["Logs"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs) below.
 
 
 ## Keeping your device "certified"
@@ -285,12 +272,12 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v105_**
+**_Current fingerprints list version - v106_**
 
 
 ## Please add support for device X
 Adding device fingerprints to the list relies heavily on the users. You guys. I've looked up a fingerprint from time to time, but it is a bit time consuming and I don't have that time...
-	
+
 If you want a specific device fingerprint to be added to the module, see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint) above. If you can find a fingerprint for the device you have in mind, [submit](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#how-do-i-submit-a-fingerprint) it for inclusion in the list of certified fingerprints.
 
 
@@ -303,23 +290,23 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Force BASIC key attestation
-See here for details on hardware based key attestation for detecting the bootloader state: https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3
+If the SafteyNet check in the Magisk Manager fails CTS and shows "evalType HARDWARE" you'll need to use this feature. See here for details on hardware based key attestation for detecting the bootloader state: https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3
 
 This feature has nothing to do with the device fingerprint, but uses the included fingerprints list to find the necessary value to use for the `ro.product.modle` prop.
 
 As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` prop (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter partition specific props (odm, product, system, vendor and system_ext) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
 
-By default this feature will use an old devices model prop value, to make sure that it is recognised as a device without the necessary hardware (picked from the available fingerprints in the module list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If OEM specific features still don't work after activating this option, try picking a device manually from the included list. If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
+By default this feature will use an old devices model prop value, based on your device or currently set fingerprint, to make sure that it is recognised as a device without the necessary hardware (picked from the available devices in the module fingerprints list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If device/OEM specific features still doesn't work after activating this option, or your device is otherwise behaving strangely, try picking a device manually from the included list (see below). If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
 
-It is also possible to pick a device manually from the list of devices (based on the included fingerprints list) or set your own custom value.
+It is also possible to pick a device manually from the list of devices (based on the module fingerprints list) or set your own custom value. Do NOT pick your own device, instead try a device that is as close to your actual device as possible. It is possible that any device will work as long as it isn't the same model as your own, and the closer it is to your device the less things will stop working as a result of the model prop change.
 
-Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled (all other simiulation props will still work though). It is also worth noting that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature and picking an old enough device will also force a basic attestation.
+Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled (all other simiulation props will still work though). It is also worth noting that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to change ro.product.model will also force a basic key attestation.
 
-Thanks to @Displax over at XDA-Developers for bringing this to everyones attention. 
+Thanks to @Displax over at XDA-Developers for bringing this to everyone's attention.
 
 
 ## Device simulation
-**_NOTE! This feature is not needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it!_**
+**_NOTE! This feature is not generally needed to pass SafetyNet's CTS profile test and may even cause issues. Only enable it if you actually need it!_**
 
 If you want to simulate a specific device (to get access to device specific apps in the Play store, as an example), you can activate this option. It will pull information from the currently used fingerprint (has to be set by the module) and use this to set a few certain props to these values. The props that can be set are (currently):
 - ro.product.brand
@@ -449,6 +436,19 @@ If you have questions, suggestions or are experiencing some kind of issue, visit
 For the moment, nothing special (I think). If you've got issues, take a look at the most common problems listed below.
 
 
+### I still can't pass the ctsProfile check
+If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
+- Make sure that [MagiskHide is enabled and working](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Test_MagiskHide).
+- Check if your device uses [hardware backed key attestation to detect an unlocked bootloader](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3). If it does, you can try using the [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) option..
+- Do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
+- Go to the "Edit fingerprints menu", select "Boot stages", and start by changing the security patch date boot stage to either default or post-fs-data. If that doesn't work, also try changing the fingerprint boot stage to post-fs-data. The default boot stage can also be changed if you go into the script options and change the boot stage to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
+- Try a different fingerprint (pick one from the provided list). You might want to reset the "Boot stage" settings to the default values first though.
+- If you're not using one of the fingerprints provided in the module, make sure you have a matching security patch date set in [Custom props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values). See ["Matching the Android security patch date"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf#matching-the-android-security-patch-date) above.
+- Some ROMs will just not be able to pass the ctsProfile check, if they contain signs of a rooted/modified device that Magisk can't hide, or that they are built in a way that makes it impossible to pass SafetyNet. Check in your ROM thread or with the creator/developer.
+- You might have remnants of previous modifications that trigger SafetyNet on your device. A clean install of your system may be required.
+- If you can't get things working, and want help, make sure to provide logs and details. See ["Logs"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#logs).
+
+
 ### Device issues because of the module
 A common reason for issues with booting the device or with system apps force closing, etc, is having enabled [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation). This feature is not needed for passing SafetyNet's CTS profile check. Only enable it if you actually need it, and keep in mind that it may cause issues when activated.
 
@@ -551,7 +551,7 @@ Please provide the above mentioned files in an archive (zip-file), for simplicit
 
 
 ## Donations
-If you've had any help from me or this module, any kind of [donation](https://forum.xda-developers.com/donatetome.php?u=4667597) to support the work involved would of course be appreciated. 
+If you've had any help from me or this module, any kind of [donation](https://forum.xda-developers.com/donatetome.php?u=4667597) to support the work involved would of course be appreciated.
 
 
 ## Source
@@ -573,11 +573,16 @@ Any previous releases can be found on [GitHub](https://github.com/Magisk-Modules
 Releases up until v2.4.0 are compatible with Magisk v15 to v16.7.  
 Releases from v2.4.1 are compatible with Magisk v17 to v18.1.  
 Releases from v4.0.0 are compatible with Magisk v19+.  
-Releases from v5.0.0 are recommended for Magisk v19.4+.
+Releases from v5.0.0 are recommended for Magisk v19.4+.  
 Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Changelog
+### v5.3.6  
+- Updated the menu item for picking a device manually for the "Force BASIC key attestation" feature to better match the menu option. Press "f" to pay respect.
+- Minor updates to the "Force BASIC key attestation" menus to be more clear and informative (hopefully).
+- Added fingerprints for Nvidia Shield TV 2015, 2015 Pro, 2019 and 2019 Pro, OnePlus 8T (several variants), Redmi Note 8 Pro	Global and Xiaomi Mi 10 Lite 5G Global and Mi 10 Ultra. Updated fingerprints for Nvidia Shield TV 2017, OnePlus 6, 6T, 8 (most variants) and 8 Pro (most variants), POCO F2 Pro European, Samsung Galaxy A40 and Note 20 Ultra 5G and Xiaomi Mi 9T Europe and Global, Mi A2, Mi A2 Lite, Pocophone F1 and Redmi Note 8. List updated to v106.
+
 ### v5.3.5  
 - Fixed issue with partition model props not being set correctly.
 - Make sure that simulating ro.product.model is completely disabled when enabling "Force BASIC key attestation".
@@ -619,7 +624,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 ### v5.2.6  
 - Fixed the supposedly "improved" verbose boot logging.
 - Change to using Magisk's internal Busybox for the `props` script (the boot scripts are already using it without issues and have for some time). Separately installed Busybox no longer needed. Thank you @Juzman for the push.
-- Added info about MagiskHide's status in the "Edit device fingeprint" menu. 
+- Added info about MagiskHide's status in the "Edit device fingeprint" menu.
 - Added fingerprint for Lenovo Tab 4 10 Plus TB-X704F and TB-X704L, Samsung Galaxy Note 4 SM-N910G and Xiaomi Redmi Note 8. Updated fingerprints for Google Pixel 2-4 XL, Motorola Moto G7 Power, OnePlus 5, 5T, 6, 6T, several variants of 7, 7 Pro, several variants of 7T and 7T Pro and several variants of 8 and 8 Pro, Poco X2, Redmi K30 Pro, Samsung Galaxy A5 2017 and Xiaomi Mi A2, Mi A2 Lite and PocoPhone F1. List updated to v92.
 
 ### v5.2.5  
@@ -962,7 +967,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v105  
+### List v106  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -1086,7 +1091,11 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Nokia 7.1 TA-1095 (10)
 - Nvidia Shield K1 (7.0)
 - Nvidia Shield Tablet (7.0)
+- Nvidia Shield TV 2015 (8.0.0 & 9)
+- Nvidia Shield TV 2015 Pro (8.0.0 & 9)
 - Nvidia Shield TV 2017 (8.0.0 & 9)
+- Nvidia Shield TV 2019 (9)
+- Nvidia Shield TV 2019 Pro (9)
 - Nvidia Shield TV Pro (8.0.0 & 9)
 - OnePlus One (6.0.1)
 - OnePlus 2 (6.0.1)
@@ -1098,44 +1107,48 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 6 (8.1.0 & 9 & 10)
 - OnePlus 6T (9 & 10)
 - OnePlus 6T T-Mobile (9)
-- OnePlus 7 GM1900 (10)
+- OnePlus 7 China GM1900 (10)
 - OnePlus 7 GM1901 (9 & 10)
-- OnePlus 7 GM1903 (9 & 10)
+- OnePlus 7 Europe GM1903 (9 & 10)
 - OnePlus 7 GM1905 (9 & 10)
-- OnePlus 7 Pro GM1910 (10)
+- OnePlus 7 China Pro GM1910 (10)
 - OnePlus 7 Pro GM1911 (9 & 10)
-- OnePlus 7 Pro GM1913 (9 & 10)
-- OnePlus 7 Pro GM1915 (9)
+- OnePlus 7 Europe Pro GM1913 (9 & 10)
+- OnePlus 7 T-Mobile Pro GM1915 (9)
 - OnePlus 7 Pro GM1917 (9 & 10)
-- OnePlus 7 Pro NR GM1920 (9 & 10)
-- OnePlus 7 Pro NR Spr GM1925 (9 & 10)
-- OnePlus 7T HD1900 (10)
+- OnePlus 7 Pro NR Europe GM1920 (9 & 10)
+- OnePlus 7 Pro NR Sprint GM1925 (9 & 10)
+- OnePlus 7T China HD1900 (10)
 - OnePlus 7T HD1901 (10)
-- OnePlus 7T HD1903 (10)
+- OnePlus 7T Europe HD1903 (10)
 - OnePlus 7T HD1905 (10)
-- OnePlus 7T Pro HD1910 (10)
+- OnePlus 7T Cina Pro HD1910 (10)
 - OnePlus 7T Pro HD1911 (10)
-- OnePlus 7T Pro HD1913 (10)
+- OnePlus 7T Europe Pro HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
 - OnePlus 7T Pro NR HD1925 (10)
-- OnePlus 8 IN2010 (10)
-- OnePlus 8 IN2011 (10)
-- OnePlus 8 IN2013 (10)
-- OnePlus 8 IN2015 (10 & 11)
-- OnePlus 8 IN2015 Visible (10)
-- OnePlus 8 IN2017 (10)
-- OnePlus 8 IN2019 (10)
-- OnePlus 8 Pro IN2020 (10)
-- OnePlus 8 Pro IN2021 (10)
-- OnePlus 8 Pro IN2023 (10)
-- OnePlus 8 Pro IN2025 (10 & 11)
-- OnePlus Nord AC2001 (10)
-- OnePlus Nord European AC2003 (10)
+- OnePlus 8 China IN2010 (10)
+- OnePlus 8 India IN2011 (10 & 11)
+- OnePlus 8 Europe IN2013 (10 & 11)
+- OnePlus 8 Global IN2015 (10 & 11)
+- OnePlus 8 Visible IN2015 (10)
+- OnePlus 8 T-Mobile IN2017 (10)
+- OnePlus 8 Verizon IN2019 (10)
+- OnePlus 8 China Pro IN2020 (10)
+- OnePlus 8 India Pro IN2021 (10 & 11)
+- OnePlus 8 Europe Pro IN2023 (10 & 11)
+- OnePlus 8 Global Pro IN2025 (10 & 11)
+- OnePlus 8T India KB2001 (11)
+- OnePlus 8T Europe KB2003 (11)
+- OnePlus 8T Global KB2005 (11)
+- OnePlus 8T T-Mobile KB2007 (11)
+- OnePlus Nord India AC2001 (10)
+- OnePlus Nord Europe AC2003 (10)
 - OnePlus Nord Global AC2003 (10)
-- OPPO Find X2 Neo CPH2009 European (10)
+- OPPO Find X2 Neo Europe CPH2009 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
-- POCO F2 Pro European (10)
+- POCO F2 Pro Europe (10)
 - POCO F2 Pro Global (10)
 - POCO X2 (10)
 - POCO X3 NFC Global (10)
@@ -1145,11 +1158,12 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Redmi K30 Pro (10)
 - Redmi K30 Pro Zoom Edition (10)
 - Redmi K30 Ultra (10)
+- Redmi Note 8 Pro Global (9 & 10)
 - Redmi Note 8 Pro India (9 & 10)
 - Redmi Note 8 Pro Russia (9 & 10)
-- Redmi Note 9 Pro European (10)
+- Redmi Note 9 Pro Europe (10)
 - Redmi Note 9 Pro Global (10)
-- Redmi Note 9S European (10)
+- Redmi Note 9S Europe (10)
 - Redmi Note 9S Global (10)
 - Samsung Galaxy A01 Core (10)
 - Samsung Galaxy A3 2015 SM-A300FU (6.0.1)
@@ -1191,6 +1205,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy Note 10 Plus SM-N975U (10)
 - Samsung Galaxy Note 10.1 2014 SM-P600 (5.1.1)
 - Samsung Galaxy Note 20 Ultra SM-N986U (10)
+- Samsung Galaxy Note 20 Ultra 5G SM-N9860 (10)
 - Samsung Galaxy S3 Neo GT-I9300I (4.4.4)
 - Samsung Galaxy S4 GT-I9505 (5.0.1)
 - Samsung Galaxy S4 Active GT-I9295 (5.0.1)
@@ -1267,16 +1282,18 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 5S Plus (6.0.1 & 7.0)
 - Xiaomi Mi 6 (8.0.0 & 9)
 - Xiaomi Mi 8 (8.1.0 & 9 & 10)
-- Xiaomi Mi 9 European (9)
+- Xiaomi Mi 9 Europe (9)
 - Xiaomi Mi 9 Lite (9)
 - Xiaomi Mi 9 SE (9)
-- Xiaomi Mi 9T European (9 & 10)
+- Xiaomi Mi 9T Europe (9 & 10)
 - Xiaomi Mi 9T Global (10)
 - Xiaomi Mi 9T Pro (9 & 10)
-- Xiaomi MI 10 European (10)
+- Xiaomi MI 10 Europe (10)
 - Xiaomi Mi 10 Global (10 & 11)
-- Xiaomi Mi 10 Lite 5G (10)
+- Xiaomi Mi 10 Lite 5G Europe (10)
+- Xiaomi Mi 10 Lite 5G Global (10)
 - Xiaomi Mi 10 Pro (10 & 11)
+- Xiaomi Mi 10 Ultra (10)
 - Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite (8.1.0 & 9 & 10)
@@ -1290,7 +1307,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi Mix 3 (9 & 10)
 - Xiaomi Mi Note 2 (7.0 & 8.0.0)
 - Xiaomi Mi Note 3 (8.1.0)
-- Xiaomi Mi Note 10 European (9)
+- Xiaomi Mi Note 10 Europe (9)
 - Xiaomi Mi Pad (4.4.4)
 - Xiaomi Mi Pad 4 (8.1.0)
 - Xiaomi Pocophone F1 (9 & 10)
@@ -1322,7 +1339,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi Note 7 (9)
 - Xiaomi Redmi Note 7 Pro (9)
 - Xiaomi Redmi Note 8 (9)
-- Xiaomi Redmi Note 8T European (9)
+- Xiaomi Redmi Note 8T Europe (9)
 - Xiaomi Redmi Y1 (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
 - ZTE Blade (6.0.1)
