@@ -292,7 +292,7 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 ## Force BASIC key attestation
 If the SafteyNet check in the Magisk Manager fails CTS and shows "evalType HARDWARE" you'll need to use this feature. See here for details on hardware based key attestation for detecting the bootloader state: https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3
 
-This feature has nothing to do with the device fingerprint, but uses the included fingerprints list to find the necessary value to use for the `ro.product.modle` prop.
+This feature has nothing to do with the device fingerprint, but uses the included fingerprints list to find the necessary value to use for the `ro.product.model` prop.
 
 As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` prop (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter partition specific props (odm, product, system, vendor and system_ext) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
 
