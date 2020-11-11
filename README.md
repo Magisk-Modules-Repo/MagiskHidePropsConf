@@ -298,7 +298,7 @@ As long as Google doesn't roll out hardware based key attestation universally, i
 
 The prefered method is to pick a device manually from the list of devices (based on the module fingerprints list) or set your own custom value. Do NOT pick your own device, instead try a device that is as close to your actual device as possible. The closer it is to your actual device the less is the likelyhood that things will stop working as a result of the model prop change.
 
-It is also possible to use a custom value, if that's what you prefer.
+It is also possible to pick a custom value, if that's what you prefer.
 
 If a device isn't picked from the list or a custom value entered, this feature will by default use an old devices model prop value, based on your device or currently set fingerprint, to make sure that it is recognised as a device without the necessary hardware (picked from the available devices in the module fingerprints list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If device/OEM specific features still doesn't work after activating this option, or your device is otherwise behaving strangely, try picking a device manually from the included list (see below). If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
 
@@ -1012,6 +1012,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Google Pixel 4 (10 & 11)
 - Google Pixel 4 XL (10 & 11)
 - Google Pixel 4a (10 & 11)
+- Google Pixel 4a 5G (11)
+- Google Pixel 5 (11)
 - Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
@@ -1078,6 +1080,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Motorola Moto G7 XT1962-5 (10)
 - Motorola Moto G7 Power (9 & 10)
 - Motorola Moto G7 Play (9 & 10)
+- Motorola Moto G7 Play T-Mobile (10)
 - Motorola Moto X Play (7.1.1)
 - Motorola Moto X4 (8.0.0 & 9)
 - Motorola Moto Z2 Play (8.0.0)
@@ -1098,7 +1101,6 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Nvidia Shield TV 2017 (8.0.0 & 9)
 - Nvidia Shield TV 2019 (9)
 - Nvidia Shield TV 2019 Pro (9)
-- Nvidia Shield TV Pro (8.0.0 & 9)
 - OnePlus One (6.0.1)
 - OnePlus 2 (6.0.1)
 - OnePlus X (6.0.1)
@@ -1160,6 +1162,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Redmi K30 Pro (10)
 - Redmi K30 Pro Zoom Edition (10)
 - Redmi K30 Ultra (10)
+- Redmi K30S Ultra (10)
 - Redmi Note 8 Pro Global (9 & 10)
 - Redmi Note 8 Pro India (9 & 10)
 - Redmi Note 8 Pro Russia (9 & 10)
@@ -1180,6 +1183,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy A20 SM-A205W (9)
 - Samsung Galaxy A40 SM-A405FN (10)
 - Samsung Galaxy A50 SM-A505F (9)
+- Samsung Galaxy A50S SM-A507FN (10)
 - Samsung Galaxy A51 SM-A515F (10)
 - Samsung Galaxy A90 5G SM-A908B (9)
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
@@ -1296,6 +1300,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 10 Lite 5G Global (10)
 - Xiaomi Mi 10 Pro (10 & 11)
 - Xiaomi Mi 10 Ultra (10)
+- Xiaomi Mi 10T Europe (10)
+- Xiaomi Mi 10T Pro Europe (10)
 - Xiaomi Mi A1 (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite (8.1.0 & 9 & 10)
@@ -1318,6 +1324,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi 4 Pro (6.0.1)
 - Xiaomi Redmi 4A (7.1.2)
 - Xiaomi Redmi 4X (6.0.1)
+- Xiaomi Redmi 5 Plus (7.1.2 & 8.1.0)
 - Xiaomi Redmi 5A (7.1.2 & 8.1.0)
 - Xiaomi Redmi 6 (9)
 - Xiaomi Redmi 6A (9)
@@ -1334,7 +1341,6 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi Note 4X (7.0)
 - Xiaomi Redmi Note 4 Mediatek (6.0)
 - Xiaomi Redmi Note 5 (7.1.2 & 8.1.0)
-- Xiaomi Redmi Note 5 Plus (7.1.2 & 8.1.0)
 - Xiaomi Redmi Note 5 Pro (8.1.0 & 9)
 - Xiaomi Redmi Note 5A Lite (7.1.2)
 - Xiaomi Redmi Note 6 Pro (8.1.0)
