@@ -272,7 +272,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v106_**
+**_Current fingerprints list version - v107_**
 
 
 ## Please add support for device X
@@ -296,9 +296,11 @@ This feature has nothing to do with the device fingerprint, but uses the include
 
 As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` prop (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter partition specific props (odm, product, system, vendor and system_ext) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
 
-By default this feature will use an old devices model prop value, based on your device or currently set fingerprint, to make sure that it is recognised as a device without the necessary hardware (picked from the available devices in the module fingerprints list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If device/OEM specific features still doesn't work after activating this option, or your device is otherwise behaving strangely, try picking a device manually from the included list (see below). If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
+The prefered method is to pick a device manually from the list of devices (based on the module fingerprints list) or set your own custom value. Do NOT pick your own device, instead try a device that is as close to your actual device as possible. The closer it is to your actual device the less is the likelyhood that things will stop working as a result of the model prop change.
 
-It is also possible to pick a device manually from the list of devices (based on the module fingerprints list) or set your own custom value. Do NOT pick your own device, instead try a device that is as close to your actual device as possible. It is possible that any device will work as long as it isn't the same model as your own, and the closer it is to your device the less things will stop working as a result of the model prop change.
+It is also possible to pick a custom value, if that's what you prefer.
+
+If a device isn't picked from the list or a custom value entered, this feature will by default use an old devices model prop value, based on your device or currently set fingerprint, to make sure that it is recognised as a device without the necessary hardware (picked from the available devices in the module fingerprints list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If device/OEM specific features still doesn't work after activating this option, or your device is otherwise behaving strangely, try picking a device manually from the included list (see below). If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
 
 Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled (all other simiulation props will still work though). It is also worth noting that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to change ro.product.model will also force a basic key attestation.
 
@@ -513,7 +515,7 @@ For some fingerprints it is necessary to also change the security patch date to 
 
 
 ### My device's model has changed
-In order to fool SafetyNet into using basic key attestation for the bootloader state check rather than hardware (which we cannot fool), the device model has to be changed to one that isn't on Googles list of devices that should use the hardware check. If your device uses hardware backed attestation, the only way (currently) to pass the CTS profile check of SafetyNet is to change the device model. More details here: https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3
+In order to fool SafetyNet into using basic key attestation for the bootloader state check rather than hardware (which we cannot fool), the device model has to be changed to one that does NOT match the actual device. If your device uses hardware backed attestation, the only way (currently) to pass the CTS profile check of SafetyNet is to change the device model. See [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) for more details.
 
 
 ### The Play Store is broken
@@ -967,7 +969,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v106  
+### List v107  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
