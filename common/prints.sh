@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=107
+PRINTSV=108
 PRINTSTRANSF=520
 
 # Certified fingerprints
