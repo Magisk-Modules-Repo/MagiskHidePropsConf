@@ -153,7 +153,7 @@ If you can't pass the CTS profile check of the SafetyNet check there are two fea
 
 If you are using a custom ROM (or have a stock ROM on a device that isn't certified by Google) you most likely need to change the device fingerprint to one that has been Google certified. Use the "[Edit device fingerprint"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#spoofing-devices-fingerprint-to-pass-the-ctsprofile-check) feature.
 
-It is also possible that you need to change your devices model to force SafetyNet to use basic key attestation rather than hardware backed. This might be applicable to both custom and stock ROMs. Use the "[Force BASIC key attestation"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) feature. If the SafteyNet check in the Magisk Manager fails CTS and shows "evalType HARDWARE" you'll need to use this feature.
+It is also possible that you need to change your devices model to force SafetyNet to use basic key attestation rather than hardware backed. If the SafteyNet check in the Magisk Manager fails CTS and shows "evalType HARDWARE" you'll need to use this feature. This might be applicable to both custom and stock ROMs. Use "[Force BASIC key attestation"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation).
 
 ### Simulating other devices
 Simple: use the ["Device simulation"](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature.
