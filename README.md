@@ -439,8 +439,9 @@ For the moment, nothing special (I think). If you've got issues, take a look at 
 
 
 ### I still can't pass the ctsProfile check
-If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified but still can't pass the ctsProfile check, try one or more of the following:
+If you've picked a certified fingerprint from the provided list, or you're using a fingerprint that you know is certified, or you've forced basic key attestation but still can't pass the ctsProfile check, try one or more of the following:
 - Make sure that [MagiskHide is enabled and working](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Test_MagiskHide).
+- Take a look under [What option should I use](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#what-option-should-i-use-1), to make sure that you are using the proper settings for your situation.
 - Check if your device uses [hardware backed key attestation to detect an unlocked bootloader](https://www.didgeridoohan.com/magisk/MagiskHide#hn_Unlocked_bootloader_3). If it does, you can try using the [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) option..
 - Do you pass basicIntegrity? If you don't, there's something else going on that this module can't help you with. Take a look under ["Miscellaneous MagiskHide issues"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues) below.
 - Go to the "Edit fingerprints menu", select "Boot stages", and start by changing the security patch date boot stage to either default or post-fs-data. If that doesn't work, also try changing the fingerprint boot stage to post-fs-data. The default boot stage can also be changed if you go into the script options and change the boot stage to post-fs-data. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) below.
