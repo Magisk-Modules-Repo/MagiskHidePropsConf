@@ -541,7 +541,7 @@ If your device's Play Store reports that the device is "uncertified", this is us
 
 
 ## Logs
-In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l run option, use -h for details). All the relevant logs and module files, together with the Magisk log, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
+In case of issues, please provide the logs by running the `props` script and selecting the "Collect logs" option (or running the `props` script with the -l run option, use -h for details, or collecting them manually as described below). All the relevant logs and module files, together with the Magisk log, the stock build.prop file and current prop values will be packaged into a file that'll be stored in the root of the device's internal storage, ready for attaching to a post in the [module support thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228), together with a detailed description of your problem.
 
 The logs will also automatically be saved to the root of the device's internal storage if there's an issue with the module scripts.
 
