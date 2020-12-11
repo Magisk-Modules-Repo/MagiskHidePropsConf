@@ -272,7 +272,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v110_**
+**_Current fingerprints list version - v111_**
 
 
 ## Please add support for device X
@@ -971,7 +971,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v110  
+### List v111  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -980,7 +980,8 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Asus ZenFone 5 ASUS_X00QD (9)
 - Asus ZenFone 5Z ASUS_Z01RD (9)
 - Asus ZenFone 6 ASUS_I01WD (9)
-- Asus ZenFone 7/7 Pro ASUS_I002D (10)
+- Asus ZenFone 7/7 Pro Europe ASUS_I002D (10)
+- Asus ZenFone 7/7 Pro Global ASUS_I002D (10)
 - Asus ZenFone Max M1 ASUS_X00PD (8.0.0 & 9 & 10)
 - Asus ZenFone Max Pro M1 ASUS_X00TD (8.1.0 & 9)
 - Asus ZenFone Max Pro M2 ASUS_X01BD (9)
@@ -1117,10 +1118,10 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 7 GM1901 (9 & 10)
 - OnePlus 7 Europe GM1903 (9 & 10)
 - OnePlus 7 GM1905 (9 & 10)
-- OnePlus 7 China Pro GM1910 (10)
+- OnePlus 7 Pro China GM1910 (10)
 - OnePlus 7 Pro GM1911 (9 & 10)
-- OnePlus 7 Europe Pro GM1913 (9 & 10)
-- OnePlus 7 T-Mobile Pro GM1915 (9)
+- OnePlus 7 Pro Europe GM1913 (9 & 10)
+- OnePlus 7 Pro T-Mobile GM1915 (9)
 - OnePlus 7 Pro GM1917 (9 & 10)
 - OnePlus 7 Pro NR Europe GM1920 (9 & 10)
 - OnePlus 7 Pro NR Sprint GM1925 (9 & 10)
@@ -1128,9 +1129,9 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 7T HD1901 (10)
 - OnePlus 7T Europe HD1903 (10)
 - OnePlus 7T HD1905 (10)
-- OnePlus 7T Cina Pro HD1910 (10)
+- OnePlus 7T Pro China HD1910 (10)
 - OnePlus 7T Pro HD1911 (10)
-- OnePlus 7T Europe Pro HD1913 (10)
+- OnePlus 7T Pro Europe HD1913 (10)
 - OnePlus 7T Pro HD1917 (10)
 - OnePlus 7T Pro NR HD1925 (10)
 - OnePlus 8 China IN2010 (10)
@@ -1140,14 +1141,17 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 8 Visible IN2015 (10)
 - OnePlus 8 T-Mobile IN2017 (10)
 - OnePlus 8 Verizon IN2019 (10)
-- OnePlus 8 China Pro IN2020 (10)
-- OnePlus 8 India Pro IN2021 (10 & 11)
-- OnePlus 8 Europe Pro IN2023 (10 & 11)
-- OnePlus 8 Global Pro IN2025 (10 & 11)
+- OnePlus 8 Pro China IN2020 (10)
+- OnePlus 8 Pro India IN2021 (10 & 11)
+- OnePlus 8 Pro Europe IN2023 (10 & 11)
+- OnePlus 8 Pro Global IN2025 (10 & 11)
+- OnePlus 8T China KB2000 (11)
 - OnePlus 8T India KB2001 (11)
 - OnePlus 8T Europe KB2003 (11)
 - OnePlus 8T Global KB2005 (11)
 - OnePlus 8T T-Mobile KB2007 (11)
+- OnePlus N100 Europe (10)
+- OnePlus N10 5G Europe (10)
 - OnePlus Nord India AC2001 (10)
 - OnePlus Nord Europe AC2003 (10)
 - OnePlus Nord Global AC2003 (10)
@@ -1157,6 +1161,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - POCO F2 Pro Europe (10)
 - POCO F2 Pro Global (10)
 - POCO X2 (10)
+- POCO X3 NFC Europe (10)
 - POCO X3 NFC Global (10)
 - Razer Phone (7.1.1 & 8.1.0 & 9)
 - Razer Phone 2 (8.1.0 & 9)
@@ -1187,6 +1192,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy A50 SM-A505F (9)
 - Samsung Galaxy A50S SM-A507FN (10)
 - Samsung Galaxy A51 SM-A515F (10)
+- Samsung Galaxy A70 SM-A705FN (10)
 - Samsung Galaxy A90 5G SM-A908B (9)
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
 - Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
@@ -1214,6 +1220,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy Note 10.1 2014 SM-P600 (5.1.1)
 - Samsung Galaxy Note 20 Ultra SM-N986U (10)
 - Samsung Galaxy Note 20 Ultra 5G SM-N9860 (10)
+- Samsung Galaxy Note 20 Ultra 5G SM-N986B/DS (10)
 - Samsung Galaxy S3 Neo GT-I9300I (4.4.4)
 - Samsung Galaxy S4 GT-I9505 (5.0.1)
 - Samsung Galaxy S4 Active GT-I9295 (5.0.1)
@@ -1231,6 +1238,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S10 Plus SM-G975F (10)
 - Samsung Galaxy S10 Plus SM-G975U (9)
 - Samsung Galaxy S10e SM-G970N (10)
+- Samsung Galaxy S20 FE 5G (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
 - Samsung Galaxy Tab 4 7.0 SM-T230NU (4.4.2)
@@ -1241,6 +1249,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxt Tab A WiFi SM-T590 (9)
 - Samsung Galaxt Tab A LTE SM-T595 (9)
 - Samsung Galaxt Tab A LTE SM-T597 (9)
+- Samsung Galaxy Tab E 9.6 SM-T560 (4.4.4)
 - Samsung Galaxy Tab S2 SM-T813 (7.0)
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
 - Samsung Galaxy Tab S4 WiFi SM-T830 (10)
