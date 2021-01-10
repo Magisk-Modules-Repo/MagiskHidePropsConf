@@ -272,7 +272,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v111_**
+**_Current fingerprints list version - v112_**
 
 
 ## Please add support for device X
@@ -971,7 +971,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 
 ## Current fingerprints list
-### List v111  
+### List v112  
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -1065,6 +1065,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - LG V30 LS998 (8.0.0)
 - Mecool KM8 (8.0.0 & 9)
 - Meizu 16th (8.1.0)
+- Meizu 17 (10)
 - Meizu X8 (8.1.0)
 - Motorola Moto C Plus (7.0)
 - Motorola Moto E4 (7.1.1)
@@ -1121,7 +1122,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 7 Pro China GM1910 (10)
 - OnePlus 7 Pro GM1911 (9 & 10)
 - OnePlus 7 Pro Europe GM1913 (9 & 10)
-- OnePlus 7 Pro T-Mobile GM1915 (9)
+- OnePlus 7 Pro T-Mobile GM1915 (9 & 10)
 - OnePlus 7 Pro GM1917 (9 & 10)
 - OnePlus 7 Pro NR Europe GM1920 (9 & 10)
 - OnePlus 7 Pro NR Sprint GM1925 (9 & 10)
@@ -1150,11 +1151,13 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - OnePlus 8T Europe KB2003 (11)
 - OnePlus 8T Global KB2005 (11)
 - OnePlus 8T T-Mobile KB2007 (11)
-- OnePlus N100 Europe (10)
-- OnePlus N10 5G Europe (10)
-- OnePlus Nord India AC2001 (10)
-- OnePlus Nord Europe AC2003 (10)
-- OnePlus Nord Global AC2003 (10)
+- OnePlus N10 5G Global BE2029 (10)
+- OnePlus N10 5G Europe BE2029 (10)
+- OnePlus N100 Global BE2011 (10)
+- OnePlus N100 Europe BE2013 (10)
+- OnePlus Nord India AC2001 (10 & 11)
+- OnePlus Nord Europe AC2003 (10 & 11)
+- OnePlus Nord Global AC2003 (10 & 11)
 - OPPO Find X2 Neo Europe CPH2009 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
@@ -1170,6 +1173,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Redmi K30 Pro Zoom Edition China (10)
 - Redmi K30 Ultra China (10)
 - Redmi K30S Ultra China (10)
+- Redmi Note 8 Pro Europe (10)
 - Redmi Note 8 Pro Global (9 & 10)
 - Redmi Note 8 Pro India (9 & 10)
 - Redmi Note 8 Pro Russia (9 & 10)
@@ -1183,6 +1187,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy A3 2017 SM-A320FL (8.0.0)
 - Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
 - Samsung Galaxy A5 2017 SM-A520F (8.0.0)
+- Samsung Galaxy A6 SM-A600F (10)
 - Samsung Galaxy A6 Plus SM-A605G (9)
 - Samsung Galaxy A7 2017 SM-A720F (8.0.0)
 - Samsung Galaxy A7 2018 SM-A750GN (9 & 10)
@@ -1234,9 +1239,10 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy S8 Plus SM-G955F (8.0.0)
 - Samsung Galaxy S9 SM-G960F (8.0.0)
 - Samsung Galaxy S9 Plus SM-G965F (8.0.0)
-- Samsung Galaxy S10 SM-G973F (10)
-- Samsung Galaxy S10 Plus SM-G975F (10)
+- Samsung Galaxy S10 SM-G973F (10 & 11)
+- Samsung Galaxy S10 Plus SM-G975F (10 & 11)
 - Samsung Galaxy S10 Plus SM-G975U (9)
+- Samsung Galaxy S10e SM-G970F (10 & 11)
 - Samsung Galaxy S10e SM-G970N (10)
 - Samsung Galaxy S20 FE 5G (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
@@ -1255,6 +1261,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy Tab S4 WiFi SM-T830 (10)
 - Samsung Galaxy Tab S4 LTE SM-T835 (10)
 - Samsung Galaxy Tab S5e SM-T720 (9 & 10)
+- Samsung Galaxy Tab S6 Lite SM-P610 (10)
 - Sony Xperia 5 DSDS J9210 (10)
 - Sony Xperia 10 II Dual XQ-AU52 (10)
 - Sony Xperia M (4.3)
@@ -1346,7 +1353,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi 7A Global (9 & 10)
 - Xiaomi Redmi 8 China (9 & 10)
 - Xiaomi Redmi Go Global (8.1.0)
-- Xiaomi Redmi K20 Pro China (9)
+- Xiaomi Redmi K20 Pro China (9 & 10)
 - Xiaomi Redmi K20 Pro Global (10)
 - Xiaomi Redmi K20 Pro India (10)
 - Xiaomi Redmi Note 2 Global (5.0.2)
@@ -1361,7 +1368,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Redmi Note 6 Pro Global (8.1.0)
 - Xiaomi Redmi Note 7 Global (9)
 - Xiaomi Redmi Note 7 Pro India (9)
-- Xiaomi Redmi Note 8 Global (9)
+- Xiaomi Redmi Note 8 Global (9 & 10)
 - Xiaomi Redmi Note 8T Europe (9)
 - Xiaomi Redmi Y1 Global (7.1.2)
 - ZTE Axon 7 (7.1.1 & 8.0.0)
