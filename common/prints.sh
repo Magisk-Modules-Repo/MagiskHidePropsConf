@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=112
+PRINTSV=113
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=576
-# Unique devices=403
+# Current fingerprints count=577
+# Unique devices=404
 PRINTSLIST="
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0):Asus:ASUS_X00DD=asus/WW_Phone/ASUS_X00DD:7.1.1/NMF26F/14.0200.1712.347-20171214:user/release-keys;asus/WW_Phone/ASUS_X00DD:8.1.0/OPM1.171019.011/15.0200.1812.503-0:user/release-keys__2018-12-05
@@ -29,6 +29,7 @@ BLU S1 (7.0):Blu:BLU_S1=BLU/BLU_S1/S0320WW:7.0/NRD90M/1514191903:user/release-ke
 Elephone U Pro (8.0.0):Elephone:U_Pro=Elephone/U_Pro/U_Pro:8.0.0/Elephone_U_Pro_20180917/09172123:user/release-keys__2018-09-05
 Essential PH-1 (7.1.1 & 8.1.0 & 9 & 10):Essential:PH-1=essential/mata/mata:7.1.1/NMK24B/468:user/release-keys__2018-02-05;essential/mata/mata:8.1.0/OPM1.180104.267/399:user/release-keys__2018-07-05;essential/mata/mata:9/PQ1A.190105.112/550:user/release-keys__2019-08-05;essential/mata/mata:10/QQ1A.200105.032/540:user/release-keys__2020-02-05
 Fairphone 2 (6.0.1):Fairphone:FP2=Fairphone/FP2/FP2:6.0.1/FP2-gms-17.09.3/FP2-gms-17.09.3:user/release-keys
+Fairphone 3/3 Plus (10):Fairphone:FP3=Fairphone/FP3/FP3:10/8901.3.A.0054.20200929/09290922:user/release-keys__2020-10-05
 Fxtec Pro 1 (9):Fxtec:QX1000=Fxtec/QX1000_EEA/QX1000:9/PKQ1.190723.001/05500.20Q202:user/release-keys__2020-04-05
 Google Nexus 4 (5.1.1):LGE:Nexus 4=google/occam/mako:5.1.1/LMY48T/2237560:user/release-keys
 Google Nexus 5 (6.0.1):LGE:Nexus 5=google/hammerhead/hammerhead:6.0.1/M4B30Z/3437181:user/release-keys

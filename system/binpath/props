@@ -1562,12 +1562,12 @@ menu_dev_sim() {
 				echo -e "${G} 8${N} - ro.build.display.id${DISPTXT}"
 				if [ "$SIMMANUFACTURER" ] && [ "$SIMMODEL" ]; then
 					echo -e "${G} 9${N} - ro.product.manufacturer${MANUFACTURERTXT}"
-					if [ "$BASICATTEST" == 0 ]; then
+					#if [ "$BASICATTEST" == 0 ]; then
 						echo -e "${G}10${N} - ro.product.model${MODELTXT}"
-					else
-						echo -e "     (Simulating ro.product.model is currently ${R}disabled${N}.)"
-						echo ""
-					fi
+					#else
+					#	echo -e "     (Simulating ro.product.model is currently ${R}disabled${N}.)"
+					#	echo ""
+					#fi
 					MANMODEN=true
 				else
 					MANMODEN=false
@@ -1609,25 +1609,25 @@ menu_dev_sim() {
 								if [ "$MANMODEN" == "false" ]; then
 									invalid_input 1 2
 								else
-									if [ "$BASICATTEST" == 1 ]; then
-										case "$INPUT2" in
-											*10*) invalid_input 7 2
-											;;
-											*)
-												if [ -z "$NUMCHECK" ]; then
-													menu_dev_sim_prop "$1" "$INPUT2"
-												else
-													invalid_input 7 2
-												fi
-											;;
-										esac
-									else
+									#if [ "$BASICATTEST" == 1 ]; then
+									#	case "$INPUT2" in
+									#		*10*) invalid_input 7 2
+									#		;;
+									#		*)
+									#			if [ -z "$NUMCHECK" ]; then
+									#				menu_dev_sim_prop "$1" "$INPUT2"
+									#			else
+									#				invalid_input 7 2
+									#			fi
+									#		;;
+									#	esac
+									#else
 										if [ -z "$NUMCHECK" ]; then
 											menu_dev_sim_prop "$1" "$INPUT2"
 										else
 											invalid_input 7 2
 										fi
-									fi
+									#fi
 								fi
 							;;
 							*)
@@ -1640,11 +1640,11 @@ menu_dev_sim() {
 							if [ "$MANMODEN" == "false" ] && [ "$INPUT2" == 9 -o "$INPUT2" == 10 ]; then
 								invalid_input 1 2
 							else
-								if [ "$BASICATTEST" == 1 ] && [ "$INPUT2" == 10 ]; then
-									invalid_input 1 2
-								else
+								#if [ "$BASICATTEST" == 1 ] && [ "$INPUT2" == 10 ]; then
+								#	invalid_input 1 2
+								#else
 									menu_dev_sim_prop "$1" "$INPUT2"
-								fi
+								#fi
 							fi
 						else
 							invalid_input 1 2
@@ -4153,9 +4153,9 @@ do
 			elif [ "$PRINTEDIT" == 1 ]; then
 				PRINTTXT=$ACTIVE
 			fi
-			if [ "$BASICATTEST" == 1 ]; then
-				BASICTXT=$ACTIVE
-			fi
+			#if [ "$BASICATTEST" == 1 ]; then
+			#	BASICTXT=$ACTIVE
+			#fi
 			if [ "$FINGERPRINTENB" == 0 ] || [ "$PRINTEDIT" == 0 ]; then
 				DEVTXT=$DISABLED
 			elif [ "$DEVSIM" == 1 ] && [ "$BRANDSET" == 1 ] || [ "$NAMESET" == 1 ] || [ "$DEVICESET" == 1 ] || [ "$RELEASESET" == 1 ] || [ "$IDSET" == 1 ] || [ "$INCREMENTALSET" == 1 ] || [ "$SDKSET" == 1 ] || [ "$DISPLAYSET" == 1 ]; then
@@ -4180,13 +4180,13 @@ do
 				fi
 			fi
 			echo -e "${G}1${N} - Edit device fingerprint${PRINTTXT}"
-			echo -e "${G}2${N} - Force BASIC key attestation${BASICTXT}"
-			echo -e "${G}3${N} - Device simulation${DEVTXT}"
-			echo -e "${G}4${N} - Edit MagiskHide props${PROPTXT}"
-			echo -e "${G}5${N} - Add/edit custom props${CUSTTXT}"
-			echo -e "${G}6${N} - Delete prop values${DELTXT}"
-			echo -e "${G}7${N} - Script settings"
-			echo -e "${G}8${N} - Collect logs"
+			# echo -e "${G}2${N} - Force BASIC key attestation${BASICTXT}" # Google once again changed their SN checks. This is no longer viable. Will remove completely in future.
+			echo -e "${G}2${N} - Device simulation${DEVTXT}"
+			echo -e "${G}3${N} - Edit MagiskHide props${PROPTXT}"
+			echo -e "${G}4${N} - Add/edit custom props${CUSTTXT}"
+			echo -e "${G}5${N} - Delete prop values${DELTXT}"
+			echo -e "${G}6${N} - Script settings"
+			echo -e "${G}7${N} - Collect logs"
 			if [ -z "$UPDATECHECK" ]; then
 				echo -e "${G}u${N} - Perform module update check"
 			fi
@@ -4213,19 +4213,19 @@ do
 		case "$INPUT" in
 			1) menu_change_fingerprint "Edit device fingerprint${PRINTTXT}" $CURRFINGERPRINT $ORIGFINGERPRINT $MODULEFINGERPRINT
 			;;
-			2) menu_force_basic "Force BASIC key attestation${BASICTXT}"
+			# 2) menu_force_basic "Force BASIC key attestation${BASICTXT}" # Google once again changed their SN checks. This is no longer viable. Will remove completely in future.
+			# ;;
+			2) menu_dev_sim "Device simulation${DEVTXT}"
 			;;
-			3) menu_dev_sim "Device simulation${DEVTXT}"
+			3) menu_magiskhide_props "MagiskHide props${PROPTXT}"
 			;;
-			4) menu_magiskhide_props "MagiskHide props${PROPTXT}"
+			4) menu_custom_props "Custom props${CUSTTXT}"
 			;;
-			5) menu_custom_props "Custom props${CUSTTXT}"
+			5) menu_delete_props "Delete props${DELTXT}"
 			;;
-			6) menu_delete_props "Delete props${DELTXT}"
+			6) menu_options "Script settings"
 			;;
-			7) menu_options "Script settings"
-			;;
-			8) menu_logs "Collect logs"
+			7) menu_logs "Collect logs"
 			;;
 			u|U)
 				if [ -z "$UPDATECHECK" ]; then

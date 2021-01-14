@@ -66,9 +66,6 @@ if [ "$INSTFN" ]; then
 	PRINTEDIT
 	PRINTVEND
 	PRINTCHK
-	BASICATTEST
-	BASICATTLIST
-	BASICATTCUST
 	DEVSIM
 	PROPCOUNT
 	PROPEDIT
@@ -953,9 +950,9 @@ system_prop() {
 		if [ "$PATCHSTAGE" == 0 ]; then
 			patch_edit "$MODPATH/system.prop"
 		fi
-		if [ "$BASICATTEST" == 1 ]; then
-			forced_basic "$MODPATH/system.prop"
-		fi
+		#if [ "$BASICATTEST" == 1 ]; then
+		#	forced_basic "$MODPATH/system.prop"
+		#fi
 		if [ "$SIMSTAGE" == 0 ]; then
 			dev_sim_edit "$MODPATH/system.prop"
 		fi
@@ -1340,7 +1337,7 @@ print_files() {
 				TMPI=$(($TMPI - 1))
 			fi
 		done
-    echo -e "BASICATTMODEL=\"$(get_eq_left "$TMPLINE" | sed "s|^.*\:||")\"" >> $TMPFILE
+    #echo -e "BASICATTMODEL=\"$(get_eq_left "$TMPLINE" | sed "s|^.*\:||")\"" >> $TMPFILE
 	done
 	# Check for updated fingerprint
 	device_print_update "Updating module fingerprint."
@@ -2230,8 +2227,8 @@ export_settings() {
 	replace_fn CONFPRINTBOOT default $([ $PRINTSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	replace_fn CONFPATCHBOOT late $([ $PATCHSTAGE == 0 ] && echo "default" || $([ $PATCHSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	# Force BASIC attestation
-	replace_fn CONFBASICATTEST false $([ $BASICATTEST == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFBASICATTCUST "\"\"" "\"$BASICATTCUST\"" $EXPORTFILE
+	#replace_fn CONFBASICATTEST false $([ $BASICATTEST == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	#replace_fn CONFBASICATTCUST "\"\"" "\"$BASICATTCUST\"" $EXPORTFILE
 	# Device Simulation
 	replace_fn CONFDEVSIM false $([ $DEVSIM == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	replace_fn CONFBRAND false $([ $BRANDSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
