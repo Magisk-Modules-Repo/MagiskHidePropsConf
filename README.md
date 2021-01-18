@@ -960,6 +960,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 
 ## Current fingerprints list
 ### List v114  
+- Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -1187,6 +1188,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Samsung Galaxy A50S SM-A507FN (10)
 - Samsung Galaxy A51 SM-A515F (10)
 - Samsung Galaxy A70 SM-A705FN (10)
+- Samsung Galaxy A71 SM-A715F (10)
 - Samsung Galaxy A90 5G SM-A908B (9)
 - Samsung Galaxy Core Prime SM-G361F (5.1.1)
 - Samsung Galaxy Grand Prime SM-G530BT (5.0.2)
@@ -1309,6 +1311,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 10 Pro China (10 & 11)
 - Xiaomi Mi 10 Ultra China (10)
 - Xiaomi Mi 10T Europe (10)
+- Xiaomi Mi 10T Lite (10)
 - Xiaomi Mi 10T Pro Europe (10)
 - Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 Global (8.1.0 & 9 & 10)
