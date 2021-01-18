@@ -1311,7 +1311,7 @@ Releases from v5.2.5 will only install on Magisk v20+.
 - Xiaomi Mi 10 Pro China (10 & 11)
 - Xiaomi Mi 10 Ultra China (10)
 - Xiaomi Mi 10T Europe (10)
-- Xiaomi Mi 10T Lite (10)
+- Xiaomi Mi 10T Lite Europe (10)
 - Xiaomi Mi 10T Pro Europe (10)
 - Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 Global (8.1.0 & 9 & 10)
