@@ -4,13 +4,14 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=113
+PRINTSV=114
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=577
-# Unique devices=404
+# Current fingerprints count=580
+# Unique devices=407
 PRINTSLIST="
+Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
 Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0):Asus:ASUS_X00DD=asus/WW_Phone/ASUS_X00DD:7.1.1/NMF26F/14.0200.1712.347-20171214:user/release-keys;asus/WW_Phone/ASUS_X00DD:8.1.0/OPM1.171019.011/15.0200.1812.503-0:user/release-keys__2018-12-05
 Asus ZenFone 3 Ultra ASUS_A001 (7.0):Asus:ASUS_A001=asus/WW_Phone/ASUS_A001:7.0/NRD90M/14.1010.1804.75-20180612:user/release-keys__2018-04-01
@@ -47,7 +48,7 @@ Google Nexus Player (5.0 & 5.1 & 5.1.1 & 6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0):As
 Google Pixel (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel=google/sailfish/sailfish:7.1/NDE63V/3389651:user/release-keys;google/sailfish/sailfish:7.1.1/NOF27D/3757586:user/release-keys;google/sailfish/sailfish:7.1.2/NJH47F/4146041:user/release-keys;google/sailfish/sailfish:8.0.0/OPR3.170623.013/4397526:user/release-keys;google/sailfish/sailfish:8.1.0/OPM4.171019.021.P1/4820305:user/release-keys__2018-07-05;google/sailfish/sailfish:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
 Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel XL=google/marlin/marlin:7.1/NDE63V/3389651:user/release-keys;google/marlin/marlin:7.1.1/NOF27D/3757586:user/release-keys;google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys;google/marlin/marlin:8.0.0/OPR3.170623.013/4397526:user/release-keys;google/marlin/marlin:8.1.0/OPM4.171019.021.P1/4820305:user/release-keys__2018-07-05;google/marlin/marlin:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
 Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2=google/walleye/walleye:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/walleye/walleye:8.1.0/OPM2.171026.006.G1/4820017:user/release-keys__2018-07-05;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/walleye/walleye:11/RP1A.201005.004.A1/6934943:user/release-keys__2020-10-05
-Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2 XL=google/taimen/taimen:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/taimen/taimen:8.1.0/OPM2.171026.006.H1/4833802:user/release-keys__2018-07-05;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/taimen/taimen:11/RP1A.201005.004.A1/6934943:user/release-keys__2020-10-05 
+Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2 XL=google/taimen/taimen:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/taimen/taimen:8.1.0/OPM2.171026.006.H1/4833802:user/release-keys__2018-07-05;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/taimen/taimen:11/RP1A.201005.004.A1/6934943:user/release-keys__2020-10-05
 Google Pixel 3 (9 & 10 & 11):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/blueline/blueline:11/RQ1A.210105.003/7005429:user/release-keys__2021-01-05
 Google Pixel 3 XL (9 & 10 & 11):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/crosshatch/crosshatch:11/RQ1A.210105.003/7005429:user/release-keys__2021-01-05
 Google Pixel 3a (9 & 10 & 11):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/sargo/sargo:11/RQ1A.210105.002/6985033:user/release-keys__2021-01-05
@@ -238,6 +239,7 @@ Samsung Galaxy A50 SM-A505F (9):Samsung:SM-A505F=samsung/a50dd/a50:9/PPR1.180610
 Samsung Galaxy A50S SM-A507FN (10):Samsung:SM-A507FN=samsung/a50sxx/a50s:10/QP1A.190711.020/A507FNXXS5BTI1:user/release-keys__2020-09-01
 Samsung Galaxy A51 SM-A515F (10):Samsung:SM-A515F=samsung/a51nsxx/a51:10/QP1A.190711.020/A515FXXU1ASKJ:user/release-keys__2019-12-01
 Samsung Galaxy A70 SM-A705FN (10):samsung:SM-A705FN=samsung/a70qxx/a70q:10/QP1A.190711.020/A705FNXXU5CTK4:user/release-keys__2020-11-01
+Samsung Galaxy A71 SM-A715F (10):samsung:SM-A715F=samsung/a71naxx/a71:10/QP1A.190711.020/A715FXXU3ATK1:user/release-keys__2020-11-01
 Samsung Galaxy A90 5G SM-A908B (9):samsung:SM-A908B=samsung/r3qxx/r3q:9/PPR1.180610.011/A908BXXU2ASK5:user/release-keys__2019-11-01
 Samsung Galaxy Core Prime SM-G361F (5.1.1):Samsung:SM-G361F=samsung/coreprimeveltexx/coreprimevelte:5.1.1/LMY48B/G361FXXU1APB1:user/release-keys
 Samsung Galaxy Grand Prime SM-G530BT (5.0.2):Samsung:SM-G530BT=samsung/fortuna3gdtvvj/fortuna3gdtv:5.0.2/LRX22G/G530BTVJU1BPH4:user/release-keys
@@ -360,6 +362,7 @@ Xiaomi Mi 10 Lite 5G Global (10):Xiaomi:M2002J9G=Xiaomi/monet_global/monet:10/QK
 Xiaomi Mi 10 Pro China (10 & 11):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01;Xiaomi/cmi/cmi:11/RKQ1.200710.002/V12.1.2.0.RJACNXM:user/release-keys__2020-09-01
 Xiaomi Mi 10 Ultra China (10):Xiaomi:Mi 10 Ultra=Xiaomi/cas/cas:10/QKQ1.200419.002/V12.0.10.0.QJJCNXM:user/release-keys__2020-08-01
 Xiaomi Mi 10T Europe (10):Xiaomi:M2007J3SY=Xiaomi/apollo_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
+Xiamoi Mi 10T Lite Europe (10):Xiaomi:M2007J17G=Xiaomi/gauguin_eea/gauguin:10/QKQ1.200628.002/V12.0.8.0.QJSEUXM:user/release-keys__2020-12-01
 Xiaomi Mi 10T Pro Europe (10):Xiaomi:M2007J3SG=Xiaomi/apollopro_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
 Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 Global (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.19.0.QDIMIXM:user/release-keys__2020-12-01
@@ -379,7 +382,7 @@ Xiaomi Mi Note 3 Global (8.1.0):Xiaomi:Mi Note 3=Xiaomi/jason/jason:8.1.0/OPM1.1
 Xiaomi Mi Note 10 Europe (9):Xiaomi:Mi Note 10=Xiaomi/tucana_eea/tucana:9/PKQ1.190302.001/V11.0.11.0.PFDEUXM:user/release-keys__2019-11-01
 Xiaomi Mi Pad Global (4.4.4):Xiaomi:MI PAD=Xiaomi/mocha/mocha:4.4.4/KTU84P/V7.5.2.0.KXFMIDE:user/release-keys
 Xiaomi Mi Pad 4 China (8.1.0):Xiaomi:MI PAD 4=Xiaomi/clover/clover:8.1.0/OPM1.171019.019/V10.1.1.0.ODJCNFI:user/release-keys__2018-10-01
-Xiaomi Pocophone F1 Global (9 & 10):Xiaomi:POCOPHONE F1=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V11.0.5.0.PEJMIXM:user/release-keys__2019-10-01;Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.2.0.QEJMIXM:user/release-keys__2020-09-01
+Xiaomi Pocophone F1 Global (9 & 10):Xiaomi:POCOPHONE F1=Xiaomi/beryllium/beryllium:9/PKQ1.180729.001/V11.0.5.0.PEJMIXM:user/release-keys__2019-10-01;Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys__2020-12-01
 Xiaomi Redmi 3/3 Pro Global (5.1.1):Xiaomi:Redmi 3=Xiaomi/ido/ido:5.1.1/LMY47V/V9.6.2.0.LAIMIFD:user/release-keys
 Xiaomi Redmi 3S/X Prime Global (6.0.1):Xiaomi:Redmi 3S=Xiaomi/land/land:6.0.1/MMB29M/V9.5.1.0.MALMIFA:user/release-keys
 Xiaomi Redmi 4 Pro Global (6.0.1):Xiaomi:Redmi 4=Xiaomi/markw/markw:6.0.1/MMB29M/V9.5.3.0.MBEMIFA:user/release-keys
