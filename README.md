@@ -455,8 +455,8 @@ The reset file can be use this in combination with the [configuration file](http
 ### props not found
 There are two common reasons why you would get an error saying "not found" when running the `props` command in a terminal emulator.
 
-If you're using Termux you first have to run `su`, then it will work.
-If you're not using Termux it is likely that you have somehow disabled the module. Check in the Magisk Manager and make sure that the module is enabled.
+You need to first run `su`. This is especially true if you use Termux, but can also happen on some devices.
+If you still get "props not found" after running `su` it is likely that you have somehow disabled the module. Check in the Magisk Manager and make sure that the module is enabled.
 If neither of these options apply, check below on how to provide [logs](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#logs) for troubleshooting.
 
 
