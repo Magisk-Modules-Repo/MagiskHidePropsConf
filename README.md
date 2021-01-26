@@ -69,7 +69,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Miscellaneous MagiskHide issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#miscellaneous-magiskhide-issues)
 - [Issues, support,etc](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#issues-support-etc)
   - [Known issues](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#known-issues)
-  - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
+  - [I still can't pass the ctsProfile check](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#i-still-cant-pass-the-ctsprofile-check)
   - [Device issues because of the module](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#device-issues-because-of-the-module)
   - [props not found](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-not-found)
   - [The boot scripts did not run](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-boot-scripts-did-not-run)
