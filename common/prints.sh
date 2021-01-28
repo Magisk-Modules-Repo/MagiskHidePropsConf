@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=114
+PRINTSV=115
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=580
-# Unique devices=407
+# Current fingerprints count=581
+# Unique devices=408
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
@@ -352,7 +352,7 @@ Xiaomi Mi 9 Europe (9):Xiaomi:MI 9=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/
 Xiaomi Mi 9 Lite Global (9):Xiaomi:Mi 9 Lite=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9 SE Global (9):MI 9 SE=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9T China (10):Xiaomi:Mi 9T=Xiaomi/davinci/davinci:10/QKQ1.190825.002/V12.0.6.0.QFJCNXM:user/release-keys__2020-10-01
-Xiaomi Mi 9T Europe (9 & 10):Xiaomi:Mi 9T=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01;Xiaomi/davinci_eea/davinci:10/QKQ1.190825.002/V12.0.3.0.QFJEUXM:user/release-keys__2020-10-01
+Xiaomi Mi 9T Europe (9 & 10):Xiaomi:Mi 9T=Xiaomi/davinci_eea/davinci:9/PKQ1.190302.001/V10.3.12.0.PFJEUXM:user/release-keys__2019-07-01;Xiaomi/davinci_eea/davinci:10/QKQ1.190825.002/V12.0.4.0.QFJEUXM:user/release-keys__2021-01-01
 Xiaomi Mi 9T Pro China (9):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01
 Xiaomi Mi 9T Pro Global (9):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 10 China (10 & 11):Xiaomi:Mi 10=Xiaomi/umi/umi:10/QKQ1.191117.002/V12.0.8.0.QJBCNXM:user/release-keys__2020-07-01;Xiaomi/umi/umi:11/RKQ1.200710.002/V12.1.3.0.RJBCNXM:user/release-keys__2020-09-01
@@ -362,7 +362,7 @@ Xiaomi Mi 10 Lite 5G Global (10):Xiaomi:M2002J9G=Xiaomi/monet_global/monet:10/QK
 Xiaomi Mi 10 Pro China (10 & 11):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01;Xiaomi/cmi/cmi:11/RKQ1.200710.002/V12.1.2.0.RJACNXM:user/release-keys__2020-09-01
 Xiaomi Mi 10 Ultra China (10):Xiaomi:Mi 10 Ultra=Xiaomi/cas/cas:10/QKQ1.200419.002/V12.0.10.0.QJJCNXM:user/release-keys__2020-08-01
 Xiaomi Mi 10T Europe (10):Xiaomi:M2007J3SY=Xiaomi/apollo_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
-Xiamoi Mi 10T Lite Europe (10):Xiaomi:M2007J17G=Xiaomi/gauguin_eea/gauguin:10/QKQ1.200628.002/V12.0.8.0.QJSEUXM:user/release-keys__2020-12-01
+Xiaomi Mi 10T Lite Europe (10):Xiaomi:M2007J17G=Xiaomi/gauguin_eea/gauguin:10/QKQ1.200628.002/V12.0.8.0.QJSEUXM:user/release-keys__2020-12-01
 Xiaomi Mi 10T Pro Europe (10):Xiaomi:M2007J3SG=Xiaomi/apollopro_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
 Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 Global (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.19.0.QDIMIXM:user/release-keys__2020-12-01
@@ -392,6 +392,7 @@ Xiaomi Redmi 5 Plus Global (7.1.2 & 8.1.0):Xiaomi:Redmi 5 Plus=xiaomi/vince/vinc
 Xiaomi Redmi 5A Global (7.1.2 & 8.1.0):Xiaomi:Redmi 5A=Xiaomi/riva/riva:7.1.2/N2G47H/V9.1.8.0.NCKMIEI:user/release-keys;Xiaomi/riva/riva:8.1.0/OPM1.171019.026/V10.3.2.0.OCKMIXM:user/release-keys__2019-06-01
 Xiaomi Redmi 6 Global (9):Xiaomi:Redmi 6=xiaomi/cereus/cereus:9/PPR1.180610.011/V11.0.3.0.PCGMIXM:user/release-keys__2020-03-01
 Xiaomi Redmi 6A Global (9):Xiaomi:Redmi 6A=xiaomi/cactus/cactus:9/PPR1.180610.011/V11.0.7.0.PCBMIXM:user/release-keys__2020-03-01
+Xiaomi Redmi 7 Europe (10):Xiaomi:Redmi 7=xiaomi/onc_eea/onc:10/QKQ1.191008.001/V11.0.1.0.QFLEUXM:user/release-keys__2020-12-01
 Xiaomi Redmi 7 Global (9):Xiaomi:Redmi 7=xiaomi/onc/onc:9/PKQ1.181021.001/V11.0.5.0.PFLMIXM:user/release-keys__2020-03-01
 Xiaomi Redmi 7A Global (9 & 10):Xiaomi:Redmi 7A=Xiaomi/pine/pine:9/PKQ1.190319.001/V11.0.7.0.PCMMIXM:user/release-keys__2020-03-01;Xiaomi/pine/pine:10/QKQ1.191014.001/V11.0.3.0.QCMMIXM:user/release-keys__2020-07-01
 Xiaomi Redmi 8 China (9 & 10):Xiaomi:Redmi 8=Xiaomi/olive/olive:9/PKQ1.190319.001/V11.0.7.0.PCNCNXM:user/release-keys__2019-12-01;Xiaomi/olive/olive:10/QKQ1.191014.001/V11.0.1.0.QCNCNXM:user/release-keys__2020-06-01
