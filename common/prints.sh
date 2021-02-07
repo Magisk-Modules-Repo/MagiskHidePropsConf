@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=116
+PRINTSV=117
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=583
-# Unique devices=408
+# Current fingerprints count=586
+# Unique devices=411
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
@@ -199,6 +199,7 @@ OnePlus N100 Europe BE2013 (10):OnePlus:BE2013=OnePlus/OnePlusN100_EEA/OnePlusN1
 OnePlus Nord India AC2001 (10 & 11):OnePlus:AC2001=OnePlus/Nord_IND/Nord:10/QKQ1.200412.002/2012212158:user/release-keys__2020-12-01;OnePlus/Nord_IND/Nord:11/RP1A.201005.001/2012282045:user/release-keys__2020-12-01
 OnePlus Nord Europe AC2003 (10 & 11):OnePlus:AC2003=OnePlus/Nord_EEA/Nord:10/QKQ1.200412.002/2012212158:user/release-keys__2020-12-01;OnePlus/Nord_EEA/Nord:11/RP1A.201005.001/2012282038:user/release-keys__2020-12-01
 OnePlus Nord Global AC2003 (10 & 11):OnePlus:AC2003=OnePlus/Nord/Nord:10/QKQ1.200412.002/2012212217:user/release-keys__2020-12-01;OnePlus/Nord/Nord:11/RP1A.201005.001/2012282112:user/release-keys__2020-12-01
+OPPO A53s Europe (10):OPPO:CPH2135=OPPO/CPH2135EEA/OP4EFDL1:10/QKQ1.200614.002/1605790610:user/release-keys__2020-11-05
 OPPO Find X2 Neo Europe CPH2009 (10):OPPO:CPH2009=OPPO/CPH2009EEA/OP4C2DL1:10/QKQ1.200216.002/1596223341:user/release-keys__2020-08-05
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
@@ -348,6 +349,8 @@ Xiaomi Mi 5S Global (7.0):Xiaomi:MI 5s=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.
 Xiaomi Mi 5S Plus Global (6.0.1 & 7.0):Xiaomi:MI 5s Plus=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys;Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 Global (8.0.0 & 9):Xiaomi:MI 6=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys;Xiaomi/sagit/sagit:9/PKQ1.190118.001/V11.0.6.0.PCAMIXM:user/release-keys__2019-09-01
 Xiaomi Mi 8 Global (8.1.0 & 9 & 10):Xiaomi:MI 8=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01;Xiaomi/dipper/dipper:10/QKQ1.190828.002/V11.0.3.0.QEAMIXM:user/release-keys__2020-01-01
+Xiaomi Mi 8 Pro Global (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus/equuleus:10/QKQ1.190828.002/V11.0.5.0.QECMIXM:user/release-keys__2020-04-01
+Xiaomi Mi 8 Pro Russia (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus_ru/equuleus:10/QKQ1.190828.002/V11.0.3.0.QECRUXM:user/release-keys__2020-04-01
 Xiaomi Mi 9 Europe (9):Xiaomi:MI 9=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi 9 Lite Global (9):Xiaomi:Mi 9 Lite=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9 SE Global (9):MI 9 SE=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:user/release-keys__2019-10-01
