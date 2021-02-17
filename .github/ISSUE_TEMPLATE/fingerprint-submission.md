@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-When submitting a device fingerprint for inclusion in the module list, please provide the values from the following props:
+When submitting a device fingerprint for inclusion in the module list, please provide the device name and the values from the following props:
 - ro.build.fingerprint
 - ro.build.version.security_patch
 - ro.product.manufacturer
