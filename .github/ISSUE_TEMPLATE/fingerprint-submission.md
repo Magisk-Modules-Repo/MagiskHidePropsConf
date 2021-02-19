@@ -13,4 +13,4 @@ When submitting a device fingerprint for inclusion in the module list, please pr
 - ro.product.manufacturer
 - ro.product.model
 
-A simple way of getting all the required information is to use ipdev's great props extraction tool: https://github.com/ipdev99/mHideGP
+A simple way of getting all the required information is to use [ipdev's](https://github.com/ipdev99) great props extraction tool: https://github.com/ipdev99/mHideGP
