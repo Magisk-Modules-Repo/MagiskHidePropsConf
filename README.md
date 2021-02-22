@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v117_**
+**_Current fingerprints list version - v118_**
 
 
 ## Please add support for device X
@@ -960,7 +960,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v117  
+### List v118  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
@@ -1149,7 +1149,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus Nord India AC2001 (10 & 11)
 - OnePlus Nord Europe AC2003 (10 & 11)
 - OnePlus Nord Global AC2003 (10 & 11)
-- OPPO A53s (10)
+- OPPO A53s Europe (10)
 - OPPO Find X2 Neo Europe CPH2009 (10)
 - OPPO Neo 7 A33w (5.1)
 - OPPO Neo 7 A1603 (5.1)
@@ -1230,7 +1230,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy S7 Edge SM-G935F (8.0.0)
 - Samsung Galaxy S8 SM-G950F (8.0.0)
 - Samsung Galaxy S8 Plus SM-G955F (8.0.0)
-- Samsung Galaxy S9 SM-G960F (8.0.0)
+- Samsung Galaxy S9 SM-G960F (8.0.0 & 10)
 - Samsung Galaxy S9 Plus SM-G965F (8.0.0)
 - Samsung Galaxy S10 SM-G973F (10 & 11)
 - Samsung Galaxy S10 Plus SM-G975F (10 & 11)
@@ -1256,6 +1256,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy Tab S5e SM-T720 (9 & 10)
 - Samsung Galaxy Tab S6 Lite SM-P610 (10)
 - Sony Xperia 5 DSDS J9210 (10)
+- Sony Xperia 10 (10)
 - Sony Xperia 10 II Dual XQ-AU52 (10)
 - Sony Xperia M (4.3)
 - Sony Xperia X F5121 (8.0.0)
@@ -1306,8 +1307,9 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 9 SE Global (9)
 - Xiaomi Mi 9T China (10)
 - Xiaomi Mi 9T Europe (9 & 10)
-- Xiaomi Mi 9T Pro China (9)
-- Xiaomi Mi 9T Pro Global (9)
+- Xiaomi Mi 9T Pro China (9 & 10)
+- Xiaomi Mi 9T Pro Europe (10)
+- Xiaomi Mi 9T Pro Global (10)
 - Xiaomi Mi 10 China (10 & 11)
 - Xiaomi MI 10 Europe (10)
 - Xiaomi Mi 10 Lite 5G Europe (10)
@@ -1351,6 +1353,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Redmi 8 China (9 & 10)
 - Xiaomi Redmi Go Global (8.1.0)
 - Xiaomi Redmi K20 Pro China (9 & 10)
+- Xiaomi Redmi K20 Pro Europe (10)
 - Xiaomi Redmi K20 Pro Global (10)
 - Xiaomi Redmi K20 Pro India (10)
 - Xiaomi Redmi Note 2 Global (5.0.2)
