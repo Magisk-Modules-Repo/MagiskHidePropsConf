@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=118
+PRINTSV=119
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=591
-# Unique devices=414
+# Current fingerprints count=592
+# Unique devices=415
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
@@ -141,11 +141,11 @@ Nokia 7 Plus (9 & 10):Nokia:Nokia 7 plus=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.18061
 Nokia 7.1 TA-1095 (10):Nokia:Nokia 7.1=Nokia/Crystal_00WW/CTL_sprout:10/QKQ1.190828.002/00WW_4_08B:user/release-keys__2019-11-01
 Nvidia Shield K1 (7.0):NVIDIA:SHIELD Tablet=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield Tablet (7.0):NVIDIA:SHIELD Tablet=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
-Nvidia Shield TV 2015 (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/foster_e/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e/foster:9/PPR1.180610.011/4079208_2235.1395:user/release-keys__2020-07-05
-Nvidia Shield TV 2015 Pro (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/foster_e_hdd/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e_hdd/foster:9/PPR1.180610.011/4079208_2235.1395:user/release-keys__2020-07-05
-Nvidia Shield TV 2017 (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/darcy/darcy:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/darcy/darcy:9/PPR1.180610.011/4079208_2235.1395:user/release-keys__2020-07-05
-Nvidia Shield TV 2019 (9):NVIDIA:SHIELD Android TV=NVIDIA/sif/sif:9/PPR1.180610.011/4079180_2235.1395:user/release-keys__2020-07-05
-Nvidia Shield TV 2019 Pro (9):NVIDIA:SHIELD Android TV=NVIDIA/mdarcy/mdarcy:9/PPR1.180610.011/4079208_2235.1395:user/release-keys__2020-07-05
+Nvidia Shield TV 2015 (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/foster_e/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e/foster:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
+Nvidia Shield TV 2015 Pro (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/foster_e_hdd/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e_hdd/foster:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
+Nvidia Shield TV 2017 (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/darcy/darcy:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/darcy/darcy:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
+Nvidia Shield TV 2019 (9):NVIDIA:SHIELD Android TV=NVIDIA/sif/sif:9/PPR1.180610.011/4079180_2513.0256:user/release-keys__2020-12-05
+Nvidia Shield TV 2019 Pro (9):NVIDIA:SHIELD Android TV=NVIDIA/mdarcy/mdarcy:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
 OnePlus One (6.0.1):OnePlus:A0001=oneplus/bacon/A0001:6.0.1/MMB29X/ZNH0EAS2JK:user/release-keys
 OnePlus 2 (6.0.1):OnePlus:ONE A2003=OnePlus/OnePlus2/OnePlus2:6.0.1/MMB29M/1447858500:user/release-keys
 OnePlus X (6.0.1):OnePlus:ONE E1003=OnePlus/OnePlus/OnePlus:6.0.1/MMB29M/10281213:user/release-keys
@@ -215,7 +215,7 @@ Redmi K30 Pro China (10):Redmi:Redmi K30 Pro=Redmi/lmi/lmi:10/QKQ1.191117.002/V1
 Redmi K30 Pro Zoom Edition China (10):Redmi:Redmi K30 Pro Zoom Edition=Redmi/lmipro/lmipro:10/QKQ1.191117.002/V11.0.16.0.QJKCNXM:user/release-keys__2020-04-01
 Redmi K30 Ultra China (10):Redmi:M2006J10C=Redmi/cezanne/cezanne:10/QP1A.190711.020/V12.0.12.0.QJNCNXM:user/release-keys__2020-09-01
 Redmi K30S Ultra China (10):Redmi:M2007J3SC=Redmi/apollo/apollo:10/QKQ1.200419.002/V12.0.3.0.QJDCNXM:user/release-keys__2020-09-01
-Redmi Note 8 Pro Europe (10):Redmi:Redmi Note 8 Pro=Redmi/begonia_eea/begonia:10/QP1A.190711.020/V12.0.3.0.QGGEUXM:user/release-keys__2020-11-01
+Redmi Note 8 Pro Europe (10):Redmi:Redmi Note 8 Pro=Redmi/begonia_eea/begonia:10/QP1A.190711.020/V12.0.4.0.QGGEUXM:user/release-keys__2021-02-01
 Redmi Note 8 Pro Global (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begonia/begonia:9/PPR1.180610.011/V10.4.1.0.PGGMIXM:user/release-keys__2019-09-01;Redmi/begonia/begonia:10/QP1A.190711.020/V12.0.3.0.QGGMIXM:user/release-keys__2020-08-01
 Redmi Note 8 Pro India (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begoniain/begoniain:9/PPR1.180610.011/V10.4.4.0.PGGINXM:user/release-keys__2019-09-01;Redmi/begoniain/begoniain:10/QP1A.190711.020/V11.0.2.0.QGGINXM:user/release-keys__2020-02-01
 Redmi Note 8 Pro Russia (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begonia_ru/begonia:9/PPR1.180610.011/V11.0.3.0.PGGRUXM:user/release-keys__2019-11-01;Redmi/begonia_ru/begonia:10/QP1A.190711.020/V11.0.2.0.QGGRUXM:user/release-keys__2020-02-01
@@ -401,6 +401,7 @@ Xiaomi Redmi 7 Europe (10):Xiaomi:Redmi 7=xiaomi/onc_eea/onc:10/QKQ1.191008.001/
 Xiaomi Redmi 7 Global (9):Xiaomi:Redmi 7=xiaomi/onc/onc:9/PKQ1.181021.001/V11.0.5.0.PFLMIXM:user/release-keys__2020-03-01
 Xiaomi Redmi 7A Global (9 & 10):Xiaomi:Redmi 7A=Xiaomi/pine/pine:9/PKQ1.190319.001/V11.0.7.0.PCMMIXM:user/release-keys__2020-03-01;Xiaomi/pine/pine:10/QKQ1.191014.001/V11.0.3.0.QCMMIXM:user/release-keys__2020-07-01
 Xiaomi Redmi 8 China (9 & 10):Xiaomi:Redmi 8=Xiaomi/olive/olive:9/PKQ1.190319.001/V11.0.7.0.PCNCNXM:user/release-keys__2019-12-01;Xiaomi/olive/olive:10/QKQ1.191014.001/V11.0.1.0.QCNCNXM:user/release-keys__2020-06-01
+Xiaomi Redmi 9 China (10):Xiaomi:M2004J19AG=Redmi/lancelot/lancelot:10/QP1A.190711.020/V12.0.6.0.QJCCNXM:user/release-keys__2020-11-05
 Xiaomi Redmi Go Global (8.1.0):Xiaomi:Redmi Go=Xiaomi/tiare/tiare:8.1.0/OPM1.171019.026/V10.2.6.0.OCLMIXM:user/release-keys__2019-01-01
 Xiaomi Redmi K20 Pro China (9 & 10):Xiaomi:Redmi K20 Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01;Xiaomi/raphael/raphael:10/QKQ1.190825.002/V12.0.6.0.QFKCNXM:user/release-keys__2020-11-01
 Xiaomi Redmi K20 Pro Europe (10):Xiaomi:Mi 9T Pro=Xiaomi/raphael_eea/raphael:10/QKQ1.190825.002/V12.0.4.0.QFKEUXM:user/release-keys__2021-01-01
