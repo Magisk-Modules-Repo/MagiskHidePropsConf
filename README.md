@@ -960,7 +960,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v121  
+### List v122  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
@@ -1322,6 +1322,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 10T Europe (10)
 - Xiaomi Mi 10T Lite Europe (10)
 - Xiaomi Mi 10T Pro Europe (10)
+- Xiaomi Mi 11 China (11)
 - Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite Global (8.1.0 & 9 & 10)
