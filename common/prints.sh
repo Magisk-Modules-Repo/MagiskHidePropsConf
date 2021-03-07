@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=121
+PRINTSV=122
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=595
-# Unique devices=418
+# Current fingerprints count=596
+# Unique devices=419
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
@@ -372,6 +372,7 @@ Xiaomi Mi 10 Ultra China (10):Xiaomi:Mi 10 Ultra=Xiaomi/cas/cas:10/QKQ1.200419.0
 Xiaomi Mi 10T Europe (10):Xiaomi:M2007J3SY=Xiaomi/apollo_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
 Xiaomi Mi 10T Lite Europe (10):Xiaomi:M2007J17G=Xiaomi/gauguin_eea/gauguin:10/QKQ1.200628.002/V12.0.8.0.QJSEUXM:user/release-keys__2020-12-01
 Xiaomi Mi 10T Pro Europe (10):Xiaomi:M2007J3SG=Xiaomi/apollopro_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
+Xiaomi Mi 11 (11):Xiaomi:M2011K2C=Xiaomi/venus/venus:11/RKQ1.200928.002/V12.0.22.0.RKBCNXM:user/release-keys__2021-01-01
 Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 Global (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.21.0.QDIMIXM:user/release-keys__2021-02-01
 Xiaomi Mi A2 Lite Global (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.18.0.QDLMIXM:user/release-keys__2021-02-01
