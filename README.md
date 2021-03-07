@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v120_**
+**_Current fingerprints list version - v121_**
 
 
 ## Please add support for device X
@@ -960,7 +960,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v120  
+### List v121  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
@@ -1046,6 +1046,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - LG G6 H870 (7.0 & 8.0.0)
 - LG G7 ThinQ LM-G710 (9)
 - LG K20 Plus LG-TP260 (7.0)
+- LG K20 Plus LGMP260 (7.0)
 - LG V20 H910 (8.0.0)
 - LG V20 H918 (8.0.0)
 - LG V20 H990DS (7.0)
@@ -1089,8 +1090,9 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Nokia 6.2 (9)
 - Nokia 7 Plus (9 & 10)
 - Nokia 7.1 TA-1095 (10)
-- Nvidia Shield K1 (7.0)
-- Nvidia Shield Tablet (7.0)
+- Nvidia Shield Tablet K1 (7.0)
+- Nvidia Shield Tablet LTE (7.0)
+- Nvidia Shield Tablet WiFi (7.0)
 - Nvidia Shield TV 2015 (8.0.0 & 9)
 - Nvidia Shield TV 2015 Pro (8.0.0 & 9)
 - Nvidia Shield TV 2017 (8.0.0 & 9)
@@ -1178,6 +1180,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy A3 2016 SM-A310F (7.0)
 - Samsung Galaxy A3 2017 SM-A320FL (8.0.0)
 - Samsung Galaxy A5 2015 SM-A500FU (6.0.1)
+- Samsung Galaxy A5 2016 SM-A510F (7.0)
 - Samsung Galaxy A5 2017 SM-A520F (8.0.0)
 - Samsung Galaxy A6 SM-A600F (10)
 - Samsung Galaxy A6 Plus SM-A605G (9)
@@ -1311,7 +1314,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 9T Pro Europe (10)
 - Xiaomi Mi 9T Pro Global (10)
 - Xiaomi Mi 10 China (10 & 11)
-- Xiaomi MI 10 Europe (10)
+- Xiaomi Mi 10 Europe (10)
 - Xiaomi Mi 10 Lite 5G Europe (10)
 - Xiaomi Mi 10 Lite 5G Global (10)
 - Xiaomi Mi 10 Pro China (10 & 11)

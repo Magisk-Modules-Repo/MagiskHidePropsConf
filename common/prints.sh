@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=120
+PRINTSV=121
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=592
-# Unique devices=415
+# Current fingerprints count=595
+# Unique devices=418
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
@@ -96,6 +96,7 @@ LG G5 RS988 (7.0):LGE:RS988=lge/h1_lra_us/h1:7.0/NRD90U/1707917149a1b:user/relea
 LG G6 H870 (7.0 & 8.0.0):LGE:LG-H870=lge/lucye_global_com/lucye:7.0/NRD90U/171732341982c:user/release-keys;lge/lucye_global_com/lucye:8.0.0/OPR1.170623.032/183301757502c:user/release-keys__2018-11-01
 LG G7 ThinQ LM-G710 (9):LGE:LM-G710=lge/judyln_lao_com/judyln:9/PKQ1.181105.001/200350248e04d.FGN:user/release-keys__2020-01-01
 LG K20 Plus LG-TP260 (7.0):LGE:LG-TP260=lge/lv517_tmo_us/lv517:7.0/NRD90U/1809315248edb:user/release-keys
+LG K20 Plus LGMP260 (7.0):LGE:LGMP260=MetroPCS/lv517_mpcs_us/lv517:7.0/NRD90U/1833409570571:user/release-keys__2018-12-01
 LG V20 H910 (8.0.0):LGE:LG-H910=lge/elsa_att_us/elsa:8.0.0/OPR1.170623.032/181871124f959:user/release-keys__2018-06-01
 LG V20 H918 (8.0.0):LGE:LG-H918=lge/elsa_tmo_us/elsa:8.0.0/OPR1.170623.032/1831917495b33:user/release-keys__2018-11-01
 LG V20 H990DS (7.0):LGE:LG-H990=lge/elsa_global_com/elsa:7.0/NRD90M/1801800193678:user/release-keys
@@ -139,8 +140,9 @@ Nokia 6.1 Plus (9 & 10):Nokia:Nokia 6.1 Plus=Nokia/Dragon_00WW/DRG_sprout:9/PPR1
 Nokia 6.2 (9):Nokia:Nokia 6.2=Nokia/Starlord_00WW/SLD_sprout:9/PKQ1.190118.001/00WW_1_170:user/release-keys__2020-01-05
 Nokia 7 Plus (9 & 10):Nokia:Nokia 7 plus=Nokia/Onyx_00WW/B2N_sprout:9/PPR1.180610.011/00WW_3_53B:user/release-keys__2019-05-01;Nokia/Onyx_00WW/B2N_sprout:10/QKQ1.190828.002/00WW_4_15D:user/release-keys__2020-05-01
 Nokia 7.1 TA-1095 (10):Nokia:Nokia 7.1=Nokia/Crystal_00WW/CTL_sprout:10/QKQ1.190828.002/00WW_4_08B:user/release-keys__2019-11-01
-Nvidia Shield K1 (7.0):NVIDIA:SHIELD Tablet=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
-Nvidia Shield Tablet (7.0):NVIDIA:SHIELD Tablet=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_904.2811:user/release-keys
+Nvidia Shield Tablet K1 (7.0):NVIDIA:SHIELD Tablet=nvidia/sb_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
+Nvidia Shield Tablet LTE (7.0):NVIDIA:SHIELD Tablet=nvidia/wx_un_do/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
+Nvidia Shield Tablet WiFi (7.0):NVIDIA:SHIELD Tablet=nvidia/wx_na_wf/shieldtablet:7.0/NRD90M/1928188_1065.2559:user/release-keys
 Nvidia Shield TV 2015 (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/foster_e/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e/foster:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
 Nvidia Shield TV 2015 Pro (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/foster_e_hdd/foster:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/foster_e_hdd/foster:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
 Nvidia Shield TV 2017 (8.0.0 & 9):NVIDIA:SHIELD Android TV=NVIDIA/darcy/darcy:8.0.0/OPR6.170623.010/3507953_1441.7411:user/release-keys__2018-12-05;NVIDIA/darcy/darcy:9/PPR1.180610.011/4079208_2513.0256:user/release-keys__2020-12-05
@@ -209,7 +211,7 @@ POCO X2 (10):POCO:POCO X2=POCO/phoenixin/phoenixin:10/QKQ1.190825.002/V12.0.2.0.
 POCO X3 NFC Europe (10):POCO:M2007J20CG=POCO/surya_eea/surya:10/QKQ1.200512.002/V12.0.7.0.QJGEUXM:user/release-keys__2020-11-01
 POCO X3 NFC Global (10):POCO:M2007J20CG=POCO/surya_global/surya:10/QKQ1.200512.002/V12.0.7.0.QJGMIXM:user/release-keys__2020-11-01
 Razer Phone (7.1.1 & 8.1.0 & 9):Razer:Phone=razer/cheryl/cheryl:7.1.1/NMF26X-RZR-180118/3005:user/release-keys__2018-01-05;razer/cheryl/cheryl:8.1.0/OPM1.171019.011-RZR-180803/6033:user/release-keys__2018-07-05;razer/cheryl/cheryl:9/P-MR2-RC001-RZR-N/7083:user/release-keys__2019-11-05
-Razer Phone 2 (8.1.0 & 9):Razer:Phone 2=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05;razer/cheryl2/aura:9/P-SMR3-RC002-RZR-200226/3141:user/release-keys__2020-03-05
+Razer Phone 2 (8.1.0 & 9):Razer:Phone 2=razer/cheryl2/aura:8.1.0/O-MR2-RC009-RZR-181124/2009:user/release-keys__2018-10-05;razer/cheryl2/aura:9/P-SMR7-RC003-RZR-210107/3225:user/release-keys__2021-02-05
 Realme X2 Pro (10):Realme:RMX1931=realme/RMX1931EEA/RMX1931L1:10/QKQ1.191021.002/1590460856:user/release-keys__2020-06-05
 Redmi K30 Pro China (10):Redmi:Redmi K30 Pro=Redmi/lmi/lmi:10/QKQ1.191117.002/V12.0.1.0.QJKCNXM:user/release-keys__2020-06-01
 Redmi K30 Pro Zoom Edition China (10):Redmi:Redmi K30 Pro Zoom Edition=Redmi/lmipro/lmipro:10/QKQ1.191117.002/V11.0.16.0.QJKCNXM:user/release-keys__2020-04-01
@@ -228,11 +230,12 @@ Samsung Galaxy A3 2015 SM-A300FU (6.0.1):Samsung:SM-A300FU=samsung/a3ultexx/a3ul
 Samsung Galaxy A3 2016 SM-A310F (7.0):samsung:SM-A310F=samsung/a3xeltexx/a3xelte:7.0/NRD90M/A310FXXU4CSB2:user/release-keys__2019-02-01
 Samsung Galaxy A3 2017 SM-A320FL (8.0.0):samsung:SM-A320FL=samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXU4CSD2:user/release-keys__2019-04-01
 Samsung Galaxy A5 2015 SM-A500FU (6.0.1):Samsung:SM-A500FU=samsung/a5ultexx/a5ulte:6.0.1/MMB29M/A500FUXXU1CPH3:user/release-keys
+Samsung Galaxy A5 2016 SM-A510F (7.0):samsung:SM-A510F=samsung/a5xeltexx/a5xelte:7.0/NRD90M/A510FXXS8CSF3:user/release-keys__2019-07-01
 Samsung Galaxy A5 2017 SM-A520F (8.0.0):Samsung:SM-A520F=samsung/a5y17ltexx/a5y17lte:8.0.0/R16NW/A520FXXUGCTI9:user/release-keys__2020-09-01
 Samsung Galaxy A6 SM-A600F (10):Samsung:SM-A600F=samsung/a6ltexx/a6lte:10/QP1A.190711.020/A600FNXXS7CTI1:user/release-keys__2020-09-01
 Samsung Galaxy A6 Plus SM-A605G (9):Samsung:SM-A605G=samsung/a6pltedx/a6plte:9/PPR1.180610.011/A605GDXU3BSC6:user/release-keys__2019-03-01
 Samsung Galaxy A7 2017 SM-A720F (8.0.0):Samsung:SM-A720F=samsung/a7y17ltexx/a7y17lte:8.0.0/R16NW/A720FXXU9CSK3:user/release-keys__2019-12-01
-Samsung Galaxy A7 2018 SM-A750GN (9 & 10):samsung:SM-A750GN=samsung/a7y18ltedx/a7y18lte:9/PPR1.180610.011/A750GNDXU2BSD2:user/release-keys__2019-04-01;samsung/a7y18ltedx/a7y18lte:10/QP1A.190711.020/A750GNDXU6CTK1:user/release-keys__2020-12-01
+Samsung Galaxy A7 2018 SM-A750GN (9 & 10):samsung:SM-A750GN=samsung/a7y18ltedx/a7y18lte:9/PPR1.180610.011/A750GNDXU2BSD2:user/release-keys__2019-04-01;samsung/a7y18ltedx/a7y18lte:10/QP1A.190711.020/A750GNDXU6CUA1:user/release-keys__2021-01-01
 Samsung Galaxy A8 Plus SM-A730F (7.1.1):Samsung:SM-A730F=samsung/jackpot2ltexx/jackpot2lte:7.1.1/NMF26X/A730FXXU2ARD1:user/release-keys
 Samsung Galaxy A20 SM-A205W (9):Samsung:SM-A205W=samsung/a20cs/a20:9/PPR1.180610.011/A205WVLU3ASK2:user/release-keys__2019-11-01
 Samsung Galaxy A40 SM-A405FN (10):Samsung:SM-A405FN=samsung/a40xx/a40:10/QP1A.190711.020/A405FNXXS3BTI3:user/release-keys__2020-09-01
@@ -361,7 +364,7 @@ Xiaomi Mi 9T Pro China (9 & 10):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:9/PKQ1.1
 Xiaomi Mi 9T Pro Europe (10):Xiaomi:Mi 9T Pro=Xiaomi/raphael_eea/raphael:10/QKQ1.190825.002/V12.0.4.0.QFKEUXM:user/release-keys__2021-01-01
 Xiaomi Mi 9T Pro Global (10):Xiaomi:Mi 9T Pro=Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 10 China (10 & 11):Xiaomi:Mi 10=Xiaomi/umi/umi:10/QKQ1.191117.002/V12.0.8.0.QJBCNXM:user/release-keys__2020-07-01;Xiaomi/umi/umi:11/RKQ1.200710.002/V12.1.3.0.RJBCNXM:user/release-keys__2020-09-01
-Xiaomi MI 10 Europe (10):Xiaomi:Mi 10=Xiaomi/umi_eea/umi:10/QKQ1.191117.002/V11.0.10.0.QJBEUVF:user/release-keys__2020-07-01
+Xiaomi Mi 10 Europe (10):Xiaomi:Mi 10=Xiaomi/umi_eea/umi:10/QKQ1.191117.002/V11.0.10.0.QJBEUVF:user/release-keys__2020-07-01
 Xiaomi Mi 10 Lite 5G Europe (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.191222.002/V12.0.1.0.QJIEUXM:user/release-keys__2020-06-01
 Xiaomi Mi 10 Lite 5G Global (10):Xiaomi:M2002J9G=Xiaomi/monet_global/monet:10/QKQ1.191222.002/V12.0.1.0.QJIMIXM:user/release-keys__2020-08-01
 Xiaomi Mi 10 Pro China (10 & 11):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01;Xiaomi/cmi/cmi:11/RKQ1.200710.002/V12.1.2.0.RJACNXM:user/release-keys__2020-09-01
