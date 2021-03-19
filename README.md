@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v121_**
+**_Current fingerprints list version - v123_**
 
 
 ## Please add support for device X
@@ -960,7 +960,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v122  
+### List v123  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
@@ -1133,7 +1133,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 8 Europe IN2013 (10 & 11)
 - OnePlus 8 Global IN2015 (10 & 11)
 - OnePlus 8 Visible IN2015 (10)
-- OnePlus 8 T-Mobile IN2017 (10)
+- OnePlus 8 T-Mobile IN2017 (10 & 11)
 - OnePlus 8 Verizon IN2019 (10)
 - OnePlus 8 Pro China IN2020 (10)
 - OnePlus 8 Pro India IN2021 (10 & 11)
@@ -1144,10 +1144,14 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 8T Europe KB2003 (11)
 - OnePlus 8T Global KB2005 (11)
 - OnePlus 8T T-Mobile KB2007 (11)
-- OnePlus N10 5G Global BE2029 (10)
+- OnePlus N10 5G Global BE2026 (10)
 - OnePlus N10 5G Europe BE2029 (10)
+- OnePlus N10 5G Metro BE2025 (10)
+- OnePlus N10 5G T-Mobile BE2028 (10)
 - OnePlus N100 Global BE2011 (10)
 - OnePlus N100 Europe BE2013 (10)
+- OnePlus N100 Metro BE205 (10)
+- OnePlus N100 T-Mobile BE2012 (10)
 - OnePlus Nord India AC2001 (10 & 11)
 - OnePlus Nord Europe AC2003 (10 & 11)
 - OnePlus Nord Global AC2003 (10 & 11)
@@ -1173,6 +1177,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Redmi Note 8 Pro Russia (9 & 10)
 - Redmi Note 9 Pro Europe (10)
 - Redmi Note 9 Pro Global (10)
+- Redmi Note 9 Pro Max India (10)
 - Redmi Note 9S Europe (10)
 - Redmi Note 9S Global (10)
 - Samsung Galaxy A01 Core (10)
@@ -1258,6 +1263,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy Tab S4 LTE SM-T835 (10)
 - Samsung Galaxy Tab S5e SM-T720 (9 & 10)
 - Samsung Galaxy Tab S6 Lite SM-P610 (10)
+- Samsung Galaxy Tab S7+ WiFi SM-T970 (11)
 - Sony Xperia 5 DSDS J9210 (10)
 - Sony Xperia 10 (10)
 - Sony Xperia 10 II Dual XQ-AU52 (10)
