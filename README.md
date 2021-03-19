@@ -1150,7 +1150,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus N10 5G T-Mobile BE2028 (10)
 - OnePlus N100 Global BE2011 (10)
 - OnePlus N100 Europe BE2013 (10)
-- OnePlus N100 Metro BE205 (10)
+- OnePlus N100 Metro BE2015 (10)
 - OnePlus N100 T-Mobile BE2012 (10)
 - OnePlus Nord India AC2001 (10 & 11)
 - OnePlus Nord Europe AC2003 (10 & 11)
