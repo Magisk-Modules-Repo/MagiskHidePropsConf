@@ -235,7 +235,7 @@ Once you have the file downloaded, there are several different ways that the fin
 
 
 #### The AndroidDumps method
-AndroidDumps is a great resource for finding props for different devices. [Check it out on GitLab](https://git.rip/dumps).
+AndroidDumps is a great resource for finding props for different devices. [Check it out on GitLab](https://dumps.tadiphone.dev/dumps).
 
 
 #### The firmware.mobi method
