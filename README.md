@@ -491,6 +491,8 @@ If it seems like props you're trying to set with the module don't get set proper
 
 This may also be caused by the post-fs-data.sh script being set to run in the background because of the execution taking to long. Try disabling this option in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prop-script-settings) and see if that changes anything.
 
+There is also a possibility that the prop value you are trying to set is too long. This is only an issue on Magisk releases up until build 22006, where the prop value is limited to 91 characters. Builds after that should not have this issue.
+
 
 ### My build.prop doesn't change after using the module
 Magisk doesn't alter the build.prop file when changing or removing a prop value, it simply loads a new value or prevents the prop to load instead of adding or removing it from build.prop. If you want to check if a prop has been changed use the `getprop` command in a terminal emulator to check. Example:
