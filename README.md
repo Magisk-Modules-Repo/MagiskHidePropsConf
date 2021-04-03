@@ -38,7 +38,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
   - [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint)
     - [The getprop method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-getprop-method)
     - [The stock ROM/firmware/factory image method](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#the-stock-romfirmwarefactory-image-method)
-    - [The AndroidDumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method)
+    - [The Android Dumps method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-Android-Dumps-method)
     - [The firmware.mobi method](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method)
   - [Custom fingerprints list](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#custom-fingerprints-list)
 - [Keeping your device "certified"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#keeping-your-device-certified)
@@ -193,7 +193,7 @@ There are some situations where it might matter what fingerprint you use and Goo
 
 ### How do I submit a fingerprint?
 If you have a device fingerprint that you want to submit to the module, just post it in the [Support Thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228) together with device details and the [matching security patch date](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#matching-the-android-security-patch-date).
-To make sure that the [device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature works properly with the print you submit, please also include the values for `ro.product.manufacturer` and `ro.product.model` (use the getprop command or the [AndroidDumps](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-androiddumps-method) or [firmware.mobi](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method) methods outlined below).
+To make sure that the [device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature works properly with the print you submit, please also include the values for `ro.product.manufacturer` and `ro.product.model` (use the getprop command or the [Android Dumps](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-Android-Dumps-method) or [firmware.mobi](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-firmwaremobi-method) methods outlined below).
 Also see [Finding a certified fingerprint](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#finding-a-certified-fingerprint) below.
 
 
@@ -234,8 +234,8 @@ Once you have the file downloaded, there are several different ways that the fin
 - Etc... Experiment, the fingerprint will be in there somewhere.
 
 
-#### The AndroidDumps method
-AndroidDumps is a great resource for finding props for different devices. [Check it out on GitLab](https://dumps.tadiphone.dev/dumps).
+#### The Android Dumps method
+Android Dumps is a great resource for finding props for different devices. [Check it out on GitLab](https://dumps.tadiphone.dev/dumps).
 
 
 #### The firmware.mobi method
@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v123_**
+**_Current fingerprints list version - v124_**
 
 
 ## Please add support for device X
@@ -655,7 +655,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Updated simulation props editing so that several props can be activated at once (see the documentation for details).
 - Updated MagiskHide sensitive prop editing so that several props can be activated at once (see the documentation for details).
 - Added a new feature to export current module settings to a configuratino file (see the documentation for details).
-- Updated the documentation and added AndroidDumps as a resource for finding certified fingerprints (see the documentation for details).
+- Updated the documentation and added Android Dumps as a resource for finding certified fingerprints (see the documentation for details).
 - Various under the hood changes and improvements.
 - Added fingerprint for Samsung Galaxy Note 9 and Xiaomi Mi Box S. Updated fingerprints for HTC U12 Plus, Nokia 6.1 Plus and several variants of OnePlus 7, 7 Pro and 7T. List updated to v78.
 
@@ -960,7 +960,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v123  
+### List v124  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
@@ -977,6 +977,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Asus ZenFone Max Pro M2 ASUS_X01BD (9)
 - Asus ZenPad S 8.0 P01MA (6.0.1)
 - BLU S1 (7.0)
+- BLU Vivo XI (8.1.0)
 - Elephone U Pro (8.0.0)
 - Essential PH-1 (7.1.1 & 8.1.0 & 9 & 10)
 - Fairphone 2 (6.0.1)
@@ -1079,6 +1080,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Motorola Moto G7 Play T-Mobile (10)
 - Motorola Moto X Play (7.1.1)
 - Motorola Moto X4 (8.0.0 & 9)
+- Motorola Moto Z2 Force T-Mobile (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
 - Nextbook Ares 8A (6.0.1)
 - Nokia 6 TA-1021 (9)
@@ -1167,6 +1169,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Razer Phone (7.1.1 & 8.1.0 & 9)
 - Razer Phone 2 (8.1.0 & 9)
 - Realme X2 Pro (10)
+- Redmi 9T Global (10)
 - Redmi K30 Pro China (10)
 - Redmi K30 Pro Zoom Edition China (10)
 - Redmi K30 Ultra China (10)
@@ -1241,10 +1244,17 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy S9 SM-G960F (8.0.0 & 10)
 - Samsung Galaxy S9 Plus SM-G965F (8.0.0)
 - Samsung Galaxy S10 SM-G973F (10 & 11)
+- Samsung Galaxy S10 SM-G973F Europe (11)
+- Samsung Galaxy S10 SM-G973N (11)
+- Samsung Galaxy S10 5G SM-G977B (11)
+- Samsung Galaxy S10 5G SM-G977N (11)
 - Samsung Galaxy S10 Plus SM-G975F (10 & 11)
+- Samsung Galaxy S10 Plus SM-G975F Europe (11)
+- Samsung Galaxy S10 Plus SM-G975N (11)
 - Samsung Galaxy S10 Plus SM-G975U (9)
 - Samsung Galaxy S10e SM-G970F (10 & 11)
-- Samsung Galaxy S10e SM-G970N (10)
+- Samsung Galaxy S10e SM-G970F Europe (11)
+- Samsung Galaxy S10e SM-G970N (10 & 11)
 - Samsung Galaxy S20 FE 5G (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
@@ -1311,6 +1321,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 8 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi 8 Pro Global (10)
 - Xiaomi Mi 8 Pro Russia (10)
+- Xiaomi Mi 9 China (10)
 - Xiaomi Mi 9 Europe (9)
 - Xiaomi Mi 9 Lite Global (9)
 - Xiaomi Mi 9 SE Global (9)
@@ -1332,6 +1343,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite Global (8.1.0 & 9 & 10)
+- Xiaomi Mi A3 Europe (11)
 - Xiaomi Mi A3 Global (9 & 10 & 11)
 - Xiaomi Mi Box S (9)
 - Xiaomi Mi Max Global (6.0.1)
@@ -1356,6 +1368,8 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Redmi 5 Plus Global (7.1.2 & 8.1.0)
 - Xiaomi Redmi 5A Global (7.1.2 & 8.1.0)
 - Xiaomi Redmi 6 Global (9)
+- Xiaomi Redmi 6 Pro China (9)
+- Xiaomi Redmi 6 Pro India (9)
 - Xiaomi Redmi 6A Global (9)
 - Xiaomi Redmi 7 Europe (10)
 - Xiaomi Redmi 7 Global (9)
