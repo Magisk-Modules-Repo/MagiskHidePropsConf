@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v125_**
+**_Current fingerprints list version - v126_**
 
 
 ## Please add support for device X
@@ -962,7 +962,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v125  
+### List v126  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
@@ -1031,6 +1031,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Huawei P9 Lite VNS-L31 (7.0)
 - Huawei P9 Plus VIE-AL10 (8.0.0)
 - Huawei P9 Plus VIE-L09 (7.0)
+- Huawei P10 Lite (8.0.0)
 - Huawei P20 EML-L09 (9 & 10)
 - Huawei P20 Dual SIM EML-L29 (9)
 - Huawei P20 Lite ANE-LX1 (8.0.0 & 9)
@@ -1067,6 +1068,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Motorola Moto E4 Plus (7.1.1)
 - Motorola Moto E5 Play (8.0.0)
 - Motorola Moto E5 Plus (8.0.0)
+- Motorola Moto G Stylus (10)
 - Motorola Moto G4 (7.0 & 8.1.0)
 - Motorola Moto G5 (7.0)
 - Motorola Moto G5 Plus (7.0)
@@ -1340,6 +1342,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 10 Lite 5G Global (10)
 - Xiaomi Mi 10 Pro China (10 & 11)
 - Xiaomi Mi 10 Ultra China (10 & 11)
+- Xiaomi Mi 10S China (11)
 - Xiaomi Mi 10T Europe (10)
 - Xiaomi Mi 10T Lite Europe (10)
 - Xiaomi Mi 10T Pro Europe (10)

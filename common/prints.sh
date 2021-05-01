@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=125
+PRINTSV=126
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=621
-# Unique devices=441
+# Current fingerprints count=624
+# Unique devices=444
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1):Asus:ASUS_Z00LD=asus/WW_Z00L/ASUS_Z00L_63:6.0.1/MMB29P/WW_user_21.40.1220.2196_20180308:user/release-keys
@@ -79,6 +79,7 @@ Huawei P9 EVA-L09 (7.0):Huawei:EVA-L09=HUAWEI/EVA-L09/HWEVA:7.0/HUAWEIEVA-L09/C4
 Huawei P9 Lite VNS-L31 (7.0):Huawei:HUAWEI VNS-L31=HUAWEI/VNS-L31/HWVNS-H:7.0/HUAWEIVNS-L31/C432B414:user/release-keys__2018-06-01
 Huawei P9 Plus VIE-AL10 (8.0.0):HUAWEI:VIE-AL10=HUAWEI/VIE-AL10/HWVIE:8.0.0/HUAWEIVIE-AL10/550(C00):user/release-keys__2020-07-01
 Huawei P9 Plus VIE-L09 (7.0):Huawei:VIE-L09=HUAWEI/VIE-L09/HWVIE:7.0/HUAWEIVIE-L09/C432B387:user/release-keys__2018-07-01
+Huawei P10 Lite (8.0.0):Huawei:WAS-LX1A=HUAWEI/WAS-LX1A/HWWAS-H:8.0.0/HUAWEIWAS-LX1A/376(C02):user/release-keys__2019-03-01
 Huawei P20 EML-L09 (9 & 10):Huawei:EML-L09=HUAWEI/EML-L09/HWEML:9/HUAWEIEML-L09/9.1.0.381C109:user/release-keys__2020-01-01;HUAWEI/EML-L09/HWEML:10/HUAWEIEML-L09/10.0.0.161C109:user/release-keys__2020-04-01
 Huawei P20 Dual SIM EML-L29 (9):Huawei:EML-L29=HUAWEI/EML-L29/HWEML:9/HUAWEIEML-L29/197C432R1:user/release-keys__2019-01-01
 Huawei P20 Lite ANE-LX1 (8.0.0 & 9):Huawei:ANE-LX1=HUAWEI/ANE-LX1/HWANE:8.0.0/HUAWEIANE-LX1/180(C432):user/release-keys__2019-04-05;HUAWEI/ANE-LX1/HWANE:9/HUAWEIANE-L21/132C432R1:user/release-keys__2019-05-05
@@ -115,6 +116,7 @@ Motorola Moto E4 (7.1.1):Motorola:Moto E (4)=motorola/sperry_sprint/sperry:7.1.1
 Motorola Moto E4 Plus (7.1.1):Motorola:Moto E (4) Plus=motorola/nicklaus_fn/nicklaus_fn:7.1.1/NMA26.42-156/183:user/release-keys
 Motorola Moto E5 Play (8.0.0):Motorola:moto e5 play=motorola/james_sprint/james:8.0.0/OCPS27.91-140-1/1:user/release-keys__2018-10-01
 Motorola Moto E5 Plus (8.0.0):Motorola:moto e5 plus=motorola/hannah_sprint/hannah:8.0.0/OCPS27.91-32-4/4:user/release-keys__2018-10-01
+Motorola Moto G Stylus (10):motorola:moto g stylus=motorola/sofiap_retail/sofiap:10/QPRS30.80-58-7-5-1-2/1ec95d:user/release-keys__2021-01-01
 Motorola Moto G4 (7.0 & 8.1.0):Motorola:Moto G (4)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys;motorola/athene/athene:8.1.0/OPJ28.111-22/532da:user/release-keys__2018-12-01
 Motorola Moto G5 (7.0):Motorola:Moto G (5)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
 Motorola Moto G5 Plus (7.0):Motorola:Moto G (5) Plus=motorola/potter_n/potter_n:7.0/NPNS25.137-33-11/11:user/release-keys
@@ -388,6 +390,7 @@ Xiaomi Mi 10 Lite 5G Europe (10):Xiaomi:M2002J9G=Xiaomi/monet_eea/monet:10/QKQ1.
 Xiaomi Mi 10 Lite 5G Global (10):Xiaomi:M2002J9G=Xiaomi/monet_global/monet:10/QKQ1.191222.002/V12.0.1.0.QJIMIXM:user/release-keys__2020-08-01
 Xiaomi Mi 10 Pro China (10 & 11):Xiaomi:Mi 10 Pro=Xiaomi/cmi/cmi:10/QKQ1.191117.002/V12.0.4.0.QJACNXM:user/release-keys__2020-07-01;Xiaomi/cmi/cmi:11/RKQ1.200710.002/V12.1.2.0.RJACNXM:user/release-keys__2020-09-01
 Xiaomi Mi 10 Ultra China (10 & 11):Xiaomi:Mi 10 Ultra=Xiaomi/cas/cas:10/QKQ1.200419.002/V12.0.10.0.QJJCNXM:user/release-keys__2020-08-01;Xiaomi/cas/cas:11/RKQ1.200826.002/V12.5.1.0.RJJCNXM:user/release-keys__2021-03-01
+Xiaomi Mi 10S China (11):Xiaomi:M2102J2SC=Xiaomi/thyme/thyme:11/RKQ1.200826.002/V12.0.10.0.RGACNXM:user/release-keys__2021-03-01
 Xiaomi Mi 10T Europe (10):Xiaomi:M2007J3SY=Xiaomi/apollo_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
 Xiaomi Mi 10T Lite Europe (10):Xiaomi:M2007J17G=Xiaomi/gauguin_eea/gauguin:10/QKQ1.200628.002/V12.0.8.0.QJSEUXM:user/release-keys__2020-12-01
 Xiaomi Mi 10T Pro Europe (10):Xiaomi:M2007J3SG=Xiaomi/apollopro_eea/apollo:10/QKQ1.200419.002/V12.0.13.0.QJDEUXM:user/release-keys__2020-11-01
