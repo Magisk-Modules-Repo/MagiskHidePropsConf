@@ -4,7 +4,7 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=126
+PRINTSV=127
 PRINTSTRANSF=520
 
 # Certified fingerprints
@@ -50,15 +50,15 @@ Google Pixel (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel=google/
 Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10):Google:Pixel XL=google/marlin/marlin:7.1/NDE63V/3389651:user/release-keys;google/marlin/marlin:7.1.1/NOF27D/3757586:user/release-keys;google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys;google/marlin/marlin:8.0.0/OPR3.170623.013/4397526:user/release-keys;google/marlin/marlin:8.1.0/OPM4.171019.021.P1/4820305:user/release-keys__2018-07-05;google/marlin/marlin:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys__2019-10-06
 Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2=google/walleye/walleye:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/walleye/walleye:8.1.0/OPM2.171026.006.G1/4820017:user/release-keys__2018-07-05;google/walleye/walleye:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/walleye/walleye:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/walleye/walleye:11/RP1A.201005.004.A1/6934943:user/release-keys__2020-10-05
 Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10 & 11):Google:Pixel 2 XL=google/taimen/taimen:8.0.0/OPD1.170816.025/4424668:user/release-keys;google/taimen/taimen:8.1.0/OPM2.171026.006.H1/4833802:user/release-keys__2018-07-05;google/taimen/taimen:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/taimen/taimen:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/taimen/taimen:11/RP1A.201005.004.A1/6934943:user/release-keys__2020-10-05
-Google Pixel 3 (9 & 10 & 11):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/blueline/blueline:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 3 XL (9 & 10 & 11):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/crosshatch/crosshatch:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 3a (9 & 10 & 11):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/sargo/sargo:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 3a XL (9 & 10 & 11):Google:Pixel 3a XL=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/bonito/bonito:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 4 (10 & 11):Google:Pixel 4=google/flame/flame:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/flame/flame:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 4 XL (10 & 11):Google:Pixel 4 XL=google/coral/coral:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/coral/coral:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 4a (10 & 11):Google:Pixel 4a=google/sunfish/sunfish:10/QD4A.200805.003/6598198:user/release-keys__2020-08-05;google/sunfish/sunfish:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 4a 5G (11):Google:Pixel 4a (5G)=google/bramble/bramble:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
-Google Pixel 5 (11):Google:Pixel 5=google/redfin/redfin:11/RQ2A.210405.005/7181113:user/release-keys__2021-04-05
+Google Pixel 3 (9 & 10 & 11):Google:Pixel 3=google/blueline/blueline:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/blueline/blueline:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/blueline/blueline:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 3 XL (9 & 10 & 11):Google:Pixel 3 XL=google/crosshatch/crosshatch:9/PQ3A.190801.002/5670241:user/release-keys__2019-08-01;google/crosshatch/crosshatch:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/crosshatch/crosshatch:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 3a (9 & 10 & 11):Google:Pixel 3a=google/sargo/sargo:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/sargo/sargo:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/sargo/sargo:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 3a XL (9 & 10 & 11):Google:Pixel 3a XL=google/bonito/bonito:9/PQ3B.190801.002/5674421:user/release-keys__2019-08-01;google/bonito/bonito:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/bonito/bonito:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 4 (10 & 11):Google:Pixel 4=google/flame/flame:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/flame/flame:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 4 XL (10 & 11):Google:Pixel 4 XL=google/coral/coral:10/QQ3A.200805.001/6578210:user/release-keys__2020-08-05;google/coral/coral:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 4a (10 & 11):Google:Pixel 4a=google/sunfish/sunfish:10/QD4A.200805.003/6598198:user/release-keys__2020-08-05;google/sunfish/sunfish:11/RQ2A.210505.002/7246365:user/release-keys__2021-05-05
+Google Pixel 4a 5G (11):Google:Pixel 4a (5G)=google/bramble/bramble:11/RQ2A.210505.003/7255357:user/release-keys__2021-05-05
+Google Pixel 5 (11):Google:Pixel 5=google/redfin/redfin:11/RRQ2A.210505.003/7255357:user/release-keys__2021-05-05
 Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0):Google:Pixel C=google/ryu/dragon:6.0.1/MXC89L/3084571:user/release-keys;google/ryu/dragon:7.0/NRD91N/3318108:user/release-keys;google/ryu/dragon:7.1.1/N4F26T/3687331:user/release-keys;google/ryu/dragon:7.1.2/N2G48C/4104010:user/release-keys;google/ryu/dragon:8.0.0/OPR1.170623.032/4397478:user/release-keys;google/ryu/dragon:8.1.0/OPM8.190605.005/5749003:user/release-keys__2019-06-05
 HTC 10 (6.0.1):HTC:HTC 10=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0):HTC:HTC U-3w=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
@@ -398,8 +398,8 @@ Xiaomi Mi 11 China (11):Xiaomi:M2011K2C=Xiaomi/venus/venus:11/RKQ1.200928.002/V1
 Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9):Xiaomi:Mi A1=xiaomi/tissot/tissot_sprout:7.1.2/N2G47H/7.12.19:user/release-keys;xiaomi/tissot/tissot_sprout:8.0.0/OPR1.170623.026/V.9.5.10.0.ODHMIFA:user/release-keys__2018-04-01;xiaomi/tissot/tissot_sprout:8.1.0/OPM1.171019.026/V9.6.8.0.ODHMIFE:user/release-keys__2018-11-01;xiaomi/tissot/tissot_sprout:9/PKQ1.180917.001/V10.0.24.0.PDHMIXM:user/release-keys__2020-08-01
 Xiaomi Mi A2 Global (8.1.0 & 9 & 10):Xiaomi:Mi A2=xiaomi/jasmine/jasmine_sprout:8.1.0/OPM1.171019.011/V9.6.17.0.ODIMIFE:user/release-keys__2018-11-05;xiaomi/jasmine/jasmine_sprout:9/PKQ1.180904.001/V10.0.18.0.PDIMIXM:user/release-keys__2019-12-05;xiaomi/jasmine/jasmine_sprout:10/QKQ1.190910.002/V11.0.22.0.QDIMIXM:user/release-keys__2021-03-01
 Xiaomi Mi A2 Lite Global (8.1.0 & 9 & 10):Xiaomi:Mi A2 Lite=xiaomi/daisy/daisy_sprout:8.1.0/OPM1.171019.019/V9.6.11.0.ODLMIFF:user/release-keys__2018-11-01;xiaomi/daisy/daisy_sprout:9/PKQ1.180917.001/V10.0.20.0.PDLMIXM:user/release-keys__2020-03-01;xiaomi/daisy/daisy_sprout:10/QKQ1.191002.002/V11.0.18.0.QDLMIXM:user/release-keys__2021-02-01
-Xiaomi Mi A3 Europe (11):Xiaomi:Mi A3=Xiaomi/laurel_sprout_eea/laurel_sprout:11/RKQ1.200903.002/V12.0.3.0.RFQEUXM:user/release-keys__2021-01-05
-Xiaomi Mi A3 Global (9 & 10 & 11):Xiaomi:Mi A3=Xiaomi/laurel_sprout/laurel_sprout:9/PKQ1.190416.001/V10.3.16.0.PFQMIXM:user/release-keys__2020-03-05;Xiaomi/laurel_sprout/laurel_sprout:10/QKQ1.190910.002/V11.0.26.0.QFQMIXM:user/release-keys__2020-12-05;Xiaomi/laurel_sprout/laurel_sprout:11/RKQ1.200903.002/V12.0.7.0.RFQMIXM:user/release-keys__2021-03-05
+Xiaomi Mi A3 Europe (11):Xiaomi:Mi A3=Xiaomi/laurel_sprout_eea/laurel_sprout:11/RKQ1.200903.002/V12.0.6.0.RFQEUXM:user/release-keys__2021-04-05
+Xiaomi Mi A3 Global (9 & 10 & 11):Xiaomi:Mi A3=Xiaomi/laurel_sprout/laurel_sprout:9/PKQ1.190416.001/V10.3.16.0.PFQMIXM:user/release-keys__2020-03-05;Xiaomi/laurel_sprout/laurel_sprout:10/QKQ1.190910.002/V11.0.26.0.QFQMIXM:user/release-keys__2020-12-05;Xiaomi/laurel_sprout/laurel_sprout:11/RKQ1.200903.002/V12.0.8.0.RFQMIXM:user/release-keys__2021-04-05
 Xiaomi Mi Box S (9):Xiaomi:MIBOX4=Xiaomi/oneday/oneday:9/PI/2231:user/release-keys__2019-11-05
 Xiaomi Mi Max Global (6.0.1):Xiaomi:MI MAX=Xiaomi/helium/helium:6.0.1/MMB29M/V8.2.3.0.MBDMIDL:user/release-keys
 Xiaomi Mi Max 2 Global (7.1.1):Xiaomi:MI MAX 2=Xiaomi/oxygen/oxygen:7.1.1/NMF26F/V9.5.4.0.NDDMIFA:user/release-keys
