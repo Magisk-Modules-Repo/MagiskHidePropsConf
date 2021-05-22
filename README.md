@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v127_**
+**_Current fingerprints list version - v128_**
 
 
 ## Please add support for device X
@@ -962,8 +962,9 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v127  
+### List v128  
 - Asus ROG Phone 3 ZS661KS (10)
+- Asus ROG Phone 5 ZS673KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -1034,7 +1035,8 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Huawei P10 Lite (8.0.0)
 - Huawei P20 EML-L09 (9 & 10)
 - Huawei P20 Dual SIM EML-L29 (9)
-- Huawei P20 Lite ANE-LX1 (8.0.0 & 9)
+- Huawei P20 Lite (9)
+- Huawei P20 Lite Dual SIM ANE-LX1 (8.0.0 & 9)
 - Huawei P20 Pro CLT-L29 (8.1.0 & 9)
 - Infinix Note 5 (9 & 10)
 - Lenovo K6 Note (7.0)
@@ -1168,7 +1170,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - POCO F2 Pro Europe (10)
 - POCO F2 Pro Global (10)
 - POCO X2 (10)
-- POCO X3 NFC Europe (10)
+- POCO X3 NFC Europe (10 & 11)
 - POCO X3 NFC Global (10)
 - POCO X3 Pro Global (11)
 - Razer Phone (7.1.1 & 8.1.0 & 9)
@@ -1277,7 +1279,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy Tab S3 LTE SM-T825 (8.0.0)
 - Samsung Galaxy Tab S4 WiFi SM-T830 (10)
 - Samsung Galaxy Tab S4 LTE SM-T835 (10)
-- Samsung Galaxy Tab S5e SM-T720 (9 & 10)
+- Samsung Galaxy Tab S5e SM-T720 (9 & 10 & 11)
 - Samsung Galaxy Tab S6 Lite SM-P610 (10)
 - Samsung Galaxy Tab S7+ WiFi SM-T970 (11)
 - Sony Xperia 5 DSDS J9210 (10)
@@ -1350,7 +1352,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite Global (8.1.0 & 9 & 10)
-- Xiaomi Mi A3 Europe (11)
+- Xiaomi Mi A3 Europe (9 & 10 & 11)
 - Xiaomi Mi A3 Global (9 & 10 & 11)
 - Xiaomi Mi Box S (9)
 - Xiaomi Mi Max Global (6.0.1)
@@ -1397,7 +1399,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Redmi Note 5 Global (7.1.2 & 8.1.0)
 - Xiaomi Redmi Note 5 Pro Global (8.1.0 & 9)
 - Xiaomi Redmi Note 5A Lite Global (7.1.2)
-- Xiaomi Redmi Note 6 Pro Global (8.1.0)
+- Xiaomi Redmi Note 6 Pro Global (8.1.0 & 9)
 - Xiaomi Redmi Note 7 Global (9)
 - Xiaomi Redmi Note 7 Pro India (9)
 - Xiaomi Redmi Note 8 Global (9 & 10)
