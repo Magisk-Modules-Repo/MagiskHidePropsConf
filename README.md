@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v128_**
+**_Current fingerprints list version - v129_**
 
 
 ## Please add support for device X
@@ -962,7 +962,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v128  
+### List v129  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
@@ -1036,7 +1036,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Huawei P20 EML-L09 (9 & 10)
 - Huawei P20 Dual SIM EML-L29 (9)
 - Huawei P20 Lite (9)
-- Huawei P20 Lite Dual SIM ANE-LX1 (8.0.0 & 9)
+- Huawei P20 Lite Dual SIM (8.0.0 & 9)
 - Huawei P20 Pro CLT-L29 (8.1.0 & 9)
 - Infinix Note 5 (9 & 10)
 - Lenovo K6 Note (7.0)
@@ -1053,6 +1053,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - LG G7 ThinQ LM-G710 (9)
 - LG K20 Plus LG-TP260 (7.0)
 - LG K20 Plus LGMP260 (7.0)
+- LG K20 V VS501 (7.0)
 - LG V20 H910 (8.0.0)
 - LG V20 H918 (8.0.0)
 - LG V20 H990DS (7.0)
@@ -1128,9 +1129,9 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 7 Pro NR Europe GM1920 (9 & 10)
 - OnePlus 7 Pro NR Sprint GM1925 (9 & 10)
 - OnePlus 7T China HD1900 (10)
-- OnePlus 7T HD1901 (10)
+- OnePlus 7T HD1901 (10 & 11)
 - OnePlus 7T Europe HD1903 (10)
-- OnePlus 7T HD1905 (10)
+- OnePlus 7T HD1905 (10 & 11)
 - OnePlus 7T Pro China HD1910 (10)
 - OnePlus 7T Pro HD1911 (10)
 - OnePlus 7T Pro Europe HD1913 (10)
@@ -1187,6 +1188,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Redmi Note 8 Pro Russia (9 & 10)
 - Redmi Note 9 Pro Europe (10)
 - Redmi Note 9 Pro Global (10)
+- Redmi Note 9 Pro India (10)
 - Redmi Note 9 Pro Max India (10)
 - Redmi Note 9S Europe (10)
 - Redmi Note 9S Global (10)
@@ -1265,6 +1267,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy S10e SM-G970N (10 & 11)
 - Samsung Galaxy S20 FE 5G (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
+- Samsung Galaxy S21 SM-G991B (11)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
 - Samsung Galaxy Tab 4 7.0 SM-T230NU (4.4.2)
 - Samsung Galaxy Tab 4 8.0 SM-T330NU (5.1.1)
@@ -1362,6 +1365,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi Mix 2S Global (8.0.0 & 9)
 - Xiaomi Mi Mix 2S China (10)
 - Xiaomi Mi Mix 3 Global (9 & 10)
+- Xiaomi Mi Mix 3 5G Europe (9)
 - Xiaomi Mi Note 2 China (8.0.0)
 - Xiaomi Mi Note 2 Global (7.0)
 - Xiaomi Mi Note 3 Global (8.1.0)
