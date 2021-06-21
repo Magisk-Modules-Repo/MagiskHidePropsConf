@@ -8,7 +8,7 @@ PRINTSV=129
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=637
+# Current fingerprints count=638
 # Unique devices=450
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
@@ -381,6 +381,7 @@ Xiaomi Mi 8 Global (8.1.0 & 9 & 10):Xiaomi:MI 8=Xiaomi/dipper/dipper:8.1.0/OPM1.
 Xiaomi Mi 8 Pro Global (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus/equuleus:10/QKQ1.190828.002/V11.0.5.0.QECMIXM:user/release-keys__2020-04-01
 Xiaomi Mi 8 Pro Russia (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus_ru/equuleus:10/QKQ1.190828.002/V11.0.3.0.QECRUXM:user/release-keys__2020-04-01
 Xiaomi Mi 9 China (10):Xiaomi:MI 9=Xiaomi/cepheus/cepheus:10/QKQ1.190825.002/V12.0.6.0.QFACNXM:user/release-keys__2020-11-01
+Xiaomi Mi 9 China (11):Xiaomi:MI 9=Xiaomi/cepheus/cepheus:11/RKQ1.200826.002/V12.5.3.0.RFACNXM:user/release-keys__2021-04-01
 Xiaomi Mi 9 Europe (9):Xiaomi:MI 9=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi 9 Lite Global (9):Xiaomi:Mi 9 Lite=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9 SE Global (9):MI 9 SE=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:user/release-keys__2019-10-01
