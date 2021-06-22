@@ -1188,7 +1188,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Redmi Note 8 Pro Russia (9 & 10)
 - Redmi Note 9 Pro Europe (10)
 - Redmi Note 9 Pro Global (10)
-- Redmi Note 9 Pro India (10)
+- Redmi Note 9 Pro Indonesia (10)
 - Redmi Note 9 Pro Max India (10)
 - Redmi Note 9S Europe (10)
 - Redmi Note 9S Global (10)
