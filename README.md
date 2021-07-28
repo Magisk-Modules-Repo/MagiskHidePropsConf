@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v129_**
+**_Current fingerprints list version - v130_**
 
 
 ## Please add support for device X
@@ -962,7 +962,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v129  
+### List v130  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
@@ -975,6 +975,8 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Asus ZenFone 6 ASUS_I01WD (9)
 - Asus ZenFone 7/7 Pro Europe ASUS_I002D (10)
 - Asus ZenFone 7/7 Pro Global ASUS_I002D (10)
+- Asus Zenfone 8 Mini Europe ASUS_I006D (11)
+- Asus Zenfone 8 Mini Global ASUS_I006D (11)
 - Asus ZenFone Max M1 ASUS_X00PD (8.0.0 & 9 & 10)
 - Asus ZenFone Max Pro M1 ASUS_X00TD (8.1.0 & 9)
 - Asus ZenFone Max Pro M2 ASUS_X01BD (9)
@@ -1067,10 +1069,15 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Meizu 17 (10)
 - Meizu X8 (8.1.0)
 - Motorola Moto C Plus (7.0)
+- Motorola Moto E 2020 (10)
 - Motorola Moto E4 (7.1.1)
 - Motorola Moto E4 Plus (7.1.1)
 - Motorola Moto E5 Play (8.0.0)
 - Motorola Moto E5 Plus (8.0.0)
+- Motorola Moto Edge (10 & 11)
+- Motorola Moto G 5g (10)
+- Motorola Moto G 5g Plus (10 & 11)
+- Motorola Moto G Pro (11)
 - Motorola Moto G Stylus (10)
 - Motorola Moto G4 (7.0 & 8.1.0)
 - Motorola Moto G5 (7.0)
@@ -1085,6 +1092,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Motorola Moto G7 Power (9 & 10)
 - Motorola Moto G7 Play (9 & 10)
 - Motorola Moto G7 Play T-Mobile (10)
+- Motorola Moto Razr 2020 (10 & 11)
 - Motorola Moto X Play (7.1.1)
 - Motorola Moto X4 (8.0.0 & 9)
 - Motorola Moto Z2 Force T-Mobile (8.0.0)
@@ -1332,7 +1340,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 8 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi 8 Pro Global (10)
 - Xiaomi Mi 8 Pro Russia (10)
-- Xiaomi Mi 9 China (10)
+- Xiaomi Mi 9 China (10 & 11)
 - Xiaomi Mi 9 Europe (9)
 - Xiaomi Mi 9 Lite Global (9)
 - Xiaomi Mi 9 SE Global (9)

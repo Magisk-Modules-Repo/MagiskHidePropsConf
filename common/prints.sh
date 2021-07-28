@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=129
+PRINTSV=130
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=637
-# Unique devices=450
+# Current fingerprints count=649
+# Unique devices=458
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ROG Phone 5 ZS673KS (10):Asus:ZS673KS=asus/WW_I005D/ASUS_I005_1:11/RKQ1.201022.002/18.0840.2103.26-0:user/release-keys__2021-03-05
@@ -23,6 +23,8 @@ Asus ZenFone 5Z ASUS_Z01RD (9):Asus:ASUS_Z01RD=asus/WW_Z01RD/ASUS_Z01R_1:9/PPR1.
 Asus ZenFone 6 ASUS_I01WD (9):Asus:ASUS_I01WD=asus/WW_I01WD/ASUS_I01WD:9/PPR2.181005.003/16.1220.1909.193-0:user/release-keys__2019-09-01
 Asus ZenFone 7/7 Pro Europe ASUS_I002D (10):Asus:ASUS_I002D=asus/EU_I002D/ASUS_I002D:10/QKQ1.200127.002/29.14.53.5_20201111:user/release-keys__2020-10-05
 Asus ZenFone 7/7 Pro Global ASUS_I002D (10):Asus:ASUS_I002D=asus/WW_I002D/ASUS_I002D:10/QKQ1.200127.002/29.12.18.14_20200902:user/release-keys__2020-07-05
+Asus Zenfone 8 Mini Europe ASUS_I006D (11):Asus:ASUS_I006D=asus/EU_I006D/ASUS_I006D:11/RKQ1.201022.002/30.11.51.83:user/release-keys__2021-05-05
+Asus Zenfone 8 Mini Global ASUS_I006D (11):Asus:ASUS_I006D=asus/WW_I006D/ASUS_I006D:11/RKQ1.201022.002/30.11.51.67:user/release-key__2021-04-05
 Asus ZenFone Max M1 ASUS_X00PD (8.0.0 & 9 & 10):Asus:ASUS_X00PD=asus/WW_X00PD/ASUS_X00P_1:8.0.0/OPR1.170623.032/15.00.2007.122:user/release-keys__2020-07-05;asus/WW_X00PD/ASUS_X00P_1:9/PPR1.180610.009/16.00.1906.411:user/release-keys__2019-06-05;asus/WW_X00PD/ASUS_X00P_1:10/QKQ1.191002.002/17.00.2003.23-20200401:user/release-keys__2020-03-05
 Asus ZenFone Max Pro M1 ASUS_X00TD (8.1.0 & 9):Asus:ASUS_X00TD=asus/RU_X00TD/ASUS_X00T_6:8.1.0/OPM1/15.2016.1902.340-20190216:user/release-keys__2019-02-01;asus/WW_X00TD/ASUS_X00T_3:9/PKQ1/16.2017.2009.087-20200826:user/release-keys__2020-09-05
 Asus ZenFone Max Pro M2 ASUS_X01BD (9):asus:ASUS_X01BD=asus/WW_X01BD/ASUS_X01BD_1:9/PKQ1/16.2017.2007.094-20200705:user/release-keys__2020-07-05
@@ -115,10 +117,15 @@ Meizu 16th (8.1.0):Meizu:M1882=Meizu/meizu_16th/16th:8.1.0/OPM1.171019.026/15547
 Meizu 17 (10):meizu:meizu 17=meizu/meizu_17_N_CN/meizu17:10/QKQ1.200223.002/1599445800:user/release-keys__2020-07-01
 Meizu X8 (8.1.0):Meizu:meizu X8=Meizu/meizu_X8/X8:8.1.0/OPM1.171019.026/1556996821:user/release-keys__2019-04-01
 Motorola Moto C Plus (7.0):Motorola:Moto C Plus=motorola/panell_21_d/panell_d:7.0/NRD90M.03.040/040:user/release-keys
+Motorola Moto E 2020 (10):Motorola:moto e=motorola/ginna_retail/ginna:10/QPG30.82-141/84c8d:user/release-keys__2021-02-01
 Motorola Moto E4 (7.1.1):Motorola:Moto E (4)=motorola/sperry_sprint/sperry:7.1.1/NCQ26.69-64/68:user/release-keys
 Motorola Moto E4 Plus (7.1.1):Motorola:Moto E (4) Plus=motorola/nicklaus_fn/nicklaus_fn:7.1.1/NMA26.42-156/183:user/release-keys
 Motorola Moto E5 Play (8.0.0):Motorola:moto e5 play=motorola/james_sprint/james:8.0.0/OCPS27.91-140-1/1:user/release-keys__2018-10-01
 Motorola Moto E5 Plus (8.0.0):Motorola:moto e5 plus=motorola/hannah_sprint/hannah:8.0.0/OCPS27.91-32-4/4:user/release-keys__2018-10-01
+Motorola Moto Edge (10 & 11):Motorola:motorola edge=motorola/racer_retail/racer:10/QPD30.114-80/6ddbb:user/release-keys__2020-10-01;motorola/racer_retail/racer:11/RPDS31.Q4U-39-26-4-4/802e72:user/release-keys__2021-06-01
+Motorola Moto G 5g (10):Motorola:moto g 5G=motorola/kiev_retail/kiev:10/QZKS30.Q4-40-81-3-4/88702:user/release-keys__2021-07-01
+Motorola Moto G 5g Plus (10 & 11):Motorola:moto g 5G plus=motorola/nairo_retail/nairo:10/QPNS30.37-Q3-42-51-4/2a371:user/release-keys__2021-01-01;motorola/nairo_retail/nairo:11/RPN31.Q4U-39-27-5/20ead:user/release-keys__2021-02-01
+Motorola Moto G Pro (11):motorola:moto g pro=motorola/sofiap_ao/sofiap_sprout:11/RPRS31.Q4U-20-36/f72e82:user/release-keys__2021-07-01
 Motorola Moto G Stylus (10):motorola:moto g stylus=motorola/sofiap_retail/sofiap:10/QPRS30.80-58-7-5-1-2/1ec95d:user/release-keys__2021-01-01
 Motorola Moto G4 (7.0 & 8.1.0):Motorola:Moto G (4)=motorola/athene/athene:7.0/NPJS25.93-14-13/3:user/release-keys;motorola/athene/athene:8.1.0/OPJ28.111-22/532da:user/release-keys__2018-12-01
 Motorola Moto G5 (7.0):Motorola:Moto G (5)=motorola/cedric/cedric:7.0/NPPS25.137-15-11/11:user/release-keys
@@ -128,11 +135,12 @@ Motorola Moto G5S Plus (8.1.0):Motorola:Moto G (5S) Plus=motorola/sanders_n/sand
 Motorola Moto G6 (9):Motorola:moto g(6)=motorola/ali/ali:9/PPSS29.55-37-7-6/16c5a7:user/release-keys__2020-02-01
 Motorola Moto G6 Play (8.0.0 & 9):Motorola:moto g(6) play=motorola/jeter_sprint/jeter:8.0.0/OCP27.91-23/23:user/release-keys;motorola/aljeter/aljeter:9/PPP29.55-25/08c6:user/release-keys__2019-01-01
 Motorola Moto G6 Plus (9):Motorola:moto g(6) plus=motorola/evert_amx_n/evert_n:9/PPWS29.116-16-6/5cbfe:user/release-keys__2019-05-01
-Motorola Moto G7 XT1962-1 (9 & 10):Motorola:moto g(7)=motorola/river/river:9/PPOS29.114-134-10/ca814:user/release-keys__2020-02-01;motorola/river/river:10/QPU30.52-16-2/be43c:user/release-keys__2020-04-01
+Motorola Moto G7 XT1962-1 (9 & 10):Motorola:moto g(7)=motorola/river/river:9/PPOS29.114-134-10/ca814:user/release-keys__2020-02-01;motorola/river_retail/river:10/QPUS30.52-33-11/df129:user/release-keys__2021-02-01
 Motorola Moto G7 XT1962-5 (10):Motorola:moto g(7)=motorola/river_retru_n/river_n:10/QPUS30.52-16-2-5/58144:user/release-keys__2020-08-01
-Motorola Moto G7 Power (9 & 10):Motorola:moto g(7) power=motorola/ocean/ocean:9/PPOS29.114-134-13/6abfe:user/release-keys__2020-04-01;motorola/ocean/ocean:10/QPO30.52-29/c0490:user/release-keys__2020-04-01
-Motorola Moto G7 Play (9 & 10):Motorola:moto g(7) play=motorola/channel/channel:9/PPY29.105-160-4/56a11:user/release-keys__2019-12-01;motorola/channel/channel:10/QPY30.52-22/355d1:user/release-keys__2020-04-01
+Motorola Moto G7 Power (9 & 10):Motorola:moto g(7) power=motorola/ocean/ocean:9/PPOS29.114-134-13/6abfe:user/release-keys__2020-04-01;motorola/ocean_retail/ocean:10/QPOS30.52-29-11/72afa:user/release-keys__2020-12-01
+Motorola Moto G7 Play (9 & 10):Motorola:moto g(7) play=motorola/channel/channel:9/PPY29.105-160-4/56a11:user/release-keys__2019-12-01;motorola/channel_retail/channel:10/QPY30.85-18/6d15b:user/release-keys__2020-06-01
 Motorola Moto G7 Play T-Mobile (10):Motorola:moto (g7) play=motorola/channel_t/channel:10/QPYS30.85-18-3/60cdb:user/release-keys__2020-08-01
+Motorola Moto Razr 2020 (10 & 11):Motorola:motorola razr (2020)=motorola/smith_retail/smith:10/QPSS30.205-Q3-43-51-3/3bfc9:user/release-keys__2020-11-01;motorola/smith_retail/smith:11/RPS31.Q1-40-17-12/21bf4c:user/release-keys__2021-02-01
 Motorola Moto X Play (7.1.1):motorola:XT1562=motorola/lux_retasia_ds/lux_uds:7.1.1/NPD26.48-24-1/1:user/release-keys
 Motorola Moto X4 (8.0.0 & 9):Motorola:moto x4=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys;motorola/payton_fi/payton_sprout:9/PPWS29.69-39-6-6/8c843:user/release-keys__2020-03-01
 Motorola Moto Z2 Force T-Mobile (8.0.0):Motorola:Moto Z2=motorola/nash_tmo_c/nash:8.0.0/OCXS27.109-51-14-7/12:user/release-keys__2019-07-01
@@ -380,7 +388,7 @@ Xiaomi Mi 6 Global (8.0.0 & 9):Xiaomi:MI 6=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.
 Xiaomi Mi 8 Global (8.1.0 & 9 & 10):Xiaomi:MI 8=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01;Xiaomi/dipper/dipper:10/QKQ1.190828.002/V11.0.3.0.QEAMIXM:user/release-keys__2020-01-01
 Xiaomi Mi 8 Pro Global (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus/equuleus:10/QKQ1.190828.002/V11.0.5.0.QECMIXM:user/release-keys__2020-04-01
 Xiaomi Mi 8 Pro Russia (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus_ru/equuleus:10/QKQ1.190828.002/V11.0.3.0.QECRUXM:user/release-keys__2020-04-01
-Xiaomi Mi 9 China (10):Xiaomi:MI 9=Xiaomi/cepheus/cepheus:10/QKQ1.190825.002/V12.0.6.0.QFACNXM:user/release-keys__2020-11-01
+Xiaomi Mi 9 China (10 & 11):Xiaomi:MI 9=Xiaomi/cepheus/cepheus:10/QKQ1.190825.002/V12.0.6.0.QFACNXM:user/release-keys__2020-11-01;Xiaomi/cepheus/cepheus:11/RKQ1.200826.002/V12.5.3.0.RFACNXM:user/release-keys__2021-04-01
 Xiaomi Mi 9 Europe (9):Xiaomi:MI 9=Xiaomi/cepheus_eea/cepheus:9/PKQ1.181121.001/V10.2.27.0.PFAEUXM:user/release-keys__2019-06-01
 Xiaomi Mi 9 Lite Global (9):Xiaomi:Mi 9 Lite=Xiaomi/pyxis/pyxis:9/PKQ1.181121.001/V11.3.3.0.PFCMIXM:user/release-keys__2019-10-01
 Xiaomi Mi 9 SE Global (9):MI 9 SE=Xiaomi/grus/grus:9/PKQ1.181121.001/V11.0.4.0.PFBMIXM:user/release-keys__2019-10-01
