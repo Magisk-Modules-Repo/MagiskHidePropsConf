@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=130
+PRINTSV=131
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=686
-# Unique devices=475
+# Current fingerprints count=693
+# Unique devices=482
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ROG Phone 5 ZS673KS (10):Asus:ZS673KS=asus/WW_I005D/ASUS_I005_1:11/RKQ1.201022.002/18.0840.2103.26-0:user/release-keys__2021-03-05
@@ -237,7 +237,13 @@ OPPO Find X2 Neo Europe CPH2009 (10 & 11):OPPO:CPH2009=OPPO/CPH2009EEA/OP4C2DL1:
 OPPO Neo 7 A33w (5.1):Oppo:A33w=OPPO/A33w/A33w:5.1/LMY47I/1487829433:user/release-keys
 OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/release-keys
 POCO F2 Pro Europe (10):POCO:POCO F2 Pro=POCO/lmi_eea/lmi:10/QKQ1.191117.002/V12.0.3.0.QJKEUXM:user/release-keys__2020-09-01
-POCO F2 Pro Global (10 & 11):Xiaomi:POCO F2 Pro=POCO/lmi_global/lmi:10/QKQ1.191117.002/V12.0.4.0.QJKMIXM:user/release-keys__2020-09-01;POCO/lmi_global/lmi:11/RKQ1.200826.002/V12.5.1.0.RJKMIXM:user/release-keys__2021-06-01
+POCO F2 Pro Global (10 & 11):POCO:POCO F2 Pro=POCO/lmi_global/lmi:10/QKQ1.191117.002/V12.0.4.0.QJKMIXM:user/release-keys__2020-09-01;POCO/lmi_global/lmi:11/RKQ1.200826.002/V12.5.1.0.RJKMIXM:user/release-keys__2021-06-01
+POCO F3 Europe (11):POCO:M2012K11AG=POCO/alioth_eea/alioth:11/RKQ1.200826.002/V12.5.3.0.RKHEUXM:user/release-keys__2021-06-01
+POCO F3 Global (11):POCO:M2012K11AG=POCO/alioth_global/alioth:11/RKQ1.200826.002/V12.5.2.0.RKHMIXM:user/release-keys__2021-05-01
+POCO F3 Indoniesia (11):POCO:M2012K11AG=POCO/alioth_id/alioth:11/RKQ1.200826.002/V12.5.2.0.RKHIDXM:user/release-keys__2021-06-01
+POCO F3 Russia (11):POCO:M2012K11AG=POCO/alioth_ru/alioth:11/RKQ1.200826.002/V12.5.3.0.RKHRUXM:user/release-keys__2021-06-01
+POCO F3 Taiwan (11):POCO:M2012K11AG=POCO/alioth_global/alioth:11/RKQ1.200826.002/V12.5.2.0.RKHTWXM:user/release-keys__2021-06-01
+POCO F3 Turkey (11):POCO:M2012K11AG=POCO/alioth_tr/alioth:11/RKQ1.200826.002/V12.5.2.0.RKHTRXM:user/release-keys__2021-06-01
 POCO M3 Pro 5G Indonesia (11):POCO:M2103K19PG=POCO/camellian_p_id/camellian:11/RP1A.200720.011/V12.0.3.0.RKSIDXM:user/release-keys__2021-06-01
 POCO X2 (10):POCO:POCO X2=POCO/phoenixin/phoenixin:10/QKQ1.190825.002/V12.0.2.0.QGHINXM:user/release-keys__2020-10-01
 POCO X3 NFC Europe (10 & 11):POCO:M2007J20CG=POCO/surya_eea/surya:10/QKQ1.200512.002/V12.0.7.0.QJGEUXM:user/release-keys__2020-11-01;POCO/surya_eea/surya:11/RKQ1.200826.002/V12.0.7.0.RJGEUXM:user/release-keys__2021-04-01
@@ -252,6 +258,7 @@ Redmi K30 Pro China (10):Redmi:Redmi K30 Pro=Redmi/lmi/lmi:10/QKQ1.191117.002/V1
 Redmi K30 Pro Zoom Edition China (10):Redmi:Redmi K30 Pro Zoom Edition=Redmi/lmipro/lmipro:10/QKQ1.191117.002/V11.0.16.0.QJKCNXM:user/release-keys__2020-04-01
 Redmi K30 Ultra China (10):Redmi:M2006J10C=Redmi/cezanne/cezanne:10/QP1A.190711.020/V12.0.12.0.QJNCNXM:user/release-keys__2020-09-01
 Redmi K30S Ultra China (10):Redmi:M2007J3SC=Redmi/apollo/apollo:10/QKQ1.200419.002/V12.0.3.0.QJDCNXM:user/release-keys__2020-09-01
+Redmi K40 China (11):Redmi:M2012K11AC=Redmi/alioth/alioth:11/RKQ1.200826.002/V12.5.5.0.RKHCNXM:user/release-keys__2021-07-01
 Redmi Note 8 Pro Europe (10 & 11):Redmi:Redmi Note 8 Pro=Redmi/begonia_eea/begonia:10/QP1A.190711.020/V12.0.4.0.QGGEUXM:user/release-keys__2021-02-01;Redmi/begonia_eea/begonia:11/RP1A.200720.011/V12.5.2.0.RGGEUXM:user/release-keys__2021-07-01
 Redmi Note 8 Pro Global (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begonia/begonia:9/PPR1.180610.011/V10.4.1.0.PGGMIXM:user/release-keys__2019-09-01;Redmi/begonia/begonia:10/QP1A.190711.020/V12.0.3.0.QGGMIXM:user/release-keys__2020-08-01
 Redmi Note 8 Pro India (9 & 10):Redmi:Redmi Note 8 Pro=Redmi/begoniain/begoniain:9/PPR1.180610.011/V10.4.4.0.PGGINXM:user/release-keys__2019-09-01;Redmi/begoniain/begoniain:10/QP1A.190711.020/V11.0.2.0.QGGINXM:user/release-keys__2020-02-01
@@ -402,7 +409,7 @@ Xiaomi Mi 5S Global (7.0):Xiaomi:MI 5s=Xiaomi/capricorn/capricorn:7.0/NRD90M/V9.
 Xiaomi Mi 5S Plus Global (6.0.1 & 7.0):Xiaomi:MI 5s Plus=Xiaomi/natrium/natrium:6.0.1/MXB48T/V8.5.2.0.MBGMIED:user/release-keys;Xiaomi/natrium/natrium:7.0/NRD90M/V9.6.2.0.NBGMIFD:user/release-keys
 Xiaomi Mi 6 Global (8.0.0 & 9):Xiaomi:MI 6=Xiaomi/sagit/sagit:8.0.0/OPR1.170623.027/V9.2.3.0.OCAMIEK:user/release-keys;Xiaomi/sagit/sagit:9/PKQ1.190118.001/V11.0.6.0.PCAMIXM:user/release-keys__2019-09-01
 Xiaomi Mi 8 Global (8.1.0 & 9 & 10):Xiaomi:MI 8=Xiaomi/dipper/dipper:8.1.0/OPM1.171019.011/V9.5.5.0.OEAMIFA:user/release-keys;Xiaomi/dipper/dipper:9/PKQ1.180729.001/V10.2.3.0.PEAMIXM:user/release-keys__2019-02-01;Xiaomi/dipper/dipper:10/QKQ1.190828.002/V11.0.3.0.QEAMIXM:user/release-keys__2020-01-01
-Xiaomi Mi 8 Explorer (10):Xiaomi:Mi 8 Explorer=Xiaomi/ursa/ursa:10/QKQ1.190828.002/V12.0.5.0.QEHCNXM:user/release-keys__2020-12-01
+Xiaomi Mi 8 Explorer (10):Xiaomi:Mi 8 Explorer=Xiaomi/ursa/ursa:10/QKQ1.190828.002/V12.5.1.0.QEHCNXM:user/release-keys__2020-12-01
 Xiaomi Mi 8 Pro Global (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus/equuleus:10/QKQ1.190828.002/V11.0.5.0.QECMIXM:user/release-keys__2020-04-01
 Xiaomi Mi 8 Pro Russia (10):Xiaomi:Mi 8 Pro=Xiaomi/equuleus_ru/equuleus:10/QKQ1.190828.002/V11.0.3.0.QECRUXM:user/release-keys__2020-04-01
 Xiaomi Mi 9 China (10 & 11):Xiaomi:MI 9=Xiaomi/cepheus/cepheus:10/QKQ1.190825.002/V12.0.6.0.QFACNXM:user/release-keys__2020-11-01;Xiaomi/cepheus/cepheus:11/RKQ1.200826.002/V12.5.3.0.RFACNXM:user/release-keys__2021-04-01

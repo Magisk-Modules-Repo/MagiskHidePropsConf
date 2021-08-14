@@ -235,7 +235,7 @@ Once you have the file downloaded, there are several different ways that the fin
 
 
 #### The Android Dumps method
-Android Dumps is a great resource for finding props for different devices. [Check it out here](https://dumps.tadiphone.dev/dumps).
+Android Dumps is a great resource for finding props for different devices. [Check it here](https://dumps.tadiphone.dev/dumps).
 
 
 #### The firmware.mobi method
@@ -271,7 +271,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v130_**
+**_Current fingerprints list version - v131_**
 
 
 ## Please add support for device X
@@ -569,6 +569,12 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v5.4.1  
+- Changed internet connection test to use Github rather than Google, for users that do not have access to Google in their countries.
+- Fixed a bug where prop values containing equal signs would be truncated.
+- Fix error message in log regarding copying system.prop during module installation.
+- Added fingerprints for the POCO F3 (Europe, Global, Indonesia, Russia, Taiwan and Turkey) and Redmi K40 China and updated the fingerprint for the Xiaomi Mi 8 Explorer. Fingerprints list updated to v131.
+
 ### v5.4.0  
 - Removed "Force BASIC key attestation". Google has once again updated SafetyNet and this method no longer works to pass CTS on devices with hardware backed key attestation. Use @kdrag0n's Magisk module instead: https://forum.xda-developers.com/t/magisk-module-universal-safetynet-fix-1-1-0.4217823
 - Added fingerprint for the Fairphone 3/3 Plus. List updated to v113.
@@ -962,7 +968,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v130  
+### List v131  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)

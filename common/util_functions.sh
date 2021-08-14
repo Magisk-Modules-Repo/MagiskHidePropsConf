@@ -362,7 +362,7 @@ get_eq_left() {
 
 # Get right side of =, $1=string to check
 get_eq_right() {
-	echo $1 | cut -f 2 -d '='
+	echo $1 | cut -f 2- -d '='
 }
 
 # Get the list of print version, $1=Fingerprint device info with android versions
@@ -889,7 +889,7 @@ test_connection() {
 		;;
 		*)
 			log_handler "Checking connection."
-			ping -c 1 -W 1 google.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
+			ping -c 1 -W 1 raw.githubusercontent.com >> $LOGFILE 2>&1 && CNTTEST="true" || CNTTEST="false"
 		;;
 	esac
 }
@@ -963,11 +963,13 @@ system_prop() {
 		system_prop_cont
 
 		# Check for edge case where module has been updated but no reboot has been done yet
-		if [ -d "$ADBPATH/modules_update/MagiskHidePropsConf" ] && [ -f "$MODPATH/system.prop" ]; then
-			log_handler "Copying system.prop to update folder."
-			cp -f $MODPATH/system.prop $ADBPATH/modules_update/MagiskHidePropsConf >> $LOGFILE 2>&1
-		else
-			rm -f $ADBPATH/modules_update/MagiskHidePropsConf/system.prop >> $LOGFILE 2>&1
+		if [ -z "$INSTFN" ]; then
+			if [ -d "$ADBPATH/modules_update/MagiskHidePropsConf" ] && [ -f "$MODPATH/system.prop" ]; then
+				log_handler "Copying system.prop to update folder."
+				cp -f $MODPATH/system.prop $ADBPATH/modules_update/MagiskHidePropsConf >> $LOGFILE 2>&1
+			else
+				rm -f $ADBPATH/modules_update/MagiskHidePropsConf/system.prop >> $LOGFILE 2>&1
+			fi
 		fi
 	fi
 }
