@@ -449,7 +449,7 @@ Create a file (named `reset_mhpc` or `disable_mhpc` depending on your needs, kee
 
 If your device does not have access to /sdcard, /data or /cache through recovery (or there's no custom recovery available), you can disable Magisk by flashing a stock boot image, boot up the device, place the reset or disable file in the root of your internal storage (/sdcard), and lastly reinstall Magisk by flashing a patched boot image again. At the next boot the module will be reset/disabled and you should be up and running again.
 
-The reset file can be use this in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
+The reset file can be used in combination with the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) described above to keep device fingerprint or any other settings intact past the reset. Just make sure to remove any custom props that might have been causing issues from the configuration file.
 
 
 ### props not found
