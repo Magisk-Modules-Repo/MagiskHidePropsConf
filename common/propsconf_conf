@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
 # =================================================================
@@ -9,7 +9,7 @@
 # =================================================================
 
 # Required module version (or newer). Do not edit this value!
-CONFTRANSF=534
+CONFTRANSF=600
 
 # Device fingerprint
 CONFFINGERPRINT=""
@@ -42,7 +42,21 @@ CONFDEBUGGABLE=""
 CONFSECURE=""
 CONFTYPE=""
 CONFTAGS=""
-CONFSELINUX=""
+CONFBOOTMODE=""
+CONFMODE=""
+CONFVENDORMODE=""
+CONFHWC=""
+CONFHWCOUNTRY=""
+CONFSTATE=""
+CONFVERIFIEDBOOTSTATE=""
+CONFVENDORVERIFIEDBOOTSTATE=""
+CONFLOCKED=""
+CONFVERITYMODE=""
+CONFBOOTWARRANTY_BIT=""
+CONFBIT=""
+CONFVENDORBOOTWARRANTY_BIT=""
+CONFVENDORWARRANTY_BIT=""
+CONFVENDORDEVICE_STATE=""
 
 # Set custom props
 CONFPROPS=""
@@ -106,10 +120,10 @@ CONFBACK=false
 # post-fs-data or late_start service mode. This is useful if props don't seem to set
 # propely or the module's boot script seems to be causing issues during boot.
 #
-# CONFPATCHBOOT is by default set to using late_start service boot stage for setting 
+# CONFPATCHBOOT is by default set to using late_start service boot stage for setting
 # ro.build.version.security_patch. If the setting is changed to "default" or "post",
 # the prop will be set during either the default or post-fs-data stage. The
-# late_start service boot stage is used by default as to not cause issues for devices with 
+# late_start service boot stage is used by default as to not cause issues for devices with
 # Keymaster 4 (bootloops). If the prop doesn't seem to set properly, try changing the stage.
 
 # CONFBASICATTEST is used to enable Forced BASIC attestation, which is done by changing the
@@ -133,12 +147,27 @@ CONFBACK=false
 # post-fs-data or late_start service mode. This is useful if props don't seem to set
 # propely or the module's boot script seems to be causing issues during boot.
 
-# The MagiskHide prop variables can be set as follows:
-# CONFDEBUGGABLE - 0 or 1 (set to "0" by MagiskHide - sensitive value is "1")
-# CONFSECURE - 0 or 1 (set to "1" by MagiskHide - sensitive value is "0")
-# CONFTYPE - user or userdebug (set to "user" by MagiskHide - sensitive value is "userdebug")
-# CONFTAGS - release-keys or test-keys (set to "release-keys" by MagiskHide - sensitive value is "test-keys")
-# CONFSELINUX - 0 or 1 (set to "0" by MagiskHide - sensitive value is "1")
+# The MagiskHide prop variables can be set as follows
+# (note that these props are by default set to the safe value):
+# CONFDEBUGGABLE - 0 or 1 (sensitive value is "1")
+# CONFSECURE - 0 or 1 (sensitive value is "0")
+# CONFTYPE - user or userdebug (sensitive value is "userdebug")
+# CONFTAGS - release-keys or test-keys (sensitive value is "test-keys")
+# CONFBOOTMODE - unknown or recovery (sensitive value is "recovery")
+# CONFMODE - unknown or recovery (sensitive value is "recovery")
+# CONFVENDORMODE - unknown or recovery (sensitive value is "recovery")
+# CONFHWC - GLOBAL or CN (sensitive value is CN)
+# CONFHWCOUNTRY - GLOBAL or China (sensitive value is China)
+# CONFSTATE - locked or unlocked (sensitive value is unlocked)
+# CONFVERIFIEDBOOTSTATE - green or orange (sensitive value is orange)
+# CONFVENDORVERIFIEDBOOTSTATE - green or orange (sensitive value is orange)
+# CONFLOCKED - 1 or 0 (sensitive value is 0)
+# CONFVERITYMODE - enforcing or permissive (sensitive value is permissive)
+# CONFBOOTWARRANTY_BIT - 0 or 1 (sensitive value is "1")
+# CONFBIT - 0 or 1 (sensitive value is "1")
+# CONFVENDORBOOTWARRANTY_BIT - 0 or 1 (sensitive value is "1")
+# CONFVENDORWARRANTY_BIT - 0 or 1 (sensitive value is "1")
+# CONFVENDORDEVICE_STATE - locked or unlocked (sensitive value is unlocked)
 
 # CONFPROPS should contain any custom props and the value you want the module to set.
 # Any props you've previously edited in build.prop, and more, can be set like this.

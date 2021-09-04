@@ -1,6 +1,6 @@
 ##########################################################################################
 # Installation variables and functions for the Magisk module "MagiskHide Props Config"
-# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers.
+# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers.
 # Licence: MIT
 ##########################################################################################
 
@@ -23,13 +23,13 @@ echo "***************************************************" > $LOGFILE 2>&1
 echo "********* MagiskHide Props Config $MODVERSION ********" >> $LOGFILE 2>&1
 echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
 echo "***************************************************" >> $LOGFILE 2>&1
-log_handler "Starting module installation script"
+log_print "- Starting module installation script"
 
 # Module script installation
 script_install
 
 # Permission
+log_print "- Setting permissions"
 set_perm $MODPATH/system/$BIN/props 0 0 0755
 
-# Remove unused files
-rm -f $MODPATH/LICENSE
+log_print "- Module installation complete."

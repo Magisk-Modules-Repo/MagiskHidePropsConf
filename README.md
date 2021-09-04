@@ -79,6 +79,7 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
   - [Props don't seem to set properly](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#props-dont-seem-to-set-properly)
   - [My build.prop doesn't change after using the module](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-buildprop-doesnt-change-after-using-the-module)
   - [My device's Android security patch date changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-android-security-patch-date-changed)
+  - [My device's model has changed](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#my-devices-model-has-changed)
   - [The Play Store is broken](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-play-store-is-broken)
   - [The interface looks weird](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#the-interface-looks-weird)
   - [Boot takes a lot longer after setting props](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#boot-takes-a-lot-longer-after-setting-props)
@@ -148,7 +149,7 @@ The settings option (-s) can be used even if the module boot scripts did not run
 
 ## What option should I use?
 ### Not passing SafetyNet
-If you can't pass the CTS profile check of the SafetyNet check there are two features of the module that have the potential to help.
+If you can't pass the CTS profile check of the SafetyNet check there are a few things that you might have to do.
 
 If you are using a custom ROM (or have a stock ROM on a device that isn't certified by Google) you most likely need to change the device fingerprint to one that has been Google certified. Use the "[Edit device fingerprint"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#spoofing-devices-fingerprint-to-pass-the-ctsprofile-check) feature.
 
@@ -271,7 +272,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v131_**
+**_Current fingerprints list version - v132_**
 
 
 ## Please add support for device X
@@ -289,10 +290,26 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Force BASIC key attestation
-Google now enforces the use of hardware backed key attestation on devices that has the necessary hardware (all devices that shipped with Android 8+ and even some older devices). Up until mid January 2021 you could work around this by changing the model props to something other than the actual device. No more...
+Google now enforces the use of hardware backed key attestation on devices that has the necessary hardware (all devices that shipped with Android 8+ and even some older devices). Up until mid January 2021 you could work around this by changing the model props to something other than the actual device. This might still be necessary, and can be done with this feature of the module, but you most likely also need to trick keystore further than that.
 
-There is a fix though. @kdrag0n over on XDA Developers have a Magsk module that will trick keystore into thinking that the hardware isn't available and this will then force basic attestation. You can find that module together with details on how it works here:
+@kdrag0n over on XDA Developers have a Magsk module that will trick keystore into thinking that the hardware isn't available and this will then force basic attestation. You can find that module together with details on how it works here:
 https://forum.xda-developers.com/t/magisk-module-universal-safetynet-fix-1-1-0.4217823/
+
+These two things in combination might be required to pass CTS.
+
+If you aren't successful in passing CTS by changing the model, you could try using the Xposed (although it is recommended to use LSPosed if you want to have the best chance of passing SafetyNet) module XprivacyLua and restrict Google Play Services. Instructions on how to install LSPosed and XprivacyLua and how to use that module can be found with a simple web search, I won't cover that here.
+
+This feature of the module has nothing to do with the device fingerprint, but uses the included fingerprints list to find the necessary value to use for the `ro.product.model` prop (and related props).
+
+As long as Google doesn't roll out hardware based key attestation universally, it seems like we can fool SafetyNet into using the basic attestation by changing the `ro.product.model` prop (to pass the CTS profile check even with an unlocked bootloader). The module scripts will also alter related partition specific props (odm, product, system, vendor and system_ext) to match, if they are available. Thank you to @Displax over at XDA for finding this: https://forum.xda-developers.com/showpost.php?p=83028387&postcount=40658
+
+The prefered method is to pick a device manually from the list of devices (based on the module fingerprints list) or set your own custom value. Do NOT pick your own device, instead try a device that is as close to your actual device as possible. The closer it is to your actual device the less is the likelyhood that things will stop working as a result of the model prop change.
+
+It is also possible to use a custom value, if that's what you prefer.
+
+If a device isn't picked from the list or a custom value entered, this feature will by default use an old devices model prop value, based on your device or currently set fingerprint, to make sure that it is recognised as a device without the necessary hardware (picked from the available devices in the module fingerprints list). Using an actual model value from an old device may also help with keeping OEM specific features working (like the Samsung Galaxy Store). If device/OEM specific features still doesn't work after activating this option, or your device is otherwise behaving strangely, try picking a device manually from the included list (see below). If no model prop value from an old enough device is available, the value from `ro.product.device` will be used instead.
+
+Note that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to simulate `ro.product.model` (and related props) will be disabled when this feature is enabled (all other simiulation props will still work though). It is also worth noting that using the [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation) feature to change ro.product.model will also force a basic key attestation.
 
 
 ## Device simulation
@@ -308,7 +325,7 @@ If you want to simulate a specific device (to get access to device specific apps
 - ro.build.display.id
 - ro.build.version.sdk
 - ro.product.manufacturer
-- ro.product.model
+- ro.product.model (disabled if [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) is enabled)
 
 By default all props are disabled when this option is activated, but it is possible to activate or deactivate each prop individually or all of them at once. It is also possible to activate several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma.
 Example: If I would like to activate ro.product.name, ro.product.device and ro.product.manufacturer I would enter __"2,3,9"__.
@@ -319,25 +336,41 @@ Whenever a fingerprint is set by the module, the `ro.build.description` prop wil
 
 
 ## Set/reset MagiskHide Sensitive props
-By default, if MagiskHide detects certain sensitive prop values they will be changed to known safe values. Some of these that this feature can change are:
-- ro.debuggable (set to "0" by MagiskHide - sensitive value is "1")
-- ro.secure (set to "1" by MagiskHide - sensitive value is "0")
-- ro.build.type (set to "user" by MagiskHide - sensitive value is "userdebug")
-- ro.build.tags (set to "release-keys" by MagiskHide - sensitive value is "test-keys" or "dev-keys")
-- ro.bootmode (set to "unknown" by MagiskHide - sensitive value is "recovery")
-- ro.boot.mode (set to "unknown" by MagiskHide - sensitive value is "recovery")
-- ro.build.selinux (set to "0" by MagiskHide - sensitive value is "1")
+Up to and including Magisk v23 MagiskHide changes some sensitive props to "safe" values that won't trigger apps that might be looking for them as a sign of your device being tampered with (root).
 
-There are other props set by MagiskHide, but they are mainly used for finding the bootloader state and not needed here.
+This feature is enabled by default and will automatically change any triggering values it finds to "safe" values.
 
-From Magisk Canary build 20412 ro.build.selinux is no longer changed by MagiskHide, since different root checking libraries look for different sensitive values (someone made a thought boo-boo somewhere). From Canary build 20412 the prop is simply removed.
+The props in question are:
+- ro.debuggable
+- ro.secure
+- ro.build.type
+- ro.build.tags
+- ro.boot.vbmeta.device_state
+- ro.boot.verifiedbootstate
+- ro.boot.flash.locked
+- ro.boot.veritymode
+- ro.boot.warranty_bit
+- ro.warranty_bit
+- ro.vendor.boot.warranty_bit
+- ro.vendor.warranty_bit
+- vendor.boot.vbmeta.device_state
 
-If, for some reason, you need one or more of these to be kept as their original value (one example would be resetting ro.build.type to userdebug since some ROMs need this to work properly), you can reset to the original value with this module. Keep in mind that this might trigger some apps looking for these prop values as a sign of your device being rooted.
+There are a few props that will only change if a triggering value is detected, and these are:
+- ro.bootmode
+- ro.boot.mode
+- vendor.boot.mode
+- ro.boot.hwc
+- ro.boot.hwcountry
 
-It is possible to change or reset each prop individually or all of them at once. It is also possible to change several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma.
+And lastly there are props that will only change in the late_start service boot stage. These are:
+- vendor.boot.verifiedbootstate
+
+ro.build.selinux used to be changed by MagiskHide, but since some root detectors has a broken implementation of detecting this prop it is simply removed instead of changed (MagiskHide did this since Magisk build 20412).
+
+If, for some reason, you need one or more of these to be kept as their original value (one example would be resetting ro.build.type to userdebug since some ROMs need this to work properly), you can reset to the original value by simply disabling this prop in the module. Keep in mind that this might trigger some apps looking for these prop values as a sign of your device being rooted. If you want to further customise the prop in question you can use the ["Add/edit custom props"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) feature.
+
+It is possible to change or reset each prop individually or all of them at once. It is also possible to change several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma. This will change any props set to a sensitive value to a safe value and vice versa.
 Example: If I would like to change ro.debuggable, ro.secure and ro.build.tags I would enter __"1,2,4"__.
-
-**NOTE:** When activating this feature the screen will go black momentarily at the end of the boot cycle. This is caused by the module doing a soft reboot to reload the prop values properly.
 
 
 ## Change/set custom prop values
@@ -506,6 +539,10 @@ If the prop has been removed, the command should return nothing.
 For some fingerprints it is necessary to also change the security patch date to match the fingerprint used (the actual patch won't change, just the displayed date). This is automatically done by the module when using a fingerprint from a build after March 16 2018. If you do not want this to happen you can manually add `ro.build.version.security_patch` to the custom props and load back the original date, but keep in mind that this may result in the fingerprint not working and SafetyNet will fail.
 
 
+### My device's model has changed
+In order to fool SafetyNet into using basic key attestation for the bootloader state check rather than hardware (which we cannot fool), the device model sometimes has to be changed to one that does NOT match the actual device. If your device uses hardware backed attestation, you might have to do this to pass the CTS profile check of SafetyNet. See [Force BASIC key attestation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#force-basic-key-attestation) for more details.
+
+
 ### The Play Store is broken
 If you suddenly can't find some apps, or that you aren't offered the latest version of an app, it might be because of having changed the device fingerprint. See [Can I use any fingerprint?](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#can-i-use-any-fingerprint) for details.
 
@@ -518,8 +555,12 @@ If the interface of the props script looks strange, with a lot of gibberish alon
 If boot takes longer than usual after setting a new fingerprint or a custom prop, try changing the [boot stage](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) to post-fs-data.
 
 
+### There's a reboot during boot
+This happens when any prop is set during the late_start service boot stage. A soft reboot is necessary to properly load the new prop values.
+
+
 ### The screen goes black momentarily at boot
-This is caused by the [MagiskHide Sensitive props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setreset-magiskhide-sensitive-props) function of the module doing a soft reboot at the end of the boot cycle. This is necessary to reaload the prop values properly.
+See the section directly above.
 
 
 ### The Play Store is "uncertified"
@@ -569,6 +610,14 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v6.0.0  
+- Updated the "Edit MagiskHide props" feature to include all the sensitive prop values that MagiskHide changed, up to and including Magisk v23. All props will now be set by default. See the documentation for details.
+- Alter the permissions for SELinux files if SELinux is permissive (was included in MagiskHide up to Magisk v23).
+- Reenabled "Force BASIC key attestation", since Google seems to have changed things around again. See the documentation for details.
+- Fix reboot function in post-fs-data.sh.
+- Various small fixes.
+- Added fingerprints for Google Pixel 5a and Motorola Moto Z3 Play. List updated to v132.
+
 ### v5.4.1  
 - Changed internet connection test to use Github rather than Google, for users that do not have access to Google in their countries.
 - Fixed a bug where prop values containing equal signs would be truncated.
@@ -968,7 +1017,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v131  
+### List v132  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
@@ -1020,6 +1069,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Google Pixel 4a (10 & 11)
 - Google Pixel 4a 5G (11)
 - Google Pixel 5 (11)
+- Google Pixel 5a (11)
 - Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
@@ -1102,6 +1152,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Motorola Moto X4 (8.0.0 & 9)
 - Motorola Moto Z2 Force T-Mobile (8.0.0)
 - Motorola Moto Z2 Play (8.0.0)
+- Motorola Moto Z3 Play (9)
 - Nextbook Ares 8A (6.0.1)
 - Nokia 6 TA-1021 (9)
 - Nokia 6 TA-1025 (9)
@@ -1454,7 +1505,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 ## MIT Licence
 
-*Copyright (c) 2018-2020 Didgeridoohan*
+*Copyright (c) 2018-2021 Didgeridoohan*
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

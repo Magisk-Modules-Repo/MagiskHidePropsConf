@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
 MODPATH=${0%/*}
@@ -22,6 +22,12 @@ done
 . $MODPATH/common/util_functions.sh
 
 log_script_chk "Running service.sh module script."
+
+# Check for reboot flag
+if [ -f "$MHPCPATH/reboot" ]; then
+	rm -f $MHPCPATH/reboot >> $LOGFILE 2>&1
+	force_reboot
+fi
 
 # Resets the reboot and print update variables in propsconf_late
 replace_fn REBOOTCHK 1 0 $LATEFILE
@@ -62,10 +68,11 @@ fi
 config_file
 
 # Edits prop values if set for late_start service
+PROPLATE=false
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 log_handler "Editing prop values in late_start service mode."
 if [ "$OPTIONBOOT" == 2 ]; then
-	# ---Setting/Changing fingerprint---				
+	# ---Setting/Changing fingerprint---
 	if [ "$PRINTSTAGE" == 0 ]; then
 		print_edit "none"
 	fi
@@ -83,38 +90,49 @@ if [ "$OPTIONBOOT" == 2 ]; then
 	fi
 	# ---Setting custom props---
 	custom_edit "CUSTOMPROPS"
+else
+	# Edit fingerprint if set for late_start service
+	if [ "$PRINTSTAGE" == 2 ]; then
+		print_edit "none"
+	fi
+	# Edit security patch date if set for late_start service
+	if [ "$PATCHSTAGE" == 2 ]; then
+		patch_edit "none"
+	fi
+	# Edit simulation props if set for late_start service
+	if [ "$SIMSTAGE" == 2 ]; then
+		dev_sim_edit "none"
+	fi
 fi
-# Edit fingerprint if set for late_start service
-if [ "$OPTIONBOOT" != 2 ] && [ "$PRINTSTAGE" == 2 ]; then
-	print_edit "none"
+
+# Edit MagiskHide sensitive props
+if [ "$PROPEDIT" == 1 ]; then
+	# Edit all sensitive props, if set for late_start service
+	if [ "$PROPBOOT" == 2]; then
+		sensitive_props "$PROPSLIST" "$SAFELIST"
+	fi
+
+	# Edit late senstive props
+	sensitive_props "$LATEPROPS" "$LATESAFELIST" "late"
 fi
-# Edit security patch date if set for late_start service
-if [ "$OPTIONBOOT" != 2 ] && [ "$PATCHSTAGE" == 2 ]; then
-	patch_edit "none"
+
+# Do a soft restart if a prop has been set in service.sh
+if [ "$PROPLATE" == "true" ]; then
+	stop
+	start
 fi
-# Edit simulation props if set for late_start service
-if [ "$OPTIONBOOT" != 2 ] && [ "$SIMSTAGE" == 2 ]; then
-	dev_sim_edit "none"
+
+# SELinux
+if [ "$(getenforce)" == "Permissive" ] || [ "$(getenforce)" == "0" ]; then
+	log_handler "Dealing with permissive SELinux."
+	chmod 640 /sys/fs/selinux/enforce >> $LOGFILE 2>&1
+	chmod 440 /sys/fs/selinux/policy >> $LOGFILE 2>&1
 fi
+
 # Edit custom props set for late_start service
 custom_edit "CUSTOMPROPSLATE"
 custom_edit "CUSTOMPROPSDELAY"
 
-# Edit MagiskHide sensitive values
-if [ "$PROPEDIT" == 1 ]; then
-	log_handler "Changing sensitive props."
-	for ITEM in $PROPSLIST; do
-		PROP=$(get_prop_type $ITEM)
-		REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-		if [ "$(eval "echo \$$REPROP")" == "true" ]; then
-			log_handler "Changing/writing $ITEM."
-			resetprop -nv $ITEM "$(eval "echo \$$MODULEPROP")" >> $LOGFILE 2>&1
-		fi
-	done
-	stop
-	start
-fi
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 
 # Get currently saved values

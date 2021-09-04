@@ -1,15 +1,15 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=131
+PRINTSV=132
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=693
-# Unique devices=482
+# Current fingerprints count=695
+# Unique devices=484
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ROG Phone 5 ZS673KS (10):Asus:ZS673KS=asus/WW_I005D/ASUS_I005_1:11/RKQ1.201022.002/18.0840.2103.26-0:user/release-keys__2021-03-05
@@ -62,6 +62,7 @@ Google Pixel 4 XL (10 & 11):Google:Pixel 4 XL=google/coral/coral:10/QQ3A.200805.
 Google Pixel 4a (10 & 11):Google:Pixel 4a=google/sunfish/sunfish:10/QD4A.200805.003/6598198:user/release-keys__2020-08-05;google/sunfish/sunfish:11/RQ3A.210805.001.A1/7474174:user/release-keys__2021-08-05
 Google Pixel 4a 5G (11):Google:Pixel 4a (5G)=google/bramble/bramble:11/RQ3A.210805.001.A1/7474174:user/release-keys__2021-08-05
 Google Pixel 5 (11):Google:Pixel 5=google/redfin/redfin:11/RQ3A.210805.001.A1/7474174:user/release-keys__2021-08-05
+Google Pixel 5a (11):Google:Pixel 5a=google/barbet/barbet:11/RD2A.210605.007/7381860:user/release-keys__2021-06-05
 Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0):Google:Pixel C=google/ryu/dragon:6.0.1/MXC89L/3084571:user/release-keys;google/ryu/dragon:7.0/NRD91N/3318108:user/release-keys;google/ryu/dragon:7.1.1/N4F26T/3687331:user/release-keys;google/ryu/dragon:7.1.2/N2G48C/4104010:user/release-keys;google/ryu/dragon:8.0.0/OPR1.170623.032/4397478:user/release-keys;google/ryu/dragon:8.1.0/OPM8.190605.005/5749003:user/release-keys__2019-06-05
 HTC 10 (6.0.1):HTC:HTC 10=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0):HTC:HTC U-3w=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
@@ -144,6 +145,7 @@ Motorola Moto X Play (7.1.1):motorola:XT1562=motorola/lux_retasia_ds/lux_uds:7.1
 Motorola Moto X4 (8.0.0 & 9):Motorola:moto x4=motorola/payton/payton:8.0.0/OPWS27.57-25-6-10/12:user/release-keys;motorola/payton_fi/payton_sprout:9/PPWS29.69-39-6-6/8c843:user/release-keys__2020-03-01
 Motorola Moto Z2 Force T-Mobile (8.0.0):Motorola:Moto Z2=motorola/nash_tmo_c/nash:8.0.0/OCXS27.109-51-14-7/12:user/release-keys__2019-07-01
 Motorola Moto Z2 Play (8.0.0):Motorola:Moto Z2 Play=motorola/albus/albus:8.0.0/OPS27.76-12-25/26:user/release-keys
+Motorola Moto Z3 Play (9):Motorola:Moto Z3 Play=motorola/beckham/beckham:9/PPWS29.131-27-1-27/34b6d:user/release-keys__2020-07-01
 Nextbook Ares 8A (6.0.1):Nextbook:NX16A8116K=NextBook/NX16A8116K/NX16A8116K:6.0.1/MMB29M/V4.0.3:user/release-keys
 Nokia 6 TA-1021 (9):Nokia:TA-1021=Nokia/TA-1021_00WW/PLE:9/PKQ1.181105.001/00WW_6_19C:user/release-keys__2020-01-01
 Nokia 6 TA-1025 (9):Nokia:TA-1025=Nokia/TA-1025_00WW/PLE:9/PKQ1.181105.001/00WW_6_19C:user/release-keys__2020-01-01

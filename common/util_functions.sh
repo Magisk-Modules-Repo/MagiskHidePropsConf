@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
 ADBPATH=/data/adb
@@ -66,9 +66,13 @@ if [ "$INSTFN" ]; then
 	PRINTEDIT
 	PRINTVEND
 	PRINTCHK
+	BASICATTEST
+	BASICATTLIST
+	BASICATTCUST
 	DEVSIM
 	PROPCOUNT
 	PROPEDIT
+	PROPBOOT
 	CUSTOMEDIT
 	DELEDIT
 	PRINTSTAGE
@@ -99,7 +103,21 @@ if [ "$INSTFN" ]; then
 	MODULESECURE
 	MODULETYPE
 	MODULETAGS
-	MODULESELINUX
+	MODULEBOOTMODE
+	MODULEMODE
+	MODULEVENDORMODE
+	MODULEHWC
+	MODULEHWCOUNTRY
+	MODULESTATE
+	MODULEVERIFIEDBOOTSTATE
+	MODULEVENDORVERIFIEDBOOTSTATE
+	MODULELOCKED
+	MODULEVERITYMODE
+	MODULEBOOTWARRANTY_BIT
+	MODULEBIT
+	MODULEVENDORBOOTWARRANTY_BIT
+	MODULEVENDORWARRANTY_BIT
+	MODULEVENDORDEVICE_STATE
 	MODULEFINGERPRINT
 	SIMBRAND
 	SIMNAME
@@ -196,9 +214,15 @@ ro.debuggable
 ro.secure
 ro.build.type
 ro.build.tags
-ro.bootmode
-ro.boot.mode
-ro.build.selinux
+ro.boot.vbmeta.device_state
+ro.boot.verifiedbootstate
+ro.boot.flash.locked
+ro.boot.veritymode
+ro.boot.warranty_bit
+ro.warranty_bit
+ro.vendor.boot.warranty_bit
+ro.vendor.warranty_bit
+vendor.boot.vbmeta.device_state
 "
 
 # Safe values
@@ -207,9 +231,52 @@ ro.debuggable=0
 ro.secure=1
 ro.build.type=user
 ro.build.tags=release-keys
+ro.boot.vbmeta.device_state=locked
+ro.boot.verifiedbootstate=green
+ro.boot.flash.locked=1
+ro.boot.veritymode=enforcing
+ro.boot.warranty_bit=0
+ro.warranty_bit=0
+ro.vendor.boot.warranty_bit=0
+ro.vendor.warranty_bit=0
+vendor.boot.vbmeta.device_state=locked
+"
+
+# Trigger props
+TRIGGERPROPS="
+ro.bootmode
+ro.boot.mode
+vendor.boot.mode
+ro.boot.hwc
+ro.boot.hwcountry
+"
+
+# Safe values
+TRIGGERSAFELIST="
 ro.bootmode=unknown
 ro.boot.mode=unknown
-ro.build.selinux=0
+vendor.boot.mode=unknown
+ro.boot.hwc=GLOBAL
+ro.boot.hwcountry=GLOBAL
+"
+
+# Triggering values
+TRIGGERLIST="
+ro.bootmode=recovery
+ro.boot.mode=recovery
+vendor.boot.mode=recovery
+ro.boot.hwc=CN
+ro.boot.hwcountry=China
+"
+
+# Late props
+LATEPROPS="
+vendor.boot.verifiedbootstate
+"
+
+# Safe value
+LATESAFELIST="
+vendor.boot.verifiedbootstate=green
 "
 
 # Partitions used for different props
@@ -273,10 +340,12 @@ APILVL="
 8.1=27
 9=28
 10=29
+11=30
+12=31
 "
 
 # Values props list
-VALPROPSLIST=$PROPSLIST$PRINTPARTS$SNPROPS$ADNPROPS$ADNSIMPROPS
+VALPROPSLIST=$PROPSLIST$TRIGGERPROPS$LATEPROPS$PRINTPARTS$SNPROPS$ADNPROPS$ADNSIMPROPS
 
 # Loading module settings
 if [ -z "$INSTFN" ]; then
@@ -350,6 +419,18 @@ get_prop_type() {
 		echo "vendprint"
 	elif [ "$1" == "ro.build.display.id" ]; then
 		echo "display"
+	elif [ "$1" == "vendor.boot.mode" ]; then
+		echo "vendormode"
+	elif [ "$1" == "vendor.boot.vbmeta.device_state" ]; then
+		echo "vendordevice_state"
+	elif [ "$1" == "vendor.boot.verifiedbootstate" ]; then
+		echo "vendorverifiedbootstate"
+	elif [ "$1" == "ro.boot.warranty_bit" ]; then
+		echo "bootwarranty_bit"
+	elif [ "$1" == "ro.vendor.boot.warranty_bit" ]; then
+		echo "vendorbootwarranty_bit"
+	elif [ "$1" == "ro.vendor.warranty_bit" ]; then
+		echo "vendorwarranty_bit"
 	else
 		echo $1 | sed 's|.*\.||' | sed 's|.*\_||'
 	fi
@@ -441,13 +522,15 @@ force_reboot() {
 	echo -e "${C}Rebooting...${N}"
 	log_handler "Rebooting."
 	[ $(getprop sys.boot_completed) == 1 ] && /system/bin/svc power reboot $RBREASON >> $LOGFILE 2>&1 || /system/bin/reboot $RBREASON >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
-	sleep 15
-	log_handler "Rebooting failed."
-	echo ""
-	echo "That doesn't seem like it worked..."
-	echo "Please reboot manually."
-	echo ""
-	exit 0
+	if [ "$BOOTSTAGE" != "post" -a "$BOOTSTAGE" != "late" ]; then
+		sleep 15
+		log_handler "Rebooting failed."
+		echo ""
+		echo "That doesn't seem like it worked..."
+		echo "Please reboot manually."
+		echo ""
+		exit 0
+	fi
 }
 
 # Updates placeholders, $1=file, $2=Variable name to replace to, $3=Placeholder name, $4=Value to assign updated variable
@@ -673,7 +756,7 @@ config_file() {
 				echo "ro.vendor.build.fingerprint: ${CONFFINGERPRINT}" >> $LOGFILE 2>&1
 			fi
 			# Updates prop values (including fingerprint)
-			PROPSTMPLIST=$PROPSLIST"
+			PROPSTMPLIST=$PROPSLIST$TRIGGERPROPS$LATEPROPS"
 			ro.build.fingerprint
 			"
 			for PROPTYPE in $PROPSTMPLIST; do
@@ -941,37 +1024,32 @@ update_check() {
 
 # system.prop creation
 system_prop() {
-	if [ "$OPTIONBOOT" == 0 ]; then
+	if [ "$1" == "install" ]; then
+		log_print "- Creating system.prop file."
+	else
 		log_handler "Creating system.prop file."
-		echo -e "# This file will be read by resetprop\n\n# MagiskHide Props Config\n# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers\n# Licence: MIT\n" > $MODPATH/system.prop
-		if [ "$PRINTSTAGE" == 0 ]; then
-			print_edit "$MODPATH/system.prop"
-		fi
-		if [ "$PATCHSTAGE" == 0 ]; then
-			patch_edit "$MODPATH/system.prop"
-		fi
-		#if [ "$BASICATTEST" == 1 ]; then
-		#	forced_basic "$MODPATH/system.prop"
-		#fi
-		if [ "$SIMSTAGE" == 0 ]; then
-			dev_sim_edit "$MODPATH/system.prop"
-		fi
-		if [ "$CUSTOMPROPS" ]; then
-			custom_edit "CUSTOMPROPS" "$MODPATH/system.prop"
-		fi
-		# Check system.prop content
-		system_prop_cont
-
-		# Check for edge case where module has been updated but no reboot has been done yet
-		if [ -z "$INSTFN" ]; then
-			if [ -d "$ADBPATH/modules_update/MagiskHidePropsConf" ] && [ -f "$MODPATH/system.prop" ]; then
-				log_handler "Copying system.prop to update folder."
-				cp -f $MODPATH/system.prop $ADBPATH/modules_update/MagiskHidePropsConf >> $LOGFILE 2>&1
-			else
-				rm -f $ADBPATH/modules_update/MagiskHidePropsConf/system.prop >> $LOGFILE 2>&1
-			fi
-		fi
 	fi
+	echo -e "# This file will be read by resetprop\n# MagiskHide Props Config\n# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers\n# Licence: MIT" > $MODPATH/system.prop
+	if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 0 ]; then
+		sensitive_props "$PROPSLIST" "$SAFELIST" "$MODPATH/system.prop"
+	fi
+	if [ "$OPTIONBOOT" == 0 ] && [ "$PRINTSTAGE" == 0 ]; then
+		print_edit "$MODPATH/system.prop"
+	fi
+	if [ "$OPTIONBOOT" == 0 ] && [ "$PATCHSTAGE" == 0 ]; then
+		patch_edit "$MODPATH/system.prop"
+	fi
+	if [ "$OPTIONBOOT" == 0 ] && [ "$BASICATTEST" == 1 ]; then
+			forced_basic "$MODPATH/system.prop"
+		fi
+	if [ "$OPTIONBOOT" == 0 ] && [ "$SIMSTAGE" == 0 ]; then
+		dev_sim_edit "$MODPATH/system.prop"
+	fi
+	if [ "$OPTIONBOOT" == 0 ] && [ "$CUSTOMPROPS" ]; then
+		custom_edit "CUSTOMPROPS" "$MODPATH/system.prop"
+	fi
+	# Check system.prop content
+	system_prop_cont
 }
 
 # system.prop content
@@ -1175,6 +1253,7 @@ script_install() {
 	bin_check
 	files_check
 	settings_placement
+
 	log_print "- Updating placeholders"
 	placeholder_update $MODPATH/post-fs-data.sh MODVERSION VER_PLACEHOLDER "$MODVERSION"
 	placeholder_update $MODPATH/post-fs-data.sh LATEFILE LATE_PLACEHOLDER "$LATEFILE"
@@ -1182,8 +1261,15 @@ script_install() {
 	placeholder_update $MODPATH/common/util_functions.sh BIN BIN_PLACEHOLDER "$BIN"
 	placeholder_update $MODPATH/system/$BIN/props ADBPATH ADB_PLACEHOLDER "$ADBPATH"
 	placeholder_update $MODPATH/system/$BIN/props LATEFILE LATE_PLACEHOLDER "$LATEFILE"
+
+	# Retrieving default values from props file
+	log_print "- Saving device default values."
+	default_save
+	log_handler "Default values saved to $LATEFILE."
+
 	load_settings
 	print_files
+
 	# Checks for configuration file
 	CONFFILE=""
 	for ITEM in $CONFFILELOC; do
@@ -1201,9 +1287,10 @@ script_install() {
 	else
 		load_settings
 		# Create system.prop in case of no configuration file
-		system_prop
+		system_prop "install"
 	fi
-	log_handler "Module installation complete."
+
+	log_handler "Script install function finished."
 }
 
 # ======================== Fingerprint functions ========================
@@ -1259,6 +1346,9 @@ print_edit() {
 				echo "ro.build.fingerprint=${PRINTCHNG}" >> $1
 			else
 				resetprop -nv ro.build.fingerprint "$PRINTCHNG" >> $LOGFILE 2>&1
+				if [ "$BOOTSTAGE" == "late" ]; then
+					PROPLATE=true
+				fi
 			fi
 		else
 			log_handler "ro.build.fingerprint not currently set on device. Skipping."
@@ -1272,6 +1362,9 @@ print_edit() {
 					echo "ro.build.description=${SIMDESCRIPTION}" >> $1
 				else
 					resetprop -nv ro.build.description "$SIMDESCRIPTION" >> $LOGFILE 2>&1
+					if [ "$BOOTSTAGE" == "late" ]; then
+						PROPLATE=true
+					fi
 				fi
 			fi
 		else
@@ -1295,6 +1388,9 @@ patch_edit() {
 						echo "ro.build.version.security_patch=${SECPATCH}" >> $1
 					else
 						resetprop -nv ro.build.version.security_patch "$SECPATCH" >> $LOGFILE 2>&1
+						if [ "$BOOTSTAGE" == "late" ]; then
+							PROPLATE=true
+						fi
 					fi
 				fi
 			;;
@@ -1339,7 +1435,7 @@ print_files() {
 				TMPI=$(($TMPI - 1))
 			fi
 		done
-    #echo -e "BASICATTMODEL=\"$(get_eq_left "$TMPLINE" | sed "s|^.*\:||")\"" >> $TMPFILE
+    echo -e "BASICATTMODEL=\"$(get_eq_left "$TMPLINE" | sed "s|^.*\:||")\"" >> $TMPFILE
 	done
 	# Check for updated fingerprint
 	device_print_update "Updating module fingerprint."
@@ -1689,6 +1785,9 @@ forced_basic() {
 		fi
 		resetprop -nv ro.product.model "$TMPVAL" >> $LOGFILE 2>&1
 		set_partition_props "none" "ro.product.model" "$TMPVAL"
+		if [ "$BOOTSTAGE" == "late" ]; then
+			PROPLATE=true
+		fi
 	fi
 }
 
@@ -1751,6 +1850,9 @@ dev_sim_edit() {
 								echo "${ITEM}=${TMPVALUE}" >> $1
 							else
 								resetprop -nv $ITEM "$TMPVALUE" >> $LOGFILE 2>&1
+								if [ "$BOOTSTAGE" == "late" ]; then
+									PROPLATE=true
+								fi
 							fi
 						else
 							log_handler "$ITEM not currently set on device. Skipping."
@@ -1853,11 +1955,107 @@ change_sim_partprops() {
 }
 
 # ======================== MagiskHide Props functions ========================
+# Populate menu, $1=List of props to go through (with safe values), $2=type of list, $3=check if menu items should be printed or only counted
+magiskhide_props_menu() {
+	ACTIVE="${G} (active)${N}"
+	for ITEM in $1; do
+		PROP=$(get_prop_type $(get_eq_left "$ITEM"))
+		ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
+		if [ "$ORIGVALUE" ] && [ "$(get_eq_right "$ITEM")" != "$ORIGVALUE" ]; then
+			CTRLTRIGG=false;
+			if [ "$2" == "trigger" ]; then
+				magiskhide_trigger "$ITEM"
+			fi
+			if [ "$CTRLTRIGG" == "false" ]; then
+				if [ "$ITEMCOUNT" == 0 ]; then
+					ITEMCOUNT=1
+				fi
+				TMPTXT=""
+				if [ "$2" == "late" ]; then
+					TMPTXT=" ${C}(Late prop)${N}"
+				elif [ "$2" == "trigger" ]; then
+					TMPTXT=" ${C}(Trigger prop)${N}"
+				fi
+				if [ "$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")" == "true" ]; then
+					if [ "$TMPTXT" ]; then
+						TMPTXT=$TMPTXT$ACTIVE
+					else
+						TMPTXT=$ACTIVE
+					fi
+				fi
+				if [ "$3" != "count" ]; then
+					echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")$TMPTXT"
+				fi
+				ITEMCOUNT=$(($ITEMCOUNT+1))
+			fi
+		fi
+	done
+}
+
+# Set sensitive props, $1=List to get props from, $2=List of safe values, $3=Set to "late" if set in late stage, or file name if saving values to a prop file
+sensitive_props() {
+	if [ "$3" == "late" ]; then
+		log_handler "Changing sensitive props, late"
+	else
+		log_handler "Changing sensitive props"
+	fi
+	for ITEM in $1; do
+		PROP=$(get_prop_type $ITEM)
+		REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
+		ORIGPROP=$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')
+		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
+		REVALUE=$(eval "echo \$$REPROP")
+		ORIGVALUE=$(eval "echo \$$ORIGPROP")
+		MODULEVALUE=$(eval "echo \$$MODULEPROP")
+		if [ "$REVALUE" == "true" ] && [ "$ORIGVALUE" ]; then
+			CTRLTRIGG=false;
+			magiskhide_trigger "$ITEM"
+			if [ "$CTRLTRIGG" == "true" ]; then
+				for CTRL in $2; do
+					if [ "$(get_eq_left "$CTRL")" == "$ITEM" ]; then
+						if [ "$(get_eq_right "$CTRL")" == "$ORIGVALUE" ]; then
+							log_handler "Skipping $ITEM, already set to the safe value."
+						else
+							log_handler "Changing/writing $ITEM."
+							if [ "$3" ] && [ "$3" != "late" ]; then
+								echo "${ITEM}=$MODULEVALUE" >> $3
+							else
+								resetprop -nv $ITEM "$MODULEVALUE" >> $LOGFILE 2>&1
+								if [ "$BOOTSTAGE" == "late" ]; then
+									PROPLATE=true
+								fi
+							fi
+						fi
+					fi
+				done
+			else
+				log_handler "Skipping $ITEM, it is not set to a triggering value."
+			fi
+		elif [ "$REVALUE" == "true" ] && [ -z "$ORIGVALUE" ]; then
+			log_handler "Skipping $ITEM, does not exist on device."
+		else
+			log_handler "Skipping $ITEM, not set to change."
+		fi
+	done
+}
+
+# Check if trigger prop, $1=prop to check
+magiskhide_trigger() {
+	for TRIGG in $TRIGGERLIST; do
+		if [ "$(get_eq_left "$TRIGG")" == "$(get_eq_left "$1")" ]; then
+			if [ "$(get_eq_right "$TRIGG")" != "$ORIGVALUE" ]; then
+				CTRLTRIGG=true;
+			fi
+			break
+		fi
+	done
+}
+
 # Check safe values, $1=header, $2=Currently set prop value
 safe_props() {
 	SAFE=""
 	if [ "$2" ]; then
-		for P in $SAFELIST; do
+		for P in $SAFELIST$TRIGGERSAFELIST$LATESAFELIST; do
 			if [ "$(get_eq_left "$P")" == "$1" ]; then
 				if [ "$2" == "$(get_eq_right "$P")" ]; then
 					SAFE=1
@@ -1872,23 +2070,16 @@ safe_props() {
 
 # Find what prop value to change to, $1=header, $2=Currently set prop value
 change_to() {
-	CHANGE=""
-	case "$1" in
-		ro.debuggable) if [ "$2" == 0 ]; then CHANGE=1; else CHANGE=0; fi
-		;;
-		ro.secure) if [ "$2" == 0 ]; then CHANGE=1; else CHANGE=0; fi
-		;;
-		ro.build.type) if [ "$2" == "userdebug" ]; then CHANGE="user"; else CHANGE="userdebug"; fi
-		;;
-		ro.build.tags) if [ "$2" == "test-keys" ]; then CHANGE="release-keys"; else CHANGE="test-keys"; fi
-		;;
-		ro.bootmode) if [ "$2" == "recovery" ]; then CHANGE="unknown"; else CHANGE="recovery"; fi
-		;;
-		ro.boot.mode) if [ "$2" == "recovery" ]; then CHANGE="unknown"; else CHANGE="recovery"; fi
-		;;
-		ro.build.selinux) if [ "$2" == 1 ]; then CHANGE=0; else CHANGE=1; fi
-		;;
-	esac
+	for CHPROP in $SAFELIST$TRIGGERSAFELIST$LATESAFELIST; do
+		if [ "$(get_eq_left "$CHPROP")" == "$1" ]; then
+			if [ "$2" != "$(get_eq_right "$CHPROP")" ]; then
+				CHANGE=$(get_eq_right "$CHPROP")
+			else
+				CHANGE=$(eval "echo \$$(echo "ORIG$(get_prop_type $(get_eq_left "$CHPROP"))" | tr '[:lower:]' '[:upper:]')")
+			fi
+			break
+		fi
+	done
 }
 
 # Reset the module prop change, $1=prop name, $2=run option
@@ -1919,7 +2110,9 @@ reset_prop() {
 		replace_fn PROPEDIT 1 0 $LATEFILE
 	fi
 
-	after_change "$1" "$2"
+	if [ "$2" != "none" ]; then
+		after_change "$1" "$2"
+	fi
 }
 
 # Use prop value, $1=prop name, $2=new prop value, $3=run option
@@ -1946,7 +2139,9 @@ change_prop() {
 	fi
 	replace_fn PROPEDIT 0 1 $LATEFILE
 
-	after_change "$1" "$3"
+	if [ "$3" != "none" ]; then
+		after_change "$1" "$3"
+	fi
 }
 
 # Reset all module prop changes, $1=header
@@ -1955,7 +2150,7 @@ reset_prop_all() {
 
 	log_handler "Resetting all props to default values."
 
-	for PROPTYPE in $PROPSLIST; do
+	for PROPTYPE in $PROPSLIST$TRIGGERPROPS$LATEPROPS; do
 		PROP=$(get_prop_type $PROPTYPE)
 		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
 		REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
@@ -2011,6 +2206,9 @@ custom_edit() {
 						echo "$(get_eq_left "$ITEM")=${TMPITEM}" >> $2
 					else
 						resetprop -nv $(get_eq_left "$ITEM") "${TMPITEM}" >> $LOGFILE 2>&1
+						if [ "$BOOTSTAGE" == "late" ]; then
+							PROPLATE=true
+						fi
 					fi
 				fi
 			done
@@ -2229,8 +2427,8 @@ export_settings() {
 	replace_fn CONFPRINTBOOT default $([ $PRINTSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	replace_fn CONFPATCHBOOT late $([ $PATCHSTAGE == 0 ] && echo "default" || $([ $PATCHSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	# Force BASIC attestation
-	#replace_fn CONFBASICATTEST false $([ $BASICATTEST == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	#replace_fn CONFBASICATTCUST "\"\"" "\"$BASICATTCUST\"" $EXPORTFILE
+	replace_fn CONFBASICATTEST false $([ $BASICATTEST == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBASICATTCUST "\"\"" "\"$BASICATTCUST\"" $EXPORTFILE
 	# Device Simulation
 	replace_fn CONFDEVSIM false $([ $DEVSIM == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	replace_fn CONFBRAND false $([ $BRANDSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
@@ -2251,7 +2449,21 @@ export_settings() {
 	replace_fn CONFSECURE "\"\"" "\"$MODULESECURE\"" $EXPORTFILE
 	replace_fn CONFTYPE "\"\"" "\"$MODULETYPE\"" $EXPORTFILE
 	replace_fn CONFTAGS "\"\"" "\"$MODULETAGS\"" $EXPORTFILE
-	replace_fn CONFSELINUX "\"\"" "\"$MODULESELINUX\"" $EXPORTFILE
+	replace_fn CONFBOOTMODE "\"\"" "\"$MODULEBOOTMODE\"" $EXPORTFILE
+	replace_fn CONFMODE "\"\"" "\"$MODULEMODE\"" $EXPORTFILE
+	replace_fn CONFVENDORMODE "\"\"" "\"$MODULEVENDORMODE\"" $EXPORTFILE
+	replace_fn CONFHWC "\"\"" "\"$MODULEHWC\"" $EXPORTFILE
+	replace_fn CONFHWCOUNTRY "\"\"" "\"$MODULEHWCOUNTRY\"" $EXPORTFILE
+	replace_fn CONFDEVICE_STATE "\"\"" "\"$MODULEDEVICE_STATE\"" $EXPORTFILE
+	replace_fn CONFVERIFIEDBOOTSTATE "\"\"" "\"$MODULEVERIFIEDBOOTSTATE\"" $EXPORTFILE
+	replace_fn CONFVENDORVERIFIEDBOOTSTATE "\"\"" "\"$MODULEVENDORVERIFIEDBOOTSTATE\"" $EXPORTFILE
+	replace_fn CONFLOCKED "\"\"" "\"$MODULELOCKED\"" $EXPORTFILE
+	replace_fn CONFVERITYMODE "\"\"" "\"$MODULEVERITYMODE\"" $EXPORTFILE
+	replace_fn CONFBOOTWARRANTY_BIT "\"\"" "\"$MODULEBOOTWARRANTY_BIT\"" $EXPORTFILE
+	replace_fn CONFWARRANTY_BIT "\"\"" "\"$MODULEWARRANTY_BIT\"" $EXPORTFILE
+	replace_fn CONFVENDORBOOTWARRANTY_BIT "\"\"" "\"$MODULEVENDORBOOTWARRANTY_BIT\"" $EXPORTFILE
+	replace_fn CONFVENDORWARRANTY_BIT "\"\"" "\"$MODULEVENDORWARRANTY_BIT\"" $EXPORTFILE
+	replace_fn CONFVENDORDEVICE_STATE "\"\"" "\"$MODULEVENDORDEVICE_STATE\"" $EXPORTFILE
 	# Custom props
 	replace_fn CONFPROPS "\"\"" "\"$CUSTOMPROPS\"" $EXPORTFILE
 	replace_fn CONFPROPSPOST "\"\"" "\"$CUSTOMPROPSPOST\"" $EXPORTFILE
@@ -2271,9 +2483,9 @@ export_settings() {
 	menu_header "${C}$1${N}"
 	echo ""
 	echo "A module configuration file with"
-	echo "your current settings have been"
+	echo "your current settings haS been"
 	echo "saved to your internal storage,"
-	echo -e "in the ${C}/mhcp${N} directory."
+	echo -e "in the ${C}/mhpc${N} directory."
 	echo ""
 	echo -n "Press enter to continue..."
 	read -r INPUTTMP

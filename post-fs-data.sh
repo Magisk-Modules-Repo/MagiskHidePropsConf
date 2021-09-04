@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 # MagiskHide Props Config
-# Copyright (c) 2018-2020 Didgeridoohan @ XDA Developers
+# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
 #anch1
@@ -21,6 +21,24 @@
 	# Placeholder variables
 	MODVERSIONPH=VER_PLACEHOLDER
 	LATEFILEPH=LATE_PLACEHOLDER
+
+	# Sensitive props
+	# Safe values
+	TRIGGERSAFELIST="
+	ro.bootmode=unknown
+	ro.boot.mode=unknown
+	vendor.boot.mode=unknown
+	ro.boot.hwc=GLOBAL
+	ro.boot.hwcountry=GLOBAL
+	"
+	# Triggering values
+	TRIGGERLIST="
+	ro.bootmode=recovery
+	ro.boot.mode=recovery
+	vendor.boot.mode=recovery
+	ro.boot.hwc=CN
+	ro.boot.hwcountry=China
+	"
 
 	# Saves the previous log (if available) and creates a new one
 	if [ -f "$LOGFILE" ]; then
@@ -55,6 +73,32 @@
 		echo -e "$(date +"%Y-%m-%d %H:%M:%S.%3N") - $1" >> $LOGFILE 2>&1
 	}
 
+	# Get left side of =, $1=string to check
+	get_eq_left() {
+		echo $1 | cut -f 1 -d '='
+	}
+
+	# Get right side of =, $1=string to check
+	get_eq_right() {
+		echo $1 | cut -f 2- -d '='
+	}
+
+	# Finding file values, $1=file (with path), $2=string to look for
+	get_file_value() {
+		if [ -f "$1" ]; then
+			echo $(grep $2 $1) | sed "s|.*${2}||" | sed 's|\"||g'
+		fi
+	}
+
+	# Find prop type, $1=prop name
+	get_prop_type() {
+		if [ "$1" == "vendor.boot.mode" ]; then
+			echo "vendormode"
+		else
+			echo $1 | sed 's|.*\.||' | sed 's|.*\_||'
+		fi
+	}
+
 	# Reset/disable file locations
 	FILELOCLST="
 	/data/media/0
@@ -79,8 +123,8 @@
 		# Deletes the post-fs-data control file
 		rm -f $MHPCPATH/propsconf_postchk >> $LOGFILE 2>&1
 		# Reboot
-		log_handler "Rebooting."
-		/system/bin/reboot "" >> $LOGFILE 2>&1 || setprop sys.powerctl reboot >> $LOGFILE 2>&1
+		log_handler "Setting reboot flag."
+		touch $MHPCPATH/reboot >> $LOGFILE 2>&1
 	fi
 
 	# Check for the boot script and restore backup if deleted, or if the reset file is present
@@ -105,17 +149,49 @@
 			else
 				log_handler "The module settings file could not be found."
 			fi
-		fi	
+		fi
 		log_handler "$RSTTXT module settings file (${LATEFILE})."
 		cp -af $MODPATH/common/propsconf_late $LATEFILE >> $LOGFILE 2>&1
 		rm -f $MODPATH/system.prop >> $LOGFILE 2>&1
 	fi
 
 	# Loading module settings
+	log_handler "Loading module settings"
 	. $LATEFILE
 
+	# Remove ro.build.selinux if present
+	if [ "$(grep "ro.build.selinux" $MHPCPATH/defaultprops)" ]; then
+		log_handler "Removing ro.build.selinux."
+		resetprop -v --delete ro.build.selinux >> $LOGFILE 2>&1
+	fi
+
+	if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 0 ]; then
+		# Set trigger props
+		for ITEM in $TRIGGERLIST; do
+			TMPPROP=$(get_eq_left "$ITEM")
+			TMPVAL=$(echo $(grep "\[${TMPPROP}\]" "$MHPCPATH/defaultprops") | sed -e "s|.*\]\:\ \[||g;s|\]$||g")
+			REPROP=$(echo "RE$(get_prop_type "$TMPPROP")" | tr '[:lower:]' '[:upper:]')
+			REVAL=$(get_file_value $LATEFILE "${REPROP}=")
+			if [ "$REVAL" == "true" ]; then
+				if [ "$TMPVAL" == "$(get_eq_right "$ITEM")" ]; then
+					log_handler "Changing/writing $TMPPROP."
+					for SAFEVAL in $TRIGGERSAFELIST; do
+						if [ "$TMPPROP" == "$(get_eq_left "$SAFEVAL")" ]; then
+							resetprop -nv $(get_eq_left $SAFEVAL) $(get_eq_right $SAFEVAL) >> $LOGFILE 2>&1
+							break
+						fi
+					done
+				elif [ "$TMPVAL" ]; then
+					log_handler "Skipping $TMPPROP, not set to triggering value."
+				else
+					log_handler "Skipping $TMPPROP, does not exist on device."
+				fi
+			fi
+		done
+	fi
+
 	# Edits prop values if set for post-fs-data
-	if [ "$OPTIONBOOT" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$PRINTSTAGE" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$PATCHSTAGE" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$SIMSTAGE" == 1 ] || [ "$CUSTOMPROPSPOST" ] || [ "$DELETEPROPS" ]; then
+	if [ "$OPTIONBOOT" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$PRINTSTAGE" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$PATCHSTAGE" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$SIMSTAGE" == 1 ] || [ "$CUSTOMPROPSPOST" ] || [ "$DELETEPROPS" ] || [ "$PROPBOOT" == 1 ]; then
 		# Load functions
 		. $MODPATH/common/util_functions.sh
 		echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
@@ -139,18 +215,23 @@
 			fi
 			# Setting custom props
 			custom_edit "CUSTOMPROPS"
+		else
+			# Edit fingerprint if set for post-fs-data
+			if [ "$PRINTSTAGE" == 1 ]; then
+				print_edit "none"
+			fi
+			# Edit security patch date if set for post-fs-data
+			if [ "$PATCHSTAGE" == 1 ]; then
+				patch_edit "none"
+			fi
+			# Edit simulation props if set for post-fs-data
+			if [ "$SIMSTAGE" == 1 ]; then
+				dev_sim_edit "none"
+			fi
 		fi
-		# Edit fingerprint if set for post-fs-data
-		if [ "$OPTIONBOOT" != 1 ] && [ "$PRINTSTAGE" == 1 ]; then
-			print_edit "none"
-		fi
-		# Edit security patch date if set for post-fs-data
-		if [ "$OPTIONBOOT" != 1 ] && [ "$PATCHSTAGE" == 1 ]; then
-			patch_edit "none"
-		fi
-		# Edit simulation props if set for post-fs-data
-		if [ "$OPTIONBOOT" != 1 ] && [ "$SIMSTAGE" == 1 ]; then
-			dev_sim_edit "none"
+		# Edit MagiskHide sensitive props if set for post-fs-data
+		if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 1]; then
+			sensitive_props "$PROPSLIST" "$SAFELIST"
 		fi
 		# Edit custom props set for post-fs-data
 		custom_edit "CUSTOMPROPSPOST"
@@ -159,9 +240,8 @@
 		echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 	fi
 
-	FNSH="\n$(date +"%Y-%m-%d %H:%M:%S:%N") - post-fs-data.sh module script finished."
-	echo -e $FNSH >> $LOGFILE 2>&1
-	echo -e $FNSH >> $RUNFILE 2>&1
+	log_handler "post-fs-data.sh module script finished."
+	echo -e "\n$(date +"%Y-%m-%d %H:%M:%S:%N") - post-fs-data.sh module script finished." >> $RUNFILE 2>&1
 
 	# Deletes the post-fs-data control file
 	rm -f $MHPCPATH/propsconf_postchk >> $LOGFILE 2>&1
