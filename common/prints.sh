@@ -490,6 +490,7 @@ Xiaomi Redmi Note 7 Global (9):Xiaomi:Redmi Note 7=xiaomi/lavender/lavender:9/PK
 Xiaomi Redmi Note 7 Pro India (9):Xiaomi:Redmi Note 7 Pro=xiaomi/violet/violet:9/PKQ1.181203.001/V10.3.13.0.PFHINXM:user/release-keys__2019-08-01
 Xiaomi Redmi Note 8 Global (9 & 10):Xiaomi:Redmi Note 8=xiaomi/ginkgo/ginkgo:9/PKQ1.190616.001/V11.0.11.0.PCOMIXM:user/release-keys__2020-09-01;xiaomi/ginkgo/ginkgo:10/QKQ1.200114.002/V12.0.1.0.QCOMIXM:user/release-keys__2020-09-01
 Xiaomi Redmi Note 8T Europe (9 & 10):Xiaomi:Redmi Note 8T=xiaomi/willow_eea/willow:9/PKQ1.190616.001/V10.3.5.0.PCXEUXM:user/release-keys__2019-10-01;xiaomi/willow_eea/willow:10/QKQ1.200114.002/V12.0.1.0.QCXEUXM:user/release-keys__2020-10-01
+Xiaomi Redmi Note 9 Pro Russia (11):Xiaomi:Redmi Note 9 Pro=Redmi/joyeuse_ru/joyeuse:11/RKQ1.200826.002/V12.5.1.0.RJZRUXM:user/release-keys_2021-08-05
 Xiaomi Redmi Y1 Global (7.1.2):Xiaomi:Redmi Y1=xiaomi/ugg/ugg:7.1.2/N2G47H/V9.6.2.0.NDKMIFD:user/release-keys__2018-07-01
 ZTE Axon 7 (7.1.1 & 8.0.0):ZTE:ZTE A2017=ZTE/P996A01_N/ailsa_ii:7.1.1/NMF26V/20171211.005949:user/release-keys;ZTE/P996A01_O/ailsa_ii:8.0.0/OPR1.170623.032/20180815.171922:user/release-keys__2018-07-01
 ZTE Blade (6.0.1):ZTE:Blade A310=ZTE/P809A50_MY_MAX/P809A50:6.0.1/MMB29M/20161017.095504:user/release-keys
