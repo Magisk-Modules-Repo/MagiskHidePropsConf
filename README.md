@@ -400,7 +400,9 @@ There are a couple of persistent options that you can set for the `props` script
 ### Boot stage
 It's possible to move the execution of the boot script from the default system.prop file to either post-fs-data or late_start service. If there are any kind of issues during boot or that props don't set properly, try changing the boot stage to either post-fs-data or late_start service instead. Just keep in mind that this might cause other issues like the fingerprint not setting properly (if set during late_start service) or that post-fs-data will be interupted by having too many props causing the script to run too slow.
 
-It is also possible to set individual props, like fingerprint, security patch date and custom props individualy. There'll be an option under the corresponding menu.
+It is also possible to set individual props, like fingerprint, security patch date and custom props individualy. There'll be an option under the corresponding menu
+
+If boot stage is set to late_start service, general execution or for specific prop types, it is also possible to enable a soft reboot after these props are changed. This can sometimes be needed for a prop to properly be set to memory at such a late stage in the boot process, so if a prop doesn't appear to be set properly during the late_start service boot stage, try enabling this option. This feature is disabled by default since it has the possibility to cause issues on some devices.
 
 Note: post-fs-data runs earlier than system.prop and late_start service runs after, right at the end of the boot process. Having to many props set in post-fs-data may have an adverse effect on the boot process and may result in props not being set properly. Using the default system.prop file or late_start service is prefered if possible.
 
@@ -432,7 +434,7 @@ If you have a lot of different props set it can be handy to have a [configuratio
 ## Configuration file
 You can use a configuration file to set your desired options, rather than running the `props` command. This is particularly useful if you have a large amount of custom props you want to set. Download the [settings file](https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHide-Props-Config/master/common/propsconf_conf), extract it from the module zip (in the /common folder) or copy it from the module directory under /data/adb (in the /common folder), fill in the desired options (follow the instructions in the file), place it in the root of your internal storage (/sdcard), in /data or in /cache (or /data/cache if you're using an A/B device) and reboot. You can also use the configuration file when first installing the module. Just place the file in the root of your internal storage (or one of the other previously mentioned locations) before flashing the module and the installation script will set everything up.
 
-**NOTE!** If a configuration file is used during boot there will be a reboot during the late_start service boot mode, to load the newly set up values. This can cause issues for devices that have to boot through recovery for Magisk to be active (A-only SAR devices), so a manual reboot after the automatic one will be necessary (or just use the configuration file at install instead).
+**NOTE!** If a configuration file is used during boot there will be a reboot during the late_start service boot stage, to load the newly set up values. This can cause issues for devices that have to boot through recovery for Magisk to be active (A-only SAR devices), so a manual reboot after the automatic one will be necessary (or just use the configuration file at install instead).
 
 If you edit the configuration file in Windows, make sure that you use a text editor that can handle [Unix file endings](https://en.m.wikipedia.org/wiki/Newline), such as Notepad++ and similar editors (not regular Windows Notepad).
 
@@ -522,6 +524,8 @@ This module can usually only really help with the ctsProfile check, by spoofing 
 ### Props don't seem to set properly
 If it seems like props you're trying to set with the module don't get set properly (ctsProfile still doesn't pass, custom props don't work, etc), go into the script options and change the boot stage at which the props are being set, or change the boot stage for that particular prop, to late_start service. See ["Boot stage"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#boot-stage) or ["Custom prop values"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values) above. This might happen because the particular prop you're trying to set get assigned it's value late in the boot process and by setting the boot stage for the prop to the last one available (late_start service) you optimise the chances of the module setting the prop after the system.
 
+If the boot stage already is set to the late_start service stage you might need to activate the soft reboot option for that particular setting. Sometimes a soft reboot is required after setting a prop for the value to be properly loaded into memory.
+
 This may also be caused by the post-fs-data.sh script being set to run in the background because of the execution taking to long. Try disabling this option in the [script settings](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#prop-script-settings) and see if that changes anything.
 
 There is also a possibility that the prop value you are trying to set is too long. This is only an issue on Magisk releases up until build 22006, where the prop value is limited to 91 characters. Builds after that should not have this issue.
@@ -556,11 +560,11 @@ If boot takes longer than usual after setting a new fingerprint or a custom prop
 
 
 ### There's a reboot during boot
-This happens when any prop is set during the late_start service boot stage. A soft reboot is necessary to properly load the new prop values.
+This happens when any prop is set during the late_start service boot stage and the soft reboot option is enabled. A soft reboot can sometime be necessary to properly load the new prop values, but also has the potential for causing issues on some devices.
 
 
 ### The screen goes black momentarily at boot
-See the section directly above.
+See the section directly above about an additional reboot. Same thing.
 
 
 ### The Play Store is "uncertified"
@@ -610,6 +614,10 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v6.0.1  
+- Quickfix update to make the soft reboot when setting props in the late_start service boot stage an option. It has the potential for causing issues it seems (mainly on Samsung devices apparently). See the documentation for details.
+- Minor UI fixes and optimisations.
+
 ### v6.0.0  
 - Updated the "Edit MagiskHide props" feature to include all the sensitive prop values that MagiskHide changed, up to and including Magisk v23. All props will now be set by default. See the documentation for details.
 - Alter the permissions for SELinux files if SELinux is permissive (was included in MagiskHide up to Magisk v23).

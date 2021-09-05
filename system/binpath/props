@@ -828,15 +828,35 @@ menu_bootstage_print_set() {
 			menu_header "${C}$1${N}"
 			echo ""
 			echo "Current boot stage for $PROPTXT is"
-			echo -e "${G}$CURRTXT${N}."
+			echo -e "${C}$CURRTXT${N}."
 			echo ""
 			echo "Do you want to change it to"
 			echo -e "$TMPTXT?"
+			echo ""
+			if [ "$PRINTSTAGE" == 2 ] && [ "$PRINTSOFTBOOT" == 0 ] || [ "$PATCHSTAGE" == 2 ] && [ "$PATCHSOFTBOOT" == 0 ]; then
+				echo -e "Since you have the ${C}late_start service${N}"
+				echo -e "boot stage set, you can also ${G}enable${N} a"
+				echo "soft reboot at the end of the boot process."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			elif [ "$PRINTSTAGE" == 2 ] && [ "$PRINTSOFTBOOT" == 1 ] || [ "$PATCHSTAGE" == 2 ] && [ "$PATCHSOFTBOOT" == 1 ]; then
+				echo -e "Soft reboot at the end of the ${C}late_start${N}"
+				echo -e "${C}service${N} boot stage is ${G}enabled${N} and can be"
+				echo -e "${R}disabled${N}."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			fi
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
 			echo ""
 			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT4
 		fi
 		case "$INPUT4" in
+			r|R)
+				menu_softboot_print "Soft reboot" "$2"
+				INPUT3=""
+				break
+			;;
 			d|D)
 				if [ "$TMPSTAGE" != 0 ]; then
 					before_change
@@ -889,6 +909,67 @@ menu_bootstage_print_set() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 1 4
+			;;
+		esac
+	done
+}
+
+# Fifth menu level - Fingerprint soft reboot, $1=header, $2=type
+menu_softboot_print() {
+	INPUT5=""
+	while true
+	do
+		if [ -z "$INPUT5" ]; then
+			if [ "$2" == "print" ]; then
+				TYPETXT="device fingerprint"
+				TYPEPROP="PRINTSOFTBOOT"
+			elif [ "$2" == "patch" ]; then
+				TYPETXT="security patch"
+				TYPEPROP="PATCHSOFTBOOT"
+			fi
+			if [ "$2" == "print" ] && [ "$PRINTSOFTBOOT" == "1" ] || [ "$2" == "patch" ] && [ "$PATCHSOFTBOOT" == "1" ]; then
+				CURRTXT="${G}enabled${N}"
+				TMPTXT="${R}disable${N}"
+				LOGTXT="disabled"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				CURRTXT="${R}disabled${N}"
+				TMPTXT="${R}enable${N}"
+				LOGTXT="enabled"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Soft reboot for setting $TYPETXT"
+			echo "in the late_start service boot stage"
+			echo -e "is currently ${CURRTXT}."
+			echo ""
+			echo -e "Do you want to ${C}${TMPTXT}${N} it?"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT5
+		fi
+		case "$INPUT5" in
+			y|Y)
+				before_change
+				log_handler "The $TYPETXT soft reboot was ${LOGTXT}."
+				# Saves new module value
+				replace_fn $TYPEPROP $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
+				INPUT4=""
+				after_change "$1"
+				break
+			;;
+			n|N)
+				INPUT4=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 5
 			;;
 		esac
 	done
@@ -1942,10 +2023,30 @@ menu_bootstage_sim() {
 			echo "Do you want to change it to"
 			echo -e "$TMPTXT?"
 			echo ""
+			if [ "$SIMSTAGE" == 2 ] && [ "$SIMSOFTBOOT" == 0 ]; then
+				echo -e "Since you have the ${C}late_start service${N}"
+				echo -e "boot stage set, you can also ${G}enable${N} a"
+				echo "soft reboot at the end of the boot process."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			elif [ "$SIMSTAGE" == 2 ] && [ "$SIMSOFTBOOT" == 1 ]; then
+				echo -e "Soft reboot at the end of the ${C}late_start${N}"
+				echo -e "${C}service${N} boot stage is ${G}enabled${N} and can be"
+				echo -e "${R}disabled${N}."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			fi
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
 			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
+			r|R)
+				menu_softboot_sim "Soft reboot"
+				INPUT2=""
+				break
+			;;
 			d|D)
 				if [ "$SIMSTAGE" != 0 ]; then
 					before_change
@@ -2003,6 +2104,60 @@ menu_bootstage_sim() {
 	done
 }
 
+# Fourth menu level - MagiskHide props soft reboot, $1=header
+menu_softboot_sim() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			if [ "$SIMSOFTBOOT" == "1" ]; then
+				CURRTXT="${G}enabled${N}"
+				TMPTXT="${R}disable${N}"
+				LOGTXT="disabled"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				CURRTXT="${R}disabled${N}"
+				TMPTXT="${R}enable${N}"
+				LOGTXT="enabled"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Soft reboot for device simulation set"
+			echo "in the late_start service boot stage"
+			echo -e "is currently ${CURRTXT}."
+			echo ""
+			echo -e "Do you want to ${TMPTXT} it?"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				before_change
+				log_handler "Device simulation soft reboot ${LOGTXT}."
+				# Saves new module value
+				replace_fn SIMSOFTBOOT $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
+				INPUT3=""
+				after_change "$1"
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 4
+			;;
+		esac
+	done
+}
+
 # ======================== MagiskHide Props ========================
 # Second menu level - MagiskHide props, $1=header
 menu_magiskhide_props() {
@@ -2015,23 +2170,28 @@ menu_magiskhide_props() {
 			echo ""
 			echo "Set/reset MagiskHide sensitive props."
 			echo ""
+			echo -e "${C}Note that only props that originally are${N}"
+			echo -e "${C}set to sensitive values will show in the list.${N}"
+			echo ""
 			magiskhide_props_menu "$SAFELIST"
 			magiskhide_props_menu "$TRIGGERSAFELIST" "trigger"
 			magiskhide_props_menu "$LATESAFELIST" "late"
 			if [ "$ITEMCOUNT" == 0 ]; then
-				echo "None of the sensitive props need"
-				echo "to be changed on your device."
+				echo "None of the sensitive props available"
+				echo "need to be changed."
+				echo ""
 				echo "They are all already set to a safe"
 				echo "value or does not exist on the device."
 				echo ""
-				echo "If you still want to change/set one of"
-				echo "them, to a value other than the safe"
+				echo "If you still want to change/set some of"
+				echo "them, to values other than the safe"
 				echo "ones, use the custom props option."
 				echo ""
 				if [ "$PROPEDIT" == 1 ]; then
-					echo "But, this setting is active..."
-					echo "Do you want to disable this feature?"
-					echo "(This would save some resources during boot.)"
+					echo -e "But, this option is currently ${C}active${N}..."
+					echo ""
+					echo -e "Do you want to ${R}disable${N} this feature?"
+					echo "(Doing so would save some resources during boot.)"
 					echo ""
 					echo -e "${G}y${N} - Yes"
 					echo -e "${G}n${N} - No"
@@ -2092,6 +2252,9 @@ menu_magiskhide_props() {
 					invalid_input 1 2
 				fi
 			;;
+			s|S)
+				menu_bootstage_prop "Sensitive props boot stage"
+			;;
 			b|B)
 				if  [ "$ITEMCOUNT" != 0 ]; then
 					INPUT=""
@@ -2102,7 +2265,7 @@ menu_magiskhide_props() {
 			;;
 			y|Y)
 				if  [ "$ITEMCOUNT" == 0 ]; then
-					menu_reset_prop_all "Reset all props"
+					menu_reset_prop_all "Disable?" "yes"
 					INPUT2=""
 					break
 				else
@@ -2282,7 +2445,7 @@ menu_change_prop() {
 	done
 }
 
-# Third menu level - Reset all MagiskHide props, $1=header
+# Third menu level - Reset all MagiskHide props, $1=header, $2=type of question to ask
 menu_reset_prop_all() {
 	INPUT3=""
 	while true
@@ -2290,8 +2453,13 @@ menu_reset_prop_all() {
 		if [ -z "$INPUT3" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
-			echo "This will reset all prop values"
-			echo "to the default device values."
+			if [ "$2" == "yes" ]; then
+				echo -e "This will ${R}disable${N} the"
+				echo "MagiskHide sensitive props feature."
+			else
+				echo "This will reset all prop values"
+				echo "to the default device values."
+			fi
 			echo ""
 			echo "Do you want to continue?"
 			echo ""
@@ -2350,7 +2518,7 @@ menu_reset_prop() {
 	done
 }
 
-# Third menu level - Boot stage, $1=header
+# Third menu level - MagiskHide props boot stage, $1=header
 menu_bootstage_prop() {
 	INPUT3=""
 	while true
@@ -2376,16 +2544,37 @@ menu_bootstage_prop() {
 			echo "Do you want to change it to"
 			echo -e "$TMPTXT?"
 			echo ""
+			if [ "$PROPBOOT" == 2 ] && [ "$PROPSOFTBOOT" == 0 ]; then
+				echo "Since you have the ${C}late_start service${N}"
+				echo "boot stage set, you can also ${G}enable${N} a"
+				echo "soft reboot at the end of the boot process."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			elif [ "$PROPBOOT" == 2 ] && [ "$PROPSOFTBOOT" == 1 ]; then
+				echo "Soft reboot at the end of the ${C}late_start${N}"
+				echo "${C}service${N} boot stage is ${G}enabled${N} and can be"
+				echo "${R}disabled${N}."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			fi
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
+			echo ""
 			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
+			r|R)
+				menu_softboot_prop "Soft reboot"
+				INPUT2=""
+				break
+			;;
 			d|D)
 				if [ "$PROPBOOT" != 0 ]; then
 					before_change
 					OPTNEW=0
 					log_handler "MagiskHide props boot stage changed to default."
 					replace_fn PROPBOOT $PROPBOOT $OPTNEW $LATEFILE
+					replace_fn PROPSOFTBOOT 1 0 $LATEFILE
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
@@ -2401,6 +2590,7 @@ menu_bootstage_prop() {
 					OPTNEW=1
 					log_handler "MagiskHide props boot stage changed to post-fs-data."
 					replace_fn PROPBOOT $PROPBOOT $OPTNEW $LATEFILE
+					replace_fn PROPSOFTBOOT 1 0 $LATEFILE
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
@@ -2416,6 +2606,7 @@ menu_bootstage_prop() {
 					OPTNEW=2
 					log_handler "MagiskHide props boot stage changed to late_start service."
 					replace_fn PROPBOOT $PROPBOOT $OPTNEW $LATEFILE
+					replace_fn PROPSOFTBOOT 1 0 $LATEFILE
 					# Load module values
 					. $LATEFILE
 					INPUT2=""
@@ -2432,6 +2623,60 @@ menu_bootstage_prop() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 1 3
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - MagiskHide props soft reboot, $1=header
+menu_softboot_prop() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			if [ "$PROPSOFTBOOT" == "1" ]; then
+				CURRTXT="${G}enabled${N}"
+				TMPTXT="${R}disable${N}"
+				LOGTXT="disabled"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				CURRTXT="${R}disabled${N}"
+				TMPTXT="${R}enable${N}"
+				LOGTXT="enabled"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Soft reboot for sensitive props set"
+			echo "in the late_start service boot stage"
+			echo -e "is currently ${CURRTXT}."
+			echo ""
+			echo -e "Do you want to ${TMPTXT} it?"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				before_change
+				log_handler "Sensitive props soft reboot ${LOGTXT}."
+				# Saves new module value
+				replace_fn PROPSOFTBOOT $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
+				INPUT3=""
+				after_change "$1"
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 4
 			;;
 		esac
 	done
@@ -2877,6 +3122,7 @@ menu_bootstage_custprop() {
 	POSTTXT=""
 	LATETXT=""
 	BOTHTXT=""
+	TMPSOFT=""
 	OPTTYPE1="default"
 	OPTTYPE2="post"
 	OPTTYPE3="late"
@@ -2917,14 +3163,33 @@ menu_bootstage_custprop() {
 			echo -e "Currently ${C}${TMPBSTAGE}${N}"
 			echo "boot stage$PLEND used."
 			echo ""
+			if [ "$TMPBSTAGE" == "late_start service" -o "$TMPBSTAGE" == "both" ] && [ "$CUSTOMSOFTBOOT" == 0 ]; then
+				echo "Since you have custom props set in"
+				echo -e "the ${C}late_start service${N} boot stage"
+				echo -e "you can also ${G}enable${N} a soft"
+				echo "reboot at the end of the boot process."
+				TMPSOFT="disabled"
+			elif [ "$TMPBSTAGE" == "late_start service" -o "$TMPBSTAGE" == "both" ] && [ "$CUSTOMSOFTBOOT" == 1 ]; then
+				echo -e "Soft reboot at the end of the ${C}late_start${N}"
+				echo -e "${C}service${N} boot stage is ${G}enabled${N} for custom"
+				echo -e "props and can be ${R}disabled${N}."
+				TMPSOFT="enabled"
+			fi
+			echo ""
 			echo "Select an option below."
 			echo ""
 			echo -e "${G}1${N} - Default${DEFAULTTXT}"
 			echo -e "${G}2${N} - post-fs-data${POSTTXT}"
 			echo -e "${G}3${N} - late_start service${LATETXT}"
 			echo -e "${G}4${N} - Both boot stages${BOTHTXT}"
+			if [ "$TMPSOFT" ]; then
+				echo -e "${G}r${N} - Soft reboot${TMPSOFT}"
+			fi
 			echo -e "${G}b${N} - Go back"
 			echo -e "${G}e${N} - Exit"
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
 			echo ""
 			echo -n "Enter your desired option: "
 			read -r INPUT4
@@ -2942,6 +3207,11 @@ menu_bootstage_custprop() {
 					break
 				fi
 			;;
+			r|R)
+				menu_softboot_cust "Soft reboot"
+				INPUT4=""
+				break
+			;;
 			b|B)
 				INPUT3=""
 				break
@@ -2949,6 +3219,60 @@ menu_bootstage_custprop() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 1 4
+			;;
+		esac
+	done
+}
+
+# Fifth menu level - MagiskHide props soft reboot, $1=header
+menu_softboot_cust() {
+	INPUT5=""
+	while true
+	do
+		if [ -z "$INPUT5" ]; then
+			if [ "$CUSTOMSOFTBOOT" == "1" ]; then
+				CURRTXT="${G}enabled${N}"
+				TMPTXT="${R}disable${N}"
+				LOGTXT="disabled"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				CURRTXT="${R}disabled${N}"
+				TMPTXT="${R}enable${N}"
+				LOGTXT="enabled"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Soft reboot for custom props set"
+			echo "in the late_start service boot stage"
+			echo -e "is currently ${CURRTXT}."
+			echo ""
+			echo -e "Do you want to ${TMPTXT} it?"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT5
+		fi
+		case "$INPUT5" in
+			y|Y)
+				before_change
+				log_handler "Custom props soft reboot for custom props was ${LOGTXT}."
+				# Saves new module value
+				replace_fn CUSTOMSOFTBOOT $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
+				INPUT4=""
+				after_change "$1"
+				break
+			;;
+			n|N)
+				INPUT4=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 5
 			;;
 		esac
 	done
@@ -3753,12 +4077,32 @@ menu_options_bootstage() {
 			echo -e "Current boot stage is ${G}$2${N}."
 			echo ""
 			echo "Do you want to change it to"
-			echo -e "$TMPTXT?"
+			echo -e "${TMPTXT}?"
+			echo ""
+			if [ "$2" == "late_start service" ] && [ "$OPTIONSOFTBOOT" == 0 ]; then
+				echo -e "Since you have the ${C}late_start service${N}"
+				echo -e "boot stage set, you can also ${G}enable${N} a"
+				echo "soft reboot at the end of the boot process."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			elif [ "$2" == "late_start service" ] && [ "$OPTIONSOFTBOOT" == 1 ]; then
+				echo -e "Soft reboot at the end of the ${C}late_start${N}"
+				echo -e "${C}service${N} boot stage is ${G}enabled${N} and can be"
+				echo -e "${R}disabled${N}."
+				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
+			fi
+			echo ""
+			echo "See the module readme or the"
+			echo "support thread @ XDA for details."
 			echo ""
 			echo -en "Enter $CHOICETXT, ${G}b${N}(ack) or ${G}e${N}(xit): "
 			read -r INPUT3
 		fi
 		case "$INPUT3" in
+			r|R)
+				menu_softboot_option "Soft reboot"
+				INPUT2=""
+				break
+			;;
 			s|S)
 				if [ "$OPTIONBOOT" != 0 ]; then
 					before_change
@@ -3811,6 +4155,60 @@ menu_options_bootstage() {
 			e|E) exit_fn
 			;;
 			*)	invalid_input 1 3
+			;;
+		esac
+	done
+}
+
+# Fourth menu level - Options soft reboot, $1=header
+menu_softboot_option() {
+	INPUT4=""
+	while true
+	do
+		if [ -z "$INPUT4" ]; then
+			if [ "$OPTIONSOFTBOOT" == "1" ]; then
+				CURRTXT="${G}enabled${N}"
+				TMPTXT="${R}disable${N}"
+				LOGTXT="disabled"
+				OPTCURR=1
+				OPTNEW=0
+			else
+				CURRTXT="${R}disabled${N}"
+				TMPTXT="${R}enable${N}"
+				LOGTXT="enabled"
+				OPTCURR=0
+				OPTNEW=1
+			fi
+			menu_header "${C}$1${N}"
+			echo ""
+			echo "Soft reboot for the late_start"
+			echo "service boot stage"
+			echo -e "is currently ${CURRTXT}."
+			echo ""
+			echo -e "Do you want to ${TMPTXT} it?"
+			echo ""
+			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
+			read -r INPUT4
+		fi
+		case "$INPUT4" in
+			y|Y)
+				before_change
+				log_handler "Late_start service soft reboot was ${LOGTXT}."
+				# Saves new module value
+				replace_fn OPTIONSOFTBOOT $OPTCURR $OPTNEW $LATEFILE
+				# Load module values
+				. $LATEFILE
+				INPUT3=""
+				after_change "$1"
+				break
+			;;
+			n|N)
+				INPUT3=""
+				break
+			;;
+			e|E) exit_fn
+			;;
+			*)	invalid_input 3 4
 			;;
 		esac
 	done

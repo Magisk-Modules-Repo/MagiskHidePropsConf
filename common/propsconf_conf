@@ -9,7 +9,7 @@
 # =================================================================
 
 # Required module version (or newer). Do not edit this value!
-CONFTRANSF=600
+CONFTRANSF=601
 
 # Device fingerprint
 CONFFINGERPRINT=""
@@ -68,6 +68,14 @@ PROPOPTION=replace
 # Delete props
 CONFDELPROPS=""
 DELPROPOPTION=replace
+
+# Soft reboot options
+CONFOPTIONSOFTBOOT=false
+CONFPRINTSOFTBOOT=false
+CONFPATCHSOFTBOOT=false
+CONFSIMSOFTBOOT=false
+CONFCUSTOMSOFTBOOT=false
+CONFPROPSOFTBOOT=false
 
 # Module settings
 CONFBOOT=default
@@ -219,6 +227,11 @@ CONFBACK=false
 # "add", or "preserve". The default option is to replace the list.
 # This option supersedes the preserve option described above, but only
 # for the CONFDELPROPS variable.
+
+# The soft rebooot options can be set to true if you need a soft reboot at the
+# end of the boot process when props are set during the late_start service boot stage.
+# CONFOPTIONSOFTBOOT, CONFPRINTSOFTBOOT, CONFPATCHSOFTBOOT, CONFSIMSOFTBOOT,
+# CONFCUSTOMSOFTBOOT and CONFPROPSOFTBOOT can be set to "true" or "false".
 
 # CONFBOOT is by default set to using the module system.prop file for most props.
 # If the setting is changed to "post" or "late", the props will be set during either

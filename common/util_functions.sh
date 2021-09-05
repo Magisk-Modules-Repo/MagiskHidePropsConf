@@ -78,6 +78,12 @@ if [ "$INSTFN" ]; then
 	PRINTSTAGE
 	PATCHSTAGE
 	SIMSTAGE
+	OPTIONSOFTBOOT
+	PRINTSOFTBOOT
+	PATCHSOFTBOOT
+	SIMSOFTBOOT
+	CUSTOMSOFTBOOT
+	PROPSOFTBOOT
 	OPTIONBOOT
 	OPTIONCOLOUR
 	OPTIONWEBP
@@ -898,6 +904,62 @@ config_file() {
 				fi
 			fi
 
+			# Updates soft boot options
+			if [ "$CONFOPTIONSOFTBOOT" == true ]; then
+				OPTLCHNG=1
+				TMPTXT="enabled"
+			else
+				OPTLCHNG=0
+				TMPTXT="disabled"
+			fi
+			replace_fn OPTIONSOFTBOOT $OPTIONSOFTBOOT $OPTLCHNG $LATEFILE
+			log_handler "Soft reboot option for late_start service boot stage $TMPTXT."
+			if [ "$CONFPRINTSOFTBOOT" == true ]; then
+				OPTLCHNG=1
+				TMPTXT="enabled"
+			else
+				OPTLCHNG=0
+				TMPTXT="disabled"
+			fi
+			replace_fn PRINTSOFTBOOT $PRINTSOFTBOOT $OPTLCHNG $LATEFILE
+			log_handler "Soft reboot option for device fingerprint $TMPTXT."
+			if [ "$CONFPATCHSOFTBOOT" == true ]; then
+				OPTLCHNG=1
+				TMPTXT="enabled"
+			else
+				OPTLCHNG=0
+				TMPTXT="disabled"
+			fi
+			replace_fn PATCHSOFTBOOT $PATCHSOFTBOOT $OPTLCHNG $LATEFILE
+			log_handler "Soft reboot option for security patch date $TMPTXT."
+			if [ "$CONFSIMSOFTBOOT" == true ]; then
+				OPTLCHNG=1
+				TMPTXT="enabled"
+			else
+				OPTLCHNG=0
+				TMPTXT="disabled"
+			fi
+			replace_fn SIMSOFTBOOT $SIMSOFTBOOT $OPTLCHNG $LATEFILE
+			log_handler "Soft reboot option for device simulation $TMPTXT."
+			if [ "$CONFCUSTOMSOFTBOOT" == true ]; then
+				OPTLCHNG=1
+				TMPTXT="enabled"
+			else
+				OPTLCHNG=0
+				TMPTXT="disabled"
+			fi
+			replace_fn CUSTOMSOFTBOOT $CUSTOMSOFTBOOT $OPTLCHNG $LATEFILE
+			log_handler "Soft reboot option for custom props $TMPTXT."
+			if [ "$CONFPROPSOFTBOOT" == true ]; then
+				OPTLCHNG=1
+				TMPTXT="enabled"
+			else
+				OPTLCHNG=0
+				TMPTXT="disabled"
+			fi
+			replace_fn PROPSOFTBOOT $PROPSOFTBOOT $OPTLCHNG $LATEFILE
+			log_handler "Soft reboot option for sensitive props $TMPTXT."
+
 			# Updates options
 			# Boot stage
 			if [ "$CONFBOOT" == "default" ]; then
@@ -1346,7 +1408,7 @@ print_edit() {
 				echo "ro.build.fingerprint=${PRINTCHNG}" >> $1
 			else
 				resetprop -nv ro.build.fingerprint "$PRINTCHNG" >> $LOGFILE 2>&1
-				if [ "$BOOTSTAGE" == "late" ]; then
+				if [ "$BOOTSTAGE" == "late" ] && [ "$PRINTSOFTBOOT" = 1 ]; then
 					PROPLATE=true
 				fi
 			fi
@@ -1362,7 +1424,7 @@ print_edit() {
 					echo "ro.build.description=${SIMDESCRIPTION}" >> $1
 				else
 					resetprop -nv ro.build.description "$SIMDESCRIPTION" >> $LOGFILE 2>&1
-					if [ "$BOOTSTAGE" == "late" ]; then
+					if [ "$BOOTSTAGE" == "late" ] && [ "$PRINTSOFTBOOT" = 1 ]; then
 						PROPLATE=true
 					fi
 				fi
@@ -1388,7 +1450,7 @@ patch_edit() {
 						echo "ro.build.version.security_patch=${SECPATCH}" >> $1
 					else
 						resetprop -nv ro.build.version.security_patch "$SECPATCH" >> $LOGFILE 2>&1
-						if [ "$BOOTSTAGE" == "late" ]; then
+						if [ "$BOOTSTAGE" == "late" ] && [ "$PATCHSOFTBOOT" = 1 ]; then
 							PROPLATE=true
 						fi
 					fi
@@ -1785,7 +1847,7 @@ forced_basic() {
 		fi
 		resetprop -nv ro.product.model "$TMPVAL" >> $LOGFILE 2>&1
 		set_partition_props "none" "ro.product.model" "$TMPVAL"
-		if [ "$BOOTSTAGE" == "late" ]; then
+		if [ "$BOOTSTAGE" == "late" ] && [ "$OPTIONSOFTBOOT" = 1 ]; then
 			PROPLATE=true
 		fi
 	fi
@@ -1850,7 +1912,7 @@ dev_sim_edit() {
 								echo "${ITEM}=${TMPVALUE}" >> $1
 							else
 								resetprop -nv $ITEM "$TMPVALUE" >> $LOGFILE 2>&1
-								if [ "$BOOTSTAGE" == "late" ]; then
+								if [ "$BOOTSTAGE" == "late" ] && [ "$SIMSOFTBOOT" = 1 ]; then
 									PROPLATE=true
 								fi
 							fi
@@ -1957,39 +2019,45 @@ change_sim_partprops() {
 # ======================== MagiskHide Props functions ========================
 # Populate menu, $1=List of props to go through (with safe values), $2=type of list, $3=check if menu items should be printed or only counted
 magiskhide_props_menu() {
-	ACTIVE="${G} (active)${N}"
-	for ITEM in $1; do
-		PROP=$(get_prop_type $(get_eq_left "$ITEM"))
-		ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
-		if [ "$ORIGVALUE" ] && [ "$(get_eq_right "$ITEM")" != "$ORIGVALUE" ]; then
-			CTRLTRIGG=false;
-			if [ "$2" == "trigger" ]; then
-				magiskhide_trigger "$ITEM"
-			fi
-			if [ "$CTRLTRIGG" == "false" ]; then
-				if [ "$ITEMCOUNT" == 0 ]; then
-					ITEMCOUNT=1
+	CHKCOUNT=true
+	if [ "$3" == "count" ] && [ "$PROPEDIT" == 0 ]; then
+		CHKCOUNT=false
+	fi
+	if [ "$CHKCOUNT" == "true" ]; then
+		ACTIVE="${G} (active)${N}"
+		for ITEM in $1; do
+			PROP=$(get_prop_type $(get_eq_left "$ITEM"))
+			ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
+			if [ "$ORIGVALUE" ] && [ "$(get_eq_right "$ITEM")" != "$ORIGVALUE" ]; then
+				CTRLTRIGG=false;
+				if [ "$2" == "trigger" ]; then
+					magiskhide_trigger "$ITEM"
 				fi
-				TMPTXT=""
-				if [ "$2" == "late" ]; then
-					TMPTXT=" ${C}(Late prop)${N}"
-				elif [ "$2" == "trigger" ]; then
-					TMPTXT=" ${C}(Trigger prop)${N}"
-				fi
-				if [ "$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")" == "true" ]; then
-					if [ "$TMPTXT" ]; then
-						TMPTXT=$TMPTXT$ACTIVE
-					else
-						TMPTXT=$ACTIVE
+				if [ "$CTRLTRIGG" == "false" ]; then
+					if [ "$ITEMCOUNT" == 0 ]; then
+						ITEMCOUNT=1
 					fi
+					TMPTXT=""
+					if [ "$2" == "late" ]; then
+						TMPTXT=" ${C}(Late prop)${N}"
+					elif [ "$2" == "trigger" ]; then
+						TMPTXT=" ${C}(Trigger prop)${N}"
+					fi
+					if [ "$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")" == "true" ]; then
+						if [ "$TMPTXT" ]; then
+							TMPTXT=$TMPTXT$ACTIVE
+						else
+							TMPTXT=$ACTIVE
+						fi
+					fi
+					if [ "$3" != "count" ]; then
+						echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")$TMPTXT"
+					fi
+					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
-				if [ "$3" != "count" ]; then
-					echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")$TMPTXT"
-				fi
-				ITEMCOUNT=$(($ITEMCOUNT+1))
 			fi
-		fi
-	done
+		done
+	fi
 }
 
 # Set sensitive props, $1=List to get props from, $2=List of safe values, $3=Set to "late" if set in late stage, or file name if saving values to a prop file
@@ -2021,7 +2089,7 @@ sensitive_props() {
 								echo "${ITEM}=$MODULEVALUE" >> $3
 							else
 								resetprop -nv $ITEM "$MODULEVALUE" >> $LOGFILE 2>&1
-								if [ "$BOOTSTAGE" == "late" ]; then
+								if [ "$BOOTSTAGE" == "late" ] && [ "$PROPSOFTBOOT" = 1 ]; then
 									PROPLATE=true
 								fi
 							fi
@@ -2206,7 +2274,7 @@ custom_edit() {
 						echo "$(get_eq_left "$ITEM")=${TMPITEM}" >> $2
 					else
 						resetprop -nv $(get_eq_left "$ITEM") "${TMPITEM}" >> $LOGFILE 2>&1
-						if [ "$BOOTSTAGE" == "late" ]; then
+						if [ "$BOOTSTAGE" == "late" ] && [ "$1" = "CUSTOMPROPSLATE" ]; then
 							PROPLATE=true
 						fi
 					fi
@@ -2471,6 +2539,13 @@ export_settings() {
 	replace_fn CONFPROPSDELAY "\"\"" "\"$CUSTOMPROPSDELAY\"" $EXPORTFILE
 	# Delete props
 	replace_fn CONFDELPROPS "\"\"" "\"$DELETEPROPS\"" $EXPORTFILE
+	# Soft reboot
+	replace_fn CONFOPTIONSOFTBOOT false $([ $OPTIONSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFPRINTSOFTBOOT false $([ $PRINTSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFPATCHSOFTBOOT false $([ $PATCHSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFSIMSOFTBOOT false $([ $SIMSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFCUSTOMSOFTBOOT false $([ $CUSTOMSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFPROPSOFTBOOT false $([ $PROPSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	# Module settings
 	replace_fn CONFBOOT default $([ $OPTIONBOOT == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	replace_fn CONFCOLOUR true $([ $OPTIONCOLOUR == 0 ] && echo "false" || echo "true") $EXPORTFILE

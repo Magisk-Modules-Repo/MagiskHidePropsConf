@@ -116,11 +116,9 @@ if [ "$PROPEDIT" == 1 ]; then
 	sensitive_props "$LATEPROPS" "$LATESAFELIST" "late"
 fi
 
-# Do a soft restart if a prop has been set in service.sh
-if [ "$PROPLATE" == "true" ]; then
-	stop
-	start
-fi
+# Edit custom props set for late_start service
+custom_edit "CUSTOMPROPSLATE"
+custom_edit "CUSTOMPROPSDELAY"
 
 # SELinux
 if [ "$(getenforce)" == "Permissive" ] || [ "$(getenforce)" == "0" ]; then
@@ -129,9 +127,12 @@ if [ "$(getenforce)" == "Permissive" ] || [ "$(getenforce)" == "0" ]; then
 	chmod 440 /sys/fs/selinux/policy >> $LOGFILE 2>&1
 fi
 
-# Edit custom props set for late_start service
-custom_edit "CUSTOMPROPSLATE"
-custom_edit "CUSTOMPROPSDELAY"
+# Do a soft restart if a prop has been set in service.sh
+if [ "$PROPLATE" == "true" ]; then
+	log_handler "Soft rebooting."
+	stop
+	start
+fi
 
 echo -e "\n----------------------------------------" >> $LOGFILE 2>&1
 
