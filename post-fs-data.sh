@@ -23,15 +23,6 @@
 	LATEFILEPH=LATE_PLACEHOLDER
 
 	# Sensitive props
-	# Safe values
-	TRIGGERSAFELIST="
-	ro.bootmode=unknown
-	ro.boot.mode=unknown
-	vendor.boot.mode=unknown
-	ro.boot.hwc=GLOBAL
-	ro.boot.hwcountry=GLOBAL
-	"
-	# Triggering values
 	TRIGGERLIST="
 	ro.bootmode=recovery
 	ro.boot.mode=recovery
@@ -165,24 +156,20 @@
 		resetprop -v --delete ro.build.selinux >> $LOGFILE 2>&1
 	fi
 
-	if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 0 ]; then
+	if [ "$PROPEDIT" == 1 ]; then
 		# Set trigger props
 		for ITEM in $TRIGGERLIST; do
 			TMPPROP=$(get_eq_left "$ITEM")
 			TMPVAL=$(echo $(grep "\[${TMPPROP}\]" "$MHPCPATH/defaultprops") | sed -e "s|.*\]\:\ \[||g;s|\]$||g")
-			REPROP=$(echo "RE$(get_prop_type "$TMPPROP")" | tr '[:lower:]' '[:upper:]')
-			REVAL=$(get_file_value $LATEFILE "${REPROP}=")
-			if [ "$REVAL" == "true" ]; then
+			PROP=$(get_prop_type "$TMPPROP")
+			REVALUE=$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")
+			MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
+			if [ "$REVALUE" == 1 ]; then
 				if [ "$TMPVAL" == "$(get_eq_right "$ITEM")" ]; then
 					log_handler "Changing/writing $TMPPROP."
-					for SAFEVAL in $TRIGGERSAFELIST; do
-						if [ "$TMPPROP" == "$(get_eq_left "$SAFEVAL")" ]; then
-							resetprop -nv $(get_eq_left $SAFEVAL) $(get_eq_right $SAFEVAL) >> $LOGFILE 2>&1
-							break
-						fi
-					done
+					resetprop -nv $TMPPROP $MODULEVALUE >> $LOGFILE 2>&1
 				elif [ "$TMPVAL" ]; then
-					log_handler "Skipping $TMPPROP, not set to triggering value."
+					log_handler "Skipping $TMPPROP, not set to triggering value (set to $TMPVAL)."
 				else
 					log_handler "Skipping $TMPPROP, does not exist on device."
 				fi
@@ -231,7 +218,7 @@
 		fi
 		# Edit MagiskHide sensitive props if set for post-fs-data
 		if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 1]; then
-			sensitive_props "$PROPSLIST" "$SAFELIST"
+			sensitive_props "$PROPSLIST"
 		fi
 		# Edit custom props set for post-fs-data
 		custom_edit "CUSTOMPROPSPOST"

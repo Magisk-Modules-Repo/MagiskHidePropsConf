@@ -290,12 +290,12 @@ You can enter the fingerprint manually in the `Edit device fingerprint` menu in 
 
 
 ## Force BASIC key attestation
-Google now enforces the use of hardware backed key attestation on devices that has the necessary hardware (all devices that shipped with Android 8+ and even some older devices). Up until mid January 2021 you could work around this by changing the model props to something other than the actual device. This might still be necessary, and can be done with this feature of the module, but you most likely also need to trick keystore further than that.
+Google now enforces the use of hardware backed key attestation on devices that has the necessary hardware (all devices that shipped with Android 8+ and even some older devices).This can be circumvented by tricking the device into not using the hardware attestation, and it might also be needed to change the prop models (`ro.product.model`) to something other than your devices actual model. This feature can help with that.
 
 @kdrag0n over on XDA Developers have a Magsk module that will trick keystore into thinking that the hardware isn't available and this will then force basic attestation. You can find that module together with details on how it works here:
 https://forum.xda-developers.com/t/magisk-module-universal-safetynet-fix-1-1-0.4217823/
 
-These two things in combination might be required to pass CTS.
+The Universal SafetyNet fix not only trickes the keystore into using basic attestation, from v2.1.0 it also changes prop values that might be necessary to trick Google Play Services into letting you pass the CTS profile check, so if you're using that module you most likely will not need to use the Force BASIC key attestation feature of this module.
 
 If you aren't successful in passing CTS by changing the model, you could try using the Xposed (although it is recommended to use LSPosed if you want to have the best chance of passing SafetyNet) module XprivacyLua and restrict Google Play Services. Instructions on how to install LSPosed and XprivacyLua and how to use that module can be found with a simple web search, I won't cover that here.
 
@@ -355,7 +355,7 @@ The props in question are:
 - ro.vendor.warranty_bit
 - vendor.boot.vbmeta.device_state
 
-There are a few props that will only change if a triggering value is detected, and these are:
+There are a few props that will only change if a triggering value is detected, and these are (these will always be set in the post-fs-data boot stage):
 - ro.bootmode
 - ro.boot.mode
 - vendor.boot.mode
@@ -614,6 +614,12 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v6.0.2  
+- Fix problems when trying to disable/enable sensitive props.
+- Fix typo when checking for triggering prop values (meant that props wouldn't set properly during boot).
+- Fix UI info for if a sensitive prop has been set by the module or not.
+- More optimisations of the new code (but it's by no means optimised).
+
 ### v6.0.1  
 - Quickfix update to make the soft reboot when setting props in the late_start service boot stage an option. It has the potential for causing issues it seems (mainly on Samsung devices apparently). See the documentation for details.
 - Minor UI fixes and optimisations.

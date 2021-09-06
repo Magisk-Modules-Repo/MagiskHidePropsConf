@@ -1,4 +1,4 @@
-#!/system/bin/sh
+	#!/system/bin/sh
 
 # MagiskHide Props Config
 # Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
@@ -73,6 +73,25 @@ if [ "$INSTFN" ]; then
 	PROPCOUNT
 	PROPEDIT
 	PROPBOOT
+	REDEBUGGABLE
+	RESECURE
+	RETYPE
+	RETAGS
+	REBOOTMODE
+	REMODE
+	REVENDORMODE
+	REHWC
+	REHWCOUNTRY
+	RESTATE
+	REVERIFIEDBOOTSTATE
+	REVENDORVERIFIEDBOOTSTATE
+	RELOCKED
+	REVERITYMODE
+	REBOOTWARRANTY_BIT
+	REBIT
+	REVENDORBOOTWARRANTY_BIT
+	REVENDORWARRANTY_BIT
+	REVENDORDEVICE_STATE
 	CUSTOMEDIT
 	DELEDIT
 	PRINTSTAGE
@@ -231,23 +250,6 @@ ro.vendor.warranty_bit
 vendor.boot.vbmeta.device_state
 "
 
-# Safe values
-SAFELIST="
-ro.debuggable=0
-ro.secure=1
-ro.build.type=user
-ro.build.tags=release-keys
-ro.boot.vbmeta.device_state=locked
-ro.boot.verifiedbootstate=green
-ro.boot.flash.locked=1
-ro.boot.veritymode=enforcing
-ro.boot.warranty_bit=0
-ro.warranty_bit=0
-ro.vendor.boot.warranty_bit=0
-ro.vendor.warranty_bit=0
-vendor.boot.vbmeta.device_state=locked
-"
-
 # Trigger props
 TRIGGERPROPS="
 ro.bootmode
@@ -255,15 +257,6 @@ ro.boot.mode
 vendor.boot.mode
 ro.boot.hwc
 ro.boot.hwcountry
-"
-
-# Safe values
-TRIGGERSAFELIST="
-ro.bootmode=unknown
-ro.boot.mode=unknown
-vendor.boot.mode=unknown
-ro.boot.hwc=GLOBAL
-ro.boot.hwcountry=GLOBAL
 "
 
 # Triggering values
@@ -278,11 +271,6 @@ ro.boot.hwcountry=China
 # Late props
 LATEPROPS="
 vendor.boot.verifiedbootstate
-"
-
-# Safe value
-LATESAFELIST="
-vendor.boot.verifiedbootstate=green
 "
 
 # Partitions used for different props
@@ -776,7 +764,7 @@ config_file() {
 								change_print "$PROPTYPE" "$TMPPROP" "file"
 							fi
 						else
-							change_prop "$PROPTYPE" "$TMPPROP" "file"
+							change_prop "$PROPTYPE" "file"
 						fi
 					fi
 				else
@@ -1093,7 +1081,7 @@ system_prop() {
 	fi
 	echo -e "# This file will be read by resetprop\n# MagiskHide Props Config\n# Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers\n# Licence: MIT" > $MODPATH/system.prop
 	if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 0 ]; then
-		sensitive_props "$PROPSLIST" "$SAFELIST" "$MODPATH/system.prop"
+		sensitive_props "$PROPSLIST" "$MODPATH/system.prop"
 	fi
 	if [ "$OPTIONBOOT" == 0 ] && [ "$PRINTSTAGE" == 0 ]; then
 		print_edit "$MODPATH/system.prop"
@@ -1155,7 +1143,7 @@ settings_placement() {
 			if [ "$FILEV" == 0 ]; then
 				log_print "- Placing settings file"
 			# Updated file with a required clearing of settings
-			elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ ! "$NOTTRANSF" ]; then
+		elif [ "$UPDATETRANSF" -gt "$FILETRANSF" ] && [ -z "$NOTTRANSF" ]; then
 				log_handler "Current transfer version - ${FILETRANSF}"
 				log_handler "Update transfer version - ${UPDATETRANSF}"
 				log_handler "No settings set to not transfer"
@@ -2017,18 +2005,22 @@ change_sim_partprops() {
 }
 
 # ======================== MagiskHide Props functions ========================
-# Populate menu, $1=List of props to go through (with safe values), $2=type of list, $3=check if menu items should be printed or only counted
+# Populate menu, $1=List of props to go through, $2=type of list, $3=check if menu items should be printed or only counted
 magiskhide_props_menu() {
 	CHKCOUNT=true
 	if [ "$3" == "count" ] && [ "$PROPEDIT" == 0 ]; then
 		CHKCOUNT=false
 	fi
 	if [ "$CHKCOUNT" == "true" ]; then
-		ACTIVE="${G} (active)${N}"
+		ACTIVETXT="${G} (active)${N}"
+		ENABLEDTXT="${G} (enabled, not active)${N}"
 		for ITEM in $1; do
-			PROP=$(get_prop_type $(get_eq_left "$ITEM"))
+			PROP=$(get_prop_type $ITEM)
+			REVALUE=$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")
+			CURRVALUE=$(eval "echo \$$(echo "CURR${PROP}" | tr '[:lower:]' '[:upper:]')")
 			ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
-			if [ "$ORIGVALUE" ] && [ "$(get_eq_right "$ITEM")" != "$ORIGVALUE" ]; then
+			MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
+			if [ "$ORIGVALUE" ] && [ "$MODULEVALUE" != "$ORIGVALUE" ]; then
 				CTRLTRIGG=false;
 				if [ "$2" == "trigger" ]; then
 					magiskhide_trigger "$ITEM"
@@ -2037,21 +2029,28 @@ magiskhide_props_menu() {
 					if [ "$ITEMCOUNT" == 0 ]; then
 						ITEMCOUNT=1
 					fi
-					TMPTXT=""
-					if [ "$2" == "late" ]; then
-						TMPTXT=" ${C}(Late prop)${N}"
-					elif [ "$2" == "trigger" ]; then
-						TMPTXT=" ${C}(Trigger prop)${N}"
-					fi
-					if [ "$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")" == "true" ]; then
-						if [ "$TMPTXT" ]; then
-							TMPTXT=$TMPTXT$ACTIVE
-						else
-							TMPTXT=$ACTIVE
-						fi
-					fi
 					if [ "$3" != "count" ]; then
-						echo -e "${G}$ITEMCOUNT${N} - $(get_eq_left "$ITEM")$TMPTXT"
+						TMPTXT=""
+						if [ "$2" == "late" ]; then
+							TMPTXT=" ${C}(Late prop)${N}"
+						elif [ "$2" == "trigger" ]; then
+							TMPTXT=" ${C}(Trigger prop)${N}"
+						fi
+						if [ "$REVALUE" == 1 ] && [ "$CURRVALUE" != "$ORIGVALUE" ] && [ "$CURRVALUE" == "$MODULEVALUE" ]; then
+							if [ "$TMPTXT" ]; then
+								TMPTXT=$TMPTXT$ACTIVETXT
+							else
+								TMPTXT=$ACTIVETXT
+							fi
+						elif [ "$REVALUE" == 1 ]; then
+							if [ "$TMPTXT" ]; then
+								TMPTXT=$TMPTXT$ENABLEDTXT
+							else
+								TMPTXT=$ENABLEDTXT
+							fi
+							ENABLEDCOUNT=$(($ENABLEDCOUNT+1))
+						fi
+						echo -e "${G}$ITEMCOUNT${N} - ${ITEM}${TMPTXT}"
 					fi
 					ITEMCOUNT=$(($ITEMCOUNT+1))
 				fi
@@ -2060,46 +2059,39 @@ magiskhide_props_menu() {
 	fi
 }
 
-# Set sensitive props, $1=List to get props from, $2=List of safe values, $3=Set to "late" if set in late stage, or file name if saving values to a prop file
+# Set sensitive props, $1=List to get props from, $2=Set to "late" if set in late stage, or file name if saving values to a prop file
 sensitive_props() {
-	if [ "$3" == "late" ]; then
+	if [ "$2" == "late" ]; then
 		log_handler "Changing sensitive props, late"
 	else
 		log_handler "Changing sensitive props"
 	fi
 	for ITEM in $1; do
 		PROP=$(get_prop_type $ITEM)
-		REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-		ORIGPROP=$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')
-		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-		REVALUE=$(eval "echo \$$REPROP")
-		ORIGVALUE=$(eval "echo \$$ORIGPROP")
-		MODULEVALUE=$(eval "echo \$$MODULEPROP")
-		if [ "$REVALUE" == "true" ] && [ "$ORIGVALUE" ]; then
+		REVALUE=$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")
+		ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
+		MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
+		if [ "$REVALUE" == 1 ] && [ "$ORIGVALUE" ]; then
 			CTRLTRIGG=false;
 			magiskhide_trigger "$ITEM"
-			if [ "$CTRLTRIGG" == "true" ]; then
-				for CTRL in $2; do
-					if [ "$(get_eq_left "$CTRL")" == "$ITEM" ]; then
-						if [ "$(get_eq_right "$CTRL")" == "$ORIGVALUE" ]; then
-							log_handler "Skipping $ITEM, already set to the safe value."
-						else
-							log_handler "Changing/writing $ITEM."
-							if [ "$3" ] && [ "$3" != "late" ]; then
-								echo "${ITEM}=$MODULEVALUE" >> $3
-							else
-								resetprop -nv $ITEM "$MODULEVALUE" >> $LOGFILE 2>&1
-								if [ "$BOOTSTAGE" == "late" ] && [ "$PROPSOFTBOOT" = 1 ]; then
-									PROPLATE=true
-								fi
-							fi
+			if [ "$CTRLTRIGG" == "false" ]; then
+				if [ "$MODULEVALUE" == "$ORIGVALUE" ]; then
+					log_handler "Skipping $ITEM, already set to the safe value ($MODULEVALUE)."
+				else
+					log_handler "Changing/writing $ITEM."
+					if [ "$2" ] && [ "$2" != "late" ]; then
+						echo "${ITEM}=$MODULEVALUE" >> $2
+					else
+						resetprop -nv $ITEM "$MODULEVALUE" >> $LOGFILE 2>&1
+						if [ "$BOOTSTAGE" == "late" ] && [ "$PROPSOFTBOOT" = 1 ]; then
+							PROPLATE=true
 						fi
 					fi
-				done
+				fi
 			else
-				log_handler "Skipping $ITEM, it is not set to a triggering value."
+				log_handler "Skipping $ITEM, it is not set to a triggering value (set to $ORIGVALUE)."
 			fi
-		elif [ "$REVALUE" == "true" ] && [ -z "$ORIGVALUE" ]; then
+		elif [ "$REVALUE" == 1 ] && [ -z "$ORIGVALUE" ]; then
 			log_handler "Skipping $ITEM, does not exist on device."
 		else
 			log_handler "Skipping $ITEM, not set to change."
@@ -2110,8 +2102,9 @@ sensitive_props() {
 # Check if trigger prop, $1=prop to check
 magiskhide_trigger() {
 	for TRIGG in $TRIGGERLIST; do
-		if [ "$(get_eq_left "$TRIGG")" == "$(get_eq_left "$1")" ]; then
-			if [ "$(get_eq_right "$TRIGG")" != "$ORIGVALUE" ]; then
+		if [ "$(get_eq_left "$TRIGG")" == "$1" ]; then
+			TRIGGVALUE=$(get_eq_right "$TRIGG")
+			if [ "$TRIGGVALUE" != "$ORIGVALUE" ]; then
 				CTRLTRIGG=true;
 			fi
 			break
@@ -2123,9 +2116,10 @@ magiskhide_trigger() {
 safe_props() {
 	SAFE=""
 	if [ "$2" ]; then
-		for P in $SAFELIST$TRIGGERSAFELIST$LATESAFELIST; do
-			if [ "$(get_eq_left "$P")" == "$1" ]; then
-				if [ "$2" == "$(get_eq_right "$P")" ]; then
+		for P in $PROPSLIST$TRIGGERPROPS$LATEPROPS; do
+			MODULEVALUE=$(eval "echo \$$(echo "MODULE$(get_prop_type $ITEM)" | tr '[:lower:]' '[:upper:]')")
+			if [ "$P" == "$1" ]; then
+				if [ "$2" == "$MODULEVALUE" ]; then
 					SAFE=1
 				else
 					SAFE=0
@@ -2138,12 +2132,13 @@ safe_props() {
 
 # Find what prop value to change to, $1=header, $2=Currently set prop value
 change_to() {
-	for CHPROP in $SAFELIST$TRIGGERSAFELIST$LATESAFELIST; do
-		if [ "$(get_eq_left "$CHPROP")" == "$1" ]; then
-			if [ "$2" != "$(get_eq_right "$CHPROP")" ]; then
-				CHANGE=$(get_eq_right "$CHPROP")
+	for CHPROP in $PROPSLIST$TRIGGERPROPS$LATEPROPS; do
+		MODULEVALUE=$(eval "echo \$$(echo "MODULE$(get_prop_type $CHPROP)" | tr '[:lower:]' '[:upper:]')")
+		if [ "$CHPROP" == "$1" ]; then
+			if [ "$2" != "$MODULEVALUE" ]; then
+				CHANGE=$MODULEVALUE
 			else
-				CHANGE=$(eval "echo \$$(echo "ORIG$(get_prop_type $(get_eq_left "$CHPROP"))" | tr '[:lower:]' '[:upper:]')")
+				CHANGE=$(eval "echo \$$(echo "ORIG$(get_prop_type $CHPROP)" | tr '[:lower:]' '[:upper:]')")
 			fi
 			break
 		fi
@@ -2155,24 +2150,17 @@ reset_prop() {
 	before_change
 
 	# Sets variables
-	PROP=$(get_prop_type $1)
-	MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-	REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-	SUBA=$(get_file_value $LATEFILE "${MODULEPROP}=")
+	REPROP=$(echo "RE$(get_prop_type $1)" | tr '[:lower:]' '[:upper:]')
 
 	log_handler "Resetting $1 to default system value."
 
-	# Saves new module value
-	replace_fn $MODULEPROP "\"$SUBA\"" "\"\"" $LATEFILE
 	# Changes prop
-	replace_fn $REPROP "true" "false" $LATEFILE
+	replace_fn $REPROP 1 0 $LATEFILE
 
-	# Updates prop change variable in propsconf_late
-	if [ "$SUBA" ]; then
-		if [ "$PROPCOUNT" -gt 0 ]; then
-			PROPCOUNTP=$(($PROPCOUNT-1))
-			replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
-		fi
+	# Updates prop change variables in propsconf_late
+	if [ "$PROPCOUNT" -gt 0 ]; then
+		PROPCOUNTP=$(($PROPCOUNT-1))
+		replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
 	fi
 	if [ "$PROPCOUNTP" == 0 ]; then
 		replace_fn PROPEDIT 1 0 $LATEFILE
@@ -2183,32 +2171,25 @@ reset_prop() {
 	fi
 }
 
-# Use prop value, $1=prop name, $2=new prop value, $3=run option
+# Use prop value, $1=prop name, $3=run option
 change_prop() {
 	before_change
 
 	# Sets variables
-	PROP=$(get_prop_type $1)
-	MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-	REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-	SUBA=$(get_file_value $LATEFILE "${MODULEPROP}=")
+	REPROP=$(echo "RE$(get_prop_type $1)" | tr '[:lower:]' '[:upper:]')
 
-	log_handler "Changing $1 to $2."
+	log_handler "Changing $1 to safe value."
 
-	# Saves new module value
-	replace_fn $MODULEPROP "\"$SUBA\"" "\"$2\"" $LATEFILE
 	# Changes prop
-	replace_fn $REPROP "false" "true" $LATEFILE
+	replace_fn $REPROP 0 1 $LATEFILE
 
 	# Updates prop change variables in propsconf_late
-	if [ -z "$SUBA" ]; then
-		PROPCOUNTP=$(($PROPCOUNT+1))
-		replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
-	fi
+	PROPCOUNTP=$(($PROPCOUNT+1))
+	replace_fn PROPCOUNT $PROPCOUNT $PROPCOUNTP $LATEFILE
 	replace_fn PROPEDIT 0 1 $LATEFILE
 
-	if [ "$3" != "none" ]; then
-		after_change "$1" "$3"
+	if [ "$2" != "none" ]; then
+		after_change "$1" "$2"
 	fi
 }
 
@@ -2219,15 +2200,10 @@ reset_prop_all() {
 	log_handler "Resetting all props to default values."
 
 	for PROPTYPE in $PROPSLIST$TRIGGERPROPS$LATEPROPS; do
-		PROP=$(get_prop_type $PROPTYPE)
-		MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-		REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-		SUBA=$(get_file_value $LATEFILE "${MODULEPROP}=")
+		REPROP=$(echo "RE$(get_prop_type $PROPTYPE)" | tr '[:lower:]' '[:upper:]')
 
-		# Saves new module value
-		replace_fn $MODULEPROP "\"$SUBA\"" "\"\"" $LATEFILE
 		# Changes prop
-		replace_fn $REPROP "true" "false" $LATEFILE
+		replace_fn $REPROP 1 0 $LATEFILE
 	done
 
 	# Updates prop change variables in propsconf_late
@@ -2513,25 +2489,25 @@ export_settings() {
 	replace_fn CONFPARTPROPS true $([ $PARTPROPSSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	replace_fn CONFSIMBOOT default $([ $SIMSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
 	# MagiskHide sensitive props
-	replace_fn CONFDEBUGGABLE "\"\"" "\"$MODULEDEBUGGABLE\"" $EXPORTFILE
-	replace_fn CONFSECURE "\"\"" "\"$MODULESECURE\"" $EXPORTFILE
-	replace_fn CONFTYPE "\"\"" "\"$MODULETYPE\"" $EXPORTFILE
-	replace_fn CONFTAGS "\"\"" "\"$MODULETAGS\"" $EXPORTFILE
-	replace_fn CONFBOOTMODE "\"\"" "\"$MODULEBOOTMODE\"" $EXPORTFILE
-	replace_fn CONFMODE "\"\"" "\"$MODULEMODE\"" $EXPORTFILE
-	replace_fn CONFVENDORMODE "\"\"" "\"$MODULEVENDORMODE\"" $EXPORTFILE
-	replace_fn CONFHWC "\"\"" "\"$MODULEHWC\"" $EXPORTFILE
-	replace_fn CONFHWCOUNTRY "\"\"" "\"$MODULEHWCOUNTRY\"" $EXPORTFILE
-	replace_fn CONFDEVICE_STATE "\"\"" "\"$MODULEDEVICE_STATE\"" $EXPORTFILE
-	replace_fn CONFVERIFIEDBOOTSTATE "\"\"" "\"$MODULEVERIFIEDBOOTSTATE\"" $EXPORTFILE
-	replace_fn CONFVENDORVERIFIEDBOOTSTATE "\"\"" "\"$MODULEVENDORVERIFIEDBOOTSTATE\"" $EXPORTFILE
-	replace_fn CONFLOCKED "\"\"" "\"$MODULELOCKED\"" $EXPORTFILE
-	replace_fn CONFVERITYMODE "\"\"" "\"$MODULEVERITYMODE\"" $EXPORTFILE
-	replace_fn CONFBOOTWARRANTY_BIT "\"\"" "\"$MODULEBOOTWARRANTY_BIT\"" $EXPORTFILE
-	replace_fn CONFWARRANTY_BIT "\"\"" "\"$MODULEWARRANTY_BIT\"" $EXPORTFILE
-	replace_fn CONFVENDORBOOTWARRANTY_BIT "\"\"" "\"$MODULEVENDORBOOTWARRANTY_BIT\"" $EXPORTFILE
-	replace_fn CONFVENDORWARRANTY_BIT "\"\"" "\"$MODULEVENDORWARRANTY_BIT\"" $EXPORTFILE
-	replace_fn CONFVENDORDEVICE_STATE "\"\"" "\"$MODULEVENDORDEVICE_STATE\"" $EXPORTFILE
+	replace_fn CONFDEBUGGABLE true $([ $REDEBUGGABLE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFSECURE true $([ $RESECURE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFTYPE true $([ $RETYPE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFTAGS true $([ $RETAGS == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBOOTMODE true $([ $REBOOTMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFMODE true $([ $REMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVENDORMODE true $([ $REVENDORMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFHWC true $([ $REHWC == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFHWCOUNTRY true $([ $REHWCOUNTRY == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFSTATE true $([ $RESTATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVERIFIEDBOOTSTATE true $([ $REVERIFIEDBOOTSTATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVENDORVERIFIEDBOOTSTATE true $([ $REVENDORVERIFIEDBOOTSTATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFLOCKED true $([ $RELOCKED == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVERITYMODE true $([ $REVERITYMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBOOTWARRANTY_BIT true $([ $REBOOTWARRANTY_BIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBIT true $([ $REBIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVENDORBOOTWARRANTY_BIT true $([ $REVENDORBOOTWARRANTY_BIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVENDORWARRANTY_BIT true $([ $REVENDORWARRANTY_BIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFVENDORDEVICE_STATE true $([ $REVENDORDEVICE_STATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
 	# Custom props
 	replace_fn CONFPROPS "\"\"" "\"$CUSTOMPROPS\"" $EXPORTFILE
 	replace_fn CONFPROPSPOST "\"\"" "\"$CUSTOMPROPSPOST\"" $EXPORTFILE

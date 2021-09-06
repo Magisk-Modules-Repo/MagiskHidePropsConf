@@ -1005,6 +1005,7 @@ menu_force_basic() {
 		else
 			LISTTXT=""
 		fi
+		fn_oem_file
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}"
 			echo ""
@@ -1016,8 +1017,8 @@ menu_force_basic() {
 			echo "forced BASIC key attestation?"
 			echo ""
 			echo "The currently loaded value is:"
-			echo -e "${C}$(getprop ro.product.model)${N}"
-			if [ "$BASICATTEST" == 1 ] && [ "$ORIGMODEL" != "$(getprop ro.product.model)" ]; then
+			echo -e "${C}$CURRMODEL${N}"
+			if [ "$BASICATTEST" == 1 ] && [ "$ORIGMODEL" != "$CURRMODEL" ] && [ "$CURRMODEL" == "$BASICATTMODEL" -o "$CURRMODEL" == "$BASICATTCUST" -o "$CURRMODEL" == "$BASICATTLIST" ]; then
 				echo "(Set by this module.)"
 			fi
 			echo ""
@@ -2104,7 +2105,7 @@ menu_bootstage_sim() {
 	done
 }
 
-# Fourth menu level - MagiskHide props soft reboot, $1=header
+# Fourth menu level - Devices simulation soft reboot, $1=header
 menu_softboot_sim() {
 	INPUT4=""
 	while true
@@ -2165,6 +2166,7 @@ menu_magiskhide_props() {
 	while true
 	do
 		ITEMCOUNT=0
+		ENABLEDCOUNT=0
 		if [ -z "$INPUT2" ]; then
 			menu_header "${C}$1${N}\n Select an option below:"
 			echo ""
@@ -2173,9 +2175,9 @@ menu_magiskhide_props() {
 			echo -e "${C}Note that only props that originally are${N}"
 			echo -e "${C}set to sensitive values will show in the list.${N}"
 			echo ""
-			magiskhide_props_menu "$SAFELIST"
-			magiskhide_props_menu "$TRIGGERSAFELIST" "trigger"
-			magiskhide_props_menu "$LATESAFELIST" "late"
+			magiskhide_props_menu "$PROPSLIST"
+			magiskhide_props_menu "$TRIGGERPROPS" "trigger"
+			magiskhide_props_menu "$LATEPROPS" "late"
 			if [ "$ITEMCOUNT" == 0 ]; then
 				echo "None of the sensitive props available"
 				echo "need to be changed."
@@ -2209,7 +2211,7 @@ menu_magiskhide_props() {
 					break
 				fi
 			else
-				if [ "$PROPCOUNT" -lt $(($ITEMCOUNT-3)) ]; then
+				if [ "$PROPCOUNT" -lt $(($ITEMCOUNT-3)) ] || [ "$ENABLEDCOUNT" -gt 2 ]; then
 					echo -e "${G}a${N} - Set all props"
 				fi
 				if [ "$PROPCOUNT" -gt 2 ]; then
@@ -2239,7 +2241,7 @@ menu_magiskhide_props() {
 				fi
 			;;
 			a|A)
-				if [ "$PROPCOUNT" -lt $(($ITEMCOUNT-3)) ] && [ "$ITEMCOUNT" != 0 ]; then
+				if [ "$ITEMCOUNT" != 0 ] && [ "$PROPCOUNT" -lt $(($ITEMCOUNT-3)) ] || [ "$ENABLEDCOUNT" -gt 2 ]; then
 					menu_change_prop "Set all props"
 				else
 					invalid_input 1 2
@@ -2285,13 +2287,14 @@ menu_magiskhide_props() {
 			*)
 				if [ "$INPUT2" -ge 1 -a "$INPUT2" -lt "$ITEMCOUNT" ] && [ "$ITEMCOUNT" != 0 ]; then
 					ITEMCOUNT=1
-					for ITEM in $SAFELIST$TRIGGERSAFELIST$LATESAFELIST; do
-						CURRVALUE=$(eval "echo \$$(echo "CURR$(get_prop_type $(get_eq_left "$ITEM"))" | tr '[:lower:]' '[:upper:]')")
-						ORIGVALUE=$(eval "echo \$$(echo "ORIG$(get_prop_type $(get_eq_left "$ITEM"))" | tr '[:lower:]' '[:upper:]')")
-						MODULEVALUE=$(eval "echo \$$(echo "MODULE$(get_prop_type $(get_eq_left "$ITEM"))" | tr '[:lower:]' '[:upper:]')")
-						if [ "$ORIGVALUE" ] && [ "$(get_eq_right "$ITEM")" != "$ORIGVALUE" ]; then
+					for ITEM in $PROPSLIST$TRIGGERPROPS$LATEPROPS; do
+						PROP=$(get_prop_type $ITEM)
+						CURRVALUE=$(eval "echo \$$(echo "CURR${PROP}" | tr '[:lower:]' '[:upper:]')")
+						ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
+						MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
+						if [ "$ORIGVALUE" ] && [ "$MODULEVALUE" != "$ORIGVALUE" ]; then
 							if [ "$ITEMCOUNT" == "$INPUT2" ]; then
-								menu_change_prop "$(get_eq_left "$ITEM")" "$CURRVALUE" "$ORIGVALUE" "$MODULEVALUE"
+								menu_change_prop "$ITEM" "$CURRVALUE" "$ORIGVALUE" "$MODULEVALUE"
 								break
 							fi
 							ITEMCOUNT=$(($ITEMCOUNT+1))
@@ -2317,15 +2320,17 @@ menu_change_prop() {
 				TMPITEMS=""
 				CNT=1
 				TMPLST=$(echo $2 | sed 's|\,| |g')
-				for ITEM in $SAFELIST$TRIGGERSAFELIST$LATESAFELIST; do
-					ORIGVALUE=$(eval "echo \$$(echo "ORIG$(get_prop_type $(get_eq_left "$ITEM"))" | tr '[:lower:]' '[:upper:]')")
-					if [ "$ORIGVALUE" ] && [ "$(get_eq_right "$ITEM")" != "$ORIGVALUE" ]; then
+				for ITEM in $PROPSLIST$TRIGGERPROPS$LATEPROPS; do
+					PROP=$(get_prop_type $ITEM)
+					ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
+					MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
+					if [ "$ORIGVALUE" ] && [ "$MODULEVALUE" != "$ORIGVALUE" ]; then
 						for INT in $TMPLST; do
 							if [ "$INT" == "$CNT" ]; then
 								if [ "$TMPITEMS" ]; then
-									TMPITEMS="$TMPITEMS $(get_eq_left "$ITEM")"
+									TMPITEMS="$TMPITEMS $ITEM"
 								else
-									TMPITEMS=$(get_eq_left "$ITEM")
+									TMPITEMS=$ITEM
 								fi
 							fi
 						done
@@ -2336,7 +2341,7 @@ menu_change_prop() {
 				echo "following props:"
 				echo ""
 				for ITEM in $TMPITEMS; do
-					CURRVALUE=$(eval "echo \$$(echo "CURR$(get_prop_type $(get_eq_left "$ITEM"))" | tr '[:lower:]' '[:upper:]')")
+					CURRVALUE=$(eval "echo \$$(echo "CURR$(get_prop_type $ITEM)" | tr '[:lower:]' '[:upper:]')")
 					safe_props $ITEM $CURRVALUE
 					if [ "$SAFE" == 1 ]; then
 						SAFETXT=" (currently set to a safe value)"
@@ -2350,7 +2355,6 @@ menu_change_prop() {
 				echo "MagiskHide sensitive props?"
 				TMPITEMS=$PROPSLIST$TRIGGERPROPS$LATEPROPS
 			else
-				REPROP=$(echo "RE$(get_prop_type "$1")" | tr '[:lower:]' '[:upper:]')
 				# Checks if the prop exists
 				if [ "$2" ]; then
 					CTRLTRIGG=false
@@ -2360,7 +2364,8 @@ menu_change_prop() {
 							break
 						fi
 					done
-					if [ "$4" ] && [ "$(get_file_value $LATEFILE "${REPROP}=")" == "true" ]; then
+					REVALUE=$(get_file_value $LATEFILE "$(echo "RE$(get_prop_type "$1")" | tr '[:lower:]' '[:upper:]')=")
+					if [ "$2" == "$4" ] && [ "$2" != "$3" ] && [ "$REVALUE" == 1 ]; then
 						if [ "$CTRLTRIGG" == "false" ]; then
 							PROPMODULETXT=", by this module"
 							BACKTXT=" back"
@@ -2406,6 +2411,12 @@ menu_change_prop() {
 					break
 				fi
 			fi
+			if [ "$ENABLEDCOUNT" -gt 1 ] && [ "$1" != "Set all props" ]; then
+				echo ""
+				echo -e "${C}Note that since there are several props${N}"
+				echo -e "${C}that are enabled but not active, these other${N}"
+				echo -e "${C}props will become active if you say \"yes\".${N}"
+			fi
 			echo ""
 			echo -en "Enter ${G}y${N}(es), ${G}n${N}(o) or ${G}e${N}(xit): "
 			read -r INPUT3
@@ -2419,8 +2430,7 @@ menu_change_prop() {
 						if [ "$SAFE" == 1 ] && [ "$1" != "Set all props" ]; then
 							reset_prop "$ITEM" "none"
 						else
-							change_to "$ITEM" $CURRVALUE
-							change_prop "$ITEM" $CHANGE "none"
+							change_prop "$ITEM" "none"
 						fi
 						. $LATEFILE
 					done
@@ -2428,7 +2438,7 @@ menu_change_prop() {
 				elif [ "$PROPMODULETXT" ]; then
 					menu_reset_prop "Reset $1" "$1"
 				else
-					change_prop "$1" $CHANGE
+					change_prop "$1"
 				fi
 				INPUT2=""
 				break
@@ -2555,6 +2565,9 @@ menu_bootstage_prop() {
 				echo "${R}disabled${N}."
 				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
 			fi
+			echo ""
+			echo -e "${C}Note that this option does not apply to${N}"
+			echo -e "${C}trigger or late props.${N}"
 			echo ""
 			echo "See the module readme or the"
 			echo "support thread @ XDA for details."
@@ -2956,10 +2969,11 @@ menu_new_custprop() {
 			;;
 			*)
 				PROP=$(get_prop_type $INPUT3)
-				REPROP=$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')
-				ORIGPROP=$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')
-				MODULEPROP=$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')
-				if [ "$(eval "echo \$$REPROP")" == "true" ] && [ "$(eval "echo \$$ORIGPROP")" ] && [ "$(eval "echo \$$MODULEPROP")" ] || [ "$(echo $CUSTOMPROPSLIST | grep -Eo "(^| )$INPUT3($| )")" ]; then
+				REVALUE=$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")
+				ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
+				MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
+
+				if [ "$REVALUE" == 1 ] && [ "$ORIGVALUE" ] && [ "$MODULEVALUE" ] || [ "$(echo $CUSTOMPROPSLIST | grep -Eo "(^| )$INPUT3($| )")" ]; then
 					menu_magiskhide_custprop "$INPUT3"
 				else
 					menu_set_new_custprop "$INPUT3"
@@ -3224,7 +3238,7 @@ menu_bootstage_custprop() {
 	done
 }
 
-# Fifth menu level - MagiskHide props soft reboot, $1=header
+# Fifth menu level - Custom props soft reboot, $1=header
 menu_softboot_cust() {
 	INPUT5=""
 	while true
@@ -4721,9 +4735,9 @@ do
 			fi
 			if [ "$PROPEDIT" == 1 ]; then
 				ITEMCOUNT=0
-				magiskhide_props_menu "$SAFELIST" "" "count"
-				magiskhide_props_menu "$TRIGGERSAFELIST" "trigger" "count"
-				magiskhide_props_menu "$LATESAFELIST" "late" "count"
+				magiskhide_props_menu "$PROPSLIST" "" "count"
+				magiskhide_props_menu "$TRIGGERPROPS" "trigger" "count"
+				magiskhide_props_menu "$LATEPROPS" "late" "count"
 				if [ "$ITEMCOUNT" != 0 ]; then
 					PROPTXT=$ACTIVE
 				fi

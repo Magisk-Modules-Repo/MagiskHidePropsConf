@@ -38,25 +38,25 @@ CONFPARTPROPS=true
 CONFSIMBOOT=default
 
 # MagiskHide sensitive props
-CONFDEBUGGABLE=""
-CONFSECURE=""
-CONFTYPE=""
-CONFTAGS=""
-CONFBOOTMODE=""
-CONFMODE=""
-CONFVENDORMODE=""
-CONFHWC=""
-CONFHWCOUNTRY=""
-CONFSTATE=""
-CONFVERIFIEDBOOTSTATE=""
-CONFVENDORVERIFIEDBOOTSTATE=""
-CONFLOCKED=""
-CONFVERITYMODE=""
-CONFBOOTWARRANTY_BIT=""
-CONFBIT=""
-CONFVENDORBOOTWARRANTY_BIT=""
-CONFVENDORWARRANTY_BIT=""
-CONFVENDORDEVICE_STATE=""
+CONFDEBUGGABLE=true
+CONFSECURE=true
+CONFTYPE=true
+CONFTAGS=true
+CONFBOOTMODE=true
+CONFMODE=true
+CONFVENDORMODE=true
+CONFHWC=true
+CONFHWCOUNTRY=true
+CONFSTATE=true
+CONFVERIFIEDBOOTSTATE=true
+CONFVENDORVERIFIEDBOOTSTATE=true
+CONFLOCKED=true
+CONFVERITYMODE=true
+CONFBOOTWARRANTY_BIT=true
+CONFBIT=true
+CONFVENDORBOOTWARRANTY_BIT=true
+CONFVENDORWARRANTY_BIT=true
+CONFVENDORDEVICE_STATE=true
 
 # Set custom props
 CONFPROPS=""
@@ -155,27 +155,12 @@ CONFBACK=false
 # post-fs-data or late_start service mode. This is useful if props don't seem to set
 # propely or the module's boot script seems to be causing issues during boot.
 
-# The MagiskHide prop variables can be set as follows
-# (note that these props are by default set to the safe value):
-# CONFDEBUGGABLE - 0 or 1 (sensitive value is "1")
-# CONFSECURE - 0 or 1 (sensitive value is "0")
-# CONFTYPE - user or userdebug (sensitive value is "userdebug")
-# CONFTAGS - release-keys or test-keys (sensitive value is "test-keys")
-# CONFBOOTMODE - unknown or recovery (sensitive value is "recovery")
-# CONFMODE - unknown or recovery (sensitive value is "recovery")
-# CONFVENDORMODE - unknown or recovery (sensitive value is "recovery")
-# CONFHWC - GLOBAL or CN (sensitive value is CN)
-# CONFHWCOUNTRY - GLOBAL or China (sensitive value is China)
-# CONFSTATE - locked or unlocked (sensitive value is unlocked)
-# CONFVERIFIEDBOOTSTATE - green or orange (sensitive value is orange)
-# CONFVENDORVERIFIEDBOOTSTATE - green or orange (sensitive value is orange)
-# CONFLOCKED - 1 or 0 (sensitive value is 0)
-# CONFVERITYMODE - enforcing or permissive (sensitive value is permissive)
-# CONFBOOTWARRANTY_BIT - 0 or 1 (sensitive value is "1")
-# CONFBIT - 0 or 1 (sensitive value is "1")
-# CONFVENDORBOOTWARRANTY_BIT - 0 or 1 (sensitive value is "1")
-# CONFVENDORWARRANTY_BIT - 0 or 1 (sensitive value is "1")
-# CONFVENDORDEVICE_STATE - locked or unlocked (sensitive value is unlocked)
+# The MagiskHide prop variables, CONFDEBUGGABLE, CONFSECURE, CONFTYPE, CONFBOOTMODE, CONFMODE,
+# CONFVENDORMODE, CONFHWC, CONFHWCOUNTRY, CONFSTATE, CONFVERIFIEDBOOTSTATE, CONFVENDORVERIFIEDBOOTSTATE,
+# CONFLOCKED, CONFVERITYMODE, CONFBOOTWARRANTY_BIT, CONFBIT, CONFVENDORBOOTWARRANTY_BIT,
+# CONFVENDORWARRANTY_BIT and CONFVENDORDEVICE_STATE can be either enabled or disabled (enabled by default).
+# If set to true, these props will be changed known safe values if found to contain sensitive values.
+# Helps with hiding root.
 
 # CONFPROPS should contain any custom props and the value you want the module to set.
 # Any props you've previously edited in build.prop, and more, can be set like this.

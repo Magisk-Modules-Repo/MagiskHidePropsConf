@@ -15,6 +15,11 @@ ui_print " Installing $MODVERSION "
 ui_print "************************"
 ui_print ""
 
+# Remove module directory if it exists on a fresh install
+if [ ! -d "$MODULESPATH/MagiskHidePropsConf"] && [ -d "$MHPCPATH" ]; then
+  rm -rf $MHPCPATH
+fi
+
 # Create module directory
 mkdir -pv $MHPCPATH
 
