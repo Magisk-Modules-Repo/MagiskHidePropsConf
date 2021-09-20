@@ -150,33 +150,6 @@
 	log_handler "Loading module settings"
 	. $LATEFILE
 
-	# Remove ro.build.selinux if present
-	if [ "$(grep "ro.build.selinux" $MHPCPATH/defaultprops)" ]; then
-		log_handler "Removing ro.build.selinux."
-		resetprop -v --delete ro.build.selinux >> $LOGFILE 2>&1
-	fi
-
-	if [ "$PROPEDIT" == 1 ]; then
-		# Set trigger props
-		for ITEM in $TRIGGERLIST; do
-			TMPPROP=$(get_eq_left "$ITEM")
-			TMPVAL=$(echo $(grep "\[${TMPPROP}\]" "$MHPCPATH/defaultprops") | sed -e "s|.*\]\:\ \[||g;s|\]$||g")
-			PROP=$(get_prop_type "$TMPPROP")
-			REVALUE=$(eval "echo \$$(echo "RE${PROP}" | tr '[:lower:]' '[:upper:]')")
-			MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
-			if [ "$REVALUE" == 1 ]; then
-				if [ "$TMPVAL" == "$(get_eq_right "$ITEM")" ]; then
-					log_handler "Changing/writing $TMPPROP."
-					resetprop -nv $TMPPROP $MODULEVALUE >> $LOGFILE 2>&1
-				elif [ "$TMPVAL" ]; then
-					log_handler "Skipping $TMPPROP, not set to triggering value (set to $TMPVAL)."
-				else
-					log_handler "Skipping $TMPPROP, does not exist on device."
-				fi
-			fi
-		done
-	fi
-
 	# Edits prop values if set for post-fs-data
 	if [ "$OPTIONBOOT" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$PRINTSTAGE" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$PATCHSTAGE" == 1 ] || [ "$OPTIONBOOT" != 1 -a "$SIMSTAGE" == 1 ] || [ "$CUSTOMPROPSPOST" ] || [ "$DELETEPROPS" ] || [ "$PROPBOOT" == 1 ]; then
 		# Load functions
@@ -218,7 +191,7 @@
 		fi
 		# Edit MagiskHide sensitive props if set for post-fs-data
 		if [ "$PROPEDIT" == 1 ] && [ "$PROPBOOT" == 1]; then
-			sensitive_props "$PROPSLIST"
+			sensitive_props "$PROPSLIST$TRIGGERLIST"
 		fi
 		# Edit custom props set for post-fs-data
 		custom_edit "CUSTOMPROPSPOST"

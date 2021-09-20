@@ -108,12 +108,20 @@ fi
 # Edit MagiskHide sensitive props
 if [ "$PROPEDIT" == 1 ]; then
 	# Edit all sensitive props, if set for late_start service
-	if [ "$PROPBOOT" == 2]; then
+	if [ "$PROPBOOT" == 2 ]; then
 		sensitive_props "$PROPSLIST"
+	fi
+	if [ "$PROPBOOT" == 0 ] || [ "$PROPBOOT" == 2 ]; then
+		sensitive_props "$TRIGGERPROPS"
 	fi
 
 	# Edit late senstive props
+	{
+	until [ $(getprop sys.boot_completed) == 1 ]; do
+		sleep 1
+	done
 	sensitive_props "$LATEPROPS" "late"
+	}&
 fi
 
 # Edit custom props set for late_start service
@@ -121,6 +129,12 @@ custom_edit "CUSTOMPROPSLATE"
 custom_edit "CUSTOMPROPSDELAY"
 
 # SELinux
+# Remove ro.build.selinux if present
+if [ "$(grep "ro.build.selinux" $MHPCPATH/defaultprops)" ]; then
+	log_handler "Removing ro.build.selinux."
+	resetprop -v --delete ro.build.selinux >> $LOGFILE 2>&1
+fi
+# Check for permissive SELinux
 if [ "$(getenforce)" == "Permissive" ] || [ "$(getenforce)" == "0" ]; then
 	log_handler "Dealing with permissive SELinux."
 	chmod 640 /sys/fs/selinux/enforce >> $LOGFILE 2>&1

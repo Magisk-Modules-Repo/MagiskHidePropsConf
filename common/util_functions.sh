@@ -124,25 +124,6 @@ if [ "$INSTFN" ]; then
 	REBOOTCHK
 	"
 	PROPSETTINGSLIST="
-	MODULEDEBUGGABLE
-	MODULESECURE
-	MODULETYPE
-	MODULETAGS
-	MODULEBOOTMODE
-	MODULEMODE
-	MODULEVENDORMODE
-	MODULEHWC
-	MODULEHWCOUNTRY
-	MODULESTATE
-	MODULEVERIFIEDBOOTSTATE
-	MODULEVENDORVERIFIEDBOOTSTATE
-	MODULELOCKED
-	MODULEVERITYMODE
-	MODULEBOOTWARRANTY_BIT
-	MODULEBIT
-	MODULEVENDORBOOTWARRANTY_BIT
-	MODULEVENDORWARRANTY_BIT
-	MODULEVENDORDEVICE_STATE
 	MODULEFINGERPRINT
 	SIMBRAND
 	SIMNAME
@@ -584,6 +565,7 @@ orig_check() {
 		ORIGVALUE="$(echo ${ORIGPROP})"
 		if [ "$ORIGVALUE" ]; then
 			ORIGLOAD=1
+			break
 		fi
 	done
 }
@@ -701,7 +683,7 @@ reboot_fn() {
 	done
 }
 
-# Reset module, $1=header, $2=Run options
+# Reset module, $1=header, $2=Run options, $3=Reboot or not
 reset_fn() {
 	before_change
 
@@ -710,7 +692,15 @@ reset_fn() {
 		replace_fn FINGERPRINTENB 1 $FINGERPRINTENB $LATEFILE
 	fi
 
-	after_change "$1" "$2"
+	if [ "$2" == "mismatch" ]; then
+		log_handler "Saving device default values."
+		default_save
+		log_handler "Default values saved to $LATEFILE."
+	fi
+
+	log_handler "Settings cleared."
+
+	after_change "$1" "$2" "$3"
 }
 
 # Checks for configuration file
@@ -727,7 +717,7 @@ config_file() {
 			   sleep 1
 			   touch $ITEM/testfbe
 			done
-			rm -f $ITEM/testfbe
+			rm -f $ITEM/testfbe >> $LOGFILE 2>&1
 			if [ -s "$ITEM/propsconf_conf" ]; then
 				CONFFILE="$ITEM/propsconf_conf"
 				break
@@ -749,30 +739,24 @@ config_file() {
 				CONFFINGERPRINT=$(getprop ro.vendor.build.fingerprint)
 				echo "ro.vendor.build.fingerprint: ${CONFFINGERPRINT}" >> $LOGFILE 2>&1
 			fi
-			# Updates prop values (including fingerprint)
-			PROPSTMPLIST=$PROPSLIST$TRIGGERPROPS$LATEPROPS"
-			ro.build.fingerprint
-			"
+			# Device fingerprint
+			if [ "$CONFFINGERPRINT" ]; then
+				if "$CONFFINGERPRINT" != "preserve" ] && [ "$FINGERPRINTENB" == 1 ]; then
+					change_print "$PROPTYPE" "$TMPPROP" "file"
+				fi
+			else
+				reset_print "$PROPTYPE" "file"
+			fi
+
+			# Updates sensitive props
+			PROPSTMPLIST="$PROPSLIST$TRIGGERPROPS$LATEPROPS"
 			for PROPTYPE in $PROPSTMPLIST; do
 				CONFPROP=$(echo "CONF$(get_prop_type $PROPTYPE)" | tr '[:lower:]' '[:upper:]')
 				TMPPROP=$(eval "echo \$$CONFPROP")
-				if [ "$TMPPROP" ]; then
-					log_handler "Checking $PROPTYPE settings."
-					if [ "$TMPPROP" != "preserve" ]; then
-						if [ "$PROPTYPE" == "ro.build.fingerprint" ]; then
-							if [ "$FINGERPRINTENB" == 1 ]; then
-								change_print "$PROPTYPE" "$TMPPROP" "file"
-							fi
-						else
-							change_prop "$PROPTYPE" "file"
-						fi
-					fi
+				if [ "$TMPPROP" == "true" ]; then
+					change_prop "$PROPTYPE" "file"
 				else
-					if [ "$PROPTYPE" == "ro.build.fingerprint" ]; then
-						reset_print "$PROPTYPE" "file"
-					else
-						reset_prop "$PROPTYPE" "file"
-					fi
+					reset_prop "$PROPTYPE" "file"
 				fi
 			done
 
@@ -1004,7 +988,7 @@ config_file() {
 		# Deletes the configuration file
 		log_handler "Deleting configuration file."
 		for ITEM in $CONFFILELOC; do
-			rm -f $ITEM/propsconf_conf
+			rm -f $ITEM/propsconf_conf >> $LOGFILE 2>&1
 		done
 		log_handler "Configuration file import complete."
 		if [ "$BOOTSTAGE" == "late" ]; then
@@ -1042,9 +1026,9 @@ update_check() {
 				log_print "Checking for module update."
 				MODPROPTMP=$MHPCPATH/module.prop
 				MODPROPWWW="https://raw.githubusercontent.com/Magisk-Modules-Repo/MagiskHidePropsConf/master/module.prop"
-				MODVERTMP="$(echo $(get_file_value $MODPROPTMP "version=") | sed 's|-.*||' | sed 's|v||' | sed 's|\.||g')"
 				module_v_ctrl
 				wget -T 5 -q -O $MODPROPTMP $MODPROPWWW >> $LOGFILE 2>&1
+				MODVERTMP="$(echo $(get_file_value $MODPROPTMP "version=") | sed 's|-.*||' | sed 's|v||' | sed 's|\.||g')"
 				if [ -s "$MODPROPTMP" ]; then
 					if [ "$VERSIONCMP" -lt "$MODVERTMP" ]; then
 						UPDATECHECK="There is a newer version of the module\navailable. Please update."
@@ -1058,7 +1042,7 @@ update_check() {
 						log_print "No update available."
 					fi
 				elif [ -f "$MODPROPTMP" ]; then
-					rm -f $MODPROPTMP
+					rm -f $MODPROPTMP >> $LOGFILE 2>&1
 					log_print "! File not downloaded!"
 					log_handler "File is empty."
 				else
@@ -1070,6 +1054,7 @@ update_check() {
 			sleep 0.5
 		;;
 	esac
+	rm -f $MODPROPTMP >> $LOGFILE 2>&1
 }
 
 # system.prop creation
@@ -1130,7 +1115,7 @@ settings_placement() {
 		FILETRANSF=$(get_file_value $SERVICEPATH/propsconf_late "SETTRANSF=")
 		LATEFILETMP="$SERVICEPATH/propsconf_late"
 	else
-		rm -f $LATEFILE
+		rm -f $LATEFILE >> $LOGFILE 2>&1
 		FILEV=0
 		FILETRANSF=$UPDATETRANSF
 		LATEFILETMP="$LATEFILE"
@@ -1234,6 +1219,7 @@ settings_placement() {
 		log_handler "Old settings file found in $SERVICEPATH."
 		rm -f $SERVICEPATH/propsconf_late >> $LOGFILE 2>&1
 	fi
+	rm -f $UPDATELATEFILE >> $LOGFILE 2>&1
 }
 
 # Checks for the Universal SafetyNet Fix module and similar modules editing device fingerprint
@@ -1248,10 +1234,21 @@ usnf_check() {
 				log_print "! Module - '$NAME'!"
 				log_print "! Fingerprint modification disabled!"
 				ui_print "!"
-				sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $UPDATELATEFILE
+				sed -i 's/FINGERPRINTENB=1/FINGERPRINTENB=0/' $LATEFILE
 			fi
 		fi
 	done
+}
+
+# Check for the new Universal SafetyNet Fix
+SNF_ctrl() {
+	if [ -d "$MODULESPATH/safetynet-fix" ]; then
+		TMPVER=$(echo $(get_file_value $MODULESPATH/safetynet-fix/module.prop "version=") | sed 's|v||g' | sed 's|\.||g')
+		if [ "$TMPVER" -ge "210" ]; then
+			log_handler "Found incompatible SafetyNet Fix. Disabling MagiskHide props."
+			reset_prop_all "Disabling MagiskHide props" "install"
+		fi
+	fi
 }
 
 # Check for bin/xbin
@@ -1270,21 +1267,21 @@ bin_check() {
 files_check() {
 	if [ -f "$POSTLATEFILE" ]; then
 		log_handler "Removing late_start service boot script from post-fs-data.d."
-		rm -f $POSTLATEFILE
+		rm -f $POSTLATEFILE >> $LOGFILE 2>&1
 	fi
 	if [ -f "$POSTFILE" ]; then
 		log_handler "Removing old post-fs-data boot script from post-fs-data.d"
-		rm -f $POSTFILE
+		rm -f $POSTFILE >> $LOGFILE 2>&1
 	fi
 	for ITEM in $CACHERM; do
 		if [ -f "$ITEM" ]; then
 			log_handler "Removing old log files ($ITEM)."
-			rm -f $ITEM
+			rm -f $ITEM >> $LOGFILE 2>&1
 		fi
 	done
 	if [ -f "$PRINTFILES/custom.sh" ]; then
 		log_handler "Removing broken custom.sh file."
-		rm -f $PRINTFILES/custom.sh
+		rm -f $PRINTFILES/custom.sh >> $LOGFILE 2>&1
 	fi
 }
 
@@ -1300,6 +1297,7 @@ load_settings() {
 script_install() {
 	load_settings
 	usnf_check
+	SNF_ctrl
 	bin_check
 	files_check
 	settings_placement
@@ -1579,20 +1577,20 @@ download_prints() {
 								log_print "Updated list to v${LISTVERSION}."
 								print_files
 							else
-								rm -f $PRINTSTMP
+								rm -f $PRINTSTMP >> $LOGFILE 2>&1
 								log_print "New fingerprints list requires module update."
 							fi
 						else
-							rm -f $PRINTSTMP
+							rm -f $PRINTSTMP >> $LOGFILE 2>&1
 							log_print "Fingerprints list up-to-date."
 						fi
 					else
-						rm -f $PRINTSTMP
+						rm -f $PRINTSTMP >> $LOGFILE 2>&1
 						log_print "! File not downloaded!"
 						log_handler "Couldn't extract list version."
 					fi
 				elif [ -f "$PRINTSTMP" ]; then
-					rm -f $PRINTSTMP
+					rm -f $PRINTSTMP >> $LOGFILE 2>&1
 					log_print "! File not downloaded!"
 					log_handler "File is empty."
 				else
@@ -2021,11 +2019,11 @@ magiskhide_props_menu() {
 			ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
 			MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
 			if [ "$ORIGVALUE" ] && [ "$MODULEVALUE" != "$ORIGVALUE" ]; then
-				CTRLTRIGG=false;
+				CTRLTRIGG=true;
 				if [ "$2" == "trigger" ]; then
 					magiskhide_trigger "$ITEM"
 				fi
-				if [ "$CTRLTRIGG" == "false" ]; then
+				if [ "$CTRLTRIGG" == "true" ]; then
 					if [ "$ITEMCOUNT" == 0 ]; then
 						ITEMCOUNT=1
 					fi
@@ -2072,9 +2070,9 @@ sensitive_props() {
 		ORIGVALUE=$(eval "echo \$$(echo "ORIG${PROP}" | tr '[:lower:]' '[:upper:]')")
 		MODULEVALUE=$(eval "echo \$$(echo "MODULE${PROP}" | tr '[:lower:]' '[:upper:]')")
 		if [ "$REVALUE" == 1 ] && [ "$ORIGVALUE" ]; then
-			CTRLTRIGG=false;
+			CTRLTRIGG=true;
 			magiskhide_trigger "$ITEM"
-			if [ "$CTRLTRIGG" == "false" ]; then
+			if [ "$CTRLTRIGG" == "true" ]; then
 				if [ "$MODULEVALUE" == "$ORIGVALUE" ]; then
 					log_handler "Skipping $ITEM, already set to the safe value ($MODULEVALUE)."
 				else
@@ -2105,7 +2103,7 @@ magiskhide_trigger() {
 		if [ "$(get_eq_left "$TRIGG")" == "$1" ]; then
 			TRIGGVALUE=$(get_eq_right "$TRIGG")
 			if [ "$TRIGGVALUE" != "$ORIGVALUE" ]; then
-				CTRLTRIGG=true;
+				CTRLTRIGG=false;
 			fi
 			break
 		fi
@@ -2193,7 +2191,7 @@ change_prop() {
 	fi
 }
 
-# Reset all module prop changes, $1=header
+# Reset all module prop changes, $1=header, $2=Run option
 reset_prop_all() {
 	before_change
 
@@ -2210,7 +2208,9 @@ reset_prop_all() {
 	replace_fn PROPCOUNT $PROPCOUNT 0 $LATEFILE
 	replace_fn PROPEDIT 1 0 $LATEFILE
 
-	after_change "$1"
+	if [ "$2" != "install" ]; then
+		after_change "$1"
+	fi
 }
 
 # ======================== Custom Props functions ========================
@@ -2233,7 +2233,7 @@ custom_edit() {
 						if [ "$(get_prop_delay_exec "$ITEM")" == "boot" ]; then
 							TMPBOOTTXT=" after \"Boot completed\""
 							until [ $(getprop sys.boot_completed) == 1 ]; do
-								sleep 0.1
+								sleep 1
 							done
 						fi
 						TMPI=1
@@ -2454,87 +2454,122 @@ reset_delprop() {
 }
 
 # ======================== Options functions ========================
+# Find value for export function, $1=Settings variable, $2=Type
+export_value() {
+	if [ "$2" == "stage" ]; then
+		if [ "$(eval "echo \$$1")" == 0 ]; then
+			TMP=default
+		elif [ "$(eval "echo \$$1")" == 1 ]; then
+			TMP=post
+		else
+			TMP=late
+		fi
+	elif [ "$2" == "binary" ]; then
+		if [ "$(eval "echo \$$1")" == 0 ]; then
+			TMP=false
+		else
+			TMP=true
+		fi
+	fi
+
+	echo "$TMP"
+}
+
 # Export all settings to a module configuration file, $1=header
 export_settings() {
 	before_change
 	log_handler "Exporting module settings to $EXPORTFILE."
+
 	# Load settings
 	. $LATEFILE
+
 	# Create export directory
+	rm -rf $EXPORTPATH >> $LOGFILE 2>&1
 	mkdir -pv $EXPORTPATH >> $LOGFILE 2>&1
+
 	# Create file and Delete instructions
-	head -n 59 $MODPATH/common/propsconf_conf > $EXPORTFILE
+	head -n 87 $MODPATH/common/propsconf_conf > $EXPORTFILE
+
 	# Export settings
 	# Fingerprint
 	replace_fn CONFFINGERPRINT "\"\"" "\"$MODULEFINGERPRINT\"" $EXPORTFILE
-	replace_fn CONFVENDPRINT false $([ $PRINTVEND == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFPRINTBOOT default $([ $PRINTSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
-	replace_fn CONFPATCHBOOT late $([ $PATCHSTAGE == 0 ] && echo "default" || $([ $PATCHSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
+	replace_fn CONFVENDPRINT false $(export_value PRINTVEND binary) $EXPORTFILE
+	replace_fn CONFPRINTBOOT default $(export_value PRINTSTAGE stage) $EXPORTFILE
+	replace_fn CONFPATCHBOOT late $(export_value PATCHSTAGE stage) $EXPORTFILE
+
 	# Force BASIC attestation
-	replace_fn CONFBASICATTEST false $([ $BASICATTEST == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBASICATTEST false $(export_value BASICATTEST binary) $EXPORTFILE
 	replace_fn CONFBASICATTCUST "\"\"" "\"$BASICATTCUST\"" $EXPORTFILE
+
 	# Device Simulation
-	replace_fn CONFDEVSIM false $([ $DEVSIM == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFBRAND false $([ $BRANDSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFNAME false $([ $NAMESET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFDEVICE false $([ $DEVICESET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFRELEASE false $([ $RELEASESET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFID false $([ $IDSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFINCREMENTAL false $([ $INCREMENTALSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFDISPLAY false $([ $DISPLAYSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFSDK false $([ $SDKSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFMANUFACTURER false $([ $MANUFACTURERSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFMODEL false $([ $MODELSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFDESCRIPTION true $([ $DESCRIPTIONSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFPARTPROPS true $([ $PARTPROPSSET == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFSIMBOOT default $([ $SIMSTAGE == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
+	replace_fn CONFDEVSIM false $(export_value DEVSIM binary) $EXPORTFILE
+	replace_fn CONFBRAND false $(export_value BRANDSET binary) $EXPORTFILE
+	replace_fn CONFNAME false $(export_value NAMESET binary) $EXPORTFILE
+	replace_fn CONFDEVICE false $(export_value DEVICESET binary) $EXPORTFILE
+	replace_fn CONFRELEASE false $(export_value RELEASESET binary) $EXPORTFILE
+	replace_fn CONFID false $(export_value IDSET binary) $EXPORTFILE
+	replace_fn CONFINCREMENTAL false $(export_value INCREMENTALSET binary) $EXPORTFILE
+	replace_fn CONFDISPLAY false $(export_value DISPLAYSET binary) $EXPORTFILE
+	replace_fn CONFSDK false $(export_value SDKSET binary) $EXPORTFILE
+	replace_fn CONFMANUFACTURER false $(export_value MANUFACTURERSET binary) $EXPORTFILE
+	replace_fn CONFMODEL false $(export_value MODELSET binary) $EXPORTFILE
+	replace_fn CONFDESCRIPTION true $(export_value DESCRIPTIONSET binary) $EXPORTFILE
+	replace_fn CONFPARTPROPS true $(export_value PARTPROPSSET binary) $EXPORTFILE
+	replace_fn CONFSIMBOOT default $(export_value SIMSTAGE stage) $EXPORTFILE
+
 	# MagiskHide sensitive props
-	replace_fn CONFDEBUGGABLE true $([ $REDEBUGGABLE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFSECURE true $([ $RESECURE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFTYPE true $([ $RETYPE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFTAGS true $([ $RETAGS == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFBOOTMODE true $([ $REBOOTMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFMODE true $([ $REMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVENDORMODE true $([ $REVENDORMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFHWC true $([ $REHWC == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFHWCOUNTRY true $([ $REHWCOUNTRY == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFSTATE true $([ $RESTATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVERIFIEDBOOTSTATE true $([ $REVERIFIEDBOOTSTATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVENDORVERIFIEDBOOTSTATE true $([ $REVENDORVERIFIEDBOOTSTATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFLOCKED true $([ $RELOCKED == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVERITYMODE true $([ $REVERITYMODE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFBOOTWARRANTY_BIT true $([ $REBOOTWARRANTY_BIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFBIT true $([ $REBIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVENDORBOOTWARRANTY_BIT true $([ $REVENDORBOOTWARRANTY_BIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVENDORWARRANTY_BIT true $([ $REVENDORWARRANTY_BIT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFVENDORDEVICE_STATE true $([ $REVENDORDEVICE_STATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFDEBUGGABLE true $(export_value REDEBUGGABLE binary) $EXPORTFILE
+	replace_fn CONFSECURE true $(export_value RESECURE binary) $EXPORTFILE
+	replace_fn CONFTYPE true $(export_value RETYPE binary) $EXPORTFILE
+	replace_fn CONFTAGS true $(export_value RETAGS binary) $EXPORTFILE
+	replace_fn CONFBOOTMODE true $(export_value REBOOTMODE binary) $EXPORTFILE
+	replace_fn CONFMODE true $(export_value REMODE binary) $EXPORTFILE
+	replace_fn CONFVENDORMODE true $(export_value REVENDORMODE binary) $EXPORTFILE
+	replace_fn CONFHWC true $(export_value REHWC binary) $EXPORTFILE
+	replace_fn CONFHWCOUNTRY true $(export_value REHWCOUNTRY binary) $EXPORTFILE
+	replace_fn CONFSTATE true $(export_value RESTATE binary) $EXPORTFILE
+	replace_fn CONFVERIFIEDBOOTSTATE true $(export_value REVERIFIEDBOOTSTATE binary) $EXPORTFILE
+	replace_fn CONFVENDORVERIFIEDBOOTSTATE true $(export_value REVENDORVERIFIEDBOOTSTATE binary) $EXPORTFILE
+	replace_fn CONFLOCKED true $(export_value RELOCKED binary) $EXPORTFILE
+	replace_fn CONFVERITYMODE true $(export_value REVERITYMODE binary) $EXPORTFILE
+	replace_fn CONFBOOTWARRANTY_BIT true $(export_value REBOOTWARRANTY_BIT binary) $EXPORTFILE
+	replace_fn CONFBIT true $(export_value REBIT binary) $EXPORTFILE
+	replace_fn CONFVENDORBOOTWARRANTY_BIT true $(export_value REVENDORBOOTWARRANTY_BIT binary) $EXPORTFILE
+	replace_fn CONFVENDORWARRANTY_BIT true $(export_value REVENDORWARRANTY_BIT binary) $EXPORTFILE
+	replace_fn CONFVENDORDEVICE_STATE true $(export_value REVENDORDEVICE_STATE binary) $EXPORTFILE
+
 	# Custom props
 	replace_fn CONFPROPS "\"\"" "\"$CUSTOMPROPS\"" $EXPORTFILE
 	replace_fn CONFPROPSPOST "\"\"" "\"$CUSTOMPROPSPOST\"" $EXPORTFILE
 	replace_fn CONFPROPSLATE "\"\"" "\"$CUSTOMPROPSLATE\"" $EXPORTFILE
 	replace_fn CONFPROPSDELAY "\"\"" "\"$CUSTOMPROPSDELAY\"" $EXPORTFILE
+
 	# Delete props
 	replace_fn CONFDELPROPS "\"\"" "\"$DELETEPROPS\"" $EXPORTFILE
+
 	# Soft reboot
-	replace_fn CONFOPTIONSOFTBOOT false $([ $OPTIONSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFPRINTSOFTBOOT false $([ $PRINTSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFPATCHSOFTBOOT false $([ $PATCHSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFSIMSOFTBOOT false $([ $SIMSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFCUSTOMSOFTBOOT false $([ $CUSTOMSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFPROPSOFTBOOT false $([ $PROPSOFTBOOT == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFOPTIONSOFTBOOT false $(export_value OPTIONSOFTBOOT binary) $EXPORTFILE
+	replace_fn CONFPRINTSOFTBOOT false $(export_value PRINTSOFTBOOT binary) $EXPORTFILE
+	replace_fn CONFPATCHSOFTBOOT false $(export_value PATCHSOFTBOOT binary) $EXPORTFILE
+	replace_fn CONFSIMSOFTBOOT false $(export_value SIMSOFTBOOT binary) $EXPORTFILE
+	replace_fn CONFCUSTOMSOFTBOOT false $(export_value CUSTOMSOFTBOOT binary) $EXPORTFILE
+	replace_fn CONFPROPSOFTBOOT false $(export_value PROPSOFTBOOT binary) $EXPORTFILE
+
 	# Module settings
-	replace_fn CONFBOOT default $([ $OPTIONBOOT == 0 ] && echo "default" || $([ $PRINTSTAGE == 1 ] && echo "post" || echo "late")) $EXPORTFILE
-	replace_fn CONFCOLOUR true $([ $OPTIONCOLOUR == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFWEBP true $([ $OPTIONWEBP == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFWEBU true $([ $OPTIONWEBU == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFUPDATE true $([ $OPTIONUPDATE == 0 ] && echo "false" || echo "true") $EXPORTFILE
-	replace_fn CONFBACK false $([ $OPTIONBACK == 0 ] && echo "false" || echo "true") $EXPORTFILE
+	replace_fn CONFBOOT default $(export_value OPTIONBOOT stage) $EXPORTFILE
+	replace_fn CONFCOLOUR true $(export_value OPTIONCOLOUR binary) $EXPORTFILE
+	replace_fn CONFWEBP true $(export_value OPTIONWEBP binary) $EXPORTFILE
+	replace_fn CONFWEBU true $(export_value OPTIONWEBU binary) $EXPORTFILE
+	replace_fn CONFUPDATE true $(export_value OPTIONUPDATE binary) $EXPORTFILE
+	replace_fn CONFBACK false $(export_value OPTIONBACK binary) $EXPORTFILE
+
 	log_handler "Export done."
+
 	# Print info
 	menu_header "${C}$1${N}"
 	echo ""
 	echo "A module configuration file with"
-	echo "your current settings haS been"
+	echo "your current settings has been"
 	echo "saved to your internal storage,"
 	echo -e "in the ${C}/mhpc${N} directory."
 	echo ""
@@ -2573,7 +2608,7 @@ collect_logs() {
 
 	# Copy package to internal storage
 	cp -f $MHPCPATH/propslogs.tar.gz /storage/emulated/0 >> $LOGFILE 2>&1
-	rm -f $MHPCPATH/propslogs.tar.gz
+	rm -f $MHPCPATH/propslogs.tar.gz >> $LOGFILE 2>&1
 
 	# Remove temporary directory
 	rm -rf $TMPLOGLOC >> $LOGFILE 2>&1
@@ -2586,7 +2621,7 @@ collect_logs() {
 		echo ""
 		echo "Logs and information collected."
 		echo ""
-		echo "The packaged file (${C}propslogs.tar.gz${N})"
+		echo -e "The packaged file (${C}propslogs.tar.gz${N})"
 		echo "has been saved to the root of your device's"
 		echo "internal storage."
 		echo "If it did not, please see the documentation"

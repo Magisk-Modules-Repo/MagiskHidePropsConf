@@ -100,6 +100,26 @@ if [ ! -f "$BBPATH" ]; then
 	exit 0
 fi
 
+# Check settings file
+module_v_ctrl
+if [ "$(get_file_value $MODPATH/module.prop "settingsVersion=")" != "$SCRIPTV" ]; then
+	log_handler "Settings version mismatch ($SCRIPTCTRL vs $SCRIPTV)."
+	menu_header "${C}Settings version mismatch${N}"
+	echo ""
+	echo "The settings file in use does not match"
+	echo "the module version."
+	echo ""
+	echo -e "${C}Settings and props will be cleared.${N}"
+	echo ""
+	echo "Any props that were set previously will"
+	echo "still be loaded into memory, but need"
+	echo "to be set up again before a reboot."
+	echo ""
+	echo -n "Press enter to continue..."
+	read -r INPUTTMP
+	reset_fn "Settings version mismatch" "mismatch" "noreboot"
+fi
+
 # Check MagiskHide status
 MHTEMP=$(magiskhide status) >> $LOGFILE 2>&1
 
@@ -232,7 +252,7 @@ menu_change_fingerprint() {
 					PATCHSTAGETXT="late_start service"
 				fi
 				if [ "$2" ]; then
-					echo "Currently set to${PRINTMODULETXT}:"
+					echo -e "Currently set to${PRINTMODULETXT}:"
 					echo ""
 					if [ "$PRINTMODULETXT" ]; then
 						get_device_used "$2"
@@ -1868,7 +1888,7 @@ menu_dev_sim_prop() {
 				echo "$TYPETXT simulation props?"
 				echo ""
 				if [ "$TMPTXT" == "Multi" ]; then
-					echo "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
+					echo -e "${C}$(echo $TMPITEMS | sed 's| |\n|g')${N}"
 					echo ""
 				fi
 				echo -e "${R}Warning!${N} Some of these props"
@@ -2357,16 +2377,16 @@ menu_change_prop() {
 			else
 				# Checks if the prop exists
 				if [ "$2" ]; then
-					CTRLTRIGG=false
+					CTRLTRIGG=true
 					for TRIGG in $TRIGGERPROPS; do
 						if [ "$TRIGG" == "$1" ]; then
-							CTRLTRIGG=true
+							CTRLTRIGG=false
 							break
 						fi
 					done
 					REVALUE=$(get_file_value $LATEFILE "$(echo "RE$(get_prop_type "$1")" | tr '[:lower:]' '[:upper:]')=")
 					if [ "$2" == "$4" ] && [ "$2" != "$3" ] && [ "$REVALUE" == 1 ]; then
-						if [ "$CTRLTRIGG" == "false" ]; then
+						if [ "$CTRLTRIGG" == "true" ]; then
 							PROPMODULETXT=", by this module"
 							BACKTXT=" back"
 						else
@@ -2374,7 +2394,7 @@ menu_change_prop() {
 							BACKTXT="${R}deactivate${N}"
 						fi
 					else
-						if [ "$CTRLTRIGG" == "false" ]; then
+						if [ "$CTRLTRIGG" == "true" ]; then
 							PROPMODULETXT=""
 							BACKTXT=""
 						else
@@ -2382,7 +2402,7 @@ menu_change_prop() {
 							BACKTXT="${G}activate${N}"
 						fi
 					fi
-					if [ "$CTRLTRIGG" == "false" ]; then
+					if [ "$CTRLTRIGG" == "true" ]; then
 						echo -e "Currently set to ${C}$2${N}${PROPMODULETXT}."
 						if [ "$2" != "$3" ]; then
 							echo -e "The original value is ${C}$3${N}."
@@ -2555,14 +2575,14 @@ menu_bootstage_prop() {
 			echo -e "$TMPTXT?"
 			echo ""
 			if [ "$PROPBOOT" == 2 ] && [ "$PROPSOFTBOOT" == 0 ]; then
-				echo "Since you have the ${C}late_start service${N}"
-				echo "boot stage set, you can also ${G}enable${N} a"
+				echo -e "Since you have the ${C}late_start service${N}"
+				echo -e "boot stage set, you can also ${G}enable${N} a"
 				echo "soft reboot at the end of the boot process."
 				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
 			elif [ "$PROPBOOT" == 2 ] && [ "$PROPSOFTBOOT" == 1 ]; then
-				echo "Soft reboot at the end of the ${C}late_start${N}"
-				echo "${C}service${N} boot stage is ${G}enabled${N} and can be"
-				echo "${R}disabled${N}."
+				echo -e "Soft reboot at the end of the ${C}late_start${N}"
+				echo -e "${C}service${N} boot stage is ${G}enabled${N} and can be"
+				echo -e "${R}disabled${N}."
 				CHOICETXT="${G}r${N}(eboot), $CHOICETXT"
 			fi
 			echo ""
@@ -4540,7 +4560,7 @@ if [ "$ISSUECHK" == 1 ] && [ "$1" != "-s" ]; then
 fi
 
 # ====================================================
-# ====================== Options =====================
+# =================== Options, etc ===================
 # ====================================================
 
 # Testing connection
@@ -4702,8 +4722,14 @@ while true
 do
 	orig_check
 	if [ "$ORIGLOAD" == 0 ]; then
-		log_handler "Original values are not loaded in propsconf_late."
-		reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
+		log_handler "Original values are not loaded in propsconf_late. Attempting to fix..."
+		log_handler "Saving device default values."
+		default_save
+		log_handler "Default values saved to $LATEFILE."
+		orig_check
+		if [ "$ORIGLOAD" == 0 ]; then
+			reboot_fn "The original prop values are not loaded,\n possibly due to a full reset of the module.\n\n Please reboot your device to reset." "reset-script"
+		fi
 	else
 		if [ "$DEVPRINTS" == "true" ]; then
 			INPUT=1

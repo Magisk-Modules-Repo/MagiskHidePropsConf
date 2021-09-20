@@ -51,6 +51,8 @@ Keep in mind that this module cannot help you pass CTS if your device uses hardw
 - [Device simulation](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf/blob/master/README.md#device-simulation)
 ##### MagiskHide props
 - [Set/reset MagiskHide Sensitive props](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#setreset-magiskhide-sensitive-props)
+##### SELinux
+- [SELinux Permissive](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#selinux-permissive)
 ##### Custom props
 - [Change/set custom prop values](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#changeset-custom-prop-values)
 - [Removing prop values](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#removing-prop-values)
@@ -272,7 +274,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v132_**
+**_Current fingerprints list version - v133_**
 
 
 ## Please add support for device X
@@ -341,28 +343,39 @@ Up to and including Magisk v23 MagiskHide changes some sensitive props to "safe"
 This feature is enabled by default and will automatically change any triggering values it finds to "safe" values.
 
 The props in question are:
+__General__
 - ro.debuggable
 - ro.secure
 - ro.build.type
+
+__Rootbeer, Microsoft, etc__
 - ro.build.tags
+
+__SafetyNet, unlocked bootloader, etc__
 - ro.boot.vbmeta.device_state
 - ro.boot.verifiedbootstate
 - ro.boot.flash.locked
 - ro.boot.veritymode
+- vendor.boot.vbmeta.device_state
+
+__Samsung__
 - ro.boot.warranty_bit
 - ro.warranty_bit
 - ro.vendor.boot.warranty_bit
 - ro.vendor.warranty_bit
-- vendor.boot.vbmeta.device_state
 
-There are a few props that will only change if a triggering value is detected, and these are (these will always be set in the post-fs-data boot stage):
+There are a few props that will only change if a triggering value is detected, and these are (by default these will be set in the late_start service boot stage but can be set during post-fs-data if this is changed in the settings):
+__Recovery mode__
 - ro.bootmode
 - ro.boot.mode
 - vendor.boot.mode
+
+__MIUI cross-region flash__
 - ro.boot.hwc
 - ro.boot.hwcountry
 
-And lastly there are props that will only change in the late_start service boot stage. These are:
+And lastly there are props that will only change after boot is completed. These are:
+__SafetyNet, unlocked bootloader, etc__
 - vendor.boot.verifiedbootstate
 
 ro.build.selinux used to be changed by MagiskHide, but since some root detectors has a broken implementation of detecting this prop it is simply removed instead of changed (MagiskHide did this since Magisk build 20412).
@@ -372,6 +385,8 @@ If, for some reason, you need one or more of these to be kept as their original 
 It is possible to change or reset each prop individually or all of them at once. It is also possible to change several props simultaneously by choosing the corresponding numbers in the menu list and entering them separated by a comma. This will change any props set to a sensitive value to a safe value and vice versa.
 Example: If I would like to change ro.debuggable, ro.secure and ro.build.tags I would enter __"1,2,4"__.
 
+## SELinux Permissive
+If MagiskHide detected that SELinux was in a permissive state it would change permissions for a couple of SELinux related files on the device, to prevent detection of this state. This has been implemented in the late_start service script.
 
 ## Change/set custom prop values
 It's quite easy to change prop values with Magisk. With this module it's even easier. Just enter the prop you want to change and the new value and the module does the rest, nice and systemless. Any changes that you've previously done directly to build.prop, default.prop, etc, you can now do with this module instead. If you have a lot of props that you want to change it'll be a lot easier to use the [configuration file](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config/blob/master/README.md#configuration-file) (see below).
@@ -614,6 +629,16 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v6.1.0  
+- Added settings file version check.
+- Added a check for the new Universal SafetyNet Fix and disable sensitive props at install if v2.1.0 or newer is detected.
+- Changed default boot stage for SELinux fix and triggering props to late_start service.
+- Fixed update check.
+- Fixed a few problems with the configuration file import.
+- Make sure late props are set after boot completed (might break some features otherwise, forgot about that).
+- Minor UI fixes.
+- Added fingerprints for Asus Smartphone for Snapdragon Insiders and Xiaomi Mi 11 Lite Indonesia. Updated fingerprint for Xiaomi Mi 10 Lite 5G Global. List updated to v133.
+
 ### v6.0.2  
 - Fix problems when trying to disable/enable sensitive props.
 - Fix typo when checking for triggering prop values (meant that props wouldn't set properly during boot).
@@ -1031,7 +1056,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v132  
+### List v133  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
