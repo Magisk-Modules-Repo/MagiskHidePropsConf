@@ -274,7 +274,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v133_**
+**_Current fingerprints list version - v134_**
 
 
 ## Please add support for device X
@@ -1056,10 +1056,9 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v133  
+### List v134  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
-- Asus Smartphone for Snapdragon Insiders (11)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -1267,17 +1266,21 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 9 Pro LE2125 (11)
 - OnePlus 9 Pro TMO LE2127 (11)
 - OnePlus 9R India LE2101 (11)
-- OnePlus N10 5G Global BE2026 (10)
-- OnePlus N10 5G Europe BE2029 (10)
+- OnePlus N10 5G Global BE2026 (10 & 11)
+- OnePlus N10 5G Europe BE2029 (10  11)
 - OnePlus N10 5G Metro BE2025 (10)
-- OnePlus N10 5G T-Mobile BE2028 (10)
-- OnePlus N100 Global BE2011 (10)
-- OnePlus N100 Europe BE2013 (10)
+- OnePlus N10 5G T-Mobile BE2028 (10 & 11)
+- OnePlus N100 Global BE2011 (10 & 11)
+- OnePlus N100 Europe BE2013 (10 & 11)
 - OnePlus N100 Metro BE2015 (10)
 - OnePlus N100 T-Mobile BE2012 (10)
+- OnePlus N200 Global DE2117 (11)
+- OnePlus N200 T-Mobile DE2118 (11)
 - OnePlus Nord India AC2001 (10 & 11)
 - OnePlus Nord Europe AC2003 (10 & 11)
 - OnePlus Nord Global AC2003 (10 & 11)
+- OnePlus Nord 2 India DN2101 (11)
+- OnePlus Nord 2 Europe DN2103 (11)
 - OnePlus Nord CE EB13AA (11)
 - OnePlus Nord CE India EB2101 (11)
 - OnePlus Nord CE Europe EB2103 (11)
@@ -1473,7 +1476,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 10 China (10 & 11)
 - Xiaomi Mi 10 Europe (10)
 - Xiaomi Mi 10 Lite 5G Europe (10)
-- Xiaomi Mi 10 Lite 5G Global (10 & 11)
+- Xiaomi Mi 10 Lite 5G Global (10)
 - Xiaomi Mi 10 Pro China (10 & 11)
 - Xiaomi Mi 10 Ultra China (10 & 11)
 - Xiaomi Mi 10S China (11)
@@ -1481,7 +1484,6 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 10T Lite Europe (10)
 - Xiaomi Mi 10T Pro Europe (10)
 - Xiaomi Mi 11 China (11)
-- Xiaomi Mi 11 Lite Indonesia (11)
 - Xiaomi Mi A1 Global (7.1.2 & 8.0.0 & 8.1.0 & 9)
 - Xiaomi Mi A2 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi A2 Lite Global (8.1.0 & 9 & 10)
