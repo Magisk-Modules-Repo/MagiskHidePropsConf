@@ -342,7 +342,7 @@ Up to and including Magisk v23 MagiskHide changes some sensitive props to "safe"
 
 This feature is enabled by default and will automatically change any triggering values it finds to "safe" values.
 
-The props in question are:
+The props in question are:  
 __General__
 - ro.debuggable
 - ro.secure
@@ -374,7 +374,7 @@ __MIUI cross-region flash__
 - ro.boot.hwc
 - ro.boot.hwcountry
 
-And lastly there are props that will only change after boot is completed. These are:
+And lastly there are props that will only change after boot is completed. These are:  
 __SafetyNet, unlocked bootloader, etc__
 - vendor.boot.verifiedbootstate
 
