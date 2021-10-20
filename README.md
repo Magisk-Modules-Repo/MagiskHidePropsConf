@@ -364,7 +364,7 @@ __Samsung__
 - ro.vendor.boot.warranty_bit
 - ro.vendor.warranty_bit
 
-There are a few props that will only change if a triggering value is detected, and these are (by default these will be set in the late_start service boot stage but can be set during post-fs-data if this is changed in the settings):
+There are a few props that will only change if a triggering value is detected, and these are (by default these will be set in the late_start service boot stage but can be set during post-fs-data if this is changed in the settings):  
 __Recovery mode__
 - ro.bootmode
 - ro.boot.mode
