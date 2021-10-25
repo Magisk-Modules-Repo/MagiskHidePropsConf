@@ -274,7 +274,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v134_**
+**_Current fingerprints list version - v135_**
 
 
 ## Please add support for device X
@@ -342,7 +342,7 @@ Up to and including Magisk v23 MagiskHide changes some sensitive props to "safe"
 
 This feature is enabled by default and will automatically change any triggering values it finds to "safe" values.
 
-The props in question are:  
+The props in question are:
 __General__
 - ro.debuggable
 - ro.secure
@@ -364,7 +364,7 @@ __Samsung__
 - ro.vendor.boot.warranty_bit
 - ro.vendor.warranty_bit
 
-There are a few props that will only change if a triggering value is detected, and these are (by default these will be set in the late_start service boot stage but can be set during post-fs-data if this is changed in the settings):  
+There are a few props that will only change if a triggering value is detected, and these are (by default these will be set in the late_start service boot stage but can be set during post-fs-data if this is changed in the settings):
 __Recovery mode__
 - ro.bootmode
 - ro.boot.mode
@@ -374,7 +374,7 @@ __MIUI cross-region flash__
 - ro.boot.hwc
 - ro.boot.hwcountry
 
-And lastly there are props that will only change after boot is completed. These are:  
+And lastly there are props that will only change after boot is completed. These are:
 __SafetyNet, unlocked bootloader, etc__
 - vendor.boot.verifiedbootstate
 
@@ -629,6 +629,11 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v6.1.1  
+- Updated custom props so that it's possible to set the same prop with different values during different boot stages.
+- Updated some module checks to match the new state of Magisk (MagiskHide is dead, long live MagiskHide).
+- Added fingerprints for LG G8 ThinkQ, Samsung Galaxy S20 FE SM-G780F and Xiaomi Redmi K20 Europe. Updated fingerprints for Google Pixel 3 to 5a (all variants), Nokia 6.1 Plus, Oneplus 6T, 9 and 9 Pro (several variants), Xiaomi Mi 9T Europe, Mi 9T Pro Global and Redmi K20 Pro China. List updated to v135.
+
 ### v6.1.0  
 - Added settings file version check.
 - Added a check for the new Universal SafetyNet Fix and disable sensitive props at install if v2.1.0 or newer is detected.
@@ -1056,10 +1061,10 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v134  
+### List v135  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
-- Asus Smartphone for Snapdragon Insiders (11)
+- Asus Smartphone for Snapdragon Insiders ASUS_I007D (11)
 - Asus ZenFone 2 Laser ASUS_Z00LD (6.0.1)
 - Asus ZenFone 3 Max ASUS_X00DD (7.1.1 & 8.1.0)
 - Asus ZenFone 3 Ultra ASUS_A001 (7.0)
@@ -1100,16 +1105,16 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Google Pixel XL (7.1 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0 & 9 & 10)
 - Google Pixel 2 (8.0.0 & 8.1.0 & 9 & 10 & 11)
 - Google Pixel 2 XL (8.0.0 & 8.1.0 & 9 & 10 & 11)
-- Google Pixel 3 (9 & 10 & 11)
-- Google Pixel 3 XL (9 & 10 & 11)
-- Google Pixel 3a (9 & 10 & 11)
-- Google Pixel 3a XL (9 & 10 & 11)
-- Google Pixel 4 (10 & 11)
-- Google Pixel 4 XL (10 & 11)
-- Google Pixel 4a (10 & 11)
-- Google Pixel 4a 5G (11)
-- Google Pixel 5 (11)
-- Google Pixel 5a (11)
+- Google Pixel 3 (9 & 10 & 11 & 12)
+- Google Pixel 3 XL (9 & 10 & 11 & 12)
+- Google Pixel 3a (9 & 10 & 11 & 12)
+- Google Pixel 3a XL (9 & 10 & 11 & 12)
+- Google Pixel 4 (10 & 11 & 12)
+- Google Pixel 4 XL (10 & 11 & 12)
+- Google Pixel 4a (10 & 11 & 12)
+- Google Pixel 4a 5G (11 & 12)
+- Google Pixel 5 (11 & 12)
+- Google Pixel 5a (11 & 12)
 - Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0)
 - HTC 10 (6.0.1)
 - HTC U11 (8.0.0)
@@ -1149,6 +1154,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - LG G5 RS988 (7.0)
 - LG G6 H870 (7.0 & 8.0.0)
 - LG G7 ThinQ LM-G710 (9)
+- LG G8 ThinQ LM G850l (11)
 - LG K20 Plus LG-TP260 (7.0)
 - LG K20 Plus LGMP260 (7.0)
 - LG K20 V VS501 (7.0)
@@ -1258,17 +1264,17 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 8T Europe KB2003 (11)
 - OnePlus 8T Global KB2005 (11)
 - OnePlus 8T T-Mobile KB2007 (11)
-- OnePlus 9 India LE2111 (11)
+- OnePlus 9 India LE2111 (11 & 12)
 - OnePlus 9 Europe LE2113 (11)
-- OnePlus 9 LE2115 (11)
+- OnePlus 9 LE2115 (11 & 12)
 - OnePlus 9 TMO LE2117 (11)
-- OnePlus 9 Pro India LE2121 (11)
+- OnePlus 9 Pro India LE2121 (11 & 12)
 - OnePlus 9 Pro Europe LE2123 (11)
-- OnePlus 9 Pro LE2125 (11)
+- OnePlus 9 Pro LE2125 (11 & 12)
 - OnePlus 9 Pro TMO LE2127 (11)
 - OnePlus 9R India LE2101 (11)
 - OnePlus N10 5G Global BE2026 (10 & 11)
-- OnePlus N10 5G Europe BE2029 (10  11)
+- OnePlus N10 5G Europe BE2029 (10 & 11)
 - OnePlus N10 5G Metro BE2025 (10)
 - OnePlus N10 5G T-Mobile BE2028 (10 & 11)
 - OnePlus N100 Global BE2011 (10 & 11)
@@ -1396,7 +1402,8 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy S10e SM-G970F (10 & 11)
 - Samsung Galaxy S10e SM-G970F Europe (11)
 - Samsung Galaxy S10e SM-G970N (10 & 11)
-- Samsung Galaxy S20 FE 5G (10)
+- Samsung Galaxy S20 FE SM-G780F (11)
+- Samsung Galaxy S20 FE 5G SM-G781B (10)
 - Samsung Galaxy S20 Ultra SM-G988B (10)
 - Samsung Galaxy S21 SM-G991B (11)
 - Samsung Galaxy Tab 2 7.0 GT-P5110 (4.2.2)
@@ -1470,10 +1477,10 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 9 Lite Global (9)
 - Xiaomi Mi 9 SE Global (9)
 - Xiaomi Mi 9T China (10)
-- Xiaomi Mi 9T Europe (9 & 10)
+- Xiaomi Mi 9T Europe (9 & 10 & 11)
 - Xiaomi Mi 9T Pro China (9 & 10)
 - Xiaomi Mi 9T Pro Europe (10)
-- Xiaomi Mi 9T Pro Global (10)
+- Xiaomi Mi 9T Pro Global (10 & 11)
 - Xiaomi Mi 10 China (10 & 11)
 - Xiaomi Mi 10 Europe (10)
 - Xiaomi Mi 10 Lite 5G Europe (10)
@@ -1524,7 +1531,8 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Redmi 8 China (9 & 10)
 - Xiaomi Redmi 9 China (10)
 - Xiaomi Redmi Go Global (8.1.0)
-- Xiaomi Redmi K20 Pro China (9 & 10)
+- Xiaomi Redmi K20 Europe (11)
+- Xiaomi Redmi K20 Pro China (9 & 10 & 11)
 - Xiaomi Redmi K20 Pro Europe (10)
 - Xiaomi Redmi K20 Pro Global (10)
 - Xiaomi Redmi K20 Pro India (10)

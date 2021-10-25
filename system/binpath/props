@@ -76,8 +76,8 @@ esac
 . $MODPATH/common/util_functions.sh
 
 if [ -f "$VLOGFILE" ]; then
-		mv -f $VLOGFILE $VLASTLOGFILE
-	fi
+	mv -f $VLOGFILE $VLASTLOGFILE
+fi
 set -x 2>$VLOGFILE
 
 log_handler "Running props script."
@@ -121,7 +121,15 @@ if [ "$(get_file_value $MODPATH/module.prop "settingsVersion=")" != "$SCRIPTV" ]
 fi
 
 # Check MagiskHide status
-MHTEMP=$(magiskhide status) >> $LOGFILE 2>&1
+if [ "$(magisk -V)" -ge 23010 ]; then
+	MHTEMP=$(magisk --denylist status) >> $LOGFILE 2>&1
+	MHLST=$(magisk --denylist ls)
+	for ITEM in $MHLST; do
+		echo $ITEM >> $LOGFILE 2>&1
+	done
+else
+	MHTEMP=$(magiskhide status) >> $LOGFILE 2>&1
+fi
 
 blank_input() {
 	# Find menu level
@@ -271,7 +279,11 @@ menu_change_fingerprint() {
 				echo "Enter the new fingerprint or"
 				echo "pick from the options below."
 				echo ""
-				$(magiskhide status)
+				if [ "$(magisk -V)" -ge 23010 ]; then
+					$(magisk --denylist status)
+				else
+					$(magiskhide status)
+				fi
 				echo ""
 				echo -e "${G}f${N} - Pick a certified fingerprint"
 				if [ "$PRINTMODULETXT" ]; then
@@ -3048,22 +3060,19 @@ menu_magiskhide_custprop() {
 			menu_header "${C}$1${N}"
 			echo ""
 			if [ "$(echo "$CUSTOMPROPSLIST" | grep -o $1)" ]; then
-				TMPCHK="b"
 				echo -e "${C}$1${N} is"
 				echo "already on your list of custom props."
 				echo "No need to set it again."
-				echo ""
-				echo -e "${G}b${N} - Go back"
 			else
-				TMPCHK="n"
 				echo -e "${C}$1${N} is"
 				echo "one of the sensitive props that can be"
 				echo "set by the MagiskHide props option."
-				echo "Are you sure you want to proceed?"
-				echo ""
-				echo -e "${G}y${N} - Yes"
-				echo -e "${G}n${N} - No"
 			fi
+			echo ""
+			echo "Are you sure you want to proceed?"
+			echo ""
+			echo -e "${G}y${N} - Yes"
+			echo -e "${G}n${N} - No"
 			echo -e "${G}e${N} - Exit"
 			echo ""
 			echo -n "Enter your desired option: "
@@ -3077,20 +3086,8 @@ menu_magiskhide_custprop() {
 				break
 			;;
 			n|N)
-				if [ "$TMPCHK" == "n" ]; then
-					INPUT3=""
-					break
-				else
-					invalid_input 1 4
-				fi
-			;;
-			b|B)
-				if [ "$TMPCHK" == "b" ]; then
-					INPUT3=""
-					break
-				else
-					invalid_input 1 4
-				fi
+				INPUT3=""
+				break
 			;;
 			e|E) exit_fn
 			;;
