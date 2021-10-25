@@ -632,7 +632,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 ### v6.1.1  
 - Updated custom props so that it's possible to set the same prop with different values during different boot stages.
 - Updated some module checks to match the new state of Magisk (MagiskHide is dead, long live MagiskHide).
-- Added fingerprints for LG G8 ThinkQ, Samsung Galaxy S20 FE SM-G780F and Xiaomi Redmi K20 Europe. Updated fingerprints for Google Pixel 3 to 5a (all variants), Nokia 6.1 Plus, Oneplus 6T, 9 and 9 Pro (several variants), Xiaomi Mi 9T Europe, Mi 9T Pro Global and Redmi K20 Pro China. List updated to v135.
+- Added fingerprints for LG G8 ThinQ, Samsung Galaxy S20 FE SM-G780F and Xiaomi Redmi K20 Europe. Updated fingerprints for Google Pixel 3 to 5a (all variants), Nokia 6.1 Plus, Oneplus 6T, 9 and 9 Pro (several variants), Xiaomi Mi 9T Europe, Mi 9T Pro Global and Redmi K20 Pro China. List updated to v135.
 
 ### v6.1.0  
 - Added settings file version check.
