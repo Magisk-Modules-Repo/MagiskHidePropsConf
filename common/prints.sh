@@ -8,8 +8,8 @@ PRINTSV=135
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=706
-# Unique devices=491
+# Current fingerprints count=727
+# Unique devices=493
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ROG Phone 5 ZS673KS (10):Asus:ZS673KS=asus/WW_I005D/ASUS_I005_1:11/RKQ1.201022.002/18.0840.2103.26-0:user/release-keys__2021-03-05
