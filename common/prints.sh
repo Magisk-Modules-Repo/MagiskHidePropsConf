@@ -4,12 +4,12 @@
 # Copyright (c) 2018-2021 Didgeridoohan @ XDA Developers
 # Licence: MIT
 
-PRINTSV=135
+PRINTSV=136
 PRINTSTRANSF=520
 
 # Certified fingerprints
-# Current fingerprints count=727
-# Unique devices=493
+# Current fingerprints count=729
+# Unique devices=495
 PRINTSLIST="
 Asus ROG Phone 3 ZS661KS (10):Asus:ZS661KS=asus/WW_I003D/ASUS_I003_1:10/QKQ1.200419.002/17.0823.2012.122-0:user/release-keys__2020-12-01
 Asus ROG Phone 5 ZS673KS (10):Asus:ZS673KS=asus/WW_I005D/ASUS_I005_1:11/RKQ1.201022.002/18.0840.2103.26-0:user/release-keys__2021-03-05
@@ -64,6 +64,8 @@ Google Pixel 4a (10 & 11 & 12):Google:Pixel 4a=google/sunfish/sunfish:10/QD4A.20
 Google Pixel 4a 5G (11 & 12):Google:Pixel 4a (5G)=google/bramble/bramble:11/RQ3A.211001.001/7641976:user/release-keys__2021-10-01;google/bramble/bramble:12/SP1A.210812.015/7679548:user/release-keys__2021-10-05
 Google Pixel 5 (11 & 12):Google:Pixel 5=google/redfin/redfin:11/RQ3A.211001.001/7641976:user/release-keys__2021-10-01;google/redfin/redfin:12/SP1A.210812.015/7679548:user/release-keys__2021-10-05
 Google Pixel 5a (11 & 12):Google:Pixel 5a=google/barbet/barbet:11/RD2A.211001.002/7644766:user/release-keys__2021-10-01;google/barbet/barbet:12/SP1A.210812.015/7679548:user/release-keys__2021-10-05
+Google Pixel 6 (12):Google:Pixel 6=google/oriole/oriole:12/SD1A.210817.015.A4/7697517:user/release-keys__2021-10-05
+Google Pixel 6 Pro (12):Google:Pixel 6 Pro=google/raven/raven:12/SD1A.210817.015.A4/7697517:user/release-keys__2021-10-05
 Google Pixel C (6.0.1 & 7.0 & 7.1.1 & 7.1.2 & 8.0.0 & 8.1.0):Google:Pixel C=google/ryu/dragon:6.0.1/MXC89L/3084571:user/release-keys;google/ryu/dragon:7.0/NRD91N/3318108:user/release-keys;google/ryu/dragon:7.1.1/N4F26T/3687331:user/release-keys;google/ryu/dragon:7.1.2/N2G48C/4104010:user/release-keys;google/ryu/dragon:8.0.0/OPR1.170623.032/4397478:user/release-keys;google/ryu/dragon:8.1.0/OPM8.190605.005/5749003:user/release-keys__2019-06-05
 HTC 10 (6.0.1):HTC:HTC 10=htc/HTCOneM10vzw/htc_pmewl:6.0.1/MMB29M/774095.8:user/release-keys
 HTC U11 (8.0.0):HTC:HTC U-3w=htc/ocndtwl_01405/htc_ocndtwl:8.0.0/OPR6.170623.013/1017190.2:user/release-keys
