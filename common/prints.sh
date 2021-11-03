@@ -297,6 +297,7 @@ Samsung Galaxy A40 SM-A405FN (10):Samsung:SM-A405FN=samsung/a40xx/a40:10/QP1A.19
 Samsung Galaxy A50 SM-A505F (9):Samsung:SM-A505F=samsung/a50dd/a50:9/PPR1.180610.011/A505FDDU1ASD6:user/release-keys__2019-04-01
 Samsung Galaxy A50S SM-A507FN (10):Samsung:SM-A507FN=samsung/a50sxx/a50s:10/QP1A.190711.020/A507FNXXS5BTI1:user/release-keys__2020-09-01
 Samsung Galaxy A51 SM-A515F (10):Samsung:SM-A515F=samsung/a51nsxx/a51:10/QP1A.190711.020/A515FXXU1ASKJ:user/release-keys__2019-12-01
+Samsung Galaxy A52 4G (11):Samsung:SM-A525F=samsung/a52qnsxx/a52q:11/RP1A.200720.012/A525FXXU2AUF3:user/release-keys__2021-06-01
 Samsung Galaxy A70 SM-A705FN (10):samsung:SM-A705FN=samsung/a70qxx/a70q:10/QP1A.190711.020/A705FNXXU5CTK4:user/release-keys__2020-11-01
 Samsung Galaxy A71 SM-A715F (10):samsung:SM-A715F=samsung/a71naxx/a71:10/QP1A.190711.020/A715FXXU3ATK1:user/release-keys__2020-11-01
 Samsung Galaxy A90 5G SM-A908B (9):samsung:SM-A908B=samsung/r3qxx/r3q:9/PPR1.180610.011/A908BXXU2ASK5:user/release-keys__2019-11-01
