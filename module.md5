@@ -1,0 +1,10 @@
+a96f0cf243927531a1898c27143906ea  ./common/bootlog.sh
+3f9013bacd6573216f4476eee72e9b3e  ./common/propsconf_late
+9ee25bf2374f1ed45d427bf89f9418d5  ./common/util_functions.sh
+b48a3faaac5b116c9214033f0c65eebb  ./META-INF/com/google/android/update-binary
+b39cd178923d60d67de5c5b81a78c242  ./META-INF/com/google/android/updater-script
+2263e6baf66d23f7db33b450515a247e  ./system/binpath/props
+2ebdaa110fc9293412435a522e3bdd17  customize.sh
+ad90c2919ec8c2f21003dd99edb3e1d3  post-fs-data.sh
+fcdca3c8d13ba9c39b74f6624844ed5d  service.sh
+f4dc021cef14a60088ff83180043613a  uninstall.sh
