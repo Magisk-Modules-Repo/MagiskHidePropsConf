@@ -30,11 +30,32 @@ echo "***************** By Didgeridoohan ***************" >> $LOGFILE 2>&1
 echo "***************************************************" >> $LOGFILE 2>&1
 log_print "- Starting module installation script"
 
-# Module script installation
-script_install
+# Rudimentary tamper check
+log_handler "Checking module files MD5 checksum."
+unzip -o "$ZIPFILE" 'META-INF/*' -d $MODPATH >> $LOGFILE 2>&1
+cd $MODPATH
+if [ "$(md5sum -c module.md5 | grep FAILED)" ]; then
+  ui_print ""
+  ui_print "!"
+  log_print "! MD5 checksum mismatch!"
+  ui_print "!"
+  ui_print ""
+  ui_print "The module files have been tampered with."
+  ui_print "Only download from official sources."
+  ui_print "See the module documentation for details."
+  ui_print ""
+  abort "! Aborting install!"
+else
+  # Module script installation
+  script_install
 
-# Permission
-log_print "- Setting permissions"
-set_perm $MODPATH/system/$BIN/props 0 0 0755
+  # Permission
+  log_print "- Setting permissions"
+  set_perm $MODPATH/system/$BIN/props 0 0 0755
 
-log_print "- Module installation complete."
+  # Cleanup
+  rm -rf $MODPATH/META-INF
+  rm -f $MODPATH/module.md5
+
+  log_print "- Module installation complete."
+fi

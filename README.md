@@ -274,7 +274,7 @@ Just run the `props` command and the list will be updated automatically. Use the
 
 If you already have a device fingerprint set by the module, and it has been updated in the current fingerprints list, it will be automatically updated when the prints list gets an update. Just reboot to apply. This function can be turned of in the script settings (see ["Prop script settings"](https://github.com/Magisk-Modules-Repo/MagiskHide-Props-Config#prop-script-settings) below)
 
-**_Current fingerprints list version - v136_**
+**_Current fingerprints list version - v137_**
 
 
 ## Please add support for device X
@@ -629,6 +629,10 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Changelog
+### v6.1.2  
+- Added rudimentary tampering check.
+- Added fingerprints for OnePlus 9RT, Samsung Galaxy A52 4G and Xiaomi Mi 6X and Redmi K30 Pro. Updated fingerprints for OnePlus 6 to Nord CE, many variants. List updated to v137.
+
 ### v6.1.1  
 - Updated custom props so that it's possible to set the same prop with different values during different boot stages.
 - Updated some module checks to match the new state of Magisk (MagiskHide is dead, long live MagiskHide).
@@ -1061,7 +1065,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 
 
 ## Current fingerprints list
-### List v136  
+### List v137  
 - Asus ROG Phone 3 ZS661KS (10)
 - Asus ROG Phone 5 ZS673KS (10)
 - Asus Smartphone for Snapdragon Insiders ASUS_I007D (11)
@@ -1228,36 +1232,36 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 5T (7.1.1 & 8.0.0 & 8.1.0 & 9 & 10)
 - OnePlus 6 (8.1.0 & 9 & 10 & 11)
 - OnePlus 6T (9 & 10 & 11)
-- OnePlus 6T T-Mobile (9)
-- OnePlus 7 China GM1900 (10)
+- OnePlus 6T T-Mobile (9 & 10)
+- OnePlus 7 China GM1900 (10 & 11)
 - OnePlus 7 GM1901 (9 & 10 & 11)
 - OnePlus 7 Europe GM1903 (9 & 10 & 11)
 - OnePlus 7 GM1905 (9 & 10 & 11)
-- OnePlus 7 Pro China GM1910 (10)
+- OnePlus 7 Pro China GM1910 (10 & 11)
 - OnePlus 7 Pro GM1911 (9 & 10 & 11)
 - OnePlus 7 Pro Europe GM1913 (9 & 10 & 11)
 - OnePlus 7 Pro T-Mobile GM1915 (9 & 10 & 11)
 - OnePlus 7 Pro GM1917 (9 & 10 & 11)
 - OnePlus 7 Pro NR Europe GM1920 (9 & 10)
 - OnePlus 7 Pro NR Sprint GM1925 (9 & 10)
-- OnePlus 7T China HD1900 (10)
+- OnePlus 7T China HD1900 (10 & 11)
 - OnePlus 7T HD1901 (10 & 11)
 - OnePlus 7T Europe HD1903 (10 & 11)
 - OnePlus 7T HD1905 (10 & 11)
 - OnePlus 7T T-Mobile HD1907 (11)
-- OnePlus 7T Pro China HD1910 (10)
+- OnePlus 7T Pro China HD1910 (10 & 11)
 - OnePlus 7T Pro HD1911 (10 & 11)
 - OnePlus 7T Pro Europe HD1913 (10 & 11)
 - OnePlus 7T Pro HD1917 (10 & 11)
 - OnePlus 7T Pro NR HD1925 (10 & 11)
-- OnePlus 8 China IN2010 (10)
+- OnePlus 8 China IN2010 (10 & 11)
 - OnePlus 8 India IN2011 (10 & 11)
 - OnePlus 8 Europe IN2013 (10 & 11)
 - OnePlus 8 Global IN2015 (10 & 11)
 - OnePlus 8 Visible IN2015 (10 & 11)
 - OnePlus 8 T-Mobile IN2017 (10 & 11)
 - OnePlus 8 Verizon IN2019 (10)
-- OnePlus 8 Pro China IN2020 (10)
+- OnePlus 8 Pro China IN2020 (10 & 11)
 - OnePlus 8 Pro India IN2021 (10 & 11)
 - OnePlus 8 Pro Europe IN2023 (10 & 11)
 - OnePlus 8 Pro Global IN2025 (10 & 11)
@@ -1275,14 +1279,15 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - OnePlus 9 Pro LE2125 (11 & 12)
 - OnePlus 9 Pro TMO LE2127 (11)
 - OnePlus 9R India LE2101 (11)
+- OnePlus 9RT China MT2110 (11)
 - OnePlus N10 5G Global BE2026 (10 & 11)
 - OnePlus N10 5G Europe BE2029 (10 & 11)
-- OnePlus N10 5G Metro BE2025 (10)
+- OnePlus N10 5G Metro BE2025 (10 & 11)
 - OnePlus N10 5G T-Mobile BE2028 (10 & 11)
 - OnePlus N100 Global BE2011 (10 & 11)
 - OnePlus N100 Europe BE2013 (10 & 11)
-- OnePlus N100 Metro BE2015 (10)
-- OnePlus N100 T-Mobile BE2012 (10)
+- OnePlus N100 Metro BE2015 (10 & 11)
+- OnePlus N100 T-Mobile BE2012 (10 & 11)
 - OnePlus N200 Global DE2117 (11)
 - OnePlus N200 T-Mobile DE2118 (11)
 - OnePlus Nord India AC2001 (10 & 11)
@@ -1348,6 +1353,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Samsung Galaxy A50 SM-A505F (9)
 - Samsung Galaxy A50S SM-A507FN (10)
 - Samsung Galaxy A51 SM-A515F (10)
+- Samsung Galaxy A52 4G (11)
 - Samsung Galaxy A70 SM-A705FN (10)
 - Samsung Galaxy A71 SM-A715F (10)
 - Samsung Galaxy A90 5G SM-A908B (9)
@@ -1470,6 +1476,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Mi 5S Global (7.0)
 - Xiaomi Mi 5S Plus Global (6.0.1 & 7.0)
 - Xiaomi Mi 6 Global (8.0.0 & 9)
+- Xiaomi Mi 6X China (9)
 - Xiaomi Mi 8 Global (8.1.0 & 9 & 10)
 - Xiaomi Mi 8 Explorer (10)
 - Xiaomi Mi 8 Pro Global (10)
@@ -1538,6 +1545,7 @@ Releases from v5.4.0 will only install on Magisk v20.4+.
 - Xiaomi Redmi K20 Pro Europe (10)
 - Xiaomi Redmi K20 Pro Global (10)
 - Xiaomi Redmi K20 Pro India (10)
+- Xiaomi Redmi K30 Pro China (11)
 - Xiaomi Redmi Note 2 Global (5.0.2)
 - Xiaomi Redmi Note 3 Pro China (6.0.1)
 - Xiaomi Redmi Note 3 Pro SE Global (6.0.1)
