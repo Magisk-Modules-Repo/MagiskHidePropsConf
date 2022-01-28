@@ -481,6 +481,7 @@ Xiaomi Redmi 6 Pro India (9):Xiaomi:Redmi 6 Pro=xiaomi/sakura_india/sakura_india
 Xiaomi Redmi 6A Global (9):Xiaomi:Redmi 6A=xiaomi/cactus/cactus:9/PPR1.180610.011/V11.0.7.0.PCBMIXM:user/release-keys__2020-03-01
 Xiaomi Redmi 7 Europe (10):Xiaomi:Redmi 7=xiaomi/onc_eea/onc:10/QKQ1.191008.001/V11.0.3.0.QFLEUXM:user/release-keys__2021-07-01
 Xiaomi Redmi 7 Global (9):Xiaomi:Redmi 7=xiaomi/onc/onc:9/PKQ1.181021.001/V11.0.5.0.PFLMIXM:user/release-keys__2020-03-01
+Xiaomi Redmi 7 China (10):Xiaomi:Redmi 7=xiaomi/onc/onc:10/QKQ1.191008.001/V12.5.3.0.QFLCNXM:user/release-keys__2021-10-01
 Xiaomi Redmi 7A Global (9 & 10):Xiaomi:Redmi 7A=Xiaomi/pine/pine:9/PKQ1.190319.001/V11.0.7.0.PCMMIXM:user/release-keys__2020-03-01;Xiaomi/pine/pine:10/QKQ1.191014.001/V11.0.3.0.QCMMIXM:user/release-keys__2020-07-01
 Xiaomi Redmi 8 China (9 & 10):Xiaomi:Redmi 8=Xiaomi/olive/olive:9/PKQ1.190319.001/V11.0.7.0.PCNCNXM:user/release-keys__2019-12-01;Xiaomi/olive/olive:10/QKQ1.191014.001/V11.0.1.0.QCNCNXM:user/release-keys__2020-06-01
 Xiaomi Redmi 9 China (10):Xiaomi:M2004J19AG=Redmi/lancelot/lancelot:10/QP1A.190711.020/V12.0.6.0.QJCCNXM:user/release-keys__2020-11-05
