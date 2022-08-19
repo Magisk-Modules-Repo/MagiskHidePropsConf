@@ -487,6 +487,7 @@ Xiaomi Redmi 9 China (10):Xiaomi:M2004J19AG=Redmi/lancelot/lancelot:10/QP1A.1907
 Xiaomi Redmi Go Global (8.1.0):Xiaomi:Redmi Go=Xiaomi/tiare/tiare:8.1.0/OPM1.171019.026/V10.2.6.0.OCLMIXM:user/release-keys__2019-01-01
 Xiaomi Redmi K20 Europe (11):Xiaomi:Redmi K20=Xiaomi/davinci_eea/davinci:11/RKQ1.200826.002/V12.1.1.0.RFJEUXM:user/release-keys__2021-08-01
 Xiaomi Redmi K20 Pro China (9 & 10 & 11):Xiaomi:Redmi K20 Pro=Xiaomi/raphael/raphael:9/PKQ1.181121.001/V10.3.14.0.PFKCNXM:user/release-keys__2019-06-01;Xiaomi/raphael/raphael:10/QKQ1.190825.002/V12.0.6.0.QFKCNXM:user/release-keys__2020-11-01;Xiaomi/raphael/raphael:11/RKQ1.200826.002/V12.5.5.0.RFKCNXM:user/release-keys__2021-07-01
+Xiaomi Redmi K20 Pro China (11):Xiaomi:Redmi K20 Pro=Xiaomi/raphael/raphael:11/RKQ1.200826.002/V12.5.6.0.RFKCNXM:user/release-keys
 Xiaomi Redmi K20 Pro Europe (10):Xiaomi:Redmi K20 Pro=Xiaomi/raphael_eea/raphael:10/QKQ1.190825.002/V12.0.4.0.QFKEUXM:user/release-keys__2021-01-01
 Xiaomi Redmi K20 Pro Global (10):Xiaomi:Redmi K20 Pro=Xiaomi/raphael/raphael:10/QKQ1.190825.002/V11.0.1.0.QFKMIXM:user/release-keys__2019-10-01
 Xiaomi Redmi K20 Pro India (10):Xiaomi:Redmi K20 Pro=Xiaomi/raphaelin/raphaelin:10/QKQ1.190825.002/V12.0.2.0.QFKINXM:user/release-keys__2020-06-01
