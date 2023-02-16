@@ -250,6 +250,7 @@ OPPO Neo 7 A1603 (5.1):Oppo:A1603=OPPO/A1603/A1603:5.1/LMY47I/1489407760:user/re
 POCO F2 Pro Europe (10):POCO:POCO F2 Pro=POCO/lmi_eea/lmi:10/QKQ1.191117.002/V12.0.3.0.QJKEUXM:user/release-keys__2020-09-01
 POCO F2 Pro Global (10 & 11):POCO:POCO F2 Pro=POCO/lmi_global/lmi:10/QKQ1.191117.002/V12.0.4.0.QJKMIXM:user/release-keys__2020-09-01;POCO/lmi_global/lmi:11/RKQ1.200826.002/V12.5.1.0.RJKMIXM:user/release-keys__2021-06-01
 POCO F3 Europe (11):POCO:M2012K11AG=POCO/alioth_eea/alioth:11/RKQ1.200826.002/V12.5.3.0.RKHEUXM:user/release-keys__2021-06-01
+POCO F3 Europe (12):POCO:M2012K11AG=POCO/alioth_eea/alioth:12/SKQ1.211006.001/V13.0.9.0.SKHEUXM:user/release-keys__2022-11-01
 POCO F3 Global (11):POCO:M2012K11AG=POCO/alioth_global/alioth:11/RKQ1.200826.002/V12.5.2.0.RKHMIXM:user/release-keys__2021-05-01
 POCO F3 Indoniesia (11):POCO:M2012K11AG=POCO/alioth_id/alioth:11/RKQ1.200826.002/V12.5.2.0.RKHIDXM:user/release-keys__2021-06-01
 POCO F3 Russia (11):POCO:M2012K11AG=POCO/alioth_ru/alioth:11/RKQ1.200826.002/V12.5.3.0.RKHRUXM:user/release-keys__2021-06-01
