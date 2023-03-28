@@ -1,10 +1,11 @@
 # MagiskHide Props Config
 ## By Didgeridoohan @ XDA Developers
 
+**This project is dead, and has been for some time. I have not been involved in the Android modding scene for some time and I no longer have the energy to take it up again.**
+
+**If anyone feels like taking over give me a holler.**
 
 <a href="https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228"><img src="https://img.shields.io/badge/-XDA-orange.svg"></a> [Support Thread](https://forum.xda-developers.com/apps/magisk/module-magiskhide-props-config-t3789228)
-
-<a href="https://www.paypal.me/didgeridoohan"><img src="https://img.shields.io/badge/-PayPal-blue.svg"></a> If you find the module useful, please don't hesitate to [support the work involved](https://www.paypal.me/didgeridoohan).
 
 ## What's this?
 This module is a very complicated way of doing something very simple. Complicated for me, that is... The aim is to make it easy for you, the user. The module changes prop values using the [Magisk resetprop tool](https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#resetprop), something that is very easy to do with a [Magisk boot script](https://github.com/topjohnwu/Magisk/blob/master/docs/details.md#magisk-booting-process) and some simple commands. This is very useful for a lot of things, among others to help pass the SafetyNet CTS Profile check on custom and uncertified ROMs (see [here](https://didgeridoohan.com/magisk/MagiskHide#hn_Matching_official_prop_values_to_pass_SafetyNet) for further details on this). And of course for any normal modification of your device that is done by altering build.prop or similar files.
