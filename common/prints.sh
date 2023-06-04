@@ -414,6 +414,7 @@ Sony Xperia Z5 Premium E6853 (7.1.1):Sony:E6853=Sony/E6853/E6853:7.1.1/32.4.A.1.
 Sony Xperia Z5 Premium Dual E6883 (7.1.1):Sony:E6883=Sony/E6883/E6883:7.1.1/32.4.A.1.54/3761073091:user/release-keys
 Vodafone Smart Ultra 6 (5.1.1):Vodafone:Vodafone Smart ultra 6=Vodafone/P839V55/P839V55:5.1.1/LMY47V/20161227.134319.15534:user/release-keys
 Walmart Onn 8 (9):Onn:ONA19TB002=onn/ONA19TB002/ONA19TB002:9/PPR1.180610.011/1551232410:user/release-keys__2019-01-05
+Xiaomi 11 Lite 5G NE (13):Xiaomi:2109119DG=Xiaomi/lisa_eea/lisa:13/TKQ1.220829.002/V14.0.7.0.TKOEUXM:user/release-keys__2023-04-01
 Xiaomi Mi 3 Global (6.0.1):Xiaomi:MI 3W=Xiaomi/cancro/cancro:6.0.1/MMB29M/V9.5.2.0.MXDMIFA:user/release-keys
 Xiaomi Mi 4 Global (6.0.1):Xiaomi:MI 4W=Xiaomi/cancro/cancro:6.0.1/MMB29M/V9.5.2.0.MXDMIFA:user/release-keys
 Xiaomi Mi 4C China (7.0):Xiaomi:Mi-4c=Xiaomi/libra/libra:7.0/NRD90M/V9.6.2.0.NXKCNFD:user/release-keys
