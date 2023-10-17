@@ -97,6 +97,7 @@ Lenovo K6 Note (7.0):Lenovo:Lenovo K53a48=Lenovo/karatep/K53a48:7.0/NRD90N/K53_S
 Lenovo Tab 4 8 Plus TB-8704F (8.1.0):Lenovo:Lenovo TB-8704F=Lenovo/TB-8704F/TB-8704F:8.1.0/OPM1.171019.019/8704F_S001018_191009_ROW:user/release-keys__2019-08-05
 Lenovo Tab 4 10 Plus TB-X704F (7.1.1):Lenovo:Lenovo TB-X704F=Lenovo/LenovoTB-X704F/X704F:7.1.1/NMF26F/TB-X704F_S000056_181015_ROW:user/release-keys__2018-10-01
 Lenovo Tab 4 10 Plus TB-X704L (7.1.1):Lenovo:Lenovo TB-X704L=Lenovo/LenovoTB-X704L/X704L:7.1.1/NMF26F/TB-X704L_S000056_181015_ROW:user/release-keys__2018-10-01
+Lenovo Tab P11 TB-J606F (11):Lenovo:Lenovo TB-J606F=Lenovo/LenovoTB-J606F/J606F:11/RKQ1.210303.002/S320311_230810_ROW:user/release-keys
 LeEco Le Pro3 (6.0.1):Leeco:LEX725=LeEco/ZL1_NA/le_zl1:6.0.1/WEXNAOP5802101261S/letv01261206:user/release-keys
 LG G2 VS980 (5.0.2):LGE:VS980 4G=lge/g2_vzw/g2:5.0.2/LRX22G/15046001715f9:user/release-keys
 LG G4 H812 (6.0):LGE:LG-H812=lge/p1_rgs_ca/p1:6.0/MRA58K/1601215569825:user/release-keys
